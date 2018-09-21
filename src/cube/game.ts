@@ -21,7 +21,7 @@ export default class Game {
 
   constructor() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(64, 1, 1, Game.SIZE);
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Game.SIZE);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = Game.SIZE / 3;
@@ -38,7 +38,7 @@ export default class Game {
     this.renderer.setClearColor(0xffffff);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.controller = new Controller(this);
-    
+
     this.loop();
   }
 
