@@ -17,17 +17,11 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
-        options: {
-          appendTsSuffixTo: [/\.vue$/]
-        }
+        loader: "ts-loader"
       },
       {
-        test: /\.vue$/,
-        loader: "vue-loader",
-        options: {
-          loaders: {}
-        }
+        test: /\.html?$/,
+        loader: "text-loader"
       },
       {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
@@ -35,12 +29,11 @@ module.exports = {
       }
     ]
   },
-  plugins: [new VueLoaderPlugin()],
   resolve: {
     alias: {
       vue$: "vue/dist/vue.esm.js"
     },
-    extensions: ["*", ".js", ".vue", ".json"]
+    extensions: ["*", ".js", ".ts", ".json"]
   },
   devServer: {
     historyApiFallback: true,

@@ -23,11 +23,13 @@
     "url-loader": "*",
     "css-loader": "*",
     "file-loader": "*",
+    "text-loader": "*",
     "vue-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
     "webpack": "*",
     "webpack-cli": "*",
+    "@types/webpack-env": "*",
     "webpack-dev-server": "*"
   }
 }
