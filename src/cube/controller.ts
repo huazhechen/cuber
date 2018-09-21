@@ -42,16 +42,16 @@ export default class Controller {
       new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Game.SIZE * 3) / 64),
       new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Game.SIZE * 3) / 64)
     ];
-    document.addEventListener("mousedown", this._onDocumentMouseDown, false);
-    document.addEventListener("mousemove", this._onDocumentMouseMove, false);
-    document.addEventListener("mouseup", this._onDocumentMouseUp, false);
-    document.addEventListener("mouseout", this._onDocumentMouseOut, false);
-    document.addEventListener("touchstart", this._touchHandler, true);
-    document.addEventListener("touchmove", this._touchHandler, true);
-    document.addEventListener("touchend", this._touchHandler, true);
-    document.addEventListener("keypress", this._onDocumentKeyPress, false);
-    document.addEventListener("keydown", this._onDocumentKeyDown, false);
-    document.addEventListener("keyup", this._onDocumentKeyUp, false);
+    this._game.renderer.domElement.addEventListener("mousedown", this._onDocumentMouseDown, false);
+    this._game.renderer.domElement.addEventListener("mousemove", this._onDocumentMouseMove, false);
+    this._game.renderer.domElement.addEventListener("mouseup", this._onDocumentMouseUp, false);
+    this._game.renderer.domElement.addEventListener("mouseout", this._onDocumentMouseOut, false);
+    this._game.renderer.domElement.addEventListener("touchstart", this._touchHandler, true);
+    this._game.renderer.domElement.addEventListener("touchmove", this._touchHandler, true);
+    this._game.renderer.domElement.addEventListener("touchend", this._touchHandler, true);
+    this._game.renderer.domElement.addEventListener("keypress", this._onDocumentKeyPress, false);
+    this._game.renderer.domElement.addEventListener("keydown", this._onDocumentKeyDown, false);
+    this._game.renderer.domElement.addEventListener("keyup", this._onDocumentKeyUp, false);
     window.addEventListener(
       "deviceorientation",
       this._handleOrientation,

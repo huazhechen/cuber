@@ -21,13 +21,12 @@ export default class Game {
 
   constructor() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 1, Game.SIZE);
+    this.camera = new THREE.PerspectiveCamera(64, 1, 1, Game.SIZE);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = Game.SIZE / 3;
     this.tweener = new Tweener();
     this.twister = new Twister(this);
-    this.controller = new Controller(this);
     this.cube = new Cube(this);
 
     this.scene.add(this.cube);
@@ -38,6 +37,8 @@ export default class Game {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor(0xffffff);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.controller = new Controller(this);
+    
     this.loop();
   }
 
