@@ -1,21 +1,86 @@
 <v-app>
-    <v-btn fixed top right icon large outline @click.stop="menu = !menu">
+    <v-content id=cuber width=100% height=100%></v-content>
+    <v-btn fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
-    <v-content id=cuber width=100% height=100%></v-content>
-    <v-dialog v-model="menu">
-        <v-tabs v-model="tab" fixed-tabs>
-            <v-tab v-for="item in items" :key="item.title" :href="`#tab-${item.title}`">
-                {{ item.title }}
-            </v-tab>
-        </v-tabs>
-        <v-tabs-items v-model="tab">
-            <v-tab-item v-for="item in items" :id="`tab-${item.title}`" :key="item.title">
-                <v-card flat>
-                    {{ item.title }}
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items>
+    <v-navigation-drawer v-model="drawer" absolute temporary touchless>
+        <v-toolbar flat>
+            <v-list>
+                <v-list-tile>
+                    <v-list-tile-title class="title">
+                        Menu
+                    </v-list-tile-title>
+                </v-list-tile>
+            </v-list>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-list dense>
+            <v-list-tile @click="onModeClick">
+                <v-list-tile-action>
+                    <v-icon>dashboard</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Mode</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="onOptionClick">
+                <v-list-tile-action>
+                    <v-icon>settings</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Option</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="onActionClick">
+                <v-list-tile-action>
+                    <v-icon>build</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Action</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
+    </v-navigation-drawer>
+    <v-dialog v-model="modeDialog">
+        <v-toolbar flat>
+            <v-list>
+                <v-list-tile>
+                    <v-list-tile-title class="title">
+                        Select Mode
+                    </v-list-tile-title>
+                </v-list-tile>
+            </v-list>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-list dense>
+            <v-list-tile @click="onModeSelect('touch')">
+                <v-list-tile-action>
+                    <v-icon>touch_app</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Touch</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="onModeSelect('button')">
+                <v-list-tile-action>
+                    <v-icon>apps</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Button</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="onModeSelect('script')">
+                <v-list-tile-action>
+                    <v-icon>code</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Script</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
     </v-dialog>
-
 </v-app>

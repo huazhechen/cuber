@@ -57,20 +57,6 @@ export default class Controller {
       this._handleOrientation,
       false
     );
-
-    window.addEventListener(
-      "resize",
-      () => {
-        this._game.camera.aspect =
-          this._game.container.clientWidth / this._game.container.clientHeight;
-        this._game.camera.updateProjectionMatrix();
-        this._game.renderer.setSize(
-          this._game.container.clientWidth,
-          this._game.container.clientHeight
-        );
-      },
-      false
-    );
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
