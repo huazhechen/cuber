@@ -1,0 +1,76 @@
+var path = require("path");
+var webpack = require("webpack");
+const { VueLoaderPlugin } = require("vue-loader");
+
+module.exports = {
+  entry: "./src/main.ts",
+  output: {
+    path: path.resolve(__dirname, "./dist"),
+    publicPath: "/dist/",
+    filename: "build.js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["vue-style-loader", "css-loader"]
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        options: {
+          appendTsSuffixTo: [/\.vue$/]
+        }
+      },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+        options: {
+          loaders: {}
+        }
+      },
+      {
+        test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+        loader: "url-loader?limit=100000"
+      }
+    ]
+  },
+  plugins: [new VueLoaderPlugin()],
+  resolve: {
+    alias: {
+      vue$: "vue/dist/vue.esm.js"
+    },
+    extensions: ["*", ".js", ".vue", ".json"]
+  },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    overlay: true,
+    disableHostCheck: true
+  },
+  performance: {
+    hints: false
+  },
+  devtool: "#eval-source-map"
+};
+
+if (process.env.NODE_ENV === "production") {
+  module.exports.devtool = "#source-map";
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  ]);
+}

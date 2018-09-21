@@ -1,0 +1,33 @@
+{
+  "name": "cuber",
+  "description": "A Vue.js project",
+  "version": "1.0.0",
+  "author": "huazhechen",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "watch": "webpack-dev-server --hot --inline --host 0.0.0.0",
+    "build": "webpack --mode=production --progress --hide-modules"
+  },
+  "dependencies": {
+    "@types/three": "*",
+    "three": "*",
+    "vue": "*",
+    "vue-class-component": "*",
+    "vuetify": "*",
+    "typeface-roboto": "*",
+    "material-design-icons": "*"
+  },
+  "devDependencies": {
+    "typescript": "*",
+    "url-loader": "*",
+    "css-loader": "*",
+    "file-loader": "*",
+    "vue-loader": "*",
+    "ts-loader": "*",
+    "vue-template-compiler": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*"
+  }
+}
