@@ -9,6 +9,7 @@ import Group from "./group";
 export default class Game {
   public static readonly SIZE: number = 1024;
   public container: Element;
+  public canvas: HTMLCanvasElement;
   public renderer: THREE.WebGLRenderer;
   public scene: THREE.Scene;
   public lock: boolean = false;
@@ -21,6 +22,8 @@ export default class Game {
 
   constructor() {
     this.scene = new THREE.Scene();
+    this.scene.rotation.x = Math.PI / 8;
+    this.scene.rotation.y = -Math.PI / 4;
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Game.SIZE);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
@@ -37,18 +40,19 @@ export default class Game {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setClearColor(0xffffff);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.canvas = this.renderer.domElement;
     this.controller = new Controller(this);
 
     this.loop();
   }
 
-  attach(container: Element) {
-    this.camera.aspect = container.clientWidth / container.clientHeight;
+  resize(width: number, height: number) {
+    this.camera.aspect = width / height;
+    let min = ((height / Math.min(width, height)) * Game.SIZE) / 4;
+    let fov = (2 * Math.atan(min / Game.SIZE) * 180) / Math.PI;
+    this.camera.fov = fov;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(container.clientWidth, container.clientHeight);
-    if (!container.contains(this.renderer.domElement)) {
-      container.appendChild(this.renderer.domElement);
-    }
+    this.renderer.setSize(width, height, true);
   }
 
   render() {

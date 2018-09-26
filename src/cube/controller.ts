@@ -8,11 +8,8 @@ export default class Controller {
   private _game: Game;
   private _dragging = false;
   private _rotating = false;
-  private _reverse = false;
-  private _axis: THREE.Vector3;
   private _down: THREE.Vector2;
   private _move: THREE.Vector2;
-  private _eye: THREE.Vector3;
   private _ray: THREE.Ray;
   private _matrix: THREE.Matrix4;
   private _holder: Holder;
@@ -23,16 +20,8 @@ export default class Controller {
   constructor(game: Game) {
     this._game = game;
     this._ray = new THREE.Ray();
-    this._axis = new THREE.Vector3();
-    this._eye = new THREE.Vector3();
-    this._down = new THREE.Vector2(
-      window.innerWidth / 2,
-      window.innerHeight / 2
-    );
-    this._move = new THREE.Vector2(
-      window.innerWidth / 2,
-      window.innerHeight / 2
-    );
+    this._down = new THREE.Vector2(0, 0);
+    this._move = new THREE.Vector2(0, 0);
     this._matrix = new THREE.Matrix4();
     this._holder = new Holder();
     this._holder.vector = new THREE.Vector3();
@@ -42,26 +31,34 @@ export default class Controller {
       new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Game.SIZE * 3) / 64),
       new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Game.SIZE * 3) / 64)
     ];
-    this._game.renderer.domElement.addEventListener("mousedown", this._onDocumentMouseDown, false);
-    this._game.renderer.domElement.addEventListener("mousemove", this._onDocumentMouseMove, false);
-    this._game.renderer.domElement.addEventListener("mouseup", this._onDocumentMouseUp, false);
-    this._game.renderer.domElement.addEventListener("mouseout", this._onDocumentMouseOut, false);
-    this._game.renderer.domElement.addEventListener("touchstart", this._touchHandler, true);
-    this._game.renderer.domElement.addEventListener("touchmove", this._touchHandler, true);
-    this._game.renderer.domElement.addEventListener("touchend", this._touchHandler, true);
-    this._game.renderer.domElement.addEventListener("keypress", this._onDocumentKeyPress, false);
-    this._game.renderer.domElement.addEventListener("keydown", this._onDocumentKeyDown, false);
-    this._game.renderer.domElement.addEventListener("keyup", this._onDocumentKeyUp, false);
-    window.addEventListener(
-      "deviceorientation",
-      this._handleOrientation,
+    this._game.canvas.addEventListener(
+      "mousedown",
+      this._onDocumentMouseDown,
       false
     );
+    this._game.canvas.addEventListener(
+      "mousemove",
+      this._onDocumentMouseMove,
+      false
+    );
+    this._game.canvas.addEventListener(
+      "mouseup",
+      this._onDocumentMouseUp,
+      false
+    );
+    this._game.canvas.addEventListener(
+      "mouseout",
+      this._onDocumentMouseOut,
+      false
+    );
+    this._game.canvas.addEventListener("touchstart", this._touchHandler, true);
+    this._game.canvas.addEventListener("touchmove", this._touchHandler, true);
+    this._game.canvas.addEventListener("touchend", this._touchHandler, true);
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
-    var x = (point.x / window.innerWidth) * 2 - 1;
-    var y = -(point.y / window.innerHeight) * 2 + 1;
+    var x = (point.x / this._game.canvas.clientWidth) * 2 - 1;
+    var y = -(point.y / this._game.canvas.clientHeight) * 2 + 1;
     this._ray.origin.setFromMatrixPosition(this._game.camera.matrixWorld);
     this._ray.direction
       .set(x, y, 0.5)
@@ -109,7 +106,14 @@ export default class Controller {
       var dx = this._move.x - this._down.x;
       var dy = this._move.y - this._down.y;
       var d = Math.sqrt(dx * dx + dy * dy);
-      if (Math.min(window.innerWidth, window.innerHeight) / d > 100) {
+      if (
+        Math.min(
+          this._game.canvas.clientWidth,
+          this._game.canvas.clientHeight
+        ) /
+          d >
+        100
+      ) {
         return true;
       }
       this._dragging = false;
@@ -118,7 +122,7 @@ export default class Controller {
         if (dx * dx > dy * dy) {
           this._group = Group.GROUPS.y;
         } else {
-          if (this._down.x < window.innerWidth / 2) {
+          if (this._down.x < this._game.canvas.clientWidth / 2) {
             this._group = Group.GROUPS.x;
           } else {
             this._group = Group.GROUPS.z;
@@ -164,18 +168,18 @@ export default class Controller {
         var dy = this._move.y - this._down.y;
         if (this._group === Group.GROUPS.y) {
           this._group.angle =
-            (dx / Math.min(window.innerWidth, window.innerHeight)) *
+            (dx / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
             Math.PI *
             2;
         } else {
           if (this._group === Group.GROUPS.x) {
             this._group.angle =
-              (dy / Math.min(window.innerWidth, window.innerHeight)) *
+              (dy / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
               Math.PI *
               2;
           } else {
             this._group.angle =
-              (-dy / Math.min(window.innerWidth, window.innerHeight)) *
+              (-dy / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
               Math.PI *
               2;
           }
@@ -210,21 +214,15 @@ export default class Controller {
       return true;
     }
 
-    this._down.x = event.clientX;
-    this._down.y = event.clientY;
+    this._down.x = event.offsetX;
+    this._down.y = event.offsetY;
 
     this._handleDown();
   };
 
   _onDocumentMouseMove = (event: MouseEvent) => {
-    this._move.x = event.clientX;
-    this._move.y = event.clientY;
-
-    let x = (this._move.x / window.innerWidth) * 2 - 1;
-    let y = -(this._move.y / window.innerHeight) * 2 + 1;
-    this._eye.x = ((Math.PI * 4) / 16 - (y * Math.PI) / 16) / +2;
-    this._eye.y = ((Math.PI * 4) / 16 - (x * Math.PI) / 16) / -1;
-
+    this._move.x = event.offsetX;
+    this._move.y = event.offsetY;
     this._handleMove();
   };
   _onDocumentMouseUp = (event: MouseEvent) => {
@@ -232,47 +230,7 @@ export default class Controller {
   };
 
   _onDocumentMouseOut = (event: MouseEvent) => {
-    this._eye.x = (Math.PI * 4) / 16 / +2;
-    this._eye.y = (Math.PI * 4) / 16 / -1;
     this._handleUp();
-  };
-
-  _onDocumentKeyPress = (event: KeyboardEvent) => {
-    var key = String.fromCharCode(event.which);
-    if ("XxRrMmLlYyUuEeDdZzFfSsBb".indexOf(key) >= 0) {
-      this._game.twist(key, this._reverse);
-      return false;
-    }
-  };
-
-  _onDocumentKeyDown = (event: KeyboardEvent) => {
-    var key = event.keyCode;
-    if (key === 222) {
-      this._reverse = true;
-      return false;
-    }
-  };
-
-  _onDocumentKeyUp = (event: KeyboardEvent) => {
-    var key = event.keyCode;
-    if (key === 222) {
-      this._reverse = false;
-      return false;
-    }
-  };
-
-  _handleOrientation = (event: DeviceOrientationEvent) => {
-    let alpha = event.alpha ? event.alpha : 0;
-    let beta = event.beta ? event.beta : 0;
-    let gamma = event.gamma ? event.gamma : 0;
-    if (beta > 90) {
-      gamma = -gamma;
-    }
-    alpha = (alpha / 180) * Math.PI;
-    beta = (beta / 180) * Math.PI;
-    gamma = (gamma / 180) * Math.PI;
-    this._eye.x = (Math.PI * 2) / 16 + beta / 8;
-    this._eye.y = -((Math.PI * 2) / 8 - gamma / 8);
   };
 
   _touchHandler = (event: TouchEvent) => {
@@ -304,9 +262,5 @@ export default class Controller {
     if (this._dragging || this._rotating) {
       return;
     }
-    this._game.scene.rotation.x +=
-      (this._eye.x - this._game.scene.rotation.x) / 8;
-    this._game.scene.rotation.y +=
-      (this._eye.y - this._game.scene.rotation.y) / 8;
   }
 }

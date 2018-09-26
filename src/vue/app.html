@@ -1,5 +1,42 @@
 <v-app>
-    <v-content id=cuber width=100% height=100%></v-content>
+    <div ref=view style="height: 100%" v-resize="resize">
+        <div ref=cuber></div>
+        <div ref=panel>
+            <v-container grid-list-md text-xs-center v-if="buttonPanel">
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-card dark color="primary">
+                            <v-card-text class="px-0">12</v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex v-for="i in 2" :key="`6${i}`" xs6>
+                        <v-card dark color="secondary">
+                            <v-card-text class="px-0">6</v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+            <v-container grid-list-md text-xs-center v-if="scriptPanel">
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-card dark color="primary">
+                            <v-card-text class="px-0">12</v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex v-for="i in 2" :key="`6${i}`" xs6>
+                        <v-card dark color="secondary">
+                            <v-card-text class="px-0">6</v-card-text>
+                        </v-card>
+                    </v-flex>
+                    <v-flex v-for="i in 3" :key="`4${i}`" xs4>
+                        <v-card dark color="primary">
+                            <v-card-text class="px-0">4</v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </div>
+    </div>
     <v-btn fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>

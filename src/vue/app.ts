@@ -8,10 +8,27 @@ import Game from "../cube/game";
 export default class App extends Vue {
   game: Game = new Game();
 
+  resize() {
+    if (
+      this.$refs.view instanceof Element &&
+      this.$refs.cuber instanceof Element &&
+      this.$refs.panel instanceof Element
+    ) {
+      let view = this.$refs.view;
+      let cuber = this.$refs.cuber;
+      let panel = this.$refs.panel;
+      let viewHeight = view.clientHeight;
+      let panelHeight = panel.clientHeight;
+      let cuberHeight = viewHeight - panelHeight;
+      this.game.resize(cuber.clientWidth, cuberHeight);
+    }
+  }
+
   mounted() {
-    let cuber = document.querySelector("#cuber");
-    if (null != cuber) {
-      this.game.attach(cuber);
+    if (this.$refs.cuber instanceof Element) {
+      let cuber = this.$refs.cuber;
+      this.resize();
+      cuber.appendChild(this.game.canvas);
     }
   }
 
@@ -39,8 +56,17 @@ export default class App extends Vue {
   }
 
   mode: string = "touch";
+  get buttonPanel() {
+    return this.mode == "button";
+  }
+
+  get scriptPanel() {
+    return this.mode == "script";
+  }
+
   onModeSelect(mode: string) {
     this.modeDialog = false;
     this.mode = mode;
+    this.$nextTick(this.resize);
   }
 }
