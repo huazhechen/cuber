@@ -2,21 +2,38 @@
     <div ref=view style="height: 100%" v-resize="resize">
         <div ref=cuber></div>
         <div ref=panel>
-            <v-container grid-list-md text-xs-center v-if="buttonPanel">
+            <v-container fluid grid-list-md text-xs-center v-show="buttonPanel">
                 <v-layout row wrap>
-                    <v-flex xs12>
-                        <v-card dark color="primary">
-                            <v-card-text class="px-0">12</v-card-text>
-                        </v-card>
+                    <v-flex d-flex xs2>
+                        <v-btn-toggle v-model="toggle_multiple" multiple>
+                            <v-layout row wrap>
+                                <v-flex d-flex xs12>
+                                    <v-btn style="height: auto; width: auto">AAA</v-btn>
+                                </v-flex>
+                                <v-flex d-flex xs12>
+                                    <v-btn style="height: auto; width: auto">BBB</v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </v-btn-toggle>
                     </v-flex>
-                    <v-flex v-for="i in 2" :key="`6${i}`" xs6>
-                        <v-card dark color="secondary">
-                            <v-card-text class="px-0">6</v-card-text>
-                        </v-card>
+                    <v-flex d-flex xs10>
+                        <v-layout row wrap>
+                            <v-flex d-flex>
+                                <v-layout row wrap>
+                                    <v-flex v-for="operation in operations" d-flex xs2>
+                                        <div @click="operate(operation)">
+                                            <v-card>
+                                                <v-card-text class="title">{{operation}}</v-card-text>
+                                            </v-card>
+                                        </div>
+                                    </v-flex>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container grid-list-md text-xs-center v-if="scriptPanel">
+            <v-container grid-list-md text-xs-center v-show="scriptPanel">
                 <v-layout row wrap>
                     <v-flex xs12>
                         <v-card dark color="primary">

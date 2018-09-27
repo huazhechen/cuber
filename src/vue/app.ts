@@ -56,6 +56,7 @@ export default class App extends Vue {
   }
 
   mode: string = "touch";
+
   get buttonPanel() {
     return this.mode == "button";
   }
@@ -68,5 +69,33 @@ export default class App extends Vue {
     this.modeDialog = false;
     this.mode = mode;
     this.$nextTick(this.resize);
+  }
+
+  operations: string[] = [
+    "L",
+    "R",
+    "D",
+    "U",
+    "B",
+    "F",
+    "l",
+    "r",
+    "d",
+    "u",
+    "b",
+    "f",
+    "M",
+    "x",
+    "E",
+    "y",
+    "S",
+    "z"
+  ];
+
+  toggle_multiple: number[] = [1];
+
+  operate(operation: string) {
+    console.log(operation);
+    this.game.twist(operation);
   }
 }

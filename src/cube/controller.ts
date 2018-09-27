@@ -31,29 +31,26 @@ export default class Controller {
       new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Game.SIZE * 3) / 64),
       new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Game.SIZE * 3) / 64)
     ];
-    this._game.canvas.addEventListener(
-      "mousedown",
-      this._onDocumentMouseDown,
-      false
-    );
-    this._game.canvas.addEventListener(
-      "mousemove",
-      this._onDocumentMouseMove,
-      false
-    );
-    this._game.canvas.addEventListener(
-      "mouseup",
-      this._onDocumentMouseUp,
-      false
-    );
-    this._game.canvas.addEventListener(
-      "mouseout",
-      this._onDocumentMouseOut,
-      false
-    );
-    this._game.canvas.addEventListener("touchstart", this._touchHandler, true);
-    this._game.canvas.addEventListener("touchmove", this._touchHandler, true);
-    this._game.canvas.addEventListener("touchend", this._touchHandler, true);
+  }
+
+  enable() {
+    this._game.canvas.addEventListener("mousedown", this._onMouseDown);
+    this._game.canvas.addEventListener("mousemove", this._onMouseMove);
+    this._game.canvas.addEventListener("mouseup", this._onMouseUp);
+    this._game.canvas.addEventListener("mouseout", this._onMouseOut);
+    this._game.canvas.addEventListener("touchstart", this._onTouch, true);
+    this._game.canvas.addEventListener("touchmove", this._onTouch, true);
+    this._game.canvas.addEventListener("touchend", this._onTouch, true);
+  }
+
+  disable() {
+    this._game.canvas.removeEventListener("mousedown", this._onMouseDown);
+    this._game.canvas.removeEventListener("mousemove", this._onMouseMove);
+    this._game.canvas.removeEventListener("mouseup", this._onMouseUp);
+    this._game.canvas.removeEventListener("mouseout", this._onMouseOut);
+    this._game.canvas.removeEventListener("touchstart", this._onTouch, true);
+    this._game.canvas.removeEventListener("touchmove", this._onTouch, true);
+    this._game.canvas.removeEventListener("touchend", this._onTouch, true);
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
@@ -168,18 +165,30 @@ export default class Controller {
         var dy = this._move.y - this._down.y;
         if (this._group === Group.GROUPS.y) {
           this._group.angle =
-            (dx / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
+            (dx /
+              Math.min(
+                this._game.canvas.clientWidth,
+                this._game.canvas.clientHeight
+              )) *
             Math.PI *
             2;
         } else {
           if (this._group === Group.GROUPS.x) {
             this._group.angle =
-              (dy / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
+              (dy /
+                Math.min(
+                  this._game.canvas.clientWidth,
+                  this._game.canvas.clientHeight
+                )) *
               Math.PI *
               2;
           } else {
             this._group.angle =
-              (-dy / Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight)) *
+              (-dy /
+                Math.min(
+                  this._game.canvas.clientWidth,
+                  this._game.canvas.clientHeight
+                )) *
               Math.PI *
               2;
           }
@@ -209,7 +218,7 @@ export default class Controller {
     this._rotating = false;
   }
 
-  _onDocumentMouseDown = (event: MouseEvent) => {
+  _onMouseDown = (event: MouseEvent) => {
     if (this._game.lock) {
       return true;
     }
@@ -220,20 +229,20 @@ export default class Controller {
     this._handleDown();
   };
 
-  _onDocumentMouseMove = (event: MouseEvent) => {
+  _onMouseMove = (event: MouseEvent) => {
     this._move.x = event.offsetX;
     this._move.y = event.offsetY;
     this._handleMove();
   };
-  _onDocumentMouseUp = (event: MouseEvent) => {
+  _onMouseUp = (event: MouseEvent) => {
     this._handleUp();
   };
 
-  _onDocumentMouseOut = (event: MouseEvent) => {
+  _onMouseOut = (event: MouseEvent) => {
     this._handleUp();
   };
 
-  _touchHandler = (event: TouchEvent) => {
+  _onTouch = (event: TouchEvent) => {
     let touches = event.changedTouches;
     let first = touches[0];
     switch (event.type) {
@@ -257,10 +266,4 @@ export default class Controller {
         return;
     }
   };
-
-  update() {
-    if (this._dragging || this._rotating) {
-      return;
-    }
-  }
 }

@@ -42,6 +42,7 @@ export default class Game {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.canvas = this.renderer.domElement;
     this.controller = new Controller(this);
+    this.controller.enable();
 
     this.loop();
   }
@@ -58,7 +59,6 @@ export default class Game {
   render() {
     this.twister.update();
     this.tweener.update();
-    this.controller.update();
     this.camera.lookAt(this.scene.position);
     this.camera.updateMatrixWorld(true);
     this.renderer.render(this.scene, this.camera);
