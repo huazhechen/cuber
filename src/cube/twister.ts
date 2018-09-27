@@ -1,11 +1,9 @@
-import * as THREE from "three";
-
 import Group from "./group";
 import Game from "./game";
 import Holder from "./holder";
 
 export default class Twister {
-  private _queue: Twist[] = [];
+  private _queue: TwistAction[] = [];
   private _game: Game;
 
   constructor(game: Game) {
@@ -18,7 +16,7 @@ export default class Twister {
     times: number = 1,
     fast: boolean = false
   ) {
-    let list = new Node(exp, reverse, times).parse();
+    let list = new TwistNode(exp, reverse, times).parse();
     if (fast) {
       list.forEach(function(element) {
         let angle = -Math.PI / 2;
@@ -55,16 +53,16 @@ export default class Twister {
     return true;
   }
 
-  start(twist: Twist) {
+  start(action: TwistAction, callback: Function | null = null) {
     let angle = -Math.PI / 2;
-    if (twist.reverse) {
+    if (action.reverse) {
       angle = -angle;
     }
-    if (twist.times) {
-      angle = angle * twist.times;
+    if (action.times) {
+      angle = angle * action.times;
     }
     let duration = (600 * Math.abs(angle)) / Math.PI;
-    let part = Group.GROUPS[twist.twist];
+    let part = Group.GROUPS[action.twist];
     if (part === undefined) {
       return;
     }
@@ -78,6 +76,9 @@ export default class Twister {
       },
       () => {
         part.adjust(this._game);
+        if (callback != null) {
+          callback();
+        }
       }
     );
   }
@@ -174,19 +175,22 @@ export default class Twister {
     return result;
   }
 }
-class Twist {
+
+export class TwistAction {
   public twist: string;
   public reverse: boolean;
   public times: number;
 }
 
-class Node {
-  private _children: Node[] = [];
-  private _twist: Twist = new Twist();
+export class TwistNode {
+  private _children: TwistNode[] = [];
+  private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
     let list = exp
       .replace(/[^xyzbsfdeulmr\(\)'0123456789]/gi, "")
-      .match(/\(\S+\)('\d*|\d*'|\d*)|[xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
+      .match(
+        /\([xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[xyzbsfdeulmr]('\d*|\d*'|\d*)/gi
+      );
     if (null === list) {
       return;
     }
@@ -205,24 +209,25 @@ class Node {
           this._twist.twist = this._twist.twist.toUpperCase();
         }
       } else {
-        this._children.push(new Node(values[1]));
+        this._children.push(new TwistNode(values[1]));
       }
       this._twist.reverse = (values[2] + values[4]).length == 0 ? false : true;
       this._twist.times = values[3].length == 0 ? 1 : parseInt(values[3]);
       this._twist.reverse = this._twist.reverse !== reverse;
       this._twist.times = this._twist.times * times;
     } else {
+      this._twist.twist = exp;
       this._twist.reverse = reverse;
       this._twist.times = times;
       list.forEach(function(c) {
-        var t = new Node(c);
+        var t = new TwistNode(c);
         this._children.push(t);
       }, this);
     }
   }
-  parse(reverse: boolean = false): Twist[] {
+  parse(reverse: boolean = false): TwistAction[] {
     reverse = this._twist.reverse !== reverse;
-    let _result: Twist[] = [];
+    let _result: TwistAction[] = [];
     if (0 !== this._children.length) {
       for (var i = 0; i < this._twist.times; i++) {
         for (var j = 0; j < this._children.length; j++) {
@@ -239,7 +244,11 @@ class Node {
         }
       }
     } else {
-      _result.push(this._twist);
+      let action = new TwistAction();
+      action.twist = this._twist.twist;
+      action.reverse = reverse;
+      action.times = this._twist.times;
+      _result.push(action);
     }
     return _result;
   }

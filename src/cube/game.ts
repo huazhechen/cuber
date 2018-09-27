@@ -47,7 +47,7 @@ export default class Game {
     this.loop();
   }
 
-  reset(){
+  reset() {
     this.cube.reset();
   }
 
@@ -73,7 +73,12 @@ export default class Game {
     this.render();
   }
 
-  twist(key: string, reverse: boolean = false, times: number = 1) {
-    this.twister.twist(key, reverse, times);
+  twist(
+    key: string,
+    reverse: boolean = false,
+    times: number = 1,
+    fast: boolean = false
+  ) {
+    this.twister.twist(key, reverse, times, fast);
   }
 }

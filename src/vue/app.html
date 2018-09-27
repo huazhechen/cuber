@@ -5,7 +5,7 @@
             <v-container fluid grid-list-md text-xs-center v-show="mode == 'keyboard'">
                 <v-layout row wrap>
                     <v-flex v-for="operation in operations" d-flex xs2>
-                        <v-btn @click="operate(operation + suffix)" class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none">{{operation}}{{suffix}}
+                        <v-btn :disabled="lock" @click="operate(operation + suffix)" class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none">{{operation}}{{suffix}}
                         </v-btn>
                     </v-flex>
                     <v-flex d-flex xs6>
@@ -25,20 +25,26 @@
             <v-container fluid grid-list-md text-xs-center v-show="mode == 'script'">
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-card-text @click="menu = true">{{script}}</v-card-text>
+                        <v-card-text class="title" :disabled="lock" @click="scriptDialog = true">{{script}}</v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-slider v-model="progress"></v-slider>
+                        <v-slider :disabled="lock" v-model="progress" step="1" :max="actions.length"></v-slider>
                     </v-flex>
                     <v-flex xs12>
-                        <v-btn flat>
+                        <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = 0">
+                            <v-icon>skip_previous</v-icon>
+                        </v-btn>
+                        <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = progress - 1">
                             <v-icon>fast_rewind</v-icon>
                         </v-btn>
-                        <v-btn flat>
-                            <v-icon>pause</v-icon>
+                        <v-btn icon large @click="playing = !playing">
+                            <v-icon>{{playing?'pause':(progress == actions.length?'replay':'play_arrow')}}</v-icon>
                         </v-btn>
-                        <v-btn flat>
+                        <v-btn icon large :disabled="lock || playing || (progress == actions.length)" @click="progress = progress + 1">
                             <v-icon>fast_forward</v-icon>
+                        </v-btn>
+                        <v-btn icon large :disabled="lock || playing || progress == actions.length" @click="progress = actions.length">
+                            <v-icon>skip_next</v-icon>
                         </v-btn>
                     </v-flex>
                 </v-layout>
@@ -68,8 +74,34 @@
                 </v-btn-toggle>
                 <v-divider></v-divider>
                 <v-subheader>Action</v-subheader>
-                <v-btn block @click="reset">Reset</v-btn>
+                <v-btn block @click="menu = false; reset()" :disabled="lock || mode=='script'">Reset</v-btn>
             </v-card-text>
         </v-card>
+    </v-dialog>
+    <v-dialog v-model="scriptDialog" scrollable>
+        <v-tabs grow style="width: 100%">
+            <template v-for="group in scripts">
+                <v-tab :key="group.name">
+                    {{group.name}}
+                </v-tab>
+            </template>
+            <template v-for="group in scripts">
+                <v-tab-item :key="group.name">
+                    <v-card tile>
+                        <v-list>
+                            <template v-for="(item, index) in group.scripts">
+                                <v-list-tile ripple @click="script = item.script; scriptDialog = false" :key="item.name">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{item.name}}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{item.script}}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                                <v-divider v-if="index + 1 < group.scripts.length" :key="index"></v-divider>
+                            </template>
+                        </v-list>
+                    </v-card>
+                </v-tab-item>
+            </template>
+        </v-tabs>
     </v-dialog>
 </v-app>
