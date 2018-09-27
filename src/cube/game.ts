@@ -48,7 +48,9 @@ export default class Game {
   }
 
   reset() {
-    this.cube.reset();
+    if (!this.lock){
+      this.cube.reset();
+    }
   }
 
   resize(width: number, height: number) {

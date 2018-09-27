@@ -28,7 +28,8 @@
                         <v-card-text class="title" :disabled="lock" @click="scriptDialog = true">{{script}}</v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-slider :disabled="lock" v-model="progress" step="1" :max="actions.length"></v-slider>
+                        <v-slider :disabled="lock" @click.native="test(event)" always-dirty thumb-label="always" ticks="always"
+                            v-model="progress" :max="actions.length"></v-slider>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = 0">
@@ -37,7 +38,7 @@
                         <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = progress - 1">
                             <v-icon>fast_rewind</v-icon>
                         </v-btn>
-                        <v-btn icon large @click="playing = !playing">
+                        <v-btn icon large :disabled="lock && !playing" @click="playing = !playing">
                             <v-icon>{{playing?'pause':(progress == actions.length?'replay':'play_arrow')}}</v-icon>
                         </v-btn>
                         <v-btn icon large :disabled="lock || playing || (progress == actions.length)" @click="progress = progress + 1">
@@ -54,7 +55,7 @@
     <v-btn fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
-    <v-dialog v-model="menu" scrollable>
+    <v-dialog v-model="menu">
         <v-card tile>
             <v-toolbar card>
                 <v-toolbar-title>Settings</v-toolbar-title>
@@ -78,30 +79,43 @@
             </v-card-text>
         </v-card>
     </v-dialog>
-    <v-dialog v-model="scriptDialog" scrollable>
-        <v-tabs grow style="width: 100%">
-            <template v-for="group in scripts">
-                <v-tab :key="group.name">
-                    {{group.name}}
-                </v-tab>
-            </template>
-            <template v-for="group in scripts">
-                <v-tab-item :key="group.name">
-                    <v-card tile>
-                        <v-list>
-                            <template v-for="(item, index) in group.scripts">
-                                <v-list-tile ripple @click="script = item.script; scriptDialog = false" :key="item.name">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{item.name}}</v-list-tile-title>
-                                        <v-list-tile-sub-title>{{item.script}}</v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                                <v-divider v-if="index + 1 < group.scripts.length" :key="index"></v-divider>
-                            </template>
-                        </v-list>
-                    </v-card>
-                </v-tab-item>
-            </template>
-        </v-tabs>
+    <v-dialog v-model="scriptDialog">
+        <v-card tile>
+            <v-toolbar>
+                <v-toolbar-title>Scripts</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn icon @click="scriptDialog = false">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <v-tabs grow>
+                <template v-for="group in scripts">
+                    <v-tab :key="group.name">
+                        {{group.name}}
+                    </v-tab>
+                </template>
+                <v-tabs-items style="overflow: auto;">
+                    <template v-for="group in scripts">
+                        <v-tab-item :key="group.name">
+                            <v-card tile>
+                                <v-list>
+                                    <template v-for="(item, index) in group.scripts">
+                                        <v-list-tile ripple @click="script = item.script; scriptDialog = false" :key="item.name">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title>{{item.name}}</v-list-tile-title>
+                                                <v-list-tile-sub-title>{{item.script}}</v-list-tile-sub-title>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                        <v-divider v-if="index + 1 < group.scripts.length" :key="index"></v-divider>
+                                    </template>
+                                </v-list>
+                            </v-card>
+                        </v-tab-item>
+                    </template>
+                </v-tabs-items>
+            </v-tabs>
+        </v-card>
     </v-dialog>
 </v-app>
