@@ -1,5 +1,4 @@
-import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import Game from "../cube/game";
 
 @Component({
@@ -32,70 +31,62 @@ export default class App extends Vue {
     }
   }
 
-  drawer: boolean = false;
+  menu: boolean = false;
   onMenuClick() {
-    this.drawer = !this.drawer;
-  }
-
-  modeDialog: boolean = false;
-  onModeClick() {
-    this.drawer = false;
-    this.modeDialog = true;
-  }
-
-  optionDialog: boolean = false;
-  onOptionClick() {
-    this.drawer = false;
-    this.optionDialog = true;
-  }
-
-  actionDialog: boolean = false;
-  onActionClick() {
-    this.drawer = false;
-    this.actionDialog = true;
+    this.menu = !this.menu;
   }
 
   mode: string = "touch";
 
-  get buttonPanel() {
-    return this.mode == "button";
-  }
-
-  get scriptPanel() {
-    return this.mode == "script";
-  }
-
-  onModeSelect(mode: string) {
-    this.modeDialog = false;
-    this.mode = mode;
+  @Watch("mode")
+  onModeChange(to: string, from: string) {
+    if (from != "touch" && to == "touch") {
+      this.game.controller.enable();
+    }
+    if (from == "touch" && to != "touch") {
+      this.game.controller.disable();
+    }
     this.$nextTick(this.resize);
   }
 
+  shift: string[] = [];
   operations: string[] = [
     "L",
-    "R",
     "D",
-    "U",
     "B",
+    "R",
+    "U",
     "F",
     "l",
-    "r",
     "d",
-    "u",
     "b",
+    "r",
+    "u",
     "f",
     "M",
-    "x",
     "E",
-    "y",
     "S",
+    "x",
+    "y",
     "z"
   ];
 
-  toggle_multiple: number[] = [1];
+  get suffix() {
+    let result: string = "";
+    result = result.concat(this.shift.indexOf("reverse") == -1 ? "" : "'");
+    result = result.concat(this.shift.indexOf("double") == -1 ? "" : "2");
+    return result;
+  }
+
+  script: string =
+    "(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')(RUR'U')";
+  progress: number = 0;
 
   operate(operation: string) {
-    console.log(operation);
     this.game.twist(operation);
+  }
+
+  reset() {
+    this.game.reset();
   }
 }

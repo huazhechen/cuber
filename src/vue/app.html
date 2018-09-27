@@ -2,53 +2,44 @@
     <div ref=view style="height: 100%" v-resize="resize">
         <div ref=cuber></div>
         <div ref=panel>
-            <v-container fluid grid-list-md text-xs-center v-show="buttonPanel">
+            <v-container fluid grid-list-md text-xs-center v-show="mode == 'keyboard'">
                 <v-layout row wrap>
-                    <v-flex d-flex xs2>
-                        <v-btn-toggle v-model="toggle_multiple" multiple>
-                            <v-layout row wrap>
-                                <v-flex d-flex xs12>
-                                    <v-btn style="height: auto; width: auto">AAA</v-btn>
-                                </v-flex>
-                                <v-flex d-flex xs12>
-                                    <v-btn style="height: auto; width: auto">BBB</v-btn>
-                                </v-flex>
-                            </v-layout>
+                    <v-flex v-for="operation in operations" d-flex xs2>
+                        <v-btn @click="operate(operation + suffix)" class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none">{{operation}}{{suffix}}
+                        </v-btn>
+                    </v-flex>
+                    <v-flex d-flex xs6>
+                        <v-btn-toggle v-model="shift" style="width:100%" multiple>
+                            <v-btn block class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none"
+                                value="reverse">reverse</v-btn>
                         </v-btn-toggle>
                     </v-flex>
-                    <v-flex d-flex xs10>
-                        <v-layout row wrap>
-                            <v-flex d-flex>
-                                <v-layout row wrap>
-                                    <v-flex v-for="operation in operations" d-flex xs2>
-                                        <div @click="operate(operation)">
-                                            <v-card>
-                                                <v-card-text class="title">{{operation}}</v-card-text>
-                                            </v-card>
-                                        </div>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
+                    <v-flex d-flex xs6>
+                        <v-btn-toggle v-model="shift" style="width:100%" multiple>
+                            <v-btn block class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none"
+                                value="double">double</v-btn>
+                        </v-btn-toggle>
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container grid-list-md text-xs-center v-show="scriptPanel">
+            <v-container fluid grid-list-md text-xs-center v-show="mode == 'script'">
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-card dark color="primary">
-                            <v-card-text class="px-0">12</v-card-text>
-                        </v-card>
+                        <v-card-text @click="menu = true">{{script}}</v-card-text>
                     </v-flex>
-                    <v-flex v-for="i in 2" :key="`6${i}`" xs6>
-                        <v-card dark color="secondary">
-                            <v-card-text class="px-0">6</v-card-text>
-                        </v-card>
+                    <v-flex xs12>
+                        <v-slider v-model="progress"></v-slider>
                     </v-flex>
-                    <v-flex v-for="i in 3" :key="`4${i}`" xs4>
-                        <v-card dark color="primary">
-                            <v-card-text class="px-0">4</v-card-text>
-                        </v-card>
+                    <v-flex xs12>
+                        <v-btn flat>
+                            <v-icon>fast_rewind</v-icon>
+                        </v-btn>
+                        <v-btn flat>
+                            <v-icon>pause</v-icon>
+                        </v-btn>
+                        <v-btn flat>
+                            <v-icon>fast_forward</v-icon>
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -57,84 +48,28 @@
     <v-btn fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
-    <v-navigation-drawer v-model="drawer" absolute temporary touchless>
-        <v-toolbar flat>
-            <v-list>
-                <v-list-tile>
-                    <v-list-tile-title class="title">
-                        Menu
-                    </v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-list dense>
-            <v-list-tile @click="onModeClick">
-                <v-list-tile-action>
-                    <v-icon>dashboard</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Mode</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-            <v-list-tile @click="onOptionClick">
-                <v-list-tile-action>
-                    <v-icon>settings</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Option</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-            <v-list-tile @click="onActionClick">
-                <v-list-tile-action>
-                    <v-icon>build</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Action</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-        </v-list>
-    </v-navigation-drawer>
-    <v-dialog v-model="modeDialog">
-        <v-toolbar flat>
-            <v-list>
-                <v-list-tile>
-                    <v-list-tile-title class="title">
-                        Select Mode
-                    </v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-list dense>
-            <v-list-tile @click="onModeSelect('touch')">
-                <v-list-tile-action>
-                    <v-icon>touch_app</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Touch</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-            <v-list-tile @click="onModeSelect('button')">
-                <v-list-tile-action>
-                    <v-icon>apps</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Button</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-            <v-list-tile @click="onModeSelect('script')">
-                <v-list-tile-action>
-                    <v-icon>code</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Script</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-        </v-list>
+    <v-dialog v-model="menu" scrollable>
+        <v-card tile>
+            <v-toolbar card>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn icon @click="menu = false">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <v-card-text>
+                <v-subheader>Control Mode</v-subheader>
+                <v-btn-toggle v-model="mode" mandatory style="width:100%">
+                    <v-btn block value="touch">Touch</v-btn>
+                    <v-btn block value="keyboard">Keyboard</v-btn>
+                    <v-btn block value="script">Script </v-btn>
+                </v-btn-toggle>
+                <v-divider></v-divider>
+                <v-subheader>Action</v-subheader>
+                <v-btn block @click="reset">Reset</v-btn>
+            </v-card-text>
+        </v-card>
     </v-dialog>
 </v-app>

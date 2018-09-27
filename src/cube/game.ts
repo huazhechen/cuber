@@ -47,6 +47,10 @@ export default class Game {
     this.loop();
   }
 
+  reset(){
+    this.cube.reset();
+  }
+
   resize(width: number, height: number) {
     this.camera.aspect = width / height;
     let min = ((height / Math.min(width, height)) * Game.SIZE) / 4;
