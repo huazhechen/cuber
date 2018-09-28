@@ -31,19 +31,19 @@
                         <v-slider readonly always-dirty thumb-label="always" ticks="always" v-model="progress" :max="actions.length"></v-slider>
                     </v-flex>
                     <v-flex xs12>
-                        <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = 0">
+                        <v-btn icon large :disabled="lock || playing || progress==0" @click="start">
                             <v-icon>skip_previous</v-icon>
                         </v-btn>
-                        <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = progress - 1">
+                        <v-btn icon large :disabled="lock || playing || progress==0" @click="backward">
                             <v-icon>fast_rewind</v-icon>
                         </v-btn>
-                        <v-btn icon large :disabled="lock && !playing" @click="playing = !playing">
-                            <v-icon>{{playing?'pause':(progress == actions.length?'replay':'play_arrow')}}</v-icon>
+                        <v-btn icon large :disabled="(lock && !playing) || (progress == actions.length)" @click="playing = !playing; play();">
+                            <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
                         </v-btn>
-                        <v-btn icon large :disabled="lock || playing || (progress == actions.length)" @click="progress = progress + 1">
+                        <v-btn icon large :disabled="lock || playing || (progress == actions.length)" @click="forward">
                             <v-icon>fast_forward</v-icon>
                         </v-btn>
-                        <v-btn icon large :disabled="lock || playing || progress == actions.length" @click="progress = actions.length">
+                        <v-btn icon large :disabled="lock || playing || progress == actions.length" @click="end">
                             <v-icon>skip_next</v-icon>
                         </v-btn>
                     </v-flex>
