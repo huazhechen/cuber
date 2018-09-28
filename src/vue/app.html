@@ -117,7 +117,14 @@
                                         </v-card>
                                     </v-flex>
                                     <v-flex xs12>
-                                        <v-pagination v-model="pages[index]" :length="Math.ceil(group.scripts.length / 6)"></v-pagination>
+                                        <v-btn icon large :disabled="pages[index]==1" @click="pages.splice(index, 1, pages[index] - 1)">
+                                            <v-icon>arrow_back</v-icon>
+                                        </v-btn>
+                                        <v-btn icon large @click="">{{pages[index]}}/{{Math.ceil(group.scripts.length / 6)}}
+                                        </v-btn>
+                                        <v-btn icon large :disabled="pages[index]==Math.ceil(group.scripts.length / 6)" @click="pages.splice(index, 1, pages[index] + 1)">
+                                            <v-icon>arrow_forward</v-icon>
+                                        </v-btn>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
