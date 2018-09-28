@@ -10,16 +10,13 @@ export default class App extends Vue {
 
   resize() {
     if (
-      this.$refs.view instanceof Element &&
-      this.$refs.cuber instanceof Element &&
-      this.$refs.panel instanceof Element
+      this.$refs.cuber instanceof HTMLElement &&
+      this.$refs.panel instanceof HTMLElement
     ) {
-      let view = this.$refs.view;
       let cuber = this.$refs.cuber;
       let panel = this.$refs.panel;
-      let viewHeight = view.clientHeight;
       let panelHeight = panel.clientHeight;
-      let cuberHeight = viewHeight - panelHeight;
+      let cuberHeight = window.innerHeight - panelHeight;
       this.game.resize(cuber.clientWidth, cuberHeight);
     }
   }
@@ -95,6 +92,24 @@ export default class App extends Vue {
 
   script: string = "RUR'U'";
   scriptDialog = false;
+  pages: number[] = [1, 1, 1];
+
+  getPageScripts(index: number) {
+    let empty = 0;
+    let page = this.pages[index];
+    let start = (page - 1) * 8;
+    let end = page * 8 - 1;
+    if (end >= this.scripts[index].scripts.length) {
+      empty = end - this.scripts[index].scripts.length + 1;
+      end = end - empty;
+    }
+    let result = this.scripts[index].scripts.slice(start, end + 1);
+    for (let i = 0; i < empty; i++) {
+      result.push({ name: "", script: "" });
+    }
+    return result;
+  }
+
   scripts = [
     {
       name: "F2L",

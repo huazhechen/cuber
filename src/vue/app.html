@@ -1,5 +1,5 @@
 <v-app>
-    <div ref=view style="height: 100%" v-resize="resize">
+    <div v-resize="resize">
         <div ref=cuber></div>
         <div ref=panel>
             <v-container fluid grid-list-md text-xs-center v-show="mode == 'keyboard'">
@@ -28,8 +28,7 @@
                         <v-card-text class="title" :disabled="lock" @click="scriptDialog = true">{{script}}</v-card-text>
                     </v-flex>
                     <v-flex xs12>
-                        <v-slider :disabled="lock" @click.native="test(event)" always-dirty thumb-label="always" ticks="always"
-                            v-model="progress" :max="actions.length"></v-slider>
+                        <v-slider readonly always-dirty thumb-label="always" ticks="always" v-model="progress" :max="actions.length"></v-slider>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn icon large :disabled="lock || playing || progress==0" @click="progress = 0">
@@ -79,7 +78,7 @@
             </v-card-text>
         </v-card>
     </v-dialog>
-    <v-dialog v-model="scriptDialog" scrollable>
+    <v-dialog v-model="scriptDialog">
         <v-card tile>
             <v-toolbar>
                 <v-toolbar-title>Scripts</v-toolbar-title>
@@ -91,27 +90,37 @@
                 </v-toolbar-items>
             </v-toolbar>
             <v-tabs grow>
-                <template v-for="group in scripts">
-                    <v-tab :key="group.name">
+                <template v-for="(group, index) in scripts">
+                    <v-tab :key="index">
                         {{group.name}}
                     </v-tab>
                 </template>
-                <v-tabs-items style="overflow: auto;">
-                    <template v-for="group in scripts">
-                        <v-tab-item :key="group.name">
-                            <v-card tile>
-                                <v-list>
-                                    <template v-for="(item, index) in group.scripts">
-                                        <v-list-tile ripple @click="script = item.script; scriptDialog = false" :key="item.name">
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>{{item.name}}</v-list-tile-title>
-                                                <v-list-tile-sub-title>{{item.script}}</v-list-tile-sub-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
-                                        <v-divider v-if="index + 1 < group.scripts.length" :key="index"></v-divider>
-                                    </template>
-                                </v-list>
-                            </v-card>
+                <v-tabs-items>
+                    <template v-for="(group, index) in scripts">
+                        <v-tab-item :key="index">
+                            <v-container fluid grid-list-md text-xs-center style="padding: 0%">
+                                <v-layout row wrap>
+                                    <v-flex xs12>
+                                        <v-card tile>
+                                            <v-list>
+                                                <template v-for="(item, i) in getPageScripts(index)">
+                                                    <v-list-tile ripple @click="if (item.name.length != 0){script = item.script; scriptDialog = false;}"
+                                                        :key="i">
+                                                        <v-list-tile-content>
+                                                            <v-list-tile-title>{{item.name}}</v-list-tile-title>
+                                                            <v-list-tile-sub-title>{{item.script}}</v-list-tile-sub-title>
+                                                        </v-list-tile-content>
+                                                    </v-list-tile>
+                                                    <v-divider v-if="i < 7"></v-divider>
+                                                </template>
+                                            </v-list>
+                                        </v-card>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-pagination v-model="pages[index]" :length="Math.ceil(group.scripts.length / 8)"></v-pagination>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
                         </v-tab-item>
                     </template>
                 </v-tabs-items>
