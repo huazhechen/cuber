@@ -97,8 +97,8 @@ export default class App extends Vue {
   getPageScripts(index: number) {
     let empty = 0;
     let page = this.pages[index];
-    let start = (page - 1) * 8;
-    let end = page * 8 - 1;
+    let start = (page - 1) * 6;
+    let end = page * 6 - 1;
     if (end >= this.scripts[index].scripts.length) {
       empty = end - this.scripts[index].scripts.length + 1;
       end = end - empty;
