@@ -238,7 +238,7 @@ export default class App extends Vue {
                 { name: "PLL-08", script: "(R U R' U')(R'F)(R2 U' R' U' R U R' F')" },
                 {
                     name: "PLL-09",
-                    script: "(R' U R U' R'2 b')x(R' U R)y'(R U R' U' R2) x'U'"
+                    script: "(R' U' F')(R U R' U')(R' F R2 U' R' U')(R U R' U R)"
                 },
                 {
                     name: "PLL-10",
