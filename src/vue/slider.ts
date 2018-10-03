@@ -75,6 +75,24 @@ export default class Slider extends Vue {
     @Prop({ default: 100 })
     max: number
 
+    @Prop({ default: 100 })
+    interval: number
+
+    getValueByIndex(index: number) {
+        return this.interval * index + this.min
+    }
+    getIndexByValue(value: number) {
+        return Math.round((value - this.min) / this.interval)
+    }
+
+    get gap() {
+        return this.size / this.total
+    }
+
+    get total() {
+        return (this.max - this.min) / this.interval
+    }
+
     setValueOnPos(pos: number, drag: boolean) {
         let prange = [0, this.size]
         let vrange = [this.min, this.max]
@@ -107,6 +125,21 @@ export default class Slider extends Vue {
             }
         }
         drag || this.setPosition()
+    }
+
+    setPosition() {
+        //   this.flag || this.setTransitionTime(speed === undefined ? this.speed : speed)
+        //   if (this.isRange) {
+        //     this.setTransform(this.position[0], this.currentSlider === 1)
+        //     this.setTransform(this.position[1], this.currentSlider === 0)
+        //   } else {
+        //     this.setTransform(this.position)
+        //   }
+        //   this.flag || this.setTransitionTime(0)
+    }
+
+    syncValue() {
+        this.$emit('input', this.val)
     }
 
     setTransform(val: number) {
