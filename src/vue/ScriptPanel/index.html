@@ -1,7 +1,7 @@
 <v-container fluid grid-list-md text-xs-center v-show="show">
     <v-layout row wrap>
         <v-flex xs12>
-            <v-card-text class="title" :disabled="disabled" @click="dialog = true">{{script.script}}</v-card-text>
+            <p class="title" @click="if (!disabled && !playing){dialog = true}">{{script.script}}</p>
         </v-flex>
         <v-flex xs1>
             <v-spacer></v-spacer>
@@ -32,26 +32,28 @@
     </v-layout>
     <v-bottom-sheet v-model="dialog">
         <v-card tile>
-            <v-subheader>Type:</v-subheader>
-            <v-btn-toggle v-model="type" mandatory style="width:100%">
-                <template v-for="(group, index) in scripts">
-                    <v-btn block :value="index">{{group.name}}</v-btn>
-                </template>
-            </v-btn-toggle>
-            <v-divider></v-divider>
-            <v-subheader>Index:</v-subheader>
-            <v-layout row wrap>
-                <v-flex xs1>
-                    <v-spacer></v-spacer>
-                </v-flex>
-                <v-flex xs10>
-                    <v-slider always-dirty thumb-label="always" track-color="primary" ticks="always" v-model="index" :max="scripts[type].scripts.length"
-                        min=1></v-slider>
-                </v-flex>
-                <v-flex xs1>
-                    <v-spacer></v-spacer>
-                </v-flex>
-            </v-layout>
+            <v-container fluid grid-list-md text-xs-center>
+                <v-subheader>Type:</v-subheader>
+                <v-btn-toggle v-model="type" mandatory style="width:100%">
+                    <template v-for="(group, index) in scripts">
+                        <v-btn block :disabled="disabled || playing" :value="index">{{group.name}}</v-btn>
+                    </template>
+                </v-btn-toggle>
+                <v-divider></v-divider>
+                <v-subheader>Index:</v-subheader>
+                <v-layout row wrap>
+                    <v-flex xs1>
+                        <v-spacer></v-spacer>
+                    </v-flex>
+                    <v-flex xs10>
+                        <v-slider :disabled="disabled || playing" always-dirty thumb-label="always" track-color="primary"
+                            ticks="always" v-model="index" :max="scripts[type].scripts.length" min=1></v-slider>
+                    </v-flex>
+                    <v-flex xs1>
+                        <v-spacer></v-spacer>
+                    </v-flex>
+                </v-layout>
+            </v-container>
         </v-card>
     </v-bottom-sheet>
 </v-container>

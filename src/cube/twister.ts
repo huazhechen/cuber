@@ -10,6 +10,10 @@ export default class Twister {
     this._game = game;
   }
 
+  get length() {
+    return this._queue.length;
+  }
+
   twist(
     exp: string,
     reverse: boolean = false,

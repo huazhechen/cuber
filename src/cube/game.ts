@@ -52,6 +52,7 @@ export default class Game {
   reset() {
     if (!this.lock) {
       this.cube.reset();
+      this.dirty = true;
     }
   }
 

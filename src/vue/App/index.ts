@@ -59,6 +59,6 @@ export default class App extends Vue {
     }
 
     get lock() {
-        return this.game.lock;
+        return this.game.lock || this.game.twister.length != 0;
     }
 }

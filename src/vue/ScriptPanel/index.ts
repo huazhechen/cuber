@@ -263,6 +263,7 @@ export default class ScriptPanel extends Vue {
 
     reset() {
         this.progress = 0;
+        this.playing = false;
         this.app.game.reset();
         this.app.game.twister.twist(this.script.script, true, 1, null, true);
     }

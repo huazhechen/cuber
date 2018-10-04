@@ -6,7 +6,7 @@
             <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
         </div>
     </div>
-    <v-btn fixed top right icon large outline @click="onMenuClick">
+    <v-btn :disabled="lock" fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
     <v-dialog v-model="menu">
@@ -29,7 +29,7 @@
                 </v-btn-toggle>
                 <v-divider></v-divider>
                 <v-subheader>Action</v-subheader>
-                <v-btn block @click="menu = false; reset()" :disabled="lock || mode=='script'">Reset</v-btn>
+                <v-btn block @click="menu = false; game.reset()" :disabled="lock || mode=='script'">Reset</v-btn>
             </v-card-text>
         </v-card>
     </v-dialog>
