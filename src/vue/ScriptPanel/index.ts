@@ -90,6 +90,7 @@ export default class ScriptPanel extends Vue {
 
     stick() {
         this.app.game.cube.stick();
+        this.app.game.dirty = true;
     }
 
     strip() {
@@ -99,6 +100,7 @@ export default class ScriptPanel extends Vue {
                 this.app.game.cube.strip(index, strip.faces);
             }
         }
+        this.app.game.dirty = true;
     }
 
     @Watch('type')
