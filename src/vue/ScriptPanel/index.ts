@@ -15,8 +15,12 @@ export default class ScriptPanel extends Vue {
 
     @Watch("show")
     onShowChange(to: boolean, from: boolean) {
+        this.stick();
         if (to) {
             this.reset();
+            this.strip();
+        } else {
+            this.playing = false;
         }
     }
 
@@ -84,14 +88,35 @@ export default class ScriptPanel extends Vue {
     type: number = 0;
     index: number = 1;
 
+    stick() {
+        this.app.game.cube.stick();
+    }
+
+    strip() {
+        let strips = this.scripts[this.type].strips;
+        for (let strip of strips) {
+            for (let index of strip.indexs) {
+                this.app.game.cube.strip(index, strip.faces);
+            }
+        }
+    }
+
     @Watch('type')
-    onTypeChange() {
+    onTypeChange(to: number, from: number) {
         this.index = 1;
+        this.stick();
+        this.strip();
     }
 
     scripts = [
         {
             name: "F2L",
+            strips: [
+                {
+                    indexs: [6, 7, 8, 15, 16, 17, 24, 25, 26],
+                    faces: [0, 1, 2, 3, 4, 5]
+                }
+            ],
             scripts: [
                 { name: "F2L-01", script: "(R U'2 R' U)2 y'(R' U' R) y" },
                 { name: "F2L-02", script: "(U R U' R' U') y'(R' U R) y" },
@@ -138,6 +163,12 @@ export default class ScriptPanel extends Vue {
         },
         {
             name: "OLL",
+            strips: [
+                {
+                    indexs: [6, 7, 8, 15, 16, 17, 24, 25, 26],
+                    faces: [0, 1, 2, 4, 5]
+                }
+            ],
             scripts: [
                 { name: "OLL-01", script: "(R U'2) (R2' F R F') U2 (R' F R F')" },
                 { name: "OLL-02", script: "(F R U R' U' F') (f R U R' U' f')" },
@@ -200,6 +231,7 @@ export default class ScriptPanel extends Vue {
         },
         {
             name: "PLL",
+            strips: [],
             scripts: [
                 { name: "PLL-01", script: "(R U' R)(U R U R)(U' R' U' R2)" },
                 { name: "PLL-02", script: "(R2 U)(R U R' U')(R' U')(R' U R')" },

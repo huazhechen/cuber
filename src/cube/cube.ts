@@ -5,13 +5,14 @@ import { Euler } from "three";
 
 export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
-  public lock: Boolean = false;
+  private _initial: Cubelet[] = [];
 
   constructor(game: Game) {
     super();
     for (var i = 0; i < 27; i++) {
       let cubelet = new Cubelet(i);
       this.cubelets.push(cubelet);
+      this._initial.push(cubelet);
       this.add(cubelet);
     }
   }
@@ -27,5 +28,17 @@ export default class Cube extends THREE.Group {
       cubelet.updateMatrix();
     }
     this.cubelets.sort(this.compare);
+  }
+
+  stick() {
+    for (let cubelet of this.cubelets) {
+      cubelet.stick();
+    }
+  }
+
+  strip(index: number, faces: number[]) {
+    for (let face of faces) {
+      this._initial[index].strip(face);
+    }
   }
 }

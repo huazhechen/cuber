@@ -26,7 +26,7 @@ export default class Game {
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 8;
-    this.scene.rotation.y = -Math.PI / 4;
+    this.scene.rotation.y = Math.PI / 16 - Math.PI / 4;
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Game.SIZE);
     this.camera.position.x = 0;
     this.camera.position.y = 0;

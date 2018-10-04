@@ -175,6 +175,7 @@ export default class Cubelet extends THREE.Group {
   public initial: number;
   private _index: number;
   private _vector: THREE.Vector3 = new THREE.Vector3();
+  private _stickers: THREE.Mesh[] = [];
 
   set vector(vector) {
     this._vector.set(
@@ -198,10 +199,12 @@ export default class Cubelet extends THREE.Group {
     let _z = Math.floor(index / 9) - 1;
     this.vector = new THREE.Vector3(_x, _y, _z);
   }
-  
+
   get index() {
     return this._index;
   }
+
+  private _materials: THREE.MeshBasicMaterial[];
 
   constructor(index: number) {
     super();
@@ -211,7 +214,7 @@ export default class Cubelet extends THREE.Group {
     let _z = Math.floor(index / 9) - 1;
     this.vector = new THREE.Vector3(_x, _y, _z);
 
-    let materials = [
+    this._materials = [
       this._vector.x < 0 ? Cubelet._MATERIALS.o : Cubelet._MATERIALS.i,
       this._vector.x > 0 ? Cubelet._MATERIALS.r : Cubelet._MATERIALS.i,
       this._vector.y < 0 ? Cubelet._MATERIALS.w : Cubelet._MATERIALS.i,
@@ -225,7 +228,7 @@ export default class Cubelet extends THREE.Group {
 
     for (let i = 0; i < 6; i++) {
       let _edge = new THREE.Mesh(Cubelet._EDGE, Cubelet._MATERIALS.p);
-      let _sticker = new THREE.Mesh(Cubelet._STICKER, materials[i]);
+      let _sticker = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
       switch (i) {
         case 0:
           _edge.rotation.y = -Math.PI / 2;
@@ -268,6 +271,17 @@ export default class Cubelet extends THREE.Group {
       }
       this.add(_edge);
       this.add(_sticker);
+      this._stickers.push(_sticker);
     }
+  }
+
+  stick() {
+    for (let i = 0; i < 6; i++) {
+      this._stickers[i].material = this._materials[i];
+    }
+  }
+
+  strip(face: number) {
+    this._stickers[face].material = Cubelet._MATERIALS.i;
   }
 }
