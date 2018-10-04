@@ -1,113 +1,92 @@
-import { Component, Vue, Watch } from "vue-property-decorator";
-import Game from "../cube/game";
-import { TwistAction, TwistNode } from "../cube/twister";
+import { Component, Vue, Prop, Watch, Inject } from "vue-property-decorator";
+import { TwistAction, TwistNode } from "../../cube/twister";
+import App from "../App";
 
 @Component({
-    template: require("./app.html")
+    template: require("./index.html")
 })
-export default class App extends Vue {
-    game: Game = new Game();
+export default class ScriptPanel extends Vue {
 
-    resize() {
-        if (
-            this.$refs.cuber instanceof HTMLElement &&
-            this.$refs.panel instanceof HTMLElement
-        ) {
-            let cuber = this.$refs.cuber;
-            let panel = this.$refs.panel;
-            let panelHeight = panel.clientHeight;
-            let cuberHeight = window.innerHeight - panelHeight;
-            this.game.resize(cuber.clientWidth, cuberHeight);
+    @Inject('app')
+    app: App
+
+    @Prop({ default: false })
+    show: boolean
+
+    @Watch("show")
+    onShowChange(to: boolean, from: boolean) {
+        if (to) {
+            this.reset();
         }
     }
 
-    mounted() {
-        if (this.$refs.cuber instanceof Element) {
-            let cuber = this.$refs.cuber;
-            this.resize();
-            cuber.appendChild(this.game.canvas);
+    @Prop({ default: false })
+    disabled: boolean
+
+    progress: number = 0;
+
+    playing: boolean = false;
+
+    play() {
+        if (this.progress == this.actions.length) {
+            this.playing = false;
+        }
+        if (this.playing) {
+            this.forward();
         }
     }
 
-    menu: boolean = false;
-    onMenuClick() {
-        this.menu = !this.menu;
+    forward() {
+        if (this.progress == this.actions.length) {
+            return;
+        }
+        let action = this.actions[this.progress];
+        this.app.game.twister.twist(action.twist, action.reverse, action.times, this.play, false);
+        this.progress++;
     }
 
-    mode: string = "touch";
+    backward() {
+        if (this.progress == 0) {
+            return;
+        }
+        this.progress--;
+        let action = this.actions[this.progress];
+        this.app.game.twister.twist(action.twist, !action.reverse, action.times, this.play, false);
+    }
 
-    resetScript() {
+    end() {
+        if (this.progress == this.actions.length) {
+            return;
+        }
+        let start = this.progress;
+        let end = this.actions.length;
+        let actions = this.actions.slice(start, end);
+        for (let action of actions) {
+            this.app.game.twister.twist(action.twist, action.reverse, action.times, null, true);
+        }
+        this.progress = this.actions.length;
+    }
+
+    start() {
+        if (this.progress == 0) {
+            return;
+        }
+        let start = 0;
+        let end = this.progress;
+        let actions = this.actions.slice(start, end).reverse();
+        for (let action of actions) {
+            this.app.game.twister.twist(action.twist, !action.reverse, action.times, null, true);
+        }
         this.progress = 0;
-        this.reset();
-        this.game.twist(this.script, true, 1, true);
     }
 
-    @Watch("mode")
-    onModeChange(to: string, from: string) {
-        this.menu = false;
-        if (from != "touch" && to == "touch") {
-            this.game.controller.enable();
-        }
-        if (from == "touch" && to != "touch") {
-            this.game.controller.disable();
-        }
-        if (to == "script") {
-            this.resetScript();
-        }
-        this.$nextTick(this.resize);
-    }
+    dialog = false;
+    type: number = 0;
+    index: number = 1;
 
-    shift: string[] = [];
-    operations: string[] = [
-        "L",
-        "D",
-        "B",
-        "R",
-        "U",
-        "F",
-        "l",
-        "d",
-        "b",
-        "r",
-        "u",
-        "f",
-        "M",
-        "E",
-        "S",
-        "x",
-        "y",
-        "z"
-    ];
-
-    get suffix() {
-        let result: string = "";
-        result = result.concat(this.shift.indexOf("reverse") == -1 ? "" : "'");
-        result = result.concat(this.shift.indexOf("double") == -1 ? "" : "2");
-        return result;
-    }
-
-    get lock() {
-        return this.game.lock;
-    }
-
-    script: string = "RUR'U'";
-    scriptDialog = false;
-    pages: number[] = [1, 1, 1];
-
-    getPageScripts(index: number) {
-        let empty = 0;
-        let page = this.pages[index];
-        let start = (page - 1) * 6;
-        let end = page * 6 - 1;
-        if (end >= this.scripts[index].scripts.length) {
-            empty = end - this.scripts[index].scripts.length + 1;
-            end = end - empty;
-        }
-        let result = this.scripts[index].scripts.slice(start, end + 1);
-        for (let i = 0; i < empty; i++) {
-            result.push({ name: "", script: "" });
-        }
-        return result;
+    @Watch('type')
+    onTypeChange() {
+        this.index = 1;
     }
 
     scripts = [
@@ -270,78 +249,21 @@ export default class App extends Vue {
             ]
         }
     ];
-    progress: number = 0;
-    actions: TwistAction[] = new TwistNode(this.script).parse();
-
-    playing: boolean = false;
+    get script() {
+        return this.scripts[this.type].scripts[this.index - 1];
+    }
+    actions: TwistAction[] = new TwistNode(this.script.script).parse();
 
     @Watch("script")
     onScriptChange(to: string, from: string) {
-        this.actions = new TwistNode(this.script).parse();
-        this.resetScript();
-        this.$nextTick(this.resize);
-    }
-
-    play() {
-        if (this.progress == this.actions.length) {
-            this.playing = false;
-        }
-        if (this.playing) {
-            this.forward();
-        }
-    }
-
-    forward() {
-        if (this.progress == this.actions.length) {
-            return;
-        }
-        this.game.twister.start(this.actions[this.progress], this.play);
-        this.progress++;
-    }
-
-    backward() {
-        if (this.progress == 0) {
-            return;
-        }
-        this.progress--;
-        let action = new TwistAction();
-        action.twist = this.actions[this.progress].twist;
-        action.times = this.actions[this.progress].times;
-        action.reverse = !this.actions[this.progress].reverse;
-        this.game.twister.start(action, this.play)
-    }
-
-    end() {
-        if (this.progress == this.actions.length) {
-            return;
-        }
-        let start = this.progress;
-        let end = this.actions.length;
-        let actions = this.actions.slice(start, end);
-        for (let action of actions) {
-            this.game.twist(action.twist, action.reverse, action.times, true);
-        }
-        this.progress = this.actions.length;
-    }
-
-    start() {
-        if (this.progress == 0) {
-            return;
-        }
-        let start = 0;
-        let end = this.progress;
-        let actions = this.actions.slice(start, end).reverse();
-        for (let action of actions) {
-            this.game.twist(action.twist, !action.reverse, action.times, true);
-        }
-        this.progress = 0;
-    }
-
-    operate(operation: string) {
-        this.game.twist(operation);
+        this.actions = new TwistNode(this.script.script).parse();
+        this.reset();
+        this.$nextTick(this.app.resize);
     }
 
     reset() {
-        this.game.reset();
+        this.progress = 0;
+        this.app.game.reset();
+        this.app.game.twister.twist(this.script.script, true, 1, null, true);
     }
 }

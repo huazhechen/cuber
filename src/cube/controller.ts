@@ -31,9 +31,6 @@ export default class Controller {
       new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Game.SIZE * 3) / 64),
       new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Game.SIZE * 3) / 64)
     ];
-  }
-
-  enable() {
     this._game.canvas.addEventListener("mousedown", this._onMouseDown);
     this._game.canvas.addEventListener("mousemove", this._onMouseMove);
     this._game.canvas.addEventListener("mouseup", this._onMouseUp);
@@ -41,16 +38,6 @@ export default class Controller {
     this._game.canvas.addEventListener("touchstart", this._onTouch, true);
     this._game.canvas.addEventListener("touchmove", this._onTouch, true);
     this._game.canvas.addEventListener("touchend", this._onTouch, true);
-  }
-
-  disable() {
-    this._game.canvas.removeEventListener("mousedown", this._onMouseDown);
-    this._game.canvas.removeEventListener("mousemove", this._onMouseMove);
-    this._game.canvas.removeEventListener("mouseup", this._onMouseUp);
-    this._game.canvas.removeEventListener("mouseout", this._onMouseOut);
-    this._game.canvas.removeEventListener("touchstart", this._onTouch, true);
-    this._game.canvas.removeEventListener("touchmove", this._onTouch, true);
-    this._game.canvas.removeEventListener("touchend", this._onTouch, true);
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
@@ -108,7 +95,7 @@ export default class Controller {
           this._game.canvas.clientWidth,
           this._game.canvas.clientHeight
         ) /
-          d >
+        d >
         100
       ) {
         return true;
@@ -210,7 +197,11 @@ export default class Controller {
   _handleUp() {
     if (this._rotating) {
       if (this._group && this._group !== null) {
-        this._group.adjust(this._game);
+        if (this._game.enable) {
+          this._group.adjust(this._game);
+        } else {
+          this._group.revert(this._game);
+        }
       }
     }
     this._holder.index = -1;

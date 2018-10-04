@@ -25,7 +25,7 @@ export default class Group extends THREE.Group {
         "M": new Group([1, 4, 7, 10, 13, 16, 19, 22, 25,], new THREE.Vector3(-1, 0, 0)),
         "E": new Group([3, 4, 5, 12, 13, 14, 21, 22, 23,], new THREE.Vector3(0, -1, 0)),
         "S": new Group([9, 10, 11, 12, 13, 14, 15, 16, 17,], new THREE.Vector3(0, 0, +1)),
-        
+
         "x": new Group([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(+1, 0, 0)),
         "y": new Group([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(0, +1, 0)),
         "z": new Group([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(0, 0, +1)),
@@ -61,6 +61,36 @@ export default class Group extends THREE.Group {
         game.lock = true;
     }
 
+    revert(game: Game) {
+        let angle = - this._angle;
+        if (angle === 0) {
+            while (true) {
+                let cubelet = this._cubelets.pop()
+                if (undefined === cubelet) {
+                    break;
+                }
+                this.remove(cubelet);
+                game.cube.add(cubelet);
+                game.cube.cubelets[cubelet.index] = cubelet;
+
+            }
+            this._angle = 0;
+            game.lock = false;
+        } else {
+            var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
+            game.tweener.tween(
+                this.angle,
+                this.angle + angle,
+                duration,
+                (value: number) => {
+                    this.angle = value;
+                },
+                () => {
+                    this.revert(game);
+                })
+        }
+    }
+
     adjust(game: Game) {
         let angle = Math.round(this._angle / (Math.PI / 2)) * (Math.PI / 2) - this._angle;
         if (angle === 0) {
@@ -78,7 +108,7 @@ export default class Group extends THREE.Group {
             this._angle = 0;
             game.lock = false;
         } else {
-            var duration = 600 * Math.abs(angle) / Math.PI;
+            var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
             game.tweener.tween(
                 this.angle,
                 this.angle + angle,

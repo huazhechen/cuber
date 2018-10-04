@@ -13,6 +13,7 @@ export default class Game {
   public renderer: THREE.WebGLRenderer;
   public scene: THREE.Scene;
   public lock: boolean = false;
+  public enable: boolean = true;
 
   public cube: Cube;
   public tweener: Tweener;
@@ -42,13 +43,12 @@ export default class Game {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.canvas = this.renderer.domElement;
     this.controller = new Controller(this);
-    this.controller.enable();
 
     this.loop();
   }
 
   reset() {
-    if (!this.lock){
+    if (!this.lock) {
       this.cube.reset();
     }
   }
@@ -73,14 +73,5 @@ export default class Game {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.render();
-  }
-
-  twist(
-    key: string,
-    reverse: boolean = false,
-    times: number = 1,
-    fast: boolean = false
-  ) {
-    this.twister.twist(key, reverse, times, fast);
   }
 }

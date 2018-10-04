@@ -1,0 +1,57 @@
+<v-container fluid grid-list-md text-xs-center v-show="show">
+    <v-layout row wrap>
+        <v-flex xs12>
+            <v-card-text class="title" :disabled="disabled" @click="dialog = true">{{script.script}}</v-card-text>
+        </v-flex>
+        <v-flex xs1>
+            <v-spacer></v-spacer>
+        </v-flex>
+        <v-flex xs10>
+            <v-slider readonly ticks="always" v-model="progress" :max="actions.length"></v-slider>
+        </v-flex>
+        <v-flex xs1>
+            <v-spacer></v-spacer>
+        </v-flex>
+        <v-flex xs12>
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click="start">
+                <v-icon>skip_previous</v-icon>
+            </v-btn>
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click="backward">
+                <v-icon>fast_rewind</v-icon>
+            </v-btn>
+            <v-btn icon large :disabled="(disabled && !playing) || (progress == actions.length)" @click="playing = !playing; play();">
+                <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
+            </v-btn>
+            <v-btn icon large :disabled="disabled || playing || (progress == actions.length)" @click="forward">
+                <v-icon>fast_forward</v-icon>
+            </v-btn>
+            <v-btn icon large :disabled="disabled || playing || progress == actions.length" @click="end">
+                <v-icon>skip_next</v-icon>
+            </v-btn>
+        </v-flex>
+    </v-layout>
+    <v-bottom-sheet v-model="dialog">
+        <v-card tile>
+            <v-subheader>Type:</v-subheader>
+            <v-btn-toggle v-model="type" mandatory style="width:100%">
+                <template v-for="(group, index) in scripts">
+                    <v-btn block :value="index">{{group.name}}</v-btn>
+                </template>
+            </v-btn-toggle>
+            <v-divider></v-divider>
+            <v-subheader>Index:</v-subheader>
+            <v-layout row wrap>
+                <v-flex xs1>
+                    <v-spacer></v-spacer>
+                </v-flex>
+                <v-flex xs10>
+                    <v-slider always-dirty thumb-label="always" track-color="primary" ticks="always" v-model="index" :max="scripts[type].scripts.length"
+                        min=1></v-slider>
+                </v-flex>
+                <v-flex xs1>
+                    <v-spacer></v-spacer>
+                </v-flex>
+            </v-layout>
+        </v-card>
+    </v-bottom-sheet>
+</v-container>

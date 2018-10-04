@@ -1,0 +1,36 @@
+<v-app>
+    <div v-resize="resize">
+        <div ref=cuber></div>
+        <div ref=panel>
+            <keyboard-panel :disabled="lock" :show="mode == 'keyboard'"></keyboard-panel>
+            <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
+        </div>
+    </div>
+    <v-btn fixed top right icon large outline @click="onMenuClick">
+        <v-icon>menu</v-icon>
+    </v-btn>
+    <v-dialog v-model="menu">
+        <v-card tile>
+            <v-toolbar card>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn icon @click="menu = false">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <v-card-text>
+                <v-subheader>Control Mode</v-subheader>
+                <v-btn-toggle v-model="mode" mandatory style="width:100%">
+                    <v-btn block value="touch">Touch</v-btn>
+                    <v-btn block value="keyboard">Keyboard</v-btn>
+                    <v-btn block value="script">Script </v-btn>
+                </v-btn-toggle>
+                <v-divider></v-divider>
+                <v-subheader>Action</v-subheader>
+                <v-btn block @click="menu = false; reset()" :disabled="lock || mode=='script'">Reset</v-btn>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
+</v-app>

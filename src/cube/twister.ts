@@ -14,11 +14,12 @@ export default class Twister {
     exp: string,
     reverse: boolean = false,
     times: number = 1,
+    callback: Function | null = null,
     fast: boolean = false
   ) {
     let list = new TwistNode(exp, reverse, times).parse();
     if (fast) {
-      list.forEach(function(element) {
+      list.forEach(function (element) {
         let angle = -Math.PI / 2;
         if (element.reverse) {
           angle = -angle;
@@ -34,8 +35,12 @@ export default class Twister {
         part.angle = angle;
         part.adjust(this._game);
       }, this);
+      if (callback) {
+        callback();
+      }
     } else {
-      list.forEach(function(element) {
+      list[list.length - 1].callback = callback;
+      list.forEach(function (element) {
         this._queue.push(element);
       }, this);
     }
@@ -53,7 +58,7 @@ export default class Twister {
     return true;
   }
 
-  start(action: TwistAction, callback: Function | null = null) {
+  start(action: TwistAction) {
     let angle = -Math.PI / 2;
     if (action.reverse) {
       angle = -angle;
@@ -61,7 +66,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let duration = (600 * Math.abs(angle)) / Math.PI;
+    let duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
     let part = Group.GROUPS[action.twist];
     if (part === undefined) {
       return;
@@ -76,8 +81,8 @@ export default class Twister {
       },
       () => {
         part.adjust(this._game);
-        if (callback != null) {
-          callback();
+        if (action.callback) {
+          action.callback();
         }
       }
     );
@@ -177,9 +182,10 @@ export default class Twister {
 }
 
 export class TwistAction {
-  public twist: string;
-  public reverse: boolean;
-  public times: number;
+  public twist: string = 'R';
+  public reverse: boolean = false;
+  public times: number = 1;
+  public callback: Function | null = null;
 }
 
 export class TwistNode {
@@ -219,7 +225,7 @@ export class TwistNode {
       this._twist.twist = exp;
       this._twist.reverse = reverse;
       this._twist.times = times;
-      list.forEach(function(c) {
+      list.forEach(function (c) {
         var t = new TwistNode(c);
         this._children.push(t);
       }, this);
@@ -238,7 +244,7 @@ export class TwistNode {
             n = this._children[j];
           }
           var list = n.parse(reverse);
-          list.forEach(function(element) {
+          list.forEach(function (element) {
             _result.push(element);
           }, this);
         }
