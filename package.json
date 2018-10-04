@@ -25,7 +25,6 @@
     "css-loader": "*",
     "file-loader": "*",
     "text-loader": "*",
-    "vue-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
     "webpack": "*",

@@ -101,6 +101,11 @@ export default class Controller {
       ) {
         return true;
       }
+      if (this._game.lock) {
+        this._dragging = false;
+        this._rotating = false;
+        return true;
+      }
       this._dragging = false;
       this._rotating = true;
       if (this._holder.index === -1) {
