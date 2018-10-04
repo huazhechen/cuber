@@ -21,6 +21,8 @@ export default class Game {
   public controller: Controller;
   public camera: THREE.PerspectiveCamera;
 
+  public dirty = true;
+
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 8;
@@ -58,16 +60,19 @@ export default class Game {
     let min = ((height / Math.min(width, height)) * Game.SIZE) / 4;
     let fov = (2 * Math.atan(min / Game.SIZE) * 180) / Math.PI;
     this.camera.fov = fov;
+    this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, true);
+    this.dirty = true;
   }
 
   render() {
     this.twister.update();
     this.tweener.update();
-    this.camera.lookAt(this.scene.position);
-    this.camera.updateMatrixWorld(true);
-    this.renderer.render(this.scene, this.camera);
+    if (this.dirty) {
+      this.renderer.render(this.scene, this.camera);
+      this.dirty = false;
+    }
   }
 
   loop() {

@@ -6,6 +6,8 @@ import App from "../App";
 })
 export default class KeyboardPanel extends Vue {
 
+    queue: string[] = [];
+
     @Inject('app')
     app: App
 
@@ -45,7 +47,12 @@ export default class KeyboardPanel extends Vue {
     }
 
     twist(operation: string) {
-        this.app.game.twister.twist(operation);
+        this.queue.push(operation);
+        this.app.game.twister.twist(operation, false, 1, this.callback, false);
+    }
+
+    callback() {
+        this.queue.shift();
     }
 
 }

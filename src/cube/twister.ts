@@ -78,6 +78,7 @@ export default class Twister {
       duration,
       (value: number) => {
         part.angle = value;
+        this._game.dirty = true;
       },
       () => {
         part.adjust(this._game);

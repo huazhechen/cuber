@@ -83,6 +83,7 @@ export default class Controller {
       }
       return false;
     }, this);
+    this._game.dirty = true;
   }
 
   _handleMove() {
@@ -192,6 +193,7 @@ export default class Controller {
           8;
       }
     }
+    this._game.dirty = true;
   }
 
   _handleUp() {
@@ -207,6 +209,7 @@ export default class Controller {
     this._holder.index = -1;
     this._dragging = false;
     this._rotating = false;
+    this._game.dirty = true;
   }
 
   _onMouseDown = (event: MouseEvent) => {

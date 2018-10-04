@@ -2,7 +2,7 @@
     <div v-resize="resize">
         <div ref=cuber></div>
         <div ref=panel>
-            <keyboard-panel :disabled="lock" :show="mode == 'keyboard'"></keyboard-panel>
+            <keyboard-panel :show="mode == 'keyboard'"></keyboard-panel>
             <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
         </div>
     </div>

@@ -76,6 +76,7 @@ export default class Group extends THREE.Group {
             }
             this._angle = 0;
             game.lock = false;
+            game.dirty = true;
         } else {
             var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
             game.tweener.tween(
@@ -84,6 +85,7 @@ export default class Group extends THREE.Group {
                 duration,
                 (value: number) => {
                     this.angle = value;
+                    game.dirty = true;
                 },
                 () => {
                     this.revert(game);
@@ -107,6 +109,7 @@ export default class Group extends THREE.Group {
             }
             this._angle = 0;
             game.lock = false;
+            game.dirty = true;
         } else {
             var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
             game.tweener.tween(
@@ -115,6 +118,7 @@ export default class Group extends THREE.Group {
                 duration,
                 (value: number) => {
                     this.angle = value;
+                    game.dirty = true;
                 },
                 () => {
                     this.adjust(game);
