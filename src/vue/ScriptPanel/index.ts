@@ -20,6 +20,7 @@ export default class ScriptPanel extends Vue {
         if (to) {
             this.onTypeChange()
             this.onScriptChange()
+            this.onExpChange(this.exp)
         } else {
             this.playing = false;
         }
@@ -296,7 +297,7 @@ export default class ScriptPanel extends Vue {
     exp: string = "";
     actions: TwistAction[] = new TwistNode(this.exp).parse();
     @Watch('exp')
-    onStorageChange(value: string) {
+    onExpChange(value: string) {
         let storage = window.localStorage;
         let saved = storage.getItem(this.script.name);
         if (value == this.script.exp) {
