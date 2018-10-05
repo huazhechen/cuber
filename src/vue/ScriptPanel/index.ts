@@ -46,7 +46,7 @@ export default class ScriptPanel extends Vue {
             return;
         }
         let action = this.actions[this.progress];
-        this.app.game.twister.twist(action.twist, action.reverse, action.times, this.play, false);
+        this.app.game.twister.twist(action.exp, action.reverse, action.times, this.play, false);
         this.progress++;
     }
 
@@ -56,7 +56,7 @@ export default class ScriptPanel extends Vue {
         }
         this.progress--;
         let action = this.actions[this.progress];
-        this.app.game.twister.twist(action.twist, !action.reverse, action.times, this.play, false);
+        this.app.game.twister.twist(action.exp, !action.reverse, action.times, this.play, false);
     }
 
     end() {
@@ -67,7 +67,7 @@ export default class ScriptPanel extends Vue {
         let end = this.actions.length;
         let actions = this.actions.slice(start, end);
         for (let action of actions) {
-            this.app.game.twister.twist(action.twist, action.reverse, action.times, null, true);
+            this.app.game.twister.twist(action.exp, action.reverse, action.times, null, true);
         }
         this.progress = this.actions.length;
     }
@@ -80,7 +80,7 @@ export default class ScriptPanel extends Vue {
         let end = this.progress;
         let actions = this.actions.slice(start, end).reverse();
         for (let action of actions) {
-            this.app.game.twister.twist(action.twist, !action.reverse, action.times, null, true);
+            this.app.game.twister.twist(action.exp, !action.reverse, action.times, null, true);
         }
         this.progress = 0;
     }

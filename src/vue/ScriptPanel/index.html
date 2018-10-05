@@ -70,7 +70,8 @@
                     </v-flex>
                     <v-divider></v-divider>
                     <v-flex xs12 style="margin: 0%; padding: 0%; width: 100%;">
-                        <v-text-field class="title" solo single-line v-model="exp"></v-text-field>
+                        <v-text-field class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'"
+                            @click:append="exp=script.exp" solo single-line v-model="exp"></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-container>

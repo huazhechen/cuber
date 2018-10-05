@@ -31,7 +31,7 @@ export default class Twister {
         if (element.times) {
           angle = angle * element.times;
         }
-        let part = Group.GROUPS[element.twist];
+        let part = Group.GROUPS[element.exp];
         if (part === undefined) {
           return;
         }
@@ -71,7 +71,7 @@ export default class Twister {
       angle = angle * action.times;
     }
     let duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
-    let part = Group.GROUPS[action.twist];
+    let part = Group.GROUPS[action.exp];
     if (part === undefined) {
       return;
     }
@@ -187,7 +187,7 @@ export default class Twister {
 }
 
 export class TwistAction {
-  public twist: string = 'R';
+  public exp: string = '';
   public reverse: boolean = false;
   public times: number = 1;
   public callback: Function | null = null;
@@ -212,12 +212,12 @@ export class TwistNode {
         if (null === values) {
           return;
         }
-        this._twist.twist = values[1];
-        if (/[XYZ]/.test(this._twist.twist)) {
-          this._twist.twist = this._twist.twist.toLowerCase();
+        this._twist.exp = values[1];
+        if (/[XYZ]/.test(this._twist.exp)) {
+          this._twist.exp = this._twist.exp.toLowerCase();
         }
-        if (/[mes]/.test(this._twist.twist)) {
-          this._twist.twist = this._twist.twist.toUpperCase();
+        if (/[mes]/.test(this._twist.exp)) {
+          this._twist.exp = this._twist.exp.toUpperCase();
         }
       } else {
         this._children.push(new TwistNode(values[1]));
@@ -227,7 +227,7 @@ export class TwistNode {
       this._twist.reverse = this._twist.reverse !== reverse;
       this._twist.times = this._twist.times * times;
     } else {
-      this._twist.twist = exp;
+      this._twist.exp = exp;
       this._twist.reverse = reverse;
       this._twist.times = times;
       list.forEach(function (c) {
@@ -256,7 +256,7 @@ export class TwistNode {
       }
     } else {
       let action = new TwistAction();
-      action.twist = this._twist.twist;
+      action.exp = this._twist.exp;
       action.reverse = reverse;
       action.times = this._twist.times;
       _result.push(action);
