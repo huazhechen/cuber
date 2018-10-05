@@ -1,4 +1,5 @@
-import { Component, Vue, Watch, Provide } from "vue-property-decorator";
+import Vue from 'vue'
+import { Component, Watch, Provide } from "vue-property-decorator";
 import KeyboardPanel from "../KeyboardPanel"
 import ScriptPanel from "../ScriptPanel"
 import Game from "../../cube/game";

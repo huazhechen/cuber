@@ -1,4 +1,5 @@
-import { Component, Vue, Prop, Watch, Inject } from "vue-property-decorator";
+import Vue from 'vue'
+import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cube/twister";
 import App from "../App";
 

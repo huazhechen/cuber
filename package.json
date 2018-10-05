@@ -7,9 +7,12 @@
   "private": true,
   "scripts": {
     "watch": "webpack-dev-server --hot --inline --host 0.0.0.0",
-    "build": "webpack --mode=production --progress --hide-modules"
+    "build": "webpack --mode=production --progress",
+    "build:dll": "webpack --config ./webpack.dll.config.js"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "*",
     "@types/three": "*",
     "three": "*",
     "vue": "*",
@@ -17,16 +20,14 @@
     "vue-property-decorator": "*",
     "vuetify": "*",
     "typeface-roboto": "*",
-    "material-design-icons": "*"
-  },
-  "devDependencies": {
-    "typescript": "*",
+    "material-design-icons": "*",
     "url-loader": "*",
     "css-loader": "*",
     "file-loader": "*",
     "text-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
+    "vue-style-loader": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "@types/webpack-env": "*",

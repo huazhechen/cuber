@@ -1,4 +1,5 @@
-import { Component, Vue, Prop, Inject } from "vue-property-decorator";
+import Vue from 'vue'
+import { Component, Prop, Inject } from "vue-property-decorator";
 import App from "../App";
 
 @Component({
