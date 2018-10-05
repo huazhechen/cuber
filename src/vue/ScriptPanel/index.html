@@ -1,56 +1,76 @@
 <v-container fluid grid-list-md text-xs-center v-show="show">
     <v-layout row wrap>
-        <v-flex xs12>
-            <p class="title" @click="if (!disabled && !playing){dialog = true}">{{script.script}}</p>
+        <v-flex xs12 style="margin: 0%; padding: 0%; display: table; width: 100%;">
+            <p class="title" @click="if (!disabled && !playing){dialog = true}" style="display: table-cell; vertical-align:middle; width: 100%; height: 2.4em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{exp}}</p>
         </v-flex>
-        <v-flex xs1>
+        <v-flex xs1 style="margin: 0%; padding: 0%;">
             <v-spacer></v-spacer>
         </v-flex>
-        <v-flex xs10>
+        <v-flex xs10 style="margin: 0%; padding: 0%;">
             <v-slider readonly ticks="always" v-model="progress" :max="actions.length"></v-slider>
         </v-flex>
-        <v-flex xs1>
+        <v-flex xs1 style="margin: 0%; padding: 0%;">
             <v-spacer></v-spacer>
         </v-flex>
-        <v-flex xs12>
-            <v-btn icon large :disabled="disabled || playing || progress==0" @click="start">
+        <v-flex xs1 style="margin: 0%; padding: 0%;">
+            <v-spacer></v-spacer>
+        </v-flex>
+        <v-flex xs2 style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click="start" style="margin: 0%; padding: 0%;">
                 <v-icon>skip_previous</v-icon>
             </v-btn>
-            <v-btn icon large :disabled="disabled || playing || progress==0" @click="backward">
+            </v-btn>
+        </v-flex>
+        <v-flex xs2 style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click="backward" style="margin: 0%; padding: 0%;">
                 <v-icon>fast_rewind</v-icon>
             </v-btn>
-            <v-btn icon large :disabled="(disabled && !playing) || (progress == actions.length)" @click="playing = !playing; play();">
+        </v-flex>
+        <v-flex xs2 style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="(disabled && !playing) || (progress == actions.length)" @click="playing = !playing; play();"
+                style="margin: 0%; padding: 0%;">
                 <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
             </v-btn>
-            <v-btn icon large :disabled="disabled || playing || (progress == actions.length)" @click="forward">
+        </v-flex>
+        <v-flex xs2 style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || (progress == actions.length)" @click="forward" style="margin: 0%; padding: 0%;">
                 <v-icon>fast_forward</v-icon>
             </v-btn>
-            <v-btn icon large :disabled="disabled || playing || progress == actions.length" @click="end">
+        </v-flex>
+        <v-flex xs2 style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress == actions.length" @click="end" style="margin: 0%; padding: 0%;">
                 <v-icon>skip_next</v-icon>
             </v-btn>
+        </v-flex>
+        <v-flex xs1 style="margin: 0%; padding: 0%;">
+            <v-spacer></v-spacer>
         </v-flex>
     </v-layout>
     <v-bottom-sheet v-model="dialog">
         <v-card tile>
             <v-container fluid grid-list-md text-xs-center>
-                <v-subheader>Type:</v-subheader>
-                <v-btn-toggle v-model="type" mandatory style="width:100%">
-                    <template v-for="(group, index) in scripts">
-                        <v-btn block :disabled="disabled || playing" :value="index">{{group.name}}</v-btn>
-                    </template>
-                </v-btn-toggle>
-                <v-divider></v-divider>
-                <v-subheader>Index:</v-subheader>
                 <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-btn-toggle v-model="type" mandatory style="width:100%">
+                            <template v-for="(group, i) in scripts">
+                                <v-btn block :disabled="disabled || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
+                            </template>
+                        </v-btn-toggle>
+                    </v-flex>
+                    <v-divider></v-divider>
                     <v-flex xs1>
                         <v-spacer></v-spacer>
                     </v-flex>
                     <v-flex xs10>
-                        <v-slider :disabled="disabled || playing" always-dirty thumb-label="always" track-color="primary"
-                            ticks="always" v-model="index" :max="scripts[type].scripts.length" min=1></v-slider>
+                        <v-slider :disabled="disabled || playing" always-dirty track-color="primary" ticks="always"
+                            v-model="index" :max="scripts[type].scripts.length" min=1></v-slider>
                     </v-flex>
                     <v-flex xs1>
                         <v-spacer></v-spacer>
+                    </v-flex>
+                    <v-divider></v-divider>
+                    <v-flex xs12 style="margin: 0%; padding: 0%; width: 100%;">
+                        <v-text-field class="title" solo single-line v-model="exp"></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-container>
