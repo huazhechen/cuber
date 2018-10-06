@@ -298,12 +298,12 @@ export default class ScriptPanel extends Vue {
           exp: "(R'UR'U'yx2)(R'UR'U'yx)(U2R'U'RUR)x"
         },
         {
-          name: "PLL-Z",
-          exp: "(R'U'RU'R)(URU'R'UR)(UR2U'R')U2"
-        },
-        {
           name: "PLL-Y",
           exp: "F(RU'R'U')(RUR'F')(RUR'U')(R'FRF')"
+        },
+        {
+          name: "PLL-Z",
+          exp: "(R'U'RU'R)(URU'R'UR)(UR2U'R')U2"
         }
       ]
     }
