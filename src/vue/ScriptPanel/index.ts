@@ -328,8 +328,10 @@ export default class ScriptPanel extends Vue {
   timeoutTask: number = 0;
   intervalTask: number = 0;
   indexDown(delta: number) {
+    clearTimeout(this.timeoutTask);
     this.timeoutTask = setTimeout(() => {
       this.timeoutTask = 0;
+      clearTimeout(this.intervalTask);
       this.intervalTask = setInterval(() => {
         this.index = this.index + delta;
       }, 100);

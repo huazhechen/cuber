@@ -40,6 +40,8 @@ export default class App extends Vue {
     }
   }
 
+  exp: string = "";
+  expTask = 0;
   mounted() {
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
@@ -49,6 +51,13 @@ export default class App extends Vue {
     let storage = window.localStorage;
     this.game.duration = Number(storage.getItem("duration") || 30);
     this.mode = storage.getItem("mode") || "touch";
+    this.game.controller.addCallback((exp: string) => {
+      this.exp = exp;
+      clearTimeout(this.expTask);
+      this.expTask = setTimeout(() => {
+        this.exp = "";
+      }, 500);
+    });
   }
 
   menu: boolean = false;

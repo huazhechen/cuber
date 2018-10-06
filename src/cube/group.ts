@@ -4,133 +4,294 @@ import Game from "./game";
 import Cubelet from "./cubelet";
 
 export default class CubeletGroup extends THREE.Group {
+  public static readonly GROUPS: { [key: string]: CubeletGroup } = {
+    L: new CubeletGroup(
+      "L",
+      [0, 3, 6, 9, 12, 15, 18, 21, 24],
+      new THREE.Vector3(-1, 0, 0)
+    ),
+    D: new CubeletGroup(
+      "D",
+      [0, 1, 2, 9, 10, 11, 18, 19, 20],
+      new THREE.Vector3(0, -1, 0)
+    ),
+    B: new CubeletGroup(
+      "B",
+      [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      new THREE.Vector3(0, 0, -1)
+    ),
+    R: new CubeletGroup(
+      "R",
+      [2, 5, 8, 11, 14, 17, 20, 23, 26],
+      new THREE.Vector3(+1, 0, 0)
+    ),
+    U: new CubeletGroup(
+      "U",
+      [6, 7, 8, 15, 16, 17, 24, 25, 26],
+      new THREE.Vector3(0, +1, 0)
+    ),
+    F: new CubeletGroup(
+      "F",
+      [18, 19, 20, 21, 22, 23, 24, 25, 26],
+      new THREE.Vector3(0, 0, +1)
+    ),
+    l: new CubeletGroup(
+      "l",
+      [0, 3, 6, 9, 12, 15, 18, 21, 24, 1, 4, 7, 10, 13, 16, 19, 22, 25],
+      new THREE.Vector3(-1, 0, 0)
+    ),
+    d: new CubeletGroup(
+      "d",
+      [0, 1, 2, 9, 10, 11, 18, 19, 20, 3, 4, 5, 12, 13, 14, 21, 22, 23],
+      new THREE.Vector3(0, -1, 0)
+    ),
+    b: new CubeletGroup(
+      "b",
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      new THREE.Vector3(0, 0, -1)
+    ),
+    r: new CubeletGroup(
+      "r",
+      [2, 5, 8, 11, 14, 17, 20, 23, 26, 1, 4, 7, 10, 13, 16, 19, 22, 25],
+      new THREE.Vector3(+1, 0, 0)
+    ),
+    u: new CubeletGroup(
+      "u",
+      [6, 7, 8, 15, 16, 17, 24, 25, 26, 3, 4, 5, 12, 13, 14, 21, 22, 23],
+      new THREE.Vector3(0, +1, 0)
+    ),
+    f: new CubeletGroup(
+      "f",
+      [18, 19, 20, 21, 22, 23, 24, 25, 26, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      new THREE.Vector3(0, 0, +1)
+    ),
+    M: new CubeletGroup(
+      "M",
+      [1, 4, 7, 10, 13, 16, 19, 22, 25],
+      new THREE.Vector3(-1, 0, 0)
+    ),
+    E: new CubeletGroup(
+      "E",
+      [3, 4, 5, 12, 13, 14, 21, 22, 23],
+      new THREE.Vector3(0, -1, 0)
+    ),
+    S: new CubeletGroup(
+      "S",
+      [9, 10, 11, 12, 13, 14, 15, 16, 17],
+      new THREE.Vector3(0, 0, +1)
+    ),
+    x: new CubeletGroup(
+      "x",
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      new THREE.Vector3(+1, 0, 0)
+    ),
+    y: new CubeletGroup(
+      "y",
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      new THREE.Vector3(0, +1, 0)
+    ),
+    z: new CubeletGroup(
+      "z",
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      new THREE.Vector3(0, 0, +1)
+    )
+  };
 
-    public static readonly GROUPS: { [key: string]: CubeletGroup } = {
-        "L": new CubeletGroup([0, 3, 6, 9, 12, 15, 18, 21, 24,], new THREE.Vector3(-1, 0, 0)),
-        "D": new CubeletGroup([0, 1, 2, 9, 10, 11, 18, 19, 20,], new THREE.Vector3(0, -1, 0)),
-        "B": new CubeletGroup([0, 1, 2, 3, 4, 5, 6, 7, 8,], new THREE.Vector3(0, 0, -1)),
+  private _cubelets: Cubelet[] = [];
+  private _angle: number;
+  private _indices: number[];
+  public axis: THREE.Vector3;
+  public name: string;
 
-        "R": new CubeletGroup([2, 5, 8, 11, 14, 17, 20, 23, 26,], new THREE.Vector3(+1, 0, 0)),
-        "U": new CubeletGroup([6, 7, 8, 15, 16, 17, 24, 25, 26,], new THREE.Vector3(0, +1, 0)),
-        "F": new CubeletGroup([18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(0, 0, +1)),
+  constructor(name: string, indices: number[], axis: THREE.Vector3) {
+    super();
+    this.name = name;
+    this._indices = indices;
+    this.axis = axis;
+    this.matrixAutoUpdate = false;
+    this.updateMatrix();
+  }
 
-        "l": new CubeletGroup([0, 3, 6, 9, 12, 15, 18, 21, 24, 1, 4, 7, 10, 13, 16, 19, 22, 25,], new THREE.Vector3(-1, 0, 0)),
-        "d": new CubeletGroup([0, 1, 2, 9, 10, 11, 18, 19, 20, 3, 4, 5, 12, 13, 14, 21, 22, 23,], new THREE.Vector3(0, -1, 0)),
-        "b": new CubeletGroup([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,], new THREE.Vector3(0, 0, -1)),
+  set angle(angle: number) {
+    this.setRotationFromAxisAngle(this.axis, angle);
+    this._angle = angle;
+    this.updateMatrix();
+  }
+  get angle() {
+    return this._angle;
+  }
 
-        "r": new CubeletGroup([2, 5, 8, 11, 14, 17, 20, 23, 26, 1, 4, 7, 10, 13, 16, 19, 22, 25,], new THREE.Vector3(+1, 0, 0)),
-        "u": new CubeletGroup([6, 7, 8, 15, 16, 17, 24, 25, 26, 3, 4, 5, 12, 13, 14, 21, 22, 23,], new THREE.Vector3(0, +1, 0)),
-        "f": new CubeletGroup([18, 19, 20, 21, 22, 23, 24, 25, 26, 9, 10, 11, 12, 13, 14, 15, 16, 17,], new THREE.Vector3(0, 0, +1)),
+  get exp() {
+    let reverse = this._angle > 0;
+    let times = Math.round(Math.abs(this._angle) / (Math.PI / 2));
+    return times == 0
+      ? ""
+      : this.name + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
+  }
 
-        "M": new CubeletGroup([1, 4, 7, 10, 13, 16, 19, 22, 25,], new THREE.Vector3(-1, 0, 0)),
-        "E": new CubeletGroup([3, 4, 5, 12, 13, 14, 21, 22, 23,], new THREE.Vector3(0, -1, 0)),
-        "S": new CubeletGroup([9, 10, 11, 12, 13, 14, 15, 16, 17,], new THREE.Vector3(0, 0, +1)),
+  hold(game: Game): void {
+    this._angle = 0;
+    this._indices.forEach(i => {
+      let cubelet = game.cube.cubelets[i];
+      this._cubelets.push(cubelet);
+      game.cube.remove(cubelet);
+      this.add(cubelet);
+    }, this);
+    game.lock = true;
+  }
 
-        "x": new CubeletGroup([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(+1, 0, 0)),
-        "y": new CubeletGroup([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(0, +1, 0)),
-        "z": new CubeletGroup([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,], new THREE.Vector3(0, 0, +1)),
-    };
-
-    private _cubelets: Cubelet[] = [];
-    private _angle: number;
-    private _indices: number[];
-    public axis: THREE.Vector3;
-
-    constructor(indices: number[], axis: THREE.Vector3) {
-        super();
-        this._indices = indices;
-        this.axis = axis;
-        this.matrixAutoUpdate = false;
-        this.updateMatrix();
-    }
-
-    set angle(angle: number) {
-        this.setRotationFromAxisAngle(this.axis, angle);
-        this._angle = angle;
-        this.updateMatrix();
-    }
-    get angle() {
-        return this._angle;
-    }
-
-    hold(game: Game): void {
-        this._angle = 0;
-        this._indices.forEach((i) => {
-            let cubelet = game.cube.cubelets[i];
-            this._cubelets.push(cubelet);
-            game.cube.remove(cubelet);
-            this.add(cubelet);
-        }, this);
-        game.lock = true;
-    }
-
-    revert(game: Game) {
-        let angle = - this._angle;
-        if (angle === 0) {
-            while (true) {
-                let cubelet = this._cubelets.pop()
-                if (undefined === cubelet) {
-                    break;
-                }
-                this.remove(cubelet);
-                game.cube.add(cubelet);
-                game.cube.cubelets[cubelet.index] = cubelet;
-
-            }
-            this._angle = 0;
-            game.lock = false;
-            game.dirty = true;
-        } else {
-            var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
-            game.tweener.tween(
-                this.angle,
-                this.angle + angle,
-                duration,
-                (value: number) => {
-                    this.angle = value;
-                    game.dirty = true;
-                },
-                () => {
-                    this.revert(game);
-                })
+  revert(game: Game) {
+    let angle = -this._angle;
+    if (angle === 0) {
+      while (true) {
+        let cubelet = this._cubelets.pop();
+        if (undefined === cubelet) {
+          break;
         }
-    }
-
-    adjust(game: Game) {
-        let angle = Math.round(this._angle / (Math.PI / 2)) * (Math.PI / 2) - this._angle;
-        if (angle === 0) {
-            while (true) {
-                let cubelet = this._cubelets.pop()
-                if (undefined === cubelet) {
-                    break;
-                }
-                this.rotate(cubelet);
-                this.remove(cubelet);
-                game.cube.add(cubelet);
-                game.cube.cubelets[cubelet.index] = cubelet;
-
-            }
-            this._angle = 0;
-            game.lock = false;
-            game.dirty = true;
-        } else {
-            var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
-            game.tweener.tween(
-                this.angle,
-                this.angle + angle,
-                duration,
-                (value: number) => {
-                    this.angle = value;
-                    game.dirty = true;
-                },
-                () => {
-                    this.adjust(game);
-                })
+        this.remove(cubelet);
+        game.cube.add(cubelet);
+        game.cube.cubelets[cubelet.index] = cubelet;
+      }
+      this._angle = 0;
+      game.lock = false;
+      game.dirty = true;
+    } else {
+      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      game.tweener.tween(
+        this.angle,
+        this.angle + angle,
+        duration,
+        (value: number) => {
+          this.angle = value;
+          game.dirty = true;
+        },
+        () => {
+          this.revert(game);
         }
-    };
-    rotate(cubelet: Cubelet) {
-        cubelet.rotateOnWorldAxis(this.axis, this._angle);
-        cubelet.vector = cubelet.vector.applyAxisAngle(this.axis, this._angle);
-        cubelet.updateMatrix();
+      );
     }
+  }
+
+  adjust(game: Game) {
+    let angle =
+      Math.round(this._angle / (Math.PI / 2)) * (Math.PI / 2) - this._angle;
+    if (angle === 0) {
+      while (true) {
+        let cubelet = this._cubelets.pop();
+        if (undefined === cubelet) {
+          break;
+        }
+        this.rotate(cubelet);
+        this.remove(cubelet);
+        game.cube.add(cubelet);
+        game.cube.cubelets[cubelet.index] = cubelet;
+      }
+      this._angle = 0;
+      game.lock = false;
+      game.dirty = true;
+    } else {
+      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      game.tweener.tween(
+        this.angle,
+        this.angle + angle,
+        duration,
+        (value: number) => {
+          this.angle = value;
+          game.dirty = true;
+        },
+        () => {
+          this.adjust(game);
+        }
+      );
+    }
+  }
+  rotate(cubelet: Cubelet) {
+    cubelet.rotateOnWorldAxis(this.axis, this._angle);
+    cubelet.vector = cubelet.vector.applyAxisAngle(this.axis, this._angle);
+    cubelet.updateMatrix();
+  }
 }
