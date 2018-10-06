@@ -22,7 +22,7 @@ export default class Game {
   public camera: THREE.PerspectiveCamera;
 
   public dirty: boolean = true;
-  public duration: number = 20;
+  public duration: number = 30;
 
   constructor() {
     this.scene = new THREE.Scene();
