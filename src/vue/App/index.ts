@@ -49,7 +49,7 @@ export default class App extends Vue {
       this.resize();
     }
     let storage = window.localStorage;
-    this.game.duration = Number(storage.getItem("duration") || 30);
+    this.game.duration = Number(storage.getItem("duration") || this.game.duration);
     this.mode = storage.getItem("mode") || "touch";
     this.game.controller.addCallback((exp: string) => {
       this.exp = exp;
