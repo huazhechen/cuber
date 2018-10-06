@@ -21,7 +21,8 @@ export default class Game {
   public controller: Controller;
   public camera: THREE.PerspectiveCamera;
 
-  public dirty = true;
+  public dirty: boolean = true;
+  public duration: number = 20;
 
   constructor() {
     this.scene = new THREE.Scene();

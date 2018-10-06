@@ -1,9 +1,14 @@
 export default class Tweener {
   constructor() {
-    setInterval(this.update.bind(this), 20);
+    this.loop();
   }
 
   private _tweens: Tween[] = [];
+
+  loop() {
+    requestAnimationFrame(this.loop.bind(this));
+    this.update();
+  }
 
   tween(
     begin: number,
@@ -30,7 +35,7 @@ export default class Tweener {
 }
 
 class Tween {
-  private _start: number = Date.now();
+  private _value: number = 0;
   private _begin: number;
   private _end: number;
   private _duration: number;
@@ -50,8 +55,8 @@ class Tween {
     this._finish = finish;
   }
   update(): boolean {
-    let time = Date.now();
-    let elapsed = (time - this._start) / this._duration;
+    this._value++;
+    let elapsed = this._value / this._duration;
     elapsed = elapsed > 1 ? 1 : elapsed;
     let value = 1 - --elapsed * elapsed;
     this._update(this._begin + (this._end - this._begin) * value);

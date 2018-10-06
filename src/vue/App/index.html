@@ -9,28 +9,45 @@
     <v-btn :disabled="lock" fixed top right icon large outline @click="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
-    <v-dialog v-model="menu">
-        <v-card tile>
-            <v-toolbar card>
-                <v-toolbar-title>Settings</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-toolbar-items>
-                    <v-btn icon @click="menu = false">
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                </v-toolbar-items>
-            </v-toolbar>
-            <v-card-text>
-                <v-subheader>Control Mode</v-subheader>
-                <v-btn-toggle v-model="mode" mandatory style="width:100%">
-                    <v-btn block value="touch">Touch</v-btn>
-                    <v-btn block value="keyboard">Keyboard</v-btn>
-                    <v-btn block value="script">Script </v-btn>
-                </v-btn-toggle>
-                <v-divider></v-divider>
-                <v-subheader>Action</v-subheader>
-                <v-btn block @click="game.reset()" :disabled="lock || mode=='script'">Reset Cube</v-btn>
-            </v-card-text>
+    <v-bottom-sheet v-model="menu">
+        <v-card flat>
+            <v-container fluid grid-list-md text-xs-center>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
+                    </v-flex>
+                    <v-flex xs9>
+                        <v-btn-toggle v-model="mode" mandatory style="width:100%">
+                            <v-btn flat block value="touch">Touch</v-btn>
+                            <v-btn flat block value="keyboard">Keyboard</v-btn>
+                            <v-btn flat block value="script">Script </v-btn>
+                        </v-btn-toggle>
+                    </v-flex>
+                    <v-flex xs3>
+                        <p style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
+                    </v-flex>
+                    <v-flex xs9>
+                        <v-btn flat outline block @click="game.reset()" :disabled="lock || mode=='script'">Reset Cube</v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <p style="margin: 0%; padding: 0%; text-align: left">Frames:</p>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon large @click="game.duration--" style="margin: 0%; padding: 0%;">
+                            <v-icon>remove</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn large outline style="margin: 0%; padding: 0%;">{{game.duration}}
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon large @click="game.duration++" style="margin: 0%; padding: 0%;">
+                            <v-icon>add</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-container>
         </v-card>
-    </v-dialog>
+    </v-bottom-sheet>
 </v-app>

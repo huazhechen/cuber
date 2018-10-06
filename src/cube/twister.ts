@@ -71,7 +71,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
+    let duration = this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
     let part = CubeletGroup.GROUPS[action.exp];
     if (part === undefined) {
       return;

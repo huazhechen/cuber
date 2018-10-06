@@ -81,7 +81,7 @@ export default class CubeletGroup extends THREE.Group {
             game.lock = false;
             game.dirty = true;
         } else {
-            var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
+            var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
             game.tweener.tween(
                 this.angle,
                 this.angle + angle,
@@ -114,7 +114,7 @@ export default class CubeletGroup extends THREE.Group {
             game.lock = false;
             game.dirty = true;
         } else {
-            var duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
+            var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
             game.tweener.tween(
                 this.angle,
                 this.angle + angle,
