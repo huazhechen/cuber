@@ -16,28 +16,28 @@
             <v-spacer></v-spacer>
         </v-flex>
         <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="disabled || playing || progress==0" @click="start" style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click.stop.prevent="start" style="margin: 0%; padding: 0%;">
                 <v-icon>skip_previous</v-icon>
             </v-btn>
             </v-btn>
         </v-flex>
         <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="disabled || playing || progress==0" @click="backward" style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress==0" @click.stop.prevent="backward" style="margin: 0%; padding: 0%;">
                 <v-icon>fast_rewind</v-icon>
             </v-btn>
         </v-flex>
         <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="(disabled && !playing) || (progress == actions.length)" @click="playing = !playing; play();" style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="(disabled && !playing) || (progress == actions.length)" @click.stop.prevent="playing = !playing; play();" style="margin: 0%; padding: 0%;">
                 <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
             </v-btn>
         </v-flex>
         <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="disabled || playing || (progress == actions.length)" @click="forward" style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || (progress == actions.length)" @click.stop.prevent="forward" style="margin: 0%; padding: 0%;">
                 <v-icon>fast_forward</v-icon>
             </v-btn>
         </v-flex>
         <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="disabled || playing || progress == actions.length" @click="end" style="margin: 0%; padding: 0%;">
+            <v-btn icon large :disabled="disabled || playing || progress == actions.length" @click.stop.prevent="end" style="margin: 0%; padding: 0%;">
                 <v-icon>skip_next</v-icon>
             </v-btn>
         </v-flex>
@@ -60,7 +60,7 @@
                         <v-text-field outline single-line hide-details class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'" @click:append="exp=script.exp" v-model="exp"></v-text-field>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon large :disabled="disabled" @click="index=1" style="margin: 0%; padding: 0%;">
+                        <v-btn icon large :disabled="disabled" @click.stop.prevent="index=1" style="margin: 0%; padding: 0%;">
                             <v-icon>first_page</v-icon>
                         </v-btn>
                         </v-btn>
@@ -76,7 +76,7 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon large :disabled="disabled" @click="index=scripts[type].scripts.length" style="margin: 0%; padding: 0%;">
+                        <v-btn icon large :disabled="disabled" @click.stop.prevent="index=scripts[type].scripts.length" style="margin: 0%; padding: 0%;">
                             <v-icon>last_page</v-icon>
                         </v-btn>
                     </v-flex>

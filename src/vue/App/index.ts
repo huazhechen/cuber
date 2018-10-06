@@ -43,11 +43,12 @@ export default class App extends Vue {
   mounted() {
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
-      this.resize();
       cuber.appendChild(this.game.canvas);
+      this.resize();
     }
     let storage = window.localStorage;
-    this.game.duration = Number(storage.getItem("duration"));
+    this.game.duration = Number(storage.getItem("duration") || 30);
+    this.mode = storage.getItem("mode") || "touch";
   }
 
   menu: boolean = false;
@@ -59,6 +60,8 @@ export default class App extends Vue {
 
   @Watch("mode")
   onModeChange(to: string, from: string) {
+    let storage = window.localStorage;
+    storage.setItem("mode", this.mode);
     if (from != "touch" && to == "touch") {
       this.game.enable = true;
     }

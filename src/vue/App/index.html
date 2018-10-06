@@ -6,7 +6,7 @@
             <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
         </div>
     </div>
-    <v-btn :disabled="lock" fixed top right icon large outline @click="onMenuClick">
+    <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="onMenuClick">
         <v-icon>menu</v-icon>
     </v-btn>
     <v-bottom-sheet v-model="menu">

@@ -376,4 +376,10 @@ export default class ScriptPanel extends Vue {
     this.app.game.reset();
     this.app.game.twister.twist(this.exp, true, 1, null, true);
   }
+
+  mounted() {
+    let storage = window.localStorage;
+    this.type = Number(storage.getItem("script.type") || 0);
+    this.index = Number(storage.getItem("script.index") || 1);
+  }
 }
