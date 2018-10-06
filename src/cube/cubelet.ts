@@ -272,6 +272,8 @@ export default class Cubelet extends THREE.Group {
       this.add(_edge);
       this.add(_sticker);
       this._stickers.push(_sticker);
+      this.matrixAutoUpdate = false;
+      this.updateMatrix();
     }
   }
 

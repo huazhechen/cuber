@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import Game from "./game";
-import Group from "./group";
+import CubeletGroup from "./group";
 import Holder from "./holder";
 
 export default class Controller {
@@ -14,7 +14,7 @@ export default class Controller {
   private _matrix: THREE.Matrix4;
   private _holder: Holder;
   private _vector: THREE.Vector3;
-  private _group: Group;
+  private _group: CubeletGroup;
   private _planes: THREE.Plane[];
 
   constructor(game: Game) {
@@ -110,12 +110,12 @@ export default class Controller {
       this._rotating = true;
       if (this._holder.index === -1) {
         if (dx * dx > dy * dy) {
-          this._group = Group.GROUPS.y;
+          this._group = CubeletGroup.GROUPS.y;
         } else {
           if (this._down.x < this._game.canvas.clientWidth / 2) {
-            this._group = Group.GROUPS.x;
+            this._group = CubeletGroup.GROUPS.x;
           } else {
-            this._group = Group.GROUPS.z;
+            this._group = CubeletGroup.GROUPS.z;
           }
         }
       } else {
@@ -156,7 +156,7 @@ export default class Controller {
       if (this._holder.index === -1) {
         var dx = this._move.x - this._down.x;
         var dy = this._move.y - this._down.y;
-        if (this._group === Group.GROUPS.y) {
+        if (this._group === CubeletGroup.GROUPS.y) {
           this._group.angle =
             (dx /
               Math.min(
@@ -166,7 +166,7 @@ export default class Controller {
             Math.PI *
             2;
         } else {
-          if (this._group === Group.GROUPS.x) {
+          if (this._group === CubeletGroup.GROUPS.x) {
             this._group.angle =
               (dy /
                 Math.min(

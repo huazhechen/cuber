@@ -1,4 +1,4 @@
-import Group from "./group";
+import CubeletGroup from "./group";
 import Game from "./game";
 import Holder from "./holder";
 
@@ -23,7 +23,7 @@ export default class Twister {
   ) {
     let list = new TwistNode(exp, reverse, times).parse();
     if (fast) {
-      list.forEach(function (element) {
+      list.forEach(function(element) {
         let angle = -Math.PI / 2;
         if (element.reverse) {
           angle = -angle;
@@ -31,7 +31,7 @@ export default class Twister {
         if (element.times) {
           angle = angle * element.times;
         }
-        let part = Group.GROUPS[element.exp];
+        let part = CubeletGroup.GROUPS[element.exp];
         if (part === undefined) {
           return;
         }
@@ -44,9 +44,10 @@ export default class Twister {
       }
     } else {
       list[list.length - 1].callback = callback;
-      list.forEach(function (element) {
+      list.forEach(function(element) {
         this._queue.push(element);
       }, this);
+      this.update();
     }
   }
 
@@ -71,7 +72,7 @@ export default class Twister {
       angle = angle * action.times;
     }
     let duration = 600 * Math.min(1, Math.abs(angle) / Math.PI);
-    let part = Group.GROUPS[action.exp];
+    let part = CubeletGroup.GROUPS[action.exp];
     if (part === undefined) {
       return;
     }
@@ -89,25 +90,26 @@ export default class Twister {
         if (action.callback) {
           action.callback();
         }
+        this.update();
       }
     );
   }
 
-  match(holder: Holder): Group[] {
-    let g: Group;
-    let result: Group[] = [];
+  match(holder: Holder): CubeletGroup[] {
+    let g: CubeletGroup;
+    let result: CubeletGroup[] = [];
 
     var index = holder.index;
     if (holder.index === -1) {
-      g = Group.GROUPS.x;
+      g = CubeletGroup.GROUPS.x;
       if (g.axis.dot(holder.plane.normal) === 0) {
         result.push(g);
       }
-      g = Group.GROUPS.y;
+      g = CubeletGroup.GROUPS.y;
       if (g.axis.dot(holder.plane.normal) === 0) {
         result.push(g);
       }
-      g = Group.GROUPS.z;
+      g = CubeletGroup.GROUPS.z;
       if (g.axis.dot(holder.plane.normal) === 0) {
         result.push(g);
       }
@@ -118,19 +120,19 @@ export default class Twister {
     var z = Math.floor(index / 9) - 1;
     switch (x) {
       case -1:
-        g = Group.GROUPS.L;
+        g = CubeletGroup.GROUPS.L;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 0:
-        g = Group.GROUPS.M;
+        g = CubeletGroup.GROUPS.M;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 1:
-        g = Group.GROUPS.R;
+        g = CubeletGroup.GROUPS.R;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
@@ -140,19 +142,19 @@ export default class Twister {
     }
     switch (y) {
       case -1:
-        g = Group.GROUPS.D;
+        g = CubeletGroup.GROUPS.D;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 0:
-        g = Group.GROUPS.E;
+        g = CubeletGroup.GROUPS.E;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 1:
-        g = Group.GROUPS.U;
+        g = CubeletGroup.GROUPS.U;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
@@ -162,19 +164,19 @@ export default class Twister {
     }
     switch (z) {
       case -1:
-        g = Group.GROUPS.B;
+        g = CubeletGroup.GROUPS.B;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 0:
-        g = Group.GROUPS.S;
+        g = CubeletGroup.GROUPS.S;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
         break;
       case 1:
-        g = Group.GROUPS.F;
+        g = CubeletGroup.GROUPS.F;
         if (g.axis.dot(holder.plane.normal) === 0) {
           result.push(g);
         }
@@ -187,7 +189,7 @@ export default class Twister {
 }
 
 export class TwistAction {
-  public exp: string = '';
+  public exp: string = "";
   public reverse: boolean = false;
   public times: number = 1;
   public callback: Function | null = null;
@@ -230,7 +232,7 @@ export class TwistNode {
       this._twist.exp = exp;
       this._twist.reverse = reverse;
       this._twist.times = times;
-      list.forEach(function (c) {
+      list.forEach(function(c) {
         var t = new TwistNode(c);
         this._children.push(t);
       }, this);
@@ -249,7 +251,7 @@ export class TwistNode {
             n = this._children[j];
           }
           var list = n.parse(reverse);
-          list.forEach(function (element) {
+          list.forEach(function(element) {
             _result.push(element);
           }, this);
         }

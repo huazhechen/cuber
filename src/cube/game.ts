@@ -4,7 +4,7 @@ import Cube from "./cube";
 import Tweener from "./tweener";
 import Controller from "./controller";
 import Twister from "./twister";
-import Group from "./group";
+import CubeletGroup from "./group";
 
 export default class Game {
   public static readonly SIZE: number = 1024;
@@ -36,8 +36,8 @@ export default class Game {
     this.cube = new Cube(this);
 
     this.scene.add(this.cube);
-    for (let key in Group.GROUPS) {
-      this.scene.add(Group.GROUPS[key]);
+    for (let key in CubeletGroup.GROUPS) {
+      this.scene.add(CubeletGroup.GROUPS[key]);
     }
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -68,8 +68,6 @@ export default class Game {
   }
 
   render() {
-    this.twister.update();
-    this.tweener.update();
     if (this.dirty) {
       this.renderer.render(this.scene, this.camera);
       this.dirty = false;
