@@ -18,6 +18,7 @@ export default class ScriptPanel extends Vue {
     this.stick();
     if (to) {
       this.onTypeChange();
+      this.onIndexChange();
       this.onScriptChange();
       this.onExpChange(this.exp);
     } else {
@@ -110,8 +111,8 @@ export default class ScriptPanel extends Vue {
   }
 
   dialog = false;
-  type: number = 0;
-  index: number = 1;
+  type: number = Number(window.localStorage.getItem("script.type") || 0);
+  index: number = Number(window.localStorage.getItem("script.index") || 1);
 
   stick() {
     this.app.game.cube.stick();
@@ -128,9 +129,19 @@ export default class ScriptPanel extends Vue {
     this.app.game.dirty = true;
   }
 
+  @Watch("index")
+  onIndexChange() {
+    let storage = window.localStorage;
+    storage.setItem("script.index", String(this.index));
+  }
+
   @Watch("type")
-  onTypeChange() {
-    this.index = 1;
+  onTypeChange(to: number = this.type, from: number = this.type) {
+    let storage = window.localStorage;
+    storage.setItem("script.type", String(this.type));
+    if (to != from) {
+      this.index = 1;
+    }
     this.stick();
     this.strip();
   }
@@ -377,11 +388,5 @@ export default class ScriptPanel extends Vue {
     this.playing = false;
     this.app.game.reset();
     this.app.game.twister.twist(this.exp, true, 1, null, true);
-  }
-
-  mounted() {
-    let storage = window.localStorage;
-    this.type = Number(storage.getItem("script.type") || 0);
-    this.index = Number(storage.getItem("script.index") || 1);
   }
 }
