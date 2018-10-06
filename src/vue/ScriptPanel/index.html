@@ -52,7 +52,7 @@
                     <v-flex xs12>
                         <v-btn-toggle v-model="type" mandatory style="width:100%">
                             <template v-for="(group, i) in scripts">
-                                <v-btn block :disabled="disabled || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
+                                <v-btn style="text-transform:none;" block :disabled="disabled || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
                             </template>
                         </v-btn-toggle>
                     </v-flex>

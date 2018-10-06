@@ -145,47 +145,47 @@ export default class ScriptPanel extends Vue {
         }
       ],
       scripts: [
-        { name: "F2L-01", exp: "(RU'2R'U)2y'(R'U'R)y" },
-        { name: "F2L-02", exp: "(URU'R'U')y'(R'UR)y" },
-        { name: "F2L-03", exp: "yU'(L'ULU)y'(RU'R')" },
-        { name: "F2L-04", exp: "(RUR'U')(RU'U'R'U')(RUR')" },
-        { name: "F2L-05", exp: "(RU'RU)y(RU'R'F2)y'" },
-        { name: "F2L-06", exp: "y'(R'U'RU)(R'U'R)y" },
-        { name: "F2L-07", exp: "(RU'R'U)(RU'R')" },
-        { name: "F2L-08", exp: "(RU'U')(RUR'U)(RU'U')R2" },
-        { name: "F2L-09", exp: "R2y(RUR'U')y'(R'UR')" },
-        { name: "F2L-10", exp: "y'(R'U)(RU')(R'UR)y" },
-        { name: "F2L-11", exp: "(RUR'U')(RUR')" },
-        { name: "F2L-12", exp: "(RUR'U')2(RUR')" },
-        { name: "F2L-13", exp: "(RU'R')y'(R'U2R)y" },
-        { name: "F2L-14", exp: "y'(R'U2)(RUR'U')Ry" },
-        { name: "F2L-15", exp: "d'zU'(R2U)(R'U'RU)z'y'" },
-        { name: "F2L-16", exp: "F'L'U2rUx'" },
-        { name: "F2L-17", exp: "y'(U2R2'U2)(RUR'UR2)y" },
-        { name: "F2L-18", exp: "(U2R2'U2)(R'U'RU'R2)" },
-        { name: "F2L-19", exp: "Ry(RU2R'F')y'" },
-        { name: "F2L-20", exp: "U(RU'U')(R'URU')R'" },
-        { name: "F2L-21", exp: "(RU'U')(R'U'RU)R'" },
-        { name: "F2L-22", exp: "U'(RU')(R'U2)(RU'R')" },
-        { name: "F2L-23", exp: "U'(RUR')d(R'U'R)y" },
-        { name: "F2L-24", exp: "d(R'URU')(R'U'R)y" },
-        { name: "F2L-25", exp: "y'(R'U'R)y" },
-        { name: "F2L-26", exp: "(R2U)y(RU'R'F2)y'" },
-        { name: "F2L-27", exp: "y'(RU'U')R'2U'R2U'R'y" },
-        { name: "F2L-28", exp: "y'(R'U)(Rd'U')(RUR')" },
-        { name: "F2L-29", exp: "U'(RU'U')(R'U2)(RU'R')" },
-        { name: "F2L-30", exp: "y'R2y'(R'U'RU)yR2y" },
-        { name: "F2L-31", exp: "URU'R'" },
-        { name: "F2L-32", exp: "U'(RU'U'R'U)(RUR')" },
-        { name: "F2L-33", exp: "d(R'U'R)d'(RUR')" },
-        { name: "F2L-34", exp: "x(UR'U'l)" },
-        { name: "F2L-35", exp: "R2y(RUR'U')y'R2" },
-        { name: "F2L-36", exp: "d(R'U2)(RU'U')(R'UR)y" },
-        { name: "F2L-37", exp: "(RU'R'U)(dR'U'R)y" },
-        { name: "F2L-38", exp: "(R'U2)(R2'U)(R2'UR)" },
-        { name: "F2L-39", exp: "y'(R2U')(F'UF)R2y" },
-        { name: "F2L-40", exp: "(RUR')" },
-        { name: "F2L-41", exp: "U'(RU'R'U)(RUR')" }
+        { name: "F2L-01", exp: "URU'R'" },
+        { name: "F2L-02", exp: "x(UR'U'l)" },
+        { name: "F2L-03", exp: "y'(R'U'R)y" },
+        { name: "F2L-04", exp: "(RUR')" },
+        { name: "F2L-05", exp: "y'R2y'(R'U'RU)yR2y" },
+        { name: "F2L-06", exp: "R2y(RUR'U')y'R2" },
+        { name: "F2L-07", exp: "U'(RU'U')(R'U2)(RU'R')" },
+        { name: "F2L-08", exp: "d(R'U2)(RU'U')(R'UR)y" },
+        { name: "F2L-09", exp: "(R2U)y(RU'R'F2)y'" },
+        { name: "F2L-10", exp: "y'(R2U')(F'UF)R2y" },
+        { name: "F2L-11", exp: "y'(RU'U')R'2U'R2U'R'y" },
+        { name: "F2L-12", exp: "(R'U2)(R2'U)(R2'UR)" },
+        { name: "F2L-13", exp: "d(R'URU')(R'U'R)y" },
+        { name: "F2L-14", exp: "U'(RU'R'U)(RUR')" },
+        { name: "F2L-15", exp: "y'(R'U)(Rd'U')(RUR')" },
+        { name: "F2L-16", exp: "(RU'R'U)(dR'U'R)y" },
+        { name: "F2L-17", exp: "(RU'U')(R'U'RU)R'" },
+        { name: "F2L-18", exp: "y'(R'U2)(RUR'U')Ry" },
+        { name: "F2L-19", exp: "U(RU'U')(R'URU')R'" },
+        { name: "F2L-20", exp: "d'zU'(R2U)(R'U'RU)z'y'" },
+        { name: "F2L-21", exp: "Ry(RU2R'F')y'" },
+        { name: "F2L-22", exp: "F'L'U2rUx'" },
+        { name: "F2L-23", exp: "(U2R2'U2)(R'U'RU'R2)" },
+        { name: "F2L-24", exp: "y'(U2R2'U2)(RUR'UR2)y" },
+        { name: "F2L-25", exp: "yU'(L'ULU)y'(RU'R')" },
+        { name: "F2L-26", exp: "(URU'R'U')y'(R'UR)y" },
+        { name: "F2L-27", exp: "(RU'R'U)(RU'R')" },
+        { name: "F2L-28", exp: "y'(R'U)(RU')(R'UR)y" },
+        { name: "F2L-29", exp: "y'(R'U'RU)(R'U'R)y" },
+        { name: "F2L-30", exp: "(RUR'U')(RUR')" },
+        { name: "F2L-31", exp: "(RU'R')y'(R'U2R)y" },
+        { name: "F2L-32", exp: "(RUR'U')2(RUR')" },
+        { name: "F2L-33", exp: "U'(RU')(R'U2)(RU'R')" },
+        { name: "F2L-34", exp: "U'(RU'U'R'U)(RUR')" },
+        { name: "F2L-35", exp: "U'(RUR')d(R'U'R)y" },
+        { name: "F2L-36", exp: "d(R'U'R)d'(RUR')" },
+        { name: "F2L-37", exp: "(RU'2R'U)2y'(R'U'R)y" },
+        { name: "F2L-38", exp: "(RUR'U')(RU'U'R'U')(RUR')" },
+        { name: "F2L-39", exp: "(RU'U')(RUR'U)(RU'U')R2" },
+        { name: "F2L-40", exp: "(RU'RU)y(RU'R'F2)y'" },
+        { name: "F2L-41", exp: "R2y(RUR'U')y'(R'UR')" }
       ]
     },
     {
@@ -260,50 +260,50 @@ export default class ScriptPanel extends Vue {
       name: "PLL",
       strips: [],
       scripts: [
-        { name: "PLL-01", exp: "(RU'R)(URUR)(U'R'U'R2)" },
-        { name: "PLL-02", exp: "(R2U)(RUR'U')(R'U')(R'UR')" },
-        { name: "PLL-03", exp: "M2UM2U2M2UM2" },
+        { name: "PLL-Aa", exp: "x(R2U'2)(R'D')(RU'2)(R'DR')x'" },
+        { name: "PLL-Ab", exp: "x(RD'R)U2R'DRU2R'2x'" },
         {
-          name: "PLL-04",
-          exp: "(R'U'RU'R)(URU'R'UR)(UR2U'R')U2"
-        },
-        { name: "PLL-05", exp: "x(R2U'2)(R'D')(RU'2)(R'DR')x'" },
-        { name: "PLL-06", exp: "x(RD'R)U2R'DRU2R'2x'" },
-        {
-          name: "PLL-07",
+          name: "PLL-E",
           exp: "x'(RU'R'DRUR')u2'(R'URDR'U'R)x'y2"
         },
-        { name: "PLL-08", exp: "(RUR'U')(R'F)(R2U'R'U'RUR'F')" },
         {
-          name: "PLL-09",
+          name: "PLL-F",
           exp: "(R'U'F')(RUR'U')(R'FR2U'R'U')(RUR'UR)"
         },
+        { name: "PLL-Ga", exp: "(R2uR')(UR'U'Ru')(R'2F'UF)" },
+        { name: "PLL-Gb", exp: "(R'd'F)(R2u)(R'URU'Ru'R'2)y'" },
+        { name: "PLL-Gc", exp: "(R'2u'RU'R)(UR'u)(R2fR'f')" },
+        { name: "PLL-Gd", exp: "(RUR')y'(R2u'RU'R'U)(R'uR2)y" },
+        { name: "PLL-H", exp: "M2UM2U2M2UM2" },
+        { name: "PLL-Ja", exp: "z(U'RD')(R2UR'U')(R2UDR')z'" },
+        { name: "PLL-Jb", exp: "(RUR'F')(RUR'U')(R'F)(R2U'R')" },
         {
-          name: "PLL-10",
-          exp: "(R'UR'U'yx2)(R'UR'U'yx)(U2R'U'RUR)x"
-        },
-        {
-          name: "PLL-11",
-          exp: "F(RU'R'U')(RUR'F')(RUR'U')(R'FRF')"
-        },
-        { name: "PLL-12", exp: "z(U'RD')(R2UR'U')(R2UDR')z'" },
-        { name: "PLL-13", exp: "(RUR'F')(RUR'U')(R'F)(R2U'R')" },
-        {
-          name: "PLL-14",
-          exp: "(R'U2)(RU'2)(R'FRUR'U')(R'F'R2U')"
-        },
-        { name: "PLL-15", exp: "(RU'2)(R'U2)(RB'R'U')(RURBR2'U)" },
-        { name: "PLL-16", exp: "(R'2u'RU'R)(UR'u)(R2fR'f')" },
-        { name: "PLL-17", exp: "(RUR')y'(R2u'RU'R'U)(R'uR2)y" },
-        { name: "PLL-18", exp: "(R2uR')(UR'U'Ru')(R'2F'UF)" },
-        { name: "PLL-19", exp: "(R'd'F)(R2u)(R'URU'Ru'R'2)y'" },
-        {
-          name: "PLL-20",
+          name: "PLL-Na",
           exp: "z(R'UR')z'(RU2L'UR')z(UR')z'(RU2L'UR')"
         },
         {
-          name: "PLL-21",
+          name: "PLL-Nb",
           exp: "z(U'RD')(R2UR'U')z'(RUR')z(R2UR')z'(RU')"
+        },
+        { name: "PLL-Ra", exp: "(RU'2)(R'U2)(RB'R'U')(RURBR2'U)" },
+        {
+          name: "PLL-Rb",
+          exp: "(R'U2)(RU'2)(R'FRUR'U')(R'F'R2U')"
+        },
+        { name: "PLL-T", exp: "(RUR'U')(R'F)(R2U'R'U'RUR'F')" },
+        { name: "PLL-Ua", exp: "(RU'R)(URUR)(U'R'U'R2)" },
+        { name: "PLL-Ub", exp: "(R2U)(RUR'U')(R'U')(R'UR')" },
+        {
+          name: "PLL-V",
+          exp: "(R'UR'U'yx2)(R'UR'U'yx)(U2R'U'RUR)x"
+        },
+        {
+          name: "PLL-Z",
+          exp: "(R'U'RU'R)(URU'R'UR)(UR2U'R')U2"
+        },
+        {
+          name: "PLL-Y",
+          exp: "F(RU'R'U')(RUR'F')(RUR'U')(R'FRF')"
         }
       ]
     }

@@ -91,6 +91,7 @@ export default class Twister {
           action.callback();
         }
         this.update();
+        this._game.dirty = true;
       }
     );
   }

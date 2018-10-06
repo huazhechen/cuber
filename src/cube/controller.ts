@@ -96,7 +96,7 @@ export default class Controller {
           this._game.canvas.clientWidth,
           this._game.canvas.clientHeight
         ) /
-        d >
+          d >
         100
       ) {
         return true;
@@ -197,8 +197,8 @@ export default class Controller {
           Math.PI *
           8;
       }
+      this._game.dirty = true;
     }
-    this._game.dirty = true;
   }
 
   _handleUp() {
