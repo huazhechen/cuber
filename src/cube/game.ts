@@ -23,6 +23,7 @@ export default class Game {
 
   public dirty: boolean = true;
   public duration: number = 60;
+  public callbacks: Function[] = [];
 
   constructor() {
     this.scene = new THREE.Scene();
@@ -48,6 +49,36 @@ export default class Game {
     this.controller = new Controller(this);
 
     this.loop();
+  }
+
+  random() {
+    let result = "";
+    if (!this.lock) {
+      let exps: string[] = [];
+      let last = -1;
+      let actions = ["U", "D", "R", "L", "F", "B"];
+      let axis = -1;
+      for (let i = 0; i < 20; i++) {
+        let exp: string[] = [];
+        while (axis == last) {
+          axis = Math.floor(Math.random() * 3);
+        }
+        let side = Math.floor(Math.random() * 2);
+        exp.push(actions[axis * 2 + side]);
+        let suffix = Math.random();
+        if (suffix < 0.2) {
+          exp.push("2");
+        } else if (suffix < 0.6) {
+          exp.push("'");
+        }
+        exps.push(exp.join(""));
+        last = axis;
+      }
+      result = exps.join(" ");
+      this.twister.twist(result, false, 1, null, true);
+      this.dirty = true;
+    }
+    return result;
   }
 
   reset() {

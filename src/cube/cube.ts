@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import Cubelet from "./cubelet";
 import Game from "./game";
-import { Euler } from "three";
-
+import { Euler, Vector3 } from "three";
 export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
   private _initial: Cubelet[] = [];
@@ -42,5 +41,15 @@ export default class Cube extends THREE.Group {
     for (let face of faces) {
       this._initial[index].strip(face);
     }
+  }
+
+  get state() {
+    let positions: number[] = [];
+    let orientations: number[] = [];
+    for (let position of Cubelet.positions) {
+      positions.push(this.cubelets[position].identity);
+      orientations.push(this.cubelets[position].orientation);
+    }
+    return positions.concat(orientations);
   }
 }

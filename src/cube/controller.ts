@@ -16,7 +16,6 @@ export default class Controller {
   private _vector: THREE.Vector3;
   private _group: CubeletGroup;
   private _planes: THREE.Plane[];
-  private _callbacks: Function[] = [];
 
   constructor(game: Game) {
     this._game = game;
@@ -39,10 +38,6 @@ export default class Controller {
     this._game.canvas.addEventListener("touchstart", this._onTouch, true);
     this._game.canvas.addEventListener("touchmove", this._onTouch, true);
     this._game.canvas.addEventListener("touchend", this._onTouch, true);
-  }
-
-  addCallback(callback: Function) {
-    this._callbacks.push(callback);
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
@@ -211,9 +206,6 @@ export default class Controller {
       if (this._group && this._group !== null) {
         if (this._game.enable) {
           this._group.adjust(this._game);
-          for (let callback of this._callbacks) {
-            callback(this._group.exp);
-          }
         } else {
           this._group.revert(this._game);
         }

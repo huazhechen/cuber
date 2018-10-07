@@ -3,12 +3,14 @@ import { Component, Watch, Provide } from "vue-property-decorator";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import Game from "../../cube/game";
+import TimerPanel from "../TimerPanel";
 
 @Component({
   template: require("./index.html"),
   components: {
     "keyboard-panel": KeyboardPanel,
-    "script-panel": ScriptPanel
+    "script-panel": ScriptPanel,
+    "timer-panel": TimerPanel
   }
 })
 export default class App extends Vue {
@@ -52,9 +54,8 @@ export default class App extends Vue {
     this.game.duration = Number(
       storage.getItem("duration") || this.game.duration
     );
-    this.mode = storage.getItem("mode") || "touch";
-    this.game.controller.addCallback(this.onTwist);
-    this.game.twister.addCallback(this.onTwist);
+    this.mode = window.localStorage.getItem("mode") || "touch";
+    this.game.callbacks.push(this.onTwist);
   }
 
   onTwist(exp: string) {

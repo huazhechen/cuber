@@ -176,6 +176,28 @@ export default class Cubelet extends THREE.Group {
   private _index: number;
   private _vector: THREE.Vector3 = new THREE.Vector3();
   private _stickers: THREE.Mesh[] = [];
+  public static positions = [
+    25,
+    17,
+    7,
+    15,
+    19,
+    11,
+    1,
+    9,
+    23,
+    21,
+    5,
+    3,
+    26,
+    8,
+    6,
+    24,
+    20,
+    18,
+    0,
+    2
+  ];
 
   set vector(vector) {
     this._vector.set(
@@ -205,6 +227,14 @@ export default class Cubelet extends THREE.Group {
   }
 
   private _materials: THREE.MeshBasicMaterial[];
+
+  get identity() {
+    return Cubelet.positions.indexOf(this.initial);
+  }
+
+  get orientation() {
+    return 0;
+  }
 
   constructor(index: number) {
     super();

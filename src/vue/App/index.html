@@ -4,11 +4,12 @@
         <div ref=panel>
             <keyboard-panel :show="mode == 'keyboard'"></keyboard-panel>
             <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
+            <timer-panel :disabled="lock" :show="mode == 'timer'"></timer-panel>
         </div>
         <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="onMenuClick">
             <v-icon>menu</v-icon>
         </v-btn>
-        <v-btn fixed top left icon outline class="title" @click.stop.prevent v-if="exp != ''" style="text-transform:none">{{exp}}</v-btn>
+        <v-btn fixed top left icon outline class="title" @click.stop.prevent v-if="mode == 'touch' && exp != ''" style="text-transform:none">{{exp}}</v-btn>
     </div>
     <v-bottom-sheet v-model="menu">
         <v-card flat>
@@ -19,19 +20,37 @@
                     </v-flex>
                     <v-flex xs9>
                         <v-btn-toggle v-model="mode" mandatory style="width:100%">
-                            <v-btn flat block value="touch">Touch</v-btn>
-                            <v-btn flat block value="keyboard">Keyboard</v-btn>
-                            <v-btn flat block value="script">Script </v-btn>
+                            <v-btn flat block value="touch">
+                                <v-icon>touch_app</v-icon>
+                            </v-btn>
+                            <v-btn flat block value="keyboard">
+                                <v-icon>keyboard</v-icon>
+                            </v-btn>
+                            <v-btn flat block value="script">
+                                <v-icon>videocam</v-icon>
+                            </v-btn>
+                            <v-btn flat block value="timer">
+                                <v-icon>timer</v-icon>
+                            </v-btn>
                         </v-btn-toggle>
                     </v-flex>
                     <v-flex xs3>
                         <p style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
                     </v-flex>
-                    <v-flex xs4.5>
-                        <v-btn flat outline block @click.stop.prevent="game.reset()" :disabled="lock || mode=='script'">Reset Cube</v-btn>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="game.reset()" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
+                            <v-icon>autorenew</v-icon>
+                        </v-btn>
                     </v-flex>
-                    <v-flex xs4.5>
-                        <v-btn flat outline block @click.stop.prevent="reset()" color="error" :disabled="lock">Clear All</v-btn>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="game.random()" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
+                            <v-icon>casino</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="reset()" color="error" :disabled="lock">
+                            <v-icon>delete</v-icon>
+                        </v-btn>
                     </v-flex>
                     <v-flex xs3>
                         <p style="margin: 0%; padding: 0%; text-align: left">Frames:</p>
