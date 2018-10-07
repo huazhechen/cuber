@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import Game from "./game";
 import Cubelet from "./cubelet";
+import { TwistNode, TwistAction } from "./twister";
 
 export default class CubeletGroup extends THREE.Group {
   public static readonly GROUPS: { [key: string]: CubeletGroup } = {
@@ -208,9 +209,11 @@ export default class CubeletGroup extends THREE.Group {
   get exp() {
     let reverse = this._angle > 0;
     let times = Math.round(Math.abs(this._angle) / (Math.PI / 2));
-    return times == 0
-      ? ""
-      : this.name + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
+    let action = new TwistAction();
+    action.exp = this.name;
+    action.times = times;
+    action.reverse = reverse;
+    return action.format();
   }
 
   hold(game: Game): void {
@@ -240,7 +243,7 @@ export default class CubeletGroup extends THREE.Group {
       game.lock = false;
       game.dirty = true;
     } else {
-      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      var duration = game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);
       game.tweener.tween(
         this.angle,
         this.angle + angle,
@@ -274,7 +277,7 @@ export default class CubeletGroup extends THREE.Group {
       game.lock = false;
       game.dirty = true;
     } else {
-      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      var duration = game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);
       game.tweener.tween(
         this.angle,
         this.angle + angle,

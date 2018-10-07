@@ -49,15 +49,20 @@ export default class App extends Vue {
       this.resize();
     }
     let storage = window.localStorage;
-    this.game.duration = Number(storage.getItem("duration") || this.game.duration);
+    this.game.duration = Number(
+      storage.getItem("duration") || this.game.duration
+    );
     this.mode = storage.getItem("mode") || "touch";
-    this.game.controller.addCallback((exp: string) => {
-      this.exp = exp;
-      clearTimeout(this.expTask);
-      this.expTask = setTimeout(() => {
-        this.exp = "";
-      }, 500);
-    });
+    this.game.controller.addCallback(this.onTwist);
+    this.game.twister.addCallback(this.onTwist);
+  }
+
+  onTwist(exp: string) {
+    this.exp = exp;
+    clearTimeout(this.expTask);
+    this.expTask = setTimeout(() => {
+      this.exp = "";
+    }, 500);
   }
 
   menu: boolean = false;
@@ -82,5 +87,11 @@ export default class App extends Vue {
 
   get lock() {
     return this.game.lock || this.game.twister.length != 0;
+  }
+
+  reset() {
+    let storage = window.localStorage;
+    storage.clear();
+    window.location.reload();
   }
 }

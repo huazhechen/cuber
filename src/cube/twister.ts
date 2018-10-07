@@ -5,9 +5,14 @@ import Holder from "./holder";
 export default class Twister {
   private _queue: TwistAction[] = [];
   private _game: Game;
+  private _callbacks: Function[] = [];
 
   constructor(game: Game) {
     this._game = game;
+  }
+
+  addCallback(callback: Function) {
+    this._callbacks.push(callback);
   }
 
   get length() {
@@ -60,6 +65,9 @@ export default class Twister {
       return false;
     }
     this.start(twist);
+    for (let callback of this._callbacks) {
+      callback(twist.format());
+    }
     return true;
   }
 
@@ -71,7 +79,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let duration = this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+    let duration = this._game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);
     let part = CubeletGroup.GROUPS[action.exp];
     if (part === undefined) {
       return;
@@ -194,6 +202,16 @@ export class TwistAction {
   public reverse: boolean = false;
   public times: number = 1;
   public callback: Function | null = null;
+
+  public format() {
+    return this.times == 0
+      ? ""
+      : (this.exp.length > 1 ? "(" : "") +
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
+  }
 }
 
 export class TwistNode {
