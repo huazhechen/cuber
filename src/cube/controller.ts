@@ -51,7 +51,7 @@ export default class Controller {
     if (this._rotating) {
       if (this._group.angle != this._angle) {
         let delta = (this._angle - this._group.angle) / 2
-        let max = Math.PI / this._game.duration * 2;
+        let max = Math.PI / this._game.duration * 4;
         if (delta > max) {
           delta = max;
         }
