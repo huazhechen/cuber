@@ -205,6 +205,9 @@ export default class Controller {
     if (this._rotating) {
       if (this._group && this._group !== null) {
         if (this._game.enable) {
+          for (let callback of this._game.callbacks) {
+            callback(this._group.exp);
+          }
           this._group.adjust(this._game);
         } else {
           this._group.revert(this._game);

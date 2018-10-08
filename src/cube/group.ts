@@ -275,9 +275,6 @@ export default class CubeletGroup extends THREE.Group {
       }
       game.lock = false;
       game.dirty = true;
-      for (let callback of game.callbacks) {
-        callback(this.exp);
-      }
       this._angle = 0;
     } else {
       var duration = game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);

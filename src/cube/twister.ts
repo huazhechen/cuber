@@ -78,6 +78,9 @@ export default class Twister {
       return;
     }
     part.hold(this._game);
+    for (let callback of this._game.callbacks) {
+      callback(action.format());
+    }
     this._game.tweener.tween(
       part.angle,
       part.angle + angle,

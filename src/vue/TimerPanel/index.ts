@@ -46,9 +46,18 @@ export default class TimerPanel extends Vue {
     );
   }
 
+  get lock() {
+    if (this.press || this.intervalTask != 0 || this.timeoutTask != 0) {
+      return true;
+    }
+    return false;
+  }
+
   random() {
-    this.app.game.reset();
-    this.exp = this.app.game.random();
+    if (!this.lock) {
+      this.app.game.reset();
+      this.exp = this.app.game.random();
+    }
   }
 
   timeoutTask = 0;
