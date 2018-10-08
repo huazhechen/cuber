@@ -12,7 +12,7 @@ module.exports = (env, argv) => ({
         rules: [
             {
                 test: /\.css$/,
-                use: ["vue-style-loader", "css-loader"]
+                use: ["style-loader", "css-loader"]
             },
             {
                 test: /\.tsx?$/,

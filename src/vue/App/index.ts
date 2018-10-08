@@ -1,10 +1,9 @@
 import Vue from "vue";
-import { Component, Watch, Provide } from "vue-property-decorator";
+import { Component, Provide, Watch } from "vue-property-decorator";
+import Game from "../../cube/game";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
-import Game from "../../cube/game";
 import TimerPanel from "../TimerPanel";
-import Cubelet from "../../cube/cubelet";
 
 @Component({
   template: require("./index.html"),
@@ -15,9 +14,7 @@ import Cubelet from "../../cube/cubelet";
   }
 })
 export default class App extends Vue {
-  @Provide("app")
-  app: App = this;
-
+  @Provide("game")
   game: Game = new Game();
 
   get duration() {
@@ -45,6 +42,8 @@ export default class App extends Vue {
 
   exp: string = "";
   expTask = 0;
+  mode: string = "";
+  keyboard: boolean = false;
   mounted() {
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
@@ -55,7 +54,8 @@ export default class App extends Vue {
     this.game.duration = Number(
       storage.getItem("duration") || this.game.duration
     );
-    this.mode = window.localStorage.getItem("mode") || "touch";
+    this.mode = window.localStorage.getItem("mode") || "play";
+    this.keyboard = Boolean(window.localStorage.getItem("mode") || false);
     this.game.callbacks.push(this.onTwist);
   }
 
@@ -68,22 +68,21 @@ export default class App extends Vue {
   }
 
   menu: boolean = false;
-  onMenuClick() {
-    this.menu = !this.menu;
-  }
+  about: boolean = false;
 
-  mode: string = "touch";
+  @Watch("keyboard")
+  onKeyboardChange() {
+    let storage = window.localStorage;
+    storage.setItem("keyboard", String(this.keyboard));
+    this.game.enable = this.mode == "play" && !this.keyboard;
+    this.$nextTick(this.resize);
+  }
 
   @Watch("mode")
   onModeChange(to: string, from: string) {
     let storage = window.localStorage;
     storage.setItem("mode", this.mode);
-    if (from != "touch" && to == "touch") {
-      this.game.enable = true;
-    }
-    if (from == "touch" && to != "touch") {
-      this.game.enable = false;
-    }
+    this.game.enable = this.mode == "play" && !this.keyboard;
     this.$nextTick(this.resize);
   }
 

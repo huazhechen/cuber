@@ -1,13 +1,13 @@
 import Vue from "vue";
-import { Component, Prop, Inject, Watch } from "vue-property-decorator";
-import App from "../App";
+import { Component, Inject, Prop, Watch } from "vue-property-decorator";
+import Game from "../../cube/game";
 
 @Component({
   template: require("./index.html")
 })
 export default class TimerPanel extends Vue {
-  @Inject("app")
-  app: App;
+  @Inject("game")
+  game: Game;
 
   @Prop({ default: false })
   show: boolean;
@@ -18,8 +18,8 @@ export default class TimerPanel extends Vue {
       if (this.exp == "") {
         this.random();
       } else {
-        this.app.game.reset();
-        this.app.game.twister.twist(this.exp, false, 1, null, true);
+        this.game.reset();
+        this.game.twister.twist(this.exp, false, 1, null, true);
       }
     }
   }
@@ -55,8 +55,8 @@ export default class TimerPanel extends Vue {
 
   random() {
     if (!this.lock) {
-      this.app.game.reset();
-      this.exp = this.app.game.random();
+      this.game.reset();
+      this.exp = this.game.random();
     }
   }
 

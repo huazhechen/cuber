@@ -8,7 +8,7 @@
   "scripts": {
     "watch": "webpack-dev-server --mode=development --hot --inline --host 0.0.0.0",
     "build": "webpack --mode=production --progress",
-    "build:dll": "webpack --config ./webpack.dll.config.js"
+    "build:dll": "webpack --mode=production --config ./webpack.dll.config.js"
   },
   "dependencies": {},
   "devDependencies": {
@@ -22,12 +22,12 @@
     "typeface-roboto": "*",
     "material-design-icons": "*",
     "url-loader": "*",
+    "style-loader": "*",
     "css-loader": "*",
     "file-loader": "*",
     "text-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
-    "vue-style-loader": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "@types/webpack-env": "*",

@@ -13,7 +13,7 @@ export default class CubeletGroup extends THREE.Group {
     ),
     D: new CubeletGroup(
       "D",
-      [18, 19, 20, 9, 10, 11, 0, 1, 2,],
+      [18, 19, 20, 9, 10, 11, 0, 1, 2],
       new THREE.Vector3(0, -1, 0)
     ),
     B: new CubeletGroup(
@@ -33,7 +33,7 @@ export default class CubeletGroup extends THREE.Group {
     ),
     F: new CubeletGroup(
       "F",
-      [24, 25, 26, 21, 22, 23, 18, 19, 20,],
+      [24, 25, 26, 21, 22, 23, 18, 19, 20],
       new THREE.Vector3(0, 0, +1)
     ),
     l: new CubeletGroup(
@@ -243,7 +243,7 @@ export default class CubeletGroup extends THREE.Group {
       game.lock = false;
       game.dirty = true;
     } else {
-      var duration = game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);
+      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
       game.tweener.tween(
         this.angle,
         this.angle + angle,
@@ -277,7 +277,7 @@ export default class CubeletGroup extends THREE.Group {
       game.dirty = true;
       this._angle = 0;
     } else {
-      var duration = game.duration * Math.min(0.5, Math.abs(angle) / Math.PI);
+      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
       game.tweener.tween(
         this.angle,
         this.angle + angle,

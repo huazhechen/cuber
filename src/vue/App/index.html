@@ -2,75 +2,102 @@
     <div v-resize="resize">
         <div ref=cuber></div>
         <div ref=panel>
-            <keyboard-panel :show="mode == 'keyboard'"></keyboard-panel>
-            <script-panel :disabled="lock" :show="mode == 'script'"></script-panel>
-            <timer-panel :disabled="lock" :show="mode == 'timer'"></timer-panel>
+            <keyboard-panel :show="mode == 'play' && keyboard"></keyboard-panel>
+            <script-panel :show="mode == 'alg'"></script-panel>
+            <timer-panel :show="mode == 'timer'"></timer-panel>
         </div>
-        <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="onMenuClick">
+        <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="menu = !menu;">
             <v-icon>menu</v-icon>
         </v-btn>
-        <v-btn fixed top left icon outline class="title" @click.stop.prevent v-if="exp != ''" style="text-transform:none">{{exp}}</v-btn>
+        <v-btn fixed top left icon class="title" @click.stop.prevent v-if="exp != ''" style="text-transform:none">{{exp}}</v-btn>
     </div>
     <v-bottom-sheet v-model="menu">
         <v-card flat>
             <v-container fluid grid-list-md text-xs-center>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs12>
-                        <p style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
+                <v-layout row wrap justify-center align-center v-show="mode == 'play'">
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="keyboard = !keyboard" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                            <v-icon>{{keyboard?'touch_app':'keyboard'}}</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                            <v-icon>casino</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn flat outline block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                            <v-icon>replay</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-divider></v-divider v-show="mode == 'play'">
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
+                    </v-flex>
+                    <v-flex xs9>
                         <v-btn-toggle v-model="mode" mandatory style="width:100%">
-                            <v-btn flat block value="touch">
-                                <v-icon>touch_app</v-icon>
+                            <v-btn flat block value="play">
+                                <v-icon>games</v-icon>
                             </v-btn>
-                            <v-btn flat block value="keyboard">
-                                <v-icon>keyboard</v-icon>
-                            </v-btn>
-                            <v-btn flat block value="script">
-                                <v-icon>videocam</v-icon>
+                            <v-btn flat block value="alg">
+                                <v-icon>school</v-icon>
                             </v-btn>
                             <v-btn flat block value="timer">
                                 <v-icon>timer</v-icon>
                             </v-btn>
                         </v-btn-toggle>
                     </v-flex>
-                    <v-flex xs12>
-                        <p style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
+                </v-layout>
+                <v-divider></v-divider>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Speed:</p>
                     </v-flex>
-                    <v-flex xs4>
-                        <v-btn flat outline block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
-                            <v-icon>autorenew</v-icon>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-btn flat outline block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
-                            <v-icon>casino</v-icon>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-btn flat outline block @click.stop.prevent="reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" color="error" :disabled="lock">
-                            <v-icon>delete</v-icon>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs12>
-                        <p style="margin: 0%; padding: 0%; text-align: left">Frames:</p>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-btn icon :disabled="game.duration == 1" @click.stop.prevent="game.duration--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                    <v-flex xs3>
+                        <v-btn icon :disabled="game.duration == 75" @click.stop.prevent="game.duration = game.duration + 15" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>remove</v-icon>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs4>
-                        <v-btn block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{game.duration}}
+                    <v-flex xs3>
+                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{(90 - game.duration)/15}}
                         </v-btn>
                     </v-flex>
-                    <v-flex xs4>
-                        <v-btn icon @click.stop.prevent="game.duration++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                    <v-flex xs3>
+                        <v-btn icon :disabled="game.duration == 15" @click.stop.prevent="game.duration = game.duration - 15" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>add</v-icon>
                         </v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-divider></v-divider>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs12>
+                        <v-btn block outline @click.stop.prevent="menu=false; about=true" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">about</v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
         </v-card>
     </v-bottom-sheet>
+    <v-dialog v-model="about">
+        <v-card>
+            <v-toolbar dark color="primary">
+                <v-toolbar-title>About</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click.native="about = false">
+                    <v-icon>close</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-card-text>
+                <a class="headline" href="https://github.com/huazhechen/cuber">Github</a>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-btn block outline @click.stop.prevent="reset" color="error">RESET</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </v-app>

@@ -1,14 +1,14 @@
 import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cube/twister";
-import App from "../App";
+import Game from "../../cube/game";
 
 @Component({
   template: require("./index.html")
 })
 export default class ScriptPanel extends Vue {
-  @Inject("app")
-  app: App;
+  @Inject("game")
+  game: Game;
 
   @Prop({ default: false })
   show: boolean;
@@ -25,9 +25,6 @@ export default class ScriptPanel extends Vue {
       this.playing = false;
     }
   }
-
-  @Prop({ default: false })
-  disabled: boolean;
 
   progress: number = 0;
 
@@ -47,7 +44,7 @@ export default class ScriptPanel extends Vue {
       return;
     }
     let action = this.actions[this.progress];
-    this.app.game.twister.twist(
+    this.game.twister.twist(
       action.exp,
       action.reverse,
       action.times,
@@ -63,7 +60,7 @@ export default class ScriptPanel extends Vue {
     }
     this.progress--;
     let action = this.actions[this.progress];
-    this.app.game.twister.twist(
+    this.game.twister.twist(
       action.exp,
       !action.reverse,
       action.times,
@@ -80,7 +77,7 @@ export default class ScriptPanel extends Vue {
     let end = this.actions.length;
     let actions = this.actions.slice(start, end);
     for (let action of actions) {
-      this.app.game.twister.twist(
+      this.game.twister.twist(
         action.exp,
         action.reverse,
         action.times,
@@ -99,7 +96,7 @@ export default class ScriptPanel extends Vue {
     let end = this.progress;
     let actions = this.actions.slice(start, end).reverse();
     for (let action of actions) {
-      this.app.game.twister.twist(
+      this.game.twister.twist(
         action.exp,
         !action.reverse,
         action.times,
@@ -115,18 +112,18 @@ export default class ScriptPanel extends Vue {
   index: number = Number(window.localStorage.getItem("script.index") || 1);
 
   stick() {
-    this.app.game.cube.stick();
-    this.app.game.dirty = true;
+    this.game.cube.stick();
+    this.game.dirty = true;
   }
 
   strip() {
     let strips = this.scripts[this.type].strips;
     for (let strip of strips) {
       for (let index of strip.indexs) {
-        this.app.game.cube.strip(index, strip.faces);
+        this.game.cube.strip(index, strip.faces);
       }
     }
-    this.app.game.dirty = true;
+    this.game.dirty = true;
   }
 
   @Watch("index")
@@ -386,7 +383,7 @@ export default class ScriptPanel extends Vue {
   reset() {
     this.progress = 0;
     this.playing = false;
-    this.app.game.reset();
-    this.app.game.twister.twist(this.exp, true, 1, null, true);
+    this.game.reset();
+    this.game.twister.twist(this.exp, true, 1, null, true);
   }
 }
