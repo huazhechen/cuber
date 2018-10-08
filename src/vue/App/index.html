@@ -15,10 +15,10 @@
         <v-card flat>
             <v-container fluid grid-list-md text-xs-center>
                 <v-layout row wrap justify-center align-center>
-                    <v-flex xs3>
+                    <v-flex xs12>
                         <p style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
                     </v-flex>
-                    <v-flex xs9>
+                    <v-flex xs12>
                         <v-btn-toggle v-model="mode" mandatory style="width:100%">
                             <v-btn flat block value="touch">
                                 <v-icon>touch_app</v-icon>
@@ -34,37 +34,37 @@
                             </v-btn>
                         </v-btn-toggle>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs12>
                         <p style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn flat outline block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
                             <v-icon>autorenew</v-icon>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn flat outline block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock || !(mode=='touch' || mode=='keyboard')">
                             <v-icon>casino</v-icon>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn flat outline block @click.stop.prevent="reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" color="error" :disabled="lock">
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs12>
                         <p style="margin: 0%; padding: 0%; text-align: left">Frames:</p>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn icon :disabled="game.duration == 1" @click.stop.prevent="game.duration--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>remove</v-icon>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{game.duration}}
                         </v-btn>
                     </v-flex>
-                    <v-flex xs3>
+                    <v-flex xs4>
                         <v-btn icon @click.stop.prevent="game.duration++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>add</v-icon>
                         </v-btn>
