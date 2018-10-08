@@ -14,6 +14,27 @@
     <v-bottom-sheet v-model="menu">
         <v-card flat>
             <v-container fluid grid-list-md text-xs-center>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn :disabled="lock || mode == 'play'" outline block @click.stop.prevent="mode = 'play'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>games</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn :disabled="lock || mode == 'alg'" outline block @click.stop.prevent="mode = 'alg'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>school</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn :disabled="lock || mode == 'timer'" outline block @click.stop.prevent="mode = 'timer'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>timer</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-divider></v-divider>
                 <v-layout row wrap justify-center align-center v-show="mode == 'play'">
                     <v-flex xs3>
                         <p class="subheading" style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
@@ -35,25 +56,6 @@
                     </v-flex>
                 </v-layout>
                 <v-divider></v-divider v-show="mode == 'play'">
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs3>
-                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
-                    </v-flex>
-                    <v-flex xs9>
-                        <v-btn-toggle v-model="mode" mandatory style="width:100%">
-                            <v-btn flat block value="play">
-                                <v-icon>games</v-icon>
-                            </v-btn>
-                            <v-btn flat block value="alg">
-                                <v-icon>school</v-icon>
-                            </v-btn>
-                            <v-btn flat block value="timer">
-                                <v-icon>timer</v-icon>
-                            </v-btn>
-                        </v-btn-toggle>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
                 <v-layout row wrap justify-center align-center>
                     <v-flex xs3>
                         <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Speed:</p>
@@ -92,10 +94,11 @@
                 </v-btn>
             </v-toolbar>
             <v-card-text>
-                <a class="headline" href="https://github.com/huazhechen/cuber">Github</a>
+                <a class="headline" href="https://github.com/huazhechen/cuber">Code</a>
             </v-card-text>
 
             <v-card-actions>
+                <v-btn block outline @click.stop.prevent="about = false">OK</v-btn>
                 <v-btn block outline @click.stop.prevent="reset" color="error">RESET</v-btn>
             </v-card-actions>
         </v-card>
