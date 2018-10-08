@@ -4,6 +4,7 @@ import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import Game from "../../cube/game";
 import TimerPanel from "../TimerPanel";
+import Cubelet from "../../cube/cubelet";
 
 @Component({
   template: require("./index.html"),

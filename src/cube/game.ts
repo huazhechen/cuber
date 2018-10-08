@@ -35,7 +35,7 @@ export default class Game {
     this.camera.position.z = Game.SIZE / 3;
     this.tweener = new Tweener();
     this.twister = new Twister(this);
-    this.cube = new Cube(this);
+    this.cube = new Cube();
 
     this.scene.add(this.cube);
     for (let key in CubeletGroup.GROUPS) {

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Shape, ShapePath } from "three";
 
 class Frame extends THREE.Geometry {
   private static readonly _INDICES = [
@@ -96,7 +95,7 @@ class Sticker extends THREE.ShapeGeometry {
     let right = size;
     let radius = size / 4;
 
-    let shape = new Shape();
+    let shape = new THREE.Shape();
     shape.moveTo(left, top + radius);
     shape.lineTo(left, bottom - radius);
     shape.quadraticCurveTo(left, bottom, left + radius, bottom);
@@ -114,7 +113,7 @@ class Sticker extends THREE.ShapeGeometry {
 
 class Edge extends THREE.ShapeGeometry {
   constructor(size: number, edge: number) {
-    let shape = new Shape();
+    let shape = new THREE.Shape();
     size = size / 2;
     shape.moveTo(-size, -size);
     shape.lineTo(-size, size);
@@ -129,7 +128,7 @@ class Edge extends THREE.ShapeGeometry {
     let right = size;
     let radius = size / 4;
 
-    let hole = new Shape();
+    let hole = new THREE.Shape();
     hole.moveTo(left, top + radius);
     hole.quadraticCurveTo(left, top, left + radius, top);
     hole.lineTo(right - radius, top);
@@ -147,6 +146,15 @@ class Edge extends THREE.ShapeGeometry {
 }
 
 export default class Cubelet extends THREE.Group {
+
+  public static readonly DIRECTION = {
+    L: 0,
+    R: 1,
+    D: 2,
+    U: 3,
+    B: 4,
+    F: 5
+  }
   private static readonly _SIZE: number = 32;
   private static readonly _BORDER_WIDTH: number = 2;
   private static readonly _EDGE_WIDTH: number = 1;
@@ -162,6 +170,7 @@ export default class Cubelet extends THREE.Group {
     Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH,
     Cubelet._EDGE_WIDTH
   );
+
   private static readonly _MATERIALS = {
     p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#000000" }),
     i: new THREE.MeshBasicMaterial({ wireframe: false, color: "#303030" }),
@@ -176,28 +185,7 @@ export default class Cubelet extends THREE.Group {
   private _index: number;
   private _vector: THREE.Vector3 = new THREE.Vector3();
   private _stickers: THREE.Mesh[] = [];
-  public static positions = [
-    25,
-    17,
-    7,
-    15,
-    19,
-    11,
-    1,
-    9,
-    23,
-    21,
-    5,
-    3,
-    26,
-    8,
-    6,
-    24,
-    20,
-    18,
-    0,
-    2
-  ];
+  private _quaternion: THREE.Quaternion = new THREE.Quaternion();
 
   set vector(vector) {
     this._vector.set(
@@ -228,12 +216,55 @@ export default class Cubelet extends THREE.Group {
 
   private _materials: THREE.MeshBasicMaterial[];
 
-  get identity() {
-    return Cubelet.positions.indexOf(this.initial);
-  }
-
-  get orientation() {
-    return 0;
+  getColor(i: number) {
+    let position = new THREE.Vector3(0, 0, 0);
+    switch (i) {
+      case Cubelet.DIRECTION.L:
+        position.x = -1;
+        break;
+      case Cubelet.DIRECTION.R:
+        position.x = 1;
+        break;
+      case Cubelet.DIRECTION.D:
+        position.y = -1;
+        break;
+      case Cubelet.DIRECTION.U:
+        position.y = 1;
+        break;
+      case Cubelet.DIRECTION.B:
+        position.z = -1;
+        break;
+      case Cubelet.DIRECTION.F:
+        position.z = 1;
+        break;
+      default:
+        break;
+    }
+    this._quaternion.copy(this.quaternion);
+    position.applyQuaternion(this._quaternion.inverse());
+    let x = Math.round(position.x);
+    let y = Math.round(position.y);
+    let z = Math.round(position.z);
+    let side = 0;
+    if (x < 0) {
+      side = Cubelet.DIRECTION.L;
+    }
+    else if (x > 0) {
+      side = Cubelet.DIRECTION.R;
+    }
+    else if (y < 0) {
+      side = Cubelet.DIRECTION.D;
+    }
+    else if (y > 0) {
+      side = Cubelet.DIRECTION.U;
+    }
+    else if (z < 0) {
+      side = Cubelet.DIRECTION.B;
+    }
+    else if (z > 0) {
+      side = Cubelet.DIRECTION.F;
+    }
+    return this._stickers[side].name;
   }
 
   constructor(index: number) {
@@ -260,41 +291,47 @@ export default class Cubelet extends THREE.Group {
       let _edge = new THREE.Mesh(Cubelet._EDGE, Cubelet._MATERIALS.p);
       let _sticker = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
       switch (i) {
-        case 0:
+        case Cubelet.DIRECTION.L:
           _edge.rotation.y = -Math.PI / 2;
           _edge.position.x = -Cubelet._SIZE / 2;
           _sticker.rotation.y = -Math.PI / 2;
           _sticker.position.x = -Cubelet._SIZE / 2;
+          _sticker.name = "L";
           break;
-        case 1:
+        case Cubelet.DIRECTION.R:
           _edge.rotation.y = Math.PI / 2;
           _edge.position.x = Cubelet._SIZE / 2;
           _sticker.rotation.y = Math.PI / 2;
           _sticker.position.x = Cubelet._SIZE / 2;
+          _sticker.name = "R";
           break;
-        case 2:
+        case Cubelet.DIRECTION.D:
           _edge.rotation.x = Math.PI / 2;
           _edge.position.y = -Cubelet._SIZE / 2;
           _sticker.rotation.x = Math.PI / 2;
           _sticker.position.y = -Cubelet._SIZE / 2;
+          _sticker.name = "D";
           break;
-        case 3:
+        case Cubelet.DIRECTION.U:
           _edge.rotation.x = -Math.PI / 2;
           _edge.position.y = Cubelet._SIZE / 2;
           _sticker.rotation.x = -Math.PI / 2;
           _sticker.position.y = Cubelet._SIZE / 2;
+          _sticker.name = "U";
           break;
-        case 4:
+        case Cubelet.DIRECTION.B:
           _edge.rotation.x = Math.PI;
           _edge.position.z = -Cubelet._SIZE / 2;
           _sticker.rotation.x = Math.PI;
           _sticker.position.z = -Cubelet._SIZE / 2;
+          _sticker.name = "B";
           break;
-        case 5:
+        case Cubelet.DIRECTION.F:
           _edge.rotation.z = 0;
           _edge.position.z = Cubelet._SIZE / 2;
           _sticker.rotation.z = 0;
           _sticker.position.z = Cubelet._SIZE / 2;
+          _sticker.name = "F";
           break;
         default:
           break;

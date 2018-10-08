@@ -8,22 +8,22 @@ export default class CubeletGroup extends THREE.Group {
   public static readonly GROUPS: { [key: string]: CubeletGroup } = {
     L: new CubeletGroup(
       "L",
-      [0, 3, 6, 9, 12, 15, 18, 21, 24],
+      [6, 15, 24, 3, 12, 21, 0, 9, 18],
       new THREE.Vector3(-1, 0, 0)
     ),
     D: new CubeletGroup(
       "D",
-      [0, 1, 2, 9, 10, 11, 18, 19, 20],
+      [18, 19, 20, 9, 10, 11, 0, 1, 2,],
       new THREE.Vector3(0, -1, 0)
     ),
     B: new CubeletGroup(
       "B",
-      [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      [8, 7, 6, 5, 4, 3, 2, 1, 0],
       new THREE.Vector3(0, 0, -1)
     ),
     R: new CubeletGroup(
       "R",
-      [2, 5, 8, 11, 14, 17, 20, 23, 26],
+      [26, 17, 8, 23, 14, 5, 20, 11, 2],
       new THREE.Vector3(+1, 0, 0)
     ),
     U: new CubeletGroup(
@@ -33,7 +33,7 @@ export default class CubeletGroup extends THREE.Group {
     ),
     F: new CubeletGroup(
       "F",
-      [18, 19, 20, 21, 22, 23, 24, 25, 26],
+      [24, 25, 26, 21, 22, 23, 18, 19, 20,],
       new THREE.Vector3(0, 0, +1)
     ),
     l: new CubeletGroup(
@@ -184,14 +184,14 @@ export default class CubeletGroup extends THREE.Group {
 
   private _cubelets: Cubelet[] = [];
   private _angle: number;
-  private _indices: number[];
+  public indices: number[];
   public axis: THREE.Vector3;
   public name: string;
 
   constructor(name: string, indices: number[], axis: THREE.Vector3) {
     super();
     this.name = name;
-    this._indices = indices;
+    this.indices = indices;
     this.axis = axis;
     this.matrixAutoUpdate = false;
     this.updateMatrix();
@@ -218,7 +218,7 @@ export default class CubeletGroup extends THREE.Group {
 
   hold(game: Game): void {
     this._angle = 0;
-    this._indices.forEach(i => {
+    this.indices.forEach(i => {
       let cubelet = game.cube.cubelets[i];
       this._cubelets.push(cubelet);
       game.cube.remove(cubelet);

@@ -1,12 +1,12 @@
 import * as THREE from "three";
+import { Euler } from "three";
 import Cubelet from "./cubelet";
-import Game from "./game";
-import { Euler, Vector3 } from "three";
+import CubeletGroup from "./group";
 export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
   private _initial: Cubelet[] = [];
 
-  constructor(game: Game) {
+  constructor() {
     super();
     for (var i = 0; i < 27; i++) {
       let cubelet = new Cubelet(i);
@@ -42,14 +42,45 @@ export default class Cube extends THREE.Group {
       this._initial[index].strip(face);
     }
   }
-
+  //                +------------+
+  //                | U1  U2  U3 |
+  //                |            |
+  //                | U4  U5  U6 |
+  //                |            |
+  //                | U7  U8  U9 |
+  //   +------------+------------+------------+------------+
+  //   | L1  L2  L3 | F1  F2  F3 | R1  R2  R3 | B1  B2  B3 |
+  //   |            |            |            |            |
+  //   | L4  L5  L6 | F4  F5  F6 | R4  R5  R6 | B4  B5  B6 |
+  //   |            |            |            |            |
+  //   | L7  L8  L9 | F7  F8  F9 | R7  R8  R9 | B7  B8  B9 |
+  //   +------------+------------+------------+------------+
+  //                | D1  D2  D3 |
+  //                |            |
+  //                | D4  D5  D6 |
+  //                |            |
+  //                | D7  D8  D9 |
+  //                +------------+
   get state() {
-    let positions: number[] = [];
-    let orientations: number[] = [];
-    for (let position of Cubelet.positions) {
-      positions.push(this.cubelets[position].identity);
-      orientations.push(this.cubelets[position].orientation);
+    let result: string[] = [];
+    for (let i of CubeletGroup.GROUPS.U.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.U));
     }
-    return positions.concat(orientations);
+    for (let i of CubeletGroup.GROUPS.R.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.R));
+    }
+    for (let i of CubeletGroup.GROUPS.F.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.F));
+    }
+    for (let i of CubeletGroup.GROUPS.D.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.D));
+    }
+    for (let i of CubeletGroup.GROUPS.L.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.L));
+    }
+    for (let i of CubeletGroup.GROUPS.B.indices) {
+      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.B));
+    }
+    return result.join("");
   }
 }
