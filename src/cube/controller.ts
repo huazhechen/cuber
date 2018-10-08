@@ -16,6 +16,7 @@ export default class Controller {
   private _vector: THREE.Vector3;
   private _group: CubeletGroup;
   private _planes: THREE.Plane[];
+  private _angle: number = 0;
 
   constructor(game: Game) {
     this._game = game;
@@ -38,6 +39,29 @@ export default class Controller {
     this._game.canvas.addEventListener("touchstart", this._onTouch, true);
     this._game.canvas.addEventListener("touchmove", this._onTouch, true);
     this._game.canvas.addEventListener("touchend", this._onTouch, true);
+    this.loop();
+  }
+
+  loop() {
+    requestAnimationFrame(this.loop.bind(this));
+    this.update();
+  }
+
+  update() {
+    if (this._rotating) {
+      if (this._group.angle != this._angle) {
+        let delta = (this._angle - this._group.angle) / 2
+        let max = Math.PI / this._game.duration * 2;
+        if (delta > max) {
+          delta = max;
+        }
+        if (delta < -max) {
+          delta = -max;
+        }
+        this._group.angle += delta;
+        this._game.dirty = true;
+      }
+    }
   }
 
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
@@ -96,7 +120,7 @@ export default class Controller {
           this._game.canvas.clientWidth,
           this._game.canvas.clientHeight
         ) /
-          d >
+        d >
         100
       ) {
         return true;
@@ -157,7 +181,7 @@ export default class Controller {
         var dx = this._move.x - this._down.x;
         var dy = this._move.y - this._down.y;
         if (this._group === CubeletGroup.GROUPS.y) {
-          this._group.angle =
+          this._angle =
             (dx /
               Math.min(
                 this._game.canvas.clientWidth,
@@ -167,7 +191,7 @@ export default class Controller {
             2;
         } else {
           if (this._group === CubeletGroup.GROUPS.x) {
-            this._group.angle =
+            this._angle =
               (dy /
                 Math.min(
                   this._game.canvas.clientWidth,
@@ -176,7 +200,7 @@ export default class Controller {
               Math.PI *
               2;
           } else {
-            this._group.angle =
+            this._angle =
               (-dy /
                 Math.min(
                   this._game.canvas.clientWidth,
@@ -190,14 +214,13 @@ export default class Controller {
         var start = this._intersect(this._down, this._holder.plane);
         var end = this._intersect(this._move, this._holder.plane);
         this._vector.subVectors(end, start).multiply(this._holder.vector);
-        this._group.angle =
+        this._angle =
           ((-(this._vector.x + this._vector.y + this._vector.z) *
             (this._group.axis.x + this._group.axis.y + this._group.axis.z)) /
             Game.SIZE) *
           Math.PI *
           8;
       }
-      this._game.dirty = true;
     }
   }
 
