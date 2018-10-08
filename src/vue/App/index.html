@@ -56,16 +56,16 @@
                         <p style="margin: 0%; padding: 0%; text-align: left">Frames:</p>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon :disabled="game.duration == 1" @click.stop.prevent="game.duration--" style="margin: 0%; padding: 0%;">
+                        <v-btn icon :disabled="game.duration == 1" @click.stop.prevent="game.duration--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>remove</v-icon>
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn depressed outline @click.stop.prevent :ripple="false" style="margin: 0%; padding: 0%;">{{game.duration}}
+                        <v-btn block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{game.duration}}
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon @click.stop.prevent="game.duration++" style="margin: 0%; padding: 0%;">
+                        <v-btn icon @click.stop.prevent="game.duration++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>add</v-icon>
                         </v-btn>
                     </v-flex>
