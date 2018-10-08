@@ -24,6 +24,7 @@ export default class Game {
   public dirty: boolean = true;
   public duration: number = 60;
   public callbacks: Function[] = [];
+  public scale: number = 1;
 
   constructor() {
     this.scene = new THREE.Scene();
@@ -36,6 +37,7 @@ export default class Game {
     this.tweener = new Tweener();
     this.twister = new Twister(this);
     this.cube = new Cube();
+    this.scale = 1;
 
     this.scene.add(this.cube);
     for (let key in CubeletGroup.GROUPS) {
@@ -90,9 +92,9 @@ export default class Game {
 
   resize(width: number, height: number) {
     this.camera.aspect = width / height;
-    let min = ((height / Math.min(width, height)) * Game.SIZE) / 4;
+    let min = ((height / Math.min(width, height)) * Game.SIZE) / 3;
     let fov = (2 * Math.atan(min / Game.SIZE) * 180) / Math.PI;
-    this.camera.fov = fov;
+    this.camera.fov = fov * this.scale;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, true);

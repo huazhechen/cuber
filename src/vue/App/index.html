@@ -66,11 +66,51 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{(90 - game.duration)/15}}
+                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{(45 - game.duration)/15}}
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
                         <v-btn icon :disabled="game.duration == 15" @click.stop.prevent="game.duration = game.duration - 15" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>add</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-divider></v-divider>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Pose:</p>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon :disabled="angle == -2" @click.stop.prevent="angle--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>remove</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon :disabled="angle == 2" @click.stop.prevent="angle++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>add</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+                <v-divider></v-divider>
+                <v-layout row wrap justify-center align-center>
+                    <v-flex xs3>
+                        <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Size:</p>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon :disabled="size == -4" @click.stop.prevent="size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                            <v-icon>remove</v-icon>
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs3>
+                        <v-btn icon :disabled="size == 4" @click.stop.prevent="size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>add</v-icon>
                         </v-btn>
                     </v-flex>

@@ -16,6 +16,25 @@ import TimerPanel from "../TimerPanel";
 export default class App extends Vue {
   @Provide("game")
   game: Game = new Game();
+  angle: number = 1;
+
+  @Watch("angle")
+  onAngleChange() {
+    let storage = window.localStorage;
+    storage.setItem("angle", String(this.angle));
+    this.game.scene.rotation.y = -Math.PI / 4 + (this.angle * Math.PI) / 16;
+    this.game.dirty = true;
+  }
+
+  size: number = 0;
+
+  @Watch("size")
+  onSizeChange() {
+    let storage = window.localStorage;
+    storage.setItem("size", String(this.size));
+    this.game.scale = Math.pow(2, -this.size / 8);
+    this.resize();
+  }
 
   get duration() {
     return this.game.duration;
@@ -51,11 +70,11 @@ export default class App extends Vue {
       this.resize();
     }
     let storage = window.localStorage;
-    this.game.duration = Number(
-      storage.getItem("duration") || this.game.duration
-    );
+    this.game.duration = Number(storage.getItem("duration") || 45);
     this.mode = window.localStorage.getItem("mode") || "play";
     this.keyboard = Boolean(window.localStorage.getItem("mode") || false);
+    this.angle = Number(window.localStorage.getItem("angle") || 1);
+    this.size = Number(window.localStorage.getItem("size") || 2);
     this.game.callbacks.push(this.onTwist);
   }
 
