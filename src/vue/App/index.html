@@ -19,17 +19,17 @@
                         <p class="subheading" style="margin: 0%; padding: 0%; text-align: left">Mode:</p>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn :disabled="lock || mode == 'play'" outline block @click.stop.prevent="mode = 'play'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                        <v-btn :color="mode == 'play'?'primary':''" :ripple="false" flat block @click.stop.prevent="if (!lock){mode = 'play';}" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>games</v-icon>
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn :disabled="lock || mode == 'alg'" outline block @click.stop.prevent="mode = 'alg'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                        <v-btn :color="mode == 'alg'?'primary':''" :ripple="false" flat block @click.stop.prevent="if (!lock){mode = 'alg';}" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>school</v-icon>
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn :disabled="lock || mode == 'timer'" outline block @click.stop.prevent="mode = 'timer'" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+                        <v-btn :color="mode == 'timer'?'primary':''" :ripple="false" flat block @click.stop.prevent="if (!lock){mode = 'timer';}" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
                             <v-icon>timer</v-icon>
                         </v-btn>
                     </v-flex>
@@ -40,17 +40,17 @@
                         <p class="subheading" style="margin: 0%; padding: 0%; text-align: left;">Action:</p>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn flat outline block @click.stop.prevent="keyboard = !keyboard" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                        <v-btn flat block @click.stop.prevent="keyboard = !keyboard" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
                             <v-icon>{{keyboard?'keyboard_hide':'keyboard'}}</v-icon>
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn flat outline block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                        <v-btn flat block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
                             <v-icon>casino</v-icon>
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn flat outline block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
+                        <v-btn flat block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :disabled="lock">
                             <v-icon>replay</v-icon>
                         </v-btn>
                     </v-flex>
@@ -66,7 +66,7 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{(45 - game.duration)/15}}
+                        <v-btn icon @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{(45 - game.duration)/15}}
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
@@ -86,7 +86,7 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
+                        <v-btn icon @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
@@ -106,7 +106,7 @@
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
-                        <v-btn icon outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
+                        <v-btn icon @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
                         </v-btn>
                     </v-flex>
                     <v-flex xs3>
