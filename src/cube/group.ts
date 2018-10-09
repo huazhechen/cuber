@@ -213,17 +213,17 @@ export default class CubeletGroup extends THREE.Group {
     action.exp = this.name;
     action.times = times;
     action.reverse = reverse;
-    return action.format();
+    return action.format;
   }
 
   hold(game: Game): void {
     this._angle = 0;
-    this.indices.forEach(i => {
+    for (let i of this.indices) {
       let cubelet = game.cube.cubelets[i];
       this._cubelets.push(cubelet);
       game.cube.remove(cubelet);
       this.add(cubelet);
-    }, this);
+    }
     game.lock = true;
   }
 

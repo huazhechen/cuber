@@ -3,7 +3,7 @@ import Game from "./game";
 import Holder from "./holder";
 
 export default class Twister {
-  private _queue: TwistAction[] = [];
+  public queue: TwistAction[] = [];
   private _game: Game;
 
   constructor(game: Game) {
@@ -11,7 +11,19 @@ export default class Twister {
   }
 
   get length() {
-    return this._queue.length;
+    return this.queue.length;
+  }
+
+  get buffer() {
+    let buffer: string[] = [];
+    for (let action of this.queue) {
+      buffer.push(action.format);
+    }
+    return buffer.join(" ");
+  }
+
+  clear() {
+    this.queue.splice(0, this.queue.length);
   }
 
   twist(
@@ -23,23 +35,49 @@ export default class Twister {
   ) {
     let list = new TwistNode(exp, reverse, times).parse();
     list[list.length - 1].callback = callback;
-    list.forEach(function (element) {
+    for (let element of list) {
       element.fast = fast;
-      this._queue.push(element);
-    }, this);
+      this.queue.push(element);
+    }
     this.update();
   }
 
   update(): boolean {
-    if (this._queue.length === 0 || this._game.lock) {
+    if (this.queue.length === 0 || this._game.lock) {
       return false;
     }
-    let twist = this._queue.shift();
+    let twist = this.queue.shift();
     if (undefined == twist) {
       return false;
     }
     this.start(twist);
     return true;
+  }
+
+  random() {
+    let result = "";
+    let exps: string[] = [];
+    let last = -1;
+    let actions = ["U", "D", "R", "L", "F", "B"];
+    let axis = -1;
+    for (let i = 0; i < 20; i++) {
+      let exp: string[] = [];
+      while (axis == last) {
+        axis = Math.floor(Math.random() * 3);
+      }
+      let side = Math.floor(Math.random() * 2);
+      exp.push(actions[axis * 2 + side]);
+      let suffix = Math.random();
+      if (suffix < 0.2) {
+        exp.push("2");
+      } else if (suffix < 0.6) {
+        exp.push("'");
+      }
+      exps.push(exp.join(""));
+      last = axis;
+    }
+    result = exps.join(" ");
+    return result;
   }
 
   start(action: TwistAction) {
@@ -48,6 +86,19 @@ export default class Twister {
       this._game.dirty = true;
       if (action.callback) {
         action.callback();
+      }
+      this.update();
+      return;
+    }
+    if (action.exp == "*") {
+      this._game.cube.reset();
+      this._game.dirty = true;
+      let exp = this.random();
+      let list = new TwistNode(exp).parse();
+      list[list.length - 1].callback = action.callback;
+      for (let element of list) {
+        element.fast = true;
+        this.queue.unshift(element);
       }
       this.update();
       return;
@@ -61,6 +112,7 @@ export default class Twister {
     }
     let part = CubeletGroup.GROUPS[action.exp];
     if (part === undefined) {
+      this.update();
       return;
     }
     part.hold(this._game);
@@ -72,9 +124,10 @@ export default class Twister {
         action.callback();
       }
       this.update();
+      return;
     } else {
       for (let callback of this._game.callbacks) {
-        callback(action.format());
+        callback(action.format);
       }
       let duration =
         this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
@@ -92,6 +145,7 @@ export default class Twister {
             action.callback();
           }
           this.update();
+          return;
         }
       );
     }
@@ -197,17 +251,17 @@ export class TwistAction {
   public fast: boolean = false;
   public callback: Function | null = null;
 
-  public format() {
+  get format() {
     if (this.fast) {
       return "";
     }
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-      this.exp +
-      (this.exp.length > 1 ? ")" : "") +
-      (this.reverse ? "'" : "") +
-      (this.times == 1 ? "" : String(this.times));
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
   }
 }
 
@@ -216,9 +270,9 @@ export class TwistNode {
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
     let list = exp
-      .replace(/[^#xyzbsfdeulmr\(\)'0123456789]/gi, "")
+      .replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "")
       .match(
-        /\([#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi
+        /\([\*#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi
       );
     if (null === list) {
       return;
@@ -226,7 +280,7 @@ export class TwistNode {
     if (list.length == 1) {
       var values = list[0].match(/^\((\S+)\)('?)(\d*)('?)$/i);
       if (values === null) {
-        values = list[0].match(/([#xyzbsfdeulmr])('?)(\d*)('?)/i);
+        values = list[0].match(/([\*#xyzbsfdeulmr])('?)(\d*)('?)/i);
         if (null === values) {
           return;
         }
@@ -248,10 +302,10 @@ export class TwistNode {
       this._twist.exp = exp;
       this._twist.reverse = reverse;
       this._twist.times = times;
-      list.forEach(function (c) {
-        var t = new TwistNode(c);
-        this._children.push(t);
-      }, this);
+      for (let element of list) {
+        var node = new TwistNode(element);
+        this._children.push(node);
+      }
     }
   }
   parse(reverse: boolean = false): TwistAction[] {
@@ -267,9 +321,9 @@ export class TwistNode {
             n = this._children[j];
           }
           var list = n.parse(reverse);
-          list.forEach(function (element) {
+          for (let element of list) {
             _result.push(element);
-          }, this);
+          }
         }
       }
     } else {

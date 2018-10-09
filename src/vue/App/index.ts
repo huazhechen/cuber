@@ -43,11 +43,12 @@ export default class App extends Vue {
   @Watch("speed")
   onSpeedChange() {
     let storage = window.localStorage;
-    storage.setItem("speed", String(this.size));
+    storage.setItem("speed", String(this.speed));
     this.game.duration = 50 - 10 * this.speed;
     if (this.init) {
-      this.game.twister.twist('R');
-      this.game.twister.twist('R', true, 1, null, true);
+      this.game.twister.clear();
+      this.game.twister.twist("R");
+      this.game.twister.twist("R", true, 1, null, true);
     }
   }
 
@@ -81,7 +82,9 @@ export default class App extends Vue {
     this.angle = Number(window.localStorage.getItem("angle") || 1);
     this.size = Number(window.localStorage.getItem("size") || 2);
     this.game.callbacks.push(this.onTwist);
-    this.$nextTick(() => { this.init = true });
+    this.$nextTick(() => {
+      this.init = true;
+    });
   }
 
   onTwist(exp: string) {
@@ -109,6 +112,7 @@ export default class App extends Vue {
     storage.setItem("mode", this.mode);
     this.game.enable = this.mode == "play";
     this.menu = false;
+    this.game.twister.clear();
     this.$nextTick(this.resize);
   }
 
