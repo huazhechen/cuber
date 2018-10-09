@@ -15,7 +15,9 @@ export default class KeyboardPanel extends Vue {
   @Prop({ default: false })
   show: boolean;
 
-  shift: string[] = [];
+  double: boolean = false;
+  reverse: boolean = false;
+
   operations: string[] = [
     "L",
     "D",
@@ -39,8 +41,8 @@ export default class KeyboardPanel extends Vue {
 
   get suffix() {
     let result: string = "";
-    result = result.concat(this.shift.indexOf("reverse") == -1 ? "" : "'");
-    result = result.concat(this.shift.indexOf("double") == -1 ? "" : "2");
+    result = result.concat(this.reverse ? "'" : "");
+    result = result.concat(this.double ? "2" : "");
     return result;
   }
 

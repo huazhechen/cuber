@@ -88,6 +88,7 @@ export default class App extends Vue {
 
   menu: boolean = false;
   about: boolean = false;
+  tune: boolean = false;
 
   @Watch("keyboard")
   onKeyboardChange() {
