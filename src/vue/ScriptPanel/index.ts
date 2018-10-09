@@ -362,9 +362,15 @@ export default class ScriptPanel extends Vue {
     this.exp = storage.getItem(this.script.name) || this.script.exp;
   }
 
+  toggle() {
+    this.playing = !this.playing;
+    this.play();
+  }
+
   init() {
     this.progress = 0;
     this.playing = false;
+    this.game.twister.clear();
     this.game.twister.twist("#");
     this.game.twister.twist(this.exp, true, 1, null, true);
   }
