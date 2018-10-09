@@ -3,7 +3,7 @@
     <div ref=cuber></div>
     <div ref=panel>
       <keyboard-panel :show="mode == 'play' && keyboard"></keyboard-panel>
-      <script-panel :show="mode == 'alg'"></script-panel>
+      <script-panel :show="mode == 'script'"></script-panel>
       <timer-panel :show="mode == 'timer'"></timer-panel>
     </div>
     <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="menu = !menu;">
@@ -22,7 +22,7 @@
             </v-btn>
           </v-flex>
           <v-flex xs4>
-            <v-btn :color="mode == 'alg'?'primary':''" flat block @click.stop.prevent="if (!lock){mode = 'alg';}" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn :color="mode == 'script'?'primary':''" flat block @click.stop.prevent="if (!lock){mode = 'script';}" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon>school</v-icon>
             </v-btn>
           </v-flex>

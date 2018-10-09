@@ -1,100 +1,52 @@
 <v-container fluid grid-list-md text-xs-center v-show="show">
-    <v-layout row wrap>
-        <v-flex xs12 style="margin: 0%; padding: 0%; display: table; width: 100%;">
-            <p class="title" @click="if (!game.lock && !playing){dialog = true}" style="
-            word-wrap: break-word; 
-            word-break: normal;
-            border: 2px solid rgba(0,0,0,0.54);
-            border-radius: 4px;
-            display: table-cell;
-            vertical-align:middle;
-            width: 100%;
-            height: 2.8em;
-            min-width: 0%;
-            min-height: 0%;
-            margin: 0%;
-            padding: 0%;
-            ">{{exp}}</p>
-        </v-flex>
-        <v-flex xs1 style="margin: 0%; padding: 0%;">
-            <v-spacer></v-spacer>
-        </v-flex>
-        <v-flex xs10 style="margin: 0%; padding: 0%;">
-            <v-slider readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
-        </v-flex>
-        <v-flex xs1 style="margin: 0%; padding: 0%;">
-            <v-spacer></v-spacer>
-        </v-flex>
-        <v-flex xs1 style="margin: 0%; padding: 0%;">
-            <v-spacer></v-spacer>
-        </v-flex>
-        <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="game.lock || playing || progress==0" @click.stop.prevent="start" style="margin: 0%; padding: 0%;">
-                <v-icon>skip_previous</v-icon>
-            </v-btn>
-            </v-btn>
-        </v-flex>
-        <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="game.lock || playing || progress==0" @click.stop.prevent="backward" style="margin: 0%; padding: 0%;">
-                <v-icon>fast_rewind</v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="(game.lock && !playing) || (progress == actions.length)" @click.stop.prevent="playing = !playing; play();" style="margin: 0%; padding: 0%;">
-                <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="game.lock || playing || (progress == actions.length)" @click.stop.prevent="forward" style="margin: 0%; padding: 0%;">
-                <v-icon>fast_forward</v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex xs2 style="margin: 0%; padding: 0%;">
-            <v-btn icon large :disabled="game.lock || playing || progress == actions.length" @click.stop.prevent="end" style="margin: 0%; padding: 0%;">
-                <v-icon>skip_next</v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex xs1 style="margin: 0%; padding: 0%;">
-            <v-spacer></v-spacer>
-        </v-flex>
-    </v-layout>
-    <v-bottom-sheet v-model="dialog">
-        <v-card tile>
-            <v-container fluid grid-list-md text-xs-center>
-                <v-layout row wrap>
-                    <v-flex xs12>
-                        <v-btn-toggle v-model="type" mandatory style="width:100%">
-                            <template v-for="(group, i) in scripts">
-                                <v-btn style="text-transform:none;" block :disabled="game.lock || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
-                            </template>
-                        </v-btn-toggle>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-text-field outline single-line hide-details class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'" @click:append="exp=script.exp" v-model="exp"></v-text-field>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn icon large :disabled="game.lock" @click.stop.prevent="index=1" style="margin: 0%; padding: 0%;">
-                            <v-icon>first_page</v-icon>
-                        </v-btn>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn icon large :disabled="game.lock" @mousedown="indexDown(-1)" @mouseup="indexUp(-1)" @mouseleave="indexUp(-1)" @touchstart.stop.prevent="indexDown(-1)" @touchend.stop.prevent="indexUp(-1)" style="margin: 0%; padding: 0%;">
-                            <v-icon>arrow_back</v-icon>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn icon large :disabled="game.lock" @mousedown="indexDown(1)" @mouseup="indexUp(1)" @mouseleave="indexUp(1)" @touchstart.stop.prevent="indexDown(1)" @touchend.stop.prevent="indexUp(1)" style="margin: 0%; padding: 0%;">
-                            <v-icon>arrow_forward</v-icon>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs3>
-                        <v-btn icon large :disabled="game.lock" @click.stop.prevent="index=scripts[type].scripts.length" style="margin: 0%; padding: 0%;">
-                            <v-icon>last_page</v-icon>
-                        </v-btn>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-card>
-    </v-bottom-sheet>
+  <v-layout row wrap>
+    <v-flex xs12>
+      <v-btn-toggle v-model="type" mandatory style="width:100%">
+        <template v-for="(group, i) in scripts">
+          <v-btn style="text-transform:none;" block :disabled="game.lock || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
+        </template>
+      </v-btn-toggle>
+    </v-flex>
+    <v-flex xs12>
+      <v-text-field outline single-line hide-details class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'"
+        @click:append="exp=script.exp" v-model="exp"></v-text-field>
+    </v-flex>
+    <v-flex xs12 style="margin: 0%; padding: 0%">
+      <v-slider readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="game.lock" @mousedown="indexDown(-1)" @mouseup="indexUp(-1)" @mouseleave="indexUp(-1)"
+        @touchstart.stop.prevent="indexDown(-1)" @touchend.stop.prevent="indexUp(-1)" style="margin: 0%; padding: 0%;">
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="playing || progress==0" @click.stop.prevent="backward" style="margin: 0%; padding: 0%;">
+        <v-icon>fast_rewind</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="game.lock || playing || progress==0" @click.stop.prevent="stop" style="margin: 0%; padding: 0%;">
+        <v-icon>stop</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="(game.lock && !playing) || (progress == actions.length)" @click.stop.prevent="playing = !playing; play();"
+        style="margin: 0%; padding: 0%;">
+        <v-icon>{{playing?'pause':'play_arrow'}}</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="playing || (progress == actions.length)" @click.stop.prevent="forward"
+        style="margin: 0%; padding: 0%;">
+        <v-icon>fast_forward</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2>
+      <v-btn icon large :disabled="game.lock" @mousedown="indexDown(1)" @mouseup="indexUp(1)" @mouseleave="indexUp(1)"
+        @touchstart.stop.prevent="indexDown(1)" @touchend.stop.prevent="indexUp(1)" style="margin: 0%; padding: 0%;">
+        <v-icon>arrow_forward</v-icon>
+      </v-btn>
+    </v-flex>
+  </v-layout>
 </v-container>

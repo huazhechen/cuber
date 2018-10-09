@@ -69,26 +69,7 @@ export default class ScriptPanel extends Vue {
     );
   }
 
-  end() {
-    if (this.progress == this.actions.length) {
-      return;
-    }
-    let start = this.progress;
-    let end = this.actions.length;
-    let actions = this.actions.slice(start, end);
-    for (let action of actions) {
-      this.game.twister.twist(
-        action.exp,
-        action.reverse,
-        action.times,
-        null,
-        true
-      );
-    }
-    this.progress = this.actions.length;
-  }
-
-  start() {
+  stop() {
     if (this.progress == 0) {
       return;
     }
