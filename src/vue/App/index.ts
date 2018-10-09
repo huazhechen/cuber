@@ -77,7 +77,7 @@ export default class App extends Vue {
     }
     let storage = window.localStorage;
     this.mode = window.localStorage.getItem("mode") || "play";
-    this.keyboard = Boolean(window.localStorage.getItem("keyboard") || false);
+    this.keyboard = window.localStorage.getItem("keyboard") == "true";
     this.speed = Number(storage.getItem("speed") || 0);
     this.angle = Number(window.localStorage.getItem("angle") || 1);
     this.size = Number(window.localStorage.getItem("size") || 2);
