@@ -46,7 +46,8 @@ export default class App extends Vue {
     storage.setItem("speed", String(this.size));
     this.game.duration = 50 - 10 * this.speed;
     if (this.init) {
-      this.game.twister.twist('R', false, 1, () => { this.game.twister.twist('R', true, 1, null, true) }, false);
+      this.game.twister.twist('R');
+      this.game.twister.twist('R', true, 1, null, true);
     }
   }
 
@@ -109,10 +110,6 @@ export default class App extends Vue {
     this.game.enable = this.mode == "play";
     this.menu = false;
     this.$nextTick(this.resize);
-  }
-
-  get lock() {
-    return this.game.lock || this.game.twister.length != 0;
   }
 
   reset() {

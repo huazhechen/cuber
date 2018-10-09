@@ -35,11 +35,20 @@ export default class ScriptPanel extends Vue {
       this.playing = false;
     }
     if (this.playing) {
-      this.forward();
+      let action = this.actions[this.progress];
+      this.game.twister.twist(
+        action.exp,
+        action.reverse,
+        action.times,
+        this.play,
+        false
+      );
+      this.progress++;
     }
   }
 
   forward() {
+    this.playing = false;
     if (this.progress == this.actions.length) {
       return;
     }
@@ -55,6 +64,7 @@ export default class ScriptPanel extends Vue {
   }
 
   backward() {
+    this.playing = false;
     if (this.progress == 0) {
       return;
     }
@@ -70,6 +80,7 @@ export default class ScriptPanel extends Vue {
   }
 
   stop() {
+    this.playing = false;
     if (this.progress == 0) {
       return;
     }
@@ -109,6 +120,14 @@ export default class ScriptPanel extends Vue {
 
   @Watch("index")
   onIndexChange() {
+    let length = this.scripts[this.type].scripts.length;
+    this.index;
+    while (this.index < 1) {
+      this.index = this.index + length;
+    }
+    while (this.index > length) {
+      this.index = this.index - length;
+    }
     let storage = window.localStorage;
     storage.setItem("script.index", String(this.index));
   }
@@ -299,15 +318,7 @@ export default class ScriptPanel extends Vue {
   ];
 
   get script() {
-    let length = this.scripts[this.type].scripts.length;
-    let index = this.index;
-    while (index < 1) {
-      index = index + length;
-    }
-    while (index > length) {
-      index = index - length;
-    }
-    let script = this.scripts[this.type].scripts[index - 1];
+    let script = this.scripts[this.type].scripts[this.index - 1];
     let result = { name: "", exp: "" };
     result.name = script.name;
     result.exp = script.exp;
@@ -344,6 +355,7 @@ export default class ScriptPanel extends Vue {
   actions: TwistAction[] = new TwistNode(this.exp).parse();
   @Watch("exp")
   onExpChange(value: string) {
+    this.playing = false;
     let storage = window.localStorage;
     let saved = storage.getItem(this.script.name);
     if (value == this.script.exp) {
@@ -352,19 +364,20 @@ export default class ScriptPanel extends Vue {
       storage.setItem(this.script.name, value);
     }
     this.actions = new TwistNode(this.exp).parse();
-    this.reset();
+    this.init();
   }
 
   @Watch("script")
   onScriptChange() {
+    this.playing = false;
     let storage = window.localStorage;
     this.exp = storage.getItem(this.script.name) || this.script.exp;
   }
 
-  reset() {
+  init() {
     this.progress = 0;
     this.playing = false;
-    this.game.reset();
+    this.game.twister.twist("#");
     this.game.twister.twist(this.exp, true, 1, null, true);
   }
 }

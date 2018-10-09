@@ -6,11 +6,11 @@
       <script-panel :show="mode == 'script'"></script-panel>
       <timer-panel :show="mode == 'timer'"></timer-panel>
     </div>
-    <v-btn :disabled="lock" fixed top right icon large outline @click.stop.prevent="menu = !menu;">
-      <v-icon>menu</v-icon>
+    <v-btn fixed top right icon large @click.stop.prevent="menu = !menu;">
+      <v-icon large>menu</v-icon>
     </v-btn>
-    <v-btn v-show="mode == 'play' && !keyboard" fixed bottom right icon large outline @click.stop.prevent="keyboard = !keyboard;">
-      <v-icon>keyboard</v-icon>
+    <v-btn v-show="mode == 'play' && !keyboard" fixed bottom right icon large @click.stop.prevent="keyboard = !keyboard;">
+      <v-icon large>keyboard</v-icon>
     </v-btn>
     <v-btn fixed top left icon class="title" @click.stop.prevent v-if="exp != ''" style="text-transform:none">{{exp}}</v-btn>
   </div>
@@ -19,21 +19,21 @@
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap justify-center align-center>
           <v-flex xs4>
-            <v-btn :color="mode == 'play'?'primary':''" flat block @click.stop.prevent="if (!lock){mode = 'play';}"
+            <v-btn :color="mode == 'play'?'primary':''" flat block @click.stop.prevent="mode = 'play'"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>games</v-icon>
+              <v-icon large>games</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs4>
-            <v-btn :color="mode == 'script'?'primary':''" flat block @click.stop.prevent="if (!lock){mode = 'script';}"
+            <v-btn :color="mode == 'script'?'primary':''" flat block @click.stop.prevent="mode = 'script'"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>school</v-icon>
+              <v-icon large>school</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs4>
-            <v-btn :color="mode == 'timer'?'primary':''" flat block @click.stop.prevent="if (!lock){mode = 'timer';}"
+            <v-btn :color="mode == 'timer'?'primary':''" flat block @click.stop.prevent="mode = 'timer'"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>timer</v-icon>
+              <v-icon large>timer</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -41,7 +41,7 @@
         <v-layout row wrap justify-center align-center>
           <v-flex xs12>
             <v-btn block outline @click.stop.prevent="menu=false; tune=true" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>tune</v-icon>
+              <v-icon large>tune</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -49,7 +49,7 @@
         <v-layout row wrap justify-center align-center>
           <v-flex xs12>
             <v-btn block outline @click.stop.prevent="menu=false; about=true" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>help</v-icon>
+              <v-icon large>help</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -65,16 +65,16 @@
           </v-flex>
           <v-flex xs3>
             <v-btn icon :disabled="speed == -4" @click.stop.prevent="speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>remove</v-icon>
+              <v-icon large>remove</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs3>
-            <v-btn flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{speed}}
+            <v-btn class="headline" flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{speed}}
             </v-btn>
           </v-flex>
           <v-flex xs3>
             <v-btn icon :disabled="speed == 4" @click.stop.prevent="speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>add</v-icon>
+              <v-icon large>add</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -85,16 +85,16 @@
           </v-flex>
           <v-flex xs3>
             <v-btn flat block :disabled="angle == -2" @click.stop.prevent="angle--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>remove</v-icon>
+              <v-icon large>remove</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs3>
-            <v-btn flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
+            <v-btn class="headline" flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
             </v-btn>
           </v-flex>
           <v-flex xs3>
             <v-btn flat block :disabled="angle == 2" @click.stop.prevent="angle++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>add</v-icon>
+              <v-icon large>add</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -105,16 +105,16 @@
           </v-flex>
           <v-flex xs3>
             <v-btn flat block :disabled="size == -4" @click.stop.prevent="size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>remove</v-icon>
+              <v-icon large>remove</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs3>
-            <v-btn flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
+            <v-btn class="headline" flat block outline @click.stop.prevent :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
             </v-btn>
           </v-flex>
           <v-flex xs3>
             <v-btn flat block :disabled="size == 4" @click.stop.prevent="size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-              <v-icon>add</v-icon>
+              <v-icon large>add</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>

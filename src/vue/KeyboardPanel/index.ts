@@ -15,6 +15,7 @@ export default class KeyboardPanel extends Vue {
   @Prop({ default: false })
   show: boolean;
 
+  twice: boolean = false;
   double: boolean = false;
   reverse: boolean = false;
 
@@ -25,12 +26,6 @@ export default class KeyboardPanel extends Vue {
     "R",
     "U",
     "F",
-    "l",
-    "d",
-    "b",
-    "r",
-    "u",
-    "f",
     "M",
     "E",
     "S",
@@ -39,16 +34,23 @@ export default class KeyboardPanel extends Vue {
     "z"
   ];
 
-  get suffix() {
-    let result: string = "";
-    result = result.concat(this.reverse ? "'" : "");
-    result = result.concat(this.double ? "2" : "");
-    return result;
+  get exps() {
+    let exps: string[] = [];
+    for (let i = 0; i < this.operations.length; i++) {
+      let exp: string = this.operations[i];
+      if (i < 6 && this.double) {
+        exp = exp.toLowerCase();
+      }
+      exp = exp.concat(this.reverse ? "'" : "");
+      exp = exp.concat(this.twice ? "2" : "");
+      exps.push(exp);
+    }
+    return exps;
   }
 
-  twist(operation: string) {
-    this.queue.push(operation);
-    this.game.twister.twist(operation, false, 1, this.callback, false);
+  twist(exp: string) {
+    this.queue.push(exp);
+    this.game.twister.twist(exp, false, 1, this.callback, false);
   }
 
   callback() {

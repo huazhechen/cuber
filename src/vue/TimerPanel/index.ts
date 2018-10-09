@@ -18,7 +18,7 @@ export default class TimerPanel extends Vue {
       if (this.exp == "") {
         this.random();
       } else {
-        this.game.reset();
+        this.game.twister.twist("#");
         this.game.twister.twist(this.exp, false, 1, null, true);
       }
     }
@@ -55,7 +55,7 @@ export default class TimerPanel extends Vue {
 
   random() {
     if (!this.lock) {
-      this.game.reset();
+      this.game.twister.twist("#");
       this.exp = this.game.random();
     }
   }
