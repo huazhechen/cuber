@@ -19,20 +19,20 @@
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap justify-center align-center>
           <v-flex xs4>
-            <v-btn :color="mode == 'play'?'primary':''" flat block @click.stop.prevent="mode = 'play'"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn class="headline" :color="mode == 'play'?'primary':''" flat block @click.stop.prevent="mode = 'play'"
+              style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>games</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs4>
-            <v-btn :color="mode == 'script'?'primary':''" flat block @click.stop.prevent="mode = 'script'"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn class="headline" :color="mode == 'script'?'primary':''" flat block @click.stop.prevent="mode = 'script'"
+              style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>school</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs4>
-            <v-btn :color="mode == 'timer'?'primary':''" flat block @click.stop.prevent="mode = 'timer'"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn class="headline" :color="mode == 'timer'?'primary':''" flat block @click.stop.prevent="mode = 'timer'"
+              style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>timer</v-icon>
             </v-btn>
           </v-flex>
@@ -40,7 +40,7 @@
         <v-divider></v-divider>
         <v-layout row wrap justify-center align-center>
           <v-flex xs12>
-            <v-btn block outline @click.stop.prevent="menu=false; tune=true" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn class="headline" block outline @click.stop.prevent="menu=false; tune=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>tune</v-icon>
             </v-btn>
           </v-flex>
@@ -48,7 +48,7 @@
         <v-divider></v-divider>
         <v-layout row wrap justify-center align-center>
           <v-flex xs12>
-            <v-btn block outline @click.stop.prevent="menu=false; about=true" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-btn class="headline" block outline @click.stop.prevent="menu=false; about=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>help</v-icon>
             </v-btn>
           </v-flex>
