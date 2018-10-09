@@ -70,6 +70,7 @@ export default class Twister {
       if (action.callback) {
         action.callback();
       }
+      this._game.dirty = true;
       this.update();
     } else {
       for (let callback of this._game.callbacks) {
