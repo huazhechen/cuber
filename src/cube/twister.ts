@@ -49,6 +49,7 @@ export default class Twister {
       if (action.callback) {
         action.callback();
       }
+      this.update();
       return;
     }
     let angle = -Math.PI / 2;
@@ -70,7 +71,6 @@ export default class Twister {
       if (action.callback) {
         action.callback();
       }
-      this._game.dirty = true;
       this.update();
     } else {
       for (let callback of this._game.callbacks) {
@@ -92,7 +92,6 @@ export default class Twister {
             action.callback();
           }
           this.update();
-          this._game.dirty = true;
         }
       );
     }
