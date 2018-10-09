@@ -1,19 +1,36 @@
-<v-container fluid grid-list-md text-xs-center v-show="show">
+<v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%">
   <v-layout row wrap>
     <v-flex xs12 style="display: table; width: 100%">
-      <p class="title" style="display: table-cell; vertical-align:middle; width: 100%; height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{queue.join('&nbsp;')}}</p>
+      <p class="title" style="display: table-cell; vertical-align:middle; width: 100%; height: 1em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{queue.join('&nbsp;')}}</p>
+    </v-flex>
+    <v-flex xs4>
+      <v-btn block @click.stop.prevent="game.random()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+        :disabled="game.lock">
+        <v-icon>casino</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs4>
+      <v-btn block @click.stop.prevent="game.reset()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+        :disabled="game.lock">
+        <v-icon>replay</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs4>
+      <v-btn block @click.stop.prevent="$emit('hide')" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+        <v-icon>keyboard_hide</v-icon>
+      </v-btn>
     </v-flex>
     <v-flex v-for="operation in operations" d-flex xs2>
       <v-btn :disabled="queue.length > 9" @click.stop.prevent="twist(operation + suffix)" class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none">{{operation}}{{suffix}}
       </v-btn>
     </v-flex>
-    <v-flex d-flex xs6>
-      <v-btn @click.stop.prevent="reverse = !reverse" block class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
+    <v-flex xs6>
+      <v-btn @click.stop.prevent="reverse = !reverse" block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
         <v-icon large>{{reverse?'rotate_left':'rotate_right'}}</v-icon>
       </v-btn>
     </v-flex>
-    <v-flex d-flex xs6>
-      <v-btn @click.stop.prevent="double = !double" block class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%;">{{double?'180°':'90°'}}
+    <v-flex xs6>
+      <v-btn @click.stop.prevent="double = !double" block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">{{double?'180°':'90°'}}
       </v-btn>
     </v-flex>
   </v-layout>

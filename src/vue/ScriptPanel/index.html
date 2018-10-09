@@ -1,18 +1,18 @@
-<v-container fluid grid-list-md text-xs-center v-show="show">
+<v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%">
   <v-layout row wrap>
-    <v-flex xs12>
-      <v-btn-toggle v-model="type" mandatory style="width:100%">
-        <template v-for="(group, i) in scripts">
-          <v-btn style="text-transform:none;" block :disabled="game.lock || playing" :value="i">{{type==i?script.name:group.name}}</v-btn>
-        </template>
-      </v-btn-toggle>
-    </v-flex>
+    <template v-for="(group, i) in scripts">
+      <v-flex xs4 style="margin: 0%; padding: 0%">
+        <v-btn class="title" :color="type == i?'primary':''" :outline="type == i" block :disabled="game.lock || playing"
+          style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; width: 100%"
+          @click.stop.prevent="type = i">{{type==i?script.name:group.name}}</v-btn>
+      </v-flex>
+    </template>
     <v-flex xs12>
       <v-text-field outline single-line hide-details class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'"
         @click:append="exp=script.exp" v-model="exp"></v-text-field>
     </v-flex>
-    <v-flex xs12 style="margin: 0%; padding: 0%">
-      <v-slider readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
+    <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
+      <v-slider style="margin: 0%" readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
     </v-flex>
     <v-flex xs2>
       <v-btn icon large :disabled="game.lock" @mousedown="indexDown(-1)" @mouseup="indexUp(-1)" @mouseleave="indexUp(-1)"
@@ -37,8 +37,7 @@
       </v-btn>
     </v-flex>
     <v-flex xs2>
-      <v-btn icon large :disabled="playing || (progress == actions.length)" @click.stop.prevent="forward"
-        style="margin: 0%; padding: 0%;">
+      <v-btn icon large :disabled="playing || (progress == actions.length)" @click.stop.prevent="forward" style="margin: 0%; padding: 0%;">
         <v-icon>fast_forward</v-icon>
       </v-btn>
     </v-flex>

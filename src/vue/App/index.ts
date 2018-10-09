@@ -16,6 +16,8 @@ import TimerPanel from "../TimerPanel";
 export default class App extends Vue {
   @Provide("game")
   game: Game = new Game();
+
+  init = false;
   angle: number = 1;
 
   @Watch("angle")
@@ -36,14 +38,16 @@ export default class App extends Vue {
     this.resize();
   }
 
-  get duration() {
-    return this.game.duration;
-  }
+  speed: number = 0;
 
-  @Watch("duration")
-  onDurationChange() {
+  @Watch("speed")
+  onSpeedChange() {
     let storage = window.localStorage;
-    storage.setItem("duration", String(this.duration));
+    storage.setItem("speed", String(this.size));
+    this.game.duration = 50 - 10 * this.speed;
+    if (this.init) {
+      this.game.twister.twist('R', false, 1, () => { this.game.twister.twist('R', true, 1, null, true) }, false);
+    }
   }
 
   resize() {
@@ -70,12 +74,13 @@ export default class App extends Vue {
       this.resize();
     }
     let storage = window.localStorage;
-    this.game.duration = Number(storage.getItem("duration") || 45);
     this.mode = window.localStorage.getItem("mode") || "play";
-    this.keyboard = Boolean(window.localStorage.getItem("mode") || false);
+    this.keyboard = Boolean(window.localStorage.getItem("keyboard") || false);
+    this.speed = Number(storage.getItem("speed") || 0);
     this.angle = Number(window.localStorage.getItem("angle") || 1);
     this.size = Number(window.localStorage.getItem("size") || 2);
     this.game.callbacks.push(this.onTwist);
+    this.$nextTick(() => { this.init = true });
   }
 
   onTwist(exp: string) {
@@ -94,7 +99,6 @@ export default class App extends Vue {
   onKeyboardChange() {
     let storage = window.localStorage;
     storage.setItem("keyboard", String(this.keyboard));
-    this.game.enable = this.mode == "play" && !this.keyboard;
     this.$nextTick(this.resize);
   }
 
@@ -102,7 +106,7 @@ export default class App extends Vue {
   onModeChange(to: string, from: string) {
     let storage = window.localStorage;
     storage.setItem("mode", this.mode);
-    this.game.enable = this.mode == "play" && !this.keyboard;
+    this.game.enable = this.mode == "play";
     this.menu = false;
     this.$nextTick(this.resize);
   }
