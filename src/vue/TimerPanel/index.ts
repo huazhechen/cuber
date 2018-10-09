@@ -18,7 +18,7 @@ export default class TimerPanel extends Vue {
       if (this.exp == "") {
         this.random();
       } else {
-        this.game.twister.twist("#x2");
+        this.game.twister.twist("#x2", false, 1, null, true);
         this.game.twister.twist(this.exp, false, 1, null, true);
       }
     }
