@@ -2,14 +2,14 @@
   <v-layout row wrap>
     <template v-for="(group, i) in scripts">
       <v-flex xs4 style="margin: 0%; padding: 0%">
-        <v-btn class="title" :color="type == i?'primary':''" :outline="type == i" block style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; width: 100%; height: 2em;" @click.stop.prevent="type = i;stop();">
+        <v-btn class="headline" :color="type == i?'primary':''" :outline="type == i" flat block style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; width: 100%; height: 2em;" @click.stop.prevent="type = i;stop();">
           {{type==i?(progress != 0?'':script.name):group.name}}
           <v-icon large v-show="type == i && (progress != 0)">replay</v-icon>
         </v-btn>
       </v-flex>
     </template>
     <v-flex xs12>
-      <v-text-field outline single-line hide-details class="title" :append-icon="exp==script.exp?'':'settings_backup_restore'" @click:append="exp=script.exp" v-model="exp"></v-text-field>
+      <v-text-field outline single-line hide-details class="headline" :append-icon="exp==script.exp?'':'settings_backup_restore'" @click:append="exp=script.exp" v-model="exp"></v-text-field>
     </v-flex>
     <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
       <v-slider style="margin: 0%" readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
