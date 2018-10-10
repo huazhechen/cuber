@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
-import Worker from "worker-loader?{inline:true, name:'[name].js'}!./solver.worker";
+import Worker from "worker-loader?{inline:true, fallback:false}!./solver.worker";
 
 @Component({
   template: require("./index.html")
@@ -16,7 +16,7 @@ export default class TimerPanel extends Vue {
 
   mounted() {
     let storage = window.localStorage;
-    let list = JSON.parse(storage.getItem("timer.scripts") || "");
+    let list = JSON.parse(storage.getItem("timer.scripts") || "[]");
     if (list instanceof Array) {
       this.scripts = list;
     }
