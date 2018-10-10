@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
-import Worker from "worker-loader?{inline:true,fallback:false}!./solver.worker";
+import Worker from "worker-loader?{inline:true, name:'[name].js'}!./solver.worker";
 
 @Component({
   template: require("./index.html")
