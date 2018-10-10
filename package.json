@@ -12,6 +12,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "cubejs": "*",
     "typescript": "*",
     "@types/three": "*",
     "three": "*",
@@ -26,6 +27,7 @@
     "css-loader": "*",
     "file-loader": "*",
     "text-loader": "*",
+    "worker-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
     "webpack": "*",

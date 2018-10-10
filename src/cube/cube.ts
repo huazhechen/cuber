@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Euler } from "three";
-import Cubelet from "./cubelet";
+import Cubelet, {FACES} from "./cubelet";
 import CubeletGroup from "./group";
 export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
@@ -64,22 +64,22 @@ export default class Cube extends THREE.Group {
   get state() {
     let result: string[] = [];
     for (let i of CubeletGroup.GROUPS.U.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.U));
+      result.push(this.cubelets[i].getColor(FACES.U));
     }
     for (let i of CubeletGroup.GROUPS.R.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.R));
+      result.push(this.cubelets[i].getColor(FACES.R));
     }
     for (let i of CubeletGroup.GROUPS.F.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.F));
+      result.push(this.cubelets[i].getColor(FACES.F));
     }
     for (let i of CubeletGroup.GROUPS.D.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.D));
+      result.push(this.cubelets[i].getColor(FACES.D));
     }
     for (let i of CubeletGroup.GROUPS.L.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.L));
+      result.push(this.cubelets[i].getColor(FACES.L));
     }
     for (let i of CubeletGroup.GROUPS.B.indices) {
-      result.push(this.cubelets[i].getColor(Cubelet.DIRECTION.B));
+      result.push(this.cubelets[i].getColor(FACES.B));
     }
     return result.join("");
   }

@@ -1,18 +1,5 @@
-# cuber
+# Cuber
 
-> A Vue.js project
+Rubik's Cube toolbox using Javascript for 100% client side single page application using Vue and Vuetify.
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# [Link](http://huazhechen.github.io/cuber)

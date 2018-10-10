@@ -145,16 +145,17 @@ class Edge extends THREE.ShapeGeometry {
   }
 }
 
+export enum FACES {
+  L,
+  R,
+  D,
+  U,
+  B,
+  F
+}
+
 export default class Cubelet extends THREE.Group {
 
-  public static readonly DIRECTION = {
-    L: 0,
-    R: 1,
-    D: 2,
-    U: 3,
-    B: 4,
-    F: 5
-  }
   private static readonly _SIZE: number = 32;
   private static readonly _BORDER_WIDTH: number = 2;
   private static readonly _EDGE_WIDTH: number = 1;
@@ -219,22 +220,22 @@ export default class Cubelet extends THREE.Group {
   getColor(i: number) {
     let position = new THREE.Vector3(0, 0, 0);
     switch (i) {
-      case Cubelet.DIRECTION.L:
+      case FACES.L:
         position.x = -1;
         break;
-      case Cubelet.DIRECTION.R:
+      case FACES.R:
         position.x = 1;
         break;
-      case Cubelet.DIRECTION.D:
+      case FACES.D:
         position.y = -1;
         break;
-      case Cubelet.DIRECTION.U:
+      case FACES.U:
         position.y = 1;
         break;
-      case Cubelet.DIRECTION.B:
+      case FACES.B:
         position.z = -1;
         break;
-      case Cubelet.DIRECTION.F:
+      case FACES.F:
         position.z = 1;
         break;
       default:
@@ -247,22 +248,22 @@ export default class Cubelet extends THREE.Group {
     let z = Math.round(position.z);
     let side = 0;
     if (x < 0) {
-      side = Cubelet.DIRECTION.L;
+      side = FACES.L;
     }
     else if (x > 0) {
-      side = Cubelet.DIRECTION.R;
+      side = FACES.R;
     }
     else if (y < 0) {
-      side = Cubelet.DIRECTION.D;
+      side = FACES.D;
     }
     else if (y > 0) {
-      side = Cubelet.DIRECTION.U;
+      side = FACES.U;
     }
     else if (z < 0) {
-      side = Cubelet.DIRECTION.B;
+      side = FACES.B;
     }
     else if (z > 0) {
-      side = Cubelet.DIRECTION.F;
+      side = FACES.F;
     }
     return this._stickers[side].name;
   }
@@ -291,42 +292,42 @@ export default class Cubelet extends THREE.Group {
       let _edge = new THREE.Mesh(Cubelet._EDGE, Cubelet._MATERIALS.p);
       let _sticker = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
       switch (i) {
-        case Cubelet.DIRECTION.L:
+        case FACES.L:
           _edge.rotation.y = -Math.PI / 2;
           _edge.position.x = -Cubelet._SIZE / 2;
           _sticker.rotation.y = -Math.PI / 2;
           _sticker.position.x = -Cubelet._SIZE / 2;
           _sticker.name = "L";
           break;
-        case Cubelet.DIRECTION.R:
+        case FACES.R:
           _edge.rotation.y = Math.PI / 2;
           _edge.position.x = Cubelet._SIZE / 2;
           _sticker.rotation.y = Math.PI / 2;
           _sticker.position.x = Cubelet._SIZE / 2;
           _sticker.name = "R";
           break;
-        case Cubelet.DIRECTION.D:
+        case FACES.D:
           _edge.rotation.x = Math.PI / 2;
           _edge.position.y = -Cubelet._SIZE / 2;
           _sticker.rotation.x = Math.PI / 2;
           _sticker.position.y = -Cubelet._SIZE / 2;
           _sticker.name = "D";
           break;
-        case Cubelet.DIRECTION.U:
+        case FACES.U:
           _edge.rotation.x = -Math.PI / 2;
           _edge.position.y = Cubelet._SIZE / 2;
           _sticker.rotation.x = -Math.PI / 2;
           _sticker.position.y = Cubelet._SIZE / 2;
           _sticker.name = "U";
           break;
-        case Cubelet.DIRECTION.B:
+        case FACES.B:
           _edge.rotation.x = Math.PI;
           _edge.position.z = -Cubelet._SIZE / 2;
           _sticker.rotation.x = Math.PI;
           _sticker.position.z = -Cubelet._SIZE / 2;
           _sticker.name = "B";
           break;
-        case Cubelet.DIRECTION.F:
+        case FACES.F:
           _edge.rotation.z = 0;
           _edge.position.z = Cubelet._SIZE / 2;
           _sticker.rotation.z = 0;

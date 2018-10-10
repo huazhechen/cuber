@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
+import Worker from "worker-loader?{inline:true,fallback:false}!./solver.worker";
 
 @Component({
   template: require("./index.html")
@@ -9,28 +10,67 @@ export default class TimerPanel extends Vue {
   @Inject("game")
   game: Game;
 
+  worker = new Worker();
+  working = false;
+  scripts: string[] = [];
+
+  mounted() {
+    let storage = window.localStorage;
+    let list = JSON.parse(storage.getItem("timer.scripts") || "");
+    if (list instanceof Array) {
+      this.scripts = list;
+    }
+    this.worker.addEventListener("message", (event: MessageEvent) => {
+      if (event.data["action"] == "init") {
+        this.working = true;
+        this.worker.postMessage({ action: "random" });
+      }
+      else if (event.data["action"] == "random") {
+        this.scripts.push(event.data["data"]);
+        this.working = false;
+      }
+    });
+    this.worker.postMessage({ action: "init" });
+    this.working = true;
+  }
+
+  @Watch("scripts")
+  onScriptsChange() {
+    let storage = window.localStorage;
+    storage.setItem("timer.scripts", JSON.stringify(this.scripts));
+    if (!this.working && this.scripts.length < 16) {
+      this.working = true;
+      this.worker.postMessage({ action: "random" });
+    }
+    if (this.exp == "") {
+      this.exp = this.scripts.shift() || "";
+    }
+  }
+
   @Prop({ default: false })
   show: boolean;
 
   @Watch("show")
   onShowChange(to: boolean, from: boolean) {
     if (to) {
-      if (this.exp == "") {
-        this.random();
-      }
       this.init();
     }
   }
 
   init() {
-    this.game.twister.twist("#x2", false, 1, null, true);
-    this.game.twister.twist(this.exp, false, 1, null, true);
+    if (this.exp != "") {
+      this.game.twister.twist("#x2", false, 1, null, true);
+      this.game.twister.twist(this.exp, false, 1, null, true);
+    }
   }
 
   @Watch("exp")
   onExpChange(to: string, from: string) {
     let storage = window.localStorage;
     storage.setItem("timer.exp", this.exp);
+    if (this.show) {
+      this.init();
+    }
   }
 
   exp: string = window.localStorage.getItem("timer.exp") || "";
@@ -58,8 +98,12 @@ export default class TimerPanel extends Vue {
 
   random() {
     if (!this.lock) {
-      this.exp = this.game.twister.random();
-      this.init();
+      if (this.scripts.length == 0) {
+        this.exp = "";
+      }
+      else {
+        this.exp = this.scripts.shift() || "";
+      }
     }
   }
 
