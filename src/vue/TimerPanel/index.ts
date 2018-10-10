@@ -12,20 +12,20 @@ export default class TimerPanel extends Vue {
 
   worker = new Worker();
   working = false;
-  scripts: string[] = [];
+  scrambles: string[] = [];
 
   mounted() {
     let storage = window.localStorage;
-    let list = JSON.parse(storage.getItem("timer.scripts") || "[]");
+    let list = JSON.parse(storage.getItem("timer.scrambles") || "[]");
     if (list instanceof Array) {
-      this.scripts = list;
+      this.scrambles = list;
     }
     this.worker.addEventListener("message", (event: MessageEvent) => {
       if (event.data["action"] == "init") {
         this.working = true;
-        this.worker.postMessage({ action: "random" });
-      } else if (event.data["action"] == "random") {
-        this.scripts.push(event.data["data"]);
+        this.worker.postMessage({ action: "scramble" });
+      } else if (event.data["action"] == "scramble") {
+        this.scrambles.push(event.data["data"]);
         this.working = false;
       }
     });
@@ -33,17 +33,17 @@ export default class TimerPanel extends Vue {
     this.working = true;
   }
 
-  @Watch("scripts")
-  onScriptsChange() {
+  @Watch("scrambles")
+  onScramblesChange() {
     let storage = window.localStorage;
-    storage.setItem("timer.scripts", JSON.stringify(this.scripts));
-    if (!this.working && this.scripts.length < 16) {
+    storage.setItem("timer.scrambles", JSON.stringify(this.scrambles));
+    if (!this.working && this.scrambles.length < 16) {
       this.working = true;
-      this.worker.postMessage({ action: "random" });
+      this.worker.postMessage({ action: "scramble" });
     }
     if (this.exp == "") {
-      if (this.scripts.length > 0) {
-        this.exp = this.scripts.shift() || "";
+      if (this.scrambles.length > 0) {
+        this.exp = this.scrambles.shift() || "";
       }
     }
   }
@@ -101,10 +101,10 @@ export default class TimerPanel extends Vue {
 
   random() {
     if (!this.lock) {
-      if (this.scripts.length == 0) {
+      if (this.scrambles.length == 0) {
         this.exp = "";
       } else {
-        this.exp = this.scripts.shift() || "";
+        this.exp = this.scrambles.shift() || "";
       }
     }
   }

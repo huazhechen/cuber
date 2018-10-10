@@ -5,9 +5,8 @@ declare module "*.vue" {
 
 declare module "cubejs" {
   export default class Cube {
-    static initSolver(): null
-    randomize(): null
-    solve(): string
+    static initSolver(): null;
+    static scramble(): string;
   }
 }
 
