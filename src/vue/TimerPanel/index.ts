@@ -81,12 +81,14 @@ export default class TimerPanel extends Vue {
   get time() {
     let min = Math.floor(this.lapse / 1000 / 60);
     let sec = Math.floor((this.lapse % (1000 * 60)) / 1000);
-    let ms = Math.floor((this.lapse % 1000) / 10);
+    let ms = this.lapse % 1000;
     return (
       (min == 0 ? "" : String(min) + ":") +
-      ("0" + String(sec)).substr(-2) +
+      ((min == 0 ? "" : "0") + String(sec)).substr(-2) +
       ":" +
-      ("0" + String(ms)).substr(-2)
+      (this.intervalTask == 0
+        ? ("0" + String(Math.floor(ms / 10))).substr(-2)
+        : Math.floor(ms / 100))
     );
   }
 
@@ -111,23 +113,25 @@ export default class TimerPanel extends Vue {
   intervalTask = 0;
 
   down() {
-    this.press = true;
-    if (this.lapse != 0) {
-      if (this.start != 0) {
-        clearInterval(this.intervalTask);
-        this.intervalTask = 0;
-        let date = new Date();
-        this.lapse = date.getTime() - this.start;
-        let storage = window.localStorage;
-        storage.setItem("timer.lapse", String(this.lapse));
-        this.start = 0;
-      } else {
-        clearTimeout(this.timeoutTask);
-        this.timeoutTask = setTimeout(() => {
-          this.lapse = 0;
-          this.timeoutTask = 0;
-        }, 1000);
-      }
+    if (this.exp == "") {
+      return;
+    }
+    if (this.intervalTask != 0) {
+      this.press = false;
+      clearInterval(this.intervalTask);
+      this.intervalTask = 0;
+      let date = new Date();
+      this.lapse = date.getTime() - this.start;
+      let storage = window.localStorage;
+      storage.setItem("timer.lapse", String(this.lapse));
+      this.start = 0;
+    } else {
+      this.press = true;
+      clearTimeout(this.timeoutTask);
+      this.timeoutTask = setTimeout(() => {
+        this.lapse = 0;
+        this.timeoutTask = 0;
+      }, 550);
     }
   }
   press: boolean = false;
@@ -137,18 +141,13 @@ export default class TimerPanel extends Vue {
       if (this.timeoutTask != 0) {
         return "red--text";
       }
-      if (this.lapse == 0) {
-        return "green--text";
-      }
+      return "green--text";
     }
     return "black--text";
   }
 
   up() {
-    this.press = false;
-    clearTimeout(this.timeoutTask);
-    this.timeoutTask = 0;
-    if (this.lapse == 0) {
+    if (this.press && this.timeoutTask == 0) {
       let date = new Date();
       this.start = date.getTime();
       clearInterval(this.intervalTask);
@@ -156,6 +155,10 @@ export default class TimerPanel extends Vue {
         let date = new Date();
         this.lapse = date.getTime() - this.start;
       }, 100);
+    } else {
+      clearTimeout(this.timeoutTask);
+      this.timeoutTask = 0;
     }
+    this.press = false;
   }
 }
