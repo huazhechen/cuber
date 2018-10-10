@@ -17,11 +17,14 @@ export default class TimerPanel extends Vue {
     if (to) {
       if (this.exp == "") {
         this.random();
-      } else {
-        this.game.twister.twist("#x2", false, 1, null, true);
-        this.game.twister.twist(this.exp, false, 1, null, true);
       }
+      this.init();
     }
+  }
+
+  init() {
+    this.game.twister.twist("#x2", false, 1, null, true);
+    this.game.twister.twist(this.exp, false, 1, null, true);
   }
 
   @Watch("exp")
@@ -56,8 +59,7 @@ export default class TimerPanel extends Vue {
   random() {
     if (!this.lock) {
       this.exp = this.game.twister.random();
-      this.game.twister.twist("#");
-      this.game.twister.twist(this.exp, false, 1, null, true);
+      this.init();
     }
   }
 
