@@ -24,8 +24,7 @@ export default class TimerPanel extends Vue {
       if (event.data["action"] == "init") {
         this.working = true;
         this.worker.postMessage({ action: "random" });
-      }
-      else if (event.data["action"] == "random") {
+      } else if (event.data["action"] == "random") {
         this.scripts.push(event.data["data"]);
         this.working = false;
       }
@@ -43,7 +42,9 @@ export default class TimerPanel extends Vue {
       this.worker.postMessage({ action: "random" });
     }
     if (this.exp == "") {
-      this.exp = this.scripts.shift() || "";
+      if (this.scripts.length > 0) {
+        this.exp = this.scripts.shift() || "";
+      }
     }
   }
 
@@ -100,8 +101,7 @@ export default class TimerPanel extends Vue {
     if (!this.lock) {
       if (this.scripts.length == 0) {
         this.exp = "";
-      }
-      else {
+      } else {
         this.exp = this.scripts.shift() || "";
       }
     }
