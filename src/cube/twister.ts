@@ -24,6 +24,7 @@ export default class Twister {
 
   clear() {
     this.queue.splice(0, this.queue.length);
+    this._game.tweener.clear();
   }
 
   twist(

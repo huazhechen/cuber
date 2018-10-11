@@ -2,7 +2,7 @@
   <v-layout row wrap>
     <template v-for="(group, i) in scripts">
       <v-flex xs4 style="margin: 0%; padding: 0%">
-        <v-btn class="headline" :color="type == i?'primary':''" :outline="type == i" flat block style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; width: 100%; height: 2em;" @click.stop.prevent="type = i;stop();">
+        <v-btn class="headline" :color="type == i?'primary':''" :outline="type == i" flat block style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; width: 100%; height: 2em;" @click.stop.prevent="init();">
           {{type==i?(progress != 0?'':script.name):group.name}}
           <v-icon large v-show="type == i && (progress != 0)">replay</v-icon>
         </v-btn>
@@ -20,7 +20,7 @@
       </v-btn>
     </v-flex>
     <v-flex xs2.4>
-      <v-btn icon large :disabled="game.lock || progress==0" @click.stop.prevent="backward" style="margin: 0%; padding: 0%;">
+      <v-btn icon large :disabled="progress==0" @click.stop.prevent="backward" style="margin: 0%; padding: 0%;">
         <v-icon large>fast_rewind</v-icon>
       </v-btn>
     </v-flex>
@@ -30,7 +30,7 @@
       </v-btn>
     </v-flex>
     <v-flex xs2.4>
-      <v-btn icon large :disabled="game.lock || progress == actions.length" @click.stop.prevent="forward" style="margin: 0%; padding: 0%;">
+      <v-btn icon large :disabled="progress == actions.length" @click.stop.prevent="forward" style="margin: 0%; padding: 0%;">
         <v-icon large>fast_forward</v-icon>
       </v-btn>
     </v-flex>

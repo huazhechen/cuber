@@ -48,43 +48,25 @@ export default class ScriptPanel extends Vue {
   }
 
   forward() {
-    this.playing = false;
     if (this.progress == this.actions.length) {
       return;
     }
+    this.game.twister.clear();
+    this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
     this.game.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
-    this.playing = false;
     if (this.progress == 0) {
       return;
     }
+    this.game.twister.clear();
+    this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
     this.game.twister.twist(action.exp, !action.reverse, action.times);
-  }
-
-  stop() {
-    this.playing = false;
-    if (this.progress == 0) {
-      return;
-    }
-    let start = 0;
-    let end = this.progress;
-    let actions = this.actions.slice(start, end).reverse();
-    for (let action of actions) {
-      this.game.twister.twist(
-        action.exp,
-        !action.reverse,
-        action.times,
-        null,
-        true
-      );
-    }
-    this.progress = 0;
   }
 
   dialog = false;
@@ -363,8 +345,14 @@ export default class ScriptPanel extends Vue {
   }
 
   toggle() {
-    this.playing = !this.playing;
-    this.play();
+    if (this.playing){
+      this.playing = false;
+      this.game.twister.clear();
+    }
+    else{
+      this.playing = !this.playing;
+      this.play();
+    }
   }
 
   init() {

@@ -244,6 +244,7 @@ export default class CubeletGroup extends THREE.Group {
       game.dirty = true;
     } else {
       var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      duration = duration / 4;
       game.tweener.tween(
         this.angle,
         this.angle + angle,

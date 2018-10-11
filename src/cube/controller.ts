@@ -97,7 +97,7 @@ export default class Controller {
           var x = Math.ceil(Math.round(point.x) / 32 - 0.5);
           var y = Math.ceil(Math.round(point.y) / 32 - 0.5);
           var z = Math.ceil(Math.round(point.z) / 32 - 0.5);
-          if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
+          if (this._game.enable && x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
             this._holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
           } else {
             this._holder.index = -1;

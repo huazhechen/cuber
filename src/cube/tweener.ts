@@ -32,6 +32,13 @@ export default class Tweener {
     }
     return true;
   }
+
+  clear() {
+    for (const tween of this._tweens) {
+      tween.finish();
+    }
+    this._tweens.splice(0, this._tweens.length);
+  }
 }
 
 class Tween {
@@ -54,6 +61,12 @@ class Tween {
     this._update = update;
     this._finish = finish;
   }
+
+  finish() {
+    this._update(this._end);
+    this._finish();
+  }
+
   update(): boolean {
     this._value++;
     let elapsed = this._value / this._duration;
