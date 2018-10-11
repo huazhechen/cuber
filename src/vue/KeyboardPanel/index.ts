@@ -12,35 +12,17 @@ export default class KeyboardPanel extends Vue {
   @Prop({ default: false })
   show: boolean;
 
-  double: boolean = false;
-  reverse: boolean = false;
+  layers: number = 0;
 
-  operations: string[] = [
-    "L",
-    "D",
-    "B",
-    "R",
-    "U",
-    "F",
-    "M",
-    "E",
-    "S",
-    "x",
-    "y",
-    "z"
+  operations: string[][] = [
+    ["L'", "B", "U'", "U", "B'", "R", "L", "D", "F'", "F", "D'", "R'"],
+    ["M'", "S'", "E", "E'", "S", "M'", "M", "E", "S'", "S", "E'", "M"],
+    ["l'", "b", "u'", "u", "b'", "r", "l", "d", "f'", "f", "d'", "r'"],
+    ["x", "z'", "y'", "y", "z", "x", "x'", "y'", "z'", "z", "y", "x'"]
   ];
 
   get exps() {
-    let exps: string[] = [];
-    for (let i = 0; i < this.operations.length; i++) {
-      let exp: string = this.operations[i];
-      if (i < 6 && this.double) {
-        exp = exp.toLowerCase();
-      }
-      exp = exp.concat(this.reverse ? "'" : "");
-      exps.push(exp);
-    }
-    return exps;
+    return this.operations[this.layers];
   }
 
   twist(exp: string) {
