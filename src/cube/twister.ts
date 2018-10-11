@@ -23,7 +23,10 @@ export default class Twister {
   }
 
   clear() {
-    this.queue.splice(0, this.queue.length);
+    for (const queue of this.queue) {
+      queue.fast = true;
+    }
+    this.update();
     this._game.tweener.clear();
   }
 
