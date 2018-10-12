@@ -113,6 +113,7 @@ export default class App extends Vue {
     storage.setItem("mode", this.mode);
     this.game.enable = this.mode == "play" && !this.keyboard;
     this.game.twister.clear();
+    this.menu = false;
     this.$nextTick(this.resize);
   }
 
