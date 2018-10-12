@@ -15,10 +15,10 @@ export default class KeyboardPanel extends Vue {
   layers: number = 0;
 
   operations: string[][] = [
-    ["L'", "B", "U'", "U", "B'", "R", "L", "D", "F'", "F", "D'", "R'"],
-    ["M'", "S'", "E", "E'", "S", "M'", "M", "E", "S'", "S", "E'", "M"],
-    ["l'", "b", "u'", "u", "b'", "r", "l", "d", "f'", "f", "d'", "r'"],
-    ["x", "z'", "y'", "y", "z", "x", "x'", "y'", "z'", "z", "y", "x'"]
+    ["L'", "U'", "B", "B'", "U", "R", "L", "F'", "D", "D'", "F", "R'"],
+    ["M'", "E", "S'", "S", "E'", "M'", "M", "S'", "E", "E'", "S", "M"],
+    ["l'", "u'", "b", "b'", "u", "r", "l", "f'", "d", "d'", "f", "r'"],
+    ["x", "y'", "z'", "z", "y", "x", "x'", "z'", "y'", "y", "z", "x'"]
   ];
 
   get exps() {
