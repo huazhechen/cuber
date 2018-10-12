@@ -14,20 +14,12 @@ export default class Twister {
     return this.queue.length;
   }
 
-  get buffer() {
-    let buffer: string[] = [];
-    for (let action of this.queue) {
-      buffer.push(action.format);
-    }
-    return buffer.join(" ");
-  }
-
-  clear() {
-    for (const queue of this.queue) {
-      queue.fast = true;
+  finish() {
+    this._game.tweener.finish();
+    for (const action of this.queue) {
+      action.fast = true;
     }
     this.update();
-    this._game.tweener.clear();
   }
 
   twist(
@@ -37,6 +29,7 @@ export default class Twister {
     callback: Function | null = null,
     fast: boolean = false
   ) {
+    this.finish();
     let list = new TwistNode(exp, reverse, times).parse();
     list[list.length - 1].callback = callback;
     for (let element of list) {
@@ -262,10 +255,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-          this.exp +
-          (this.exp.length > 1 ? ")" : "") +
-          (this.reverse ? "'" : "") +
-          (this.times == 1 ? "" : String(this.times));
+      this.exp +
+      (this.exp.length > 1 ? ")" : "") +
+      (this.reverse ? "'" : "") +
+      (this.times == 1 ? "" : String(this.times));
   }
 }
 

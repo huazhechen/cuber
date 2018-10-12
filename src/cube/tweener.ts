@@ -27,17 +27,20 @@ export default class Tweener {
       if (this._tweens[i].update()) {
         i++;
       } else {
-        this._tweens.splice(i, 1);
+        let tweens = this._tweens.splice(i, 1);
+        for (const tween of tweens) {
+          tween.finish();
+        }
       }
     }
     return true;
   }
 
-  clear() {
-    for (const tween of this._tweens) {
+  finish() {
+    let tweens = this._tweens.splice(0, this._tweens.length);
+    for (const tween of tweens) {
       tween.finish();
     }
-    this._tweens.splice(0, this._tweens.length);
   }
 }
 
@@ -48,6 +51,7 @@ class Tween {
   private _duration: number;
   private _update: Function;
   private _finish: Function;
+  private _finished: boolean = false;;
   constructor(
     begin: number,
     end: number,
@@ -63,7 +67,9 @@ class Tween {
   }
 
   finish() {
-    this._update(this._end);
+    if (!this._finished) {
+      this._update(this._end);
+    }
     this._finish();
   }
 
@@ -74,7 +80,7 @@ class Tween {
     let value = 1 - --elapsed * elapsed;
     this._update(this._begin + (this._end - this._begin) * value);
     if (value == 1) {
-      this._finish();
+      this._finished = true;
       return false;
     }
     return true;

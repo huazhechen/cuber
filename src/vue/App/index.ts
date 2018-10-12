@@ -46,9 +46,7 @@ export default class App extends Vue {
     storage.setItem("speed", String(this.speed));
     this.game.duration = 50 - 10 * this.speed;
     if (this.init) {
-      this.game.twister.clear();
-      this.game.twister.twist("R");
-      this.game.twister.twist("R", true, 1, null, true);
+      this.game.twister.twist("R", false, 1, () => { this.game.twister.twist("R", true, 1, null, true) }, false);
     }
   }
 
@@ -112,7 +110,6 @@ export default class App extends Vue {
     let storage = window.localStorage;
     storage.setItem("mode", this.mode);
     this.game.enable = this.mode == "play" && !this.keyboard;
-    this.game.twister.clear();
     this.menu = false;
     this.$nextTick(this.resize);
   }
