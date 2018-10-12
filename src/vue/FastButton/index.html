@@ -1,0 +1,3 @@
+<v-btn @click.native.stop.prevent="$emit('tap')" @touchstart.native.stop.prevent @touchend.native.stop.prevent="$emit('tap')" :ripple="ripple" :flat="flat" :block="block" :icon="icon" :large="large" :outline="outline" :color="color" :fixed="fixed" :top="top" :bottom="bottom" :left="left" :right="right" :disabled="disabled">
+  <slot></slot>
+</v-btn>
