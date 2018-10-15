@@ -101,7 +101,6 @@ export default class App extends Vue {
   onKeyboardChange() {
     let storage = window.localStorage;
     storage.setItem("keyboard", String(this.keyboard));
-    this.game.enable = this.mode == "play" && !this.keyboard;
     this.$nextTick(this.resize);
   }
 
@@ -109,7 +108,7 @@ export default class App extends Vue {
   onModeChange(to: string, from: string) {
     let storage = window.localStorage;
     storage.setItem("mode", this.mode);
-    this.game.enable = this.mode == "play" && !this.keyboard;
+    this.game.enable = this.mode == "play";
     this.menu = false;
     this.$nextTick(this.resize);
   }
