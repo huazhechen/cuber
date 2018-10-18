@@ -16,6 +16,7 @@ export default class Option {
   set mode(value: string) {
     this._mode = value;
     this._storage.setItem("option.mode", this._mode);
+    this._game.enable = this.mode == "play";
   }
 
   get keyboard() {
