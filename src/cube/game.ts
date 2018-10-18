@@ -24,6 +24,8 @@ export default class Game {
   public dirty: boolean = true;
   public duration: number = 60;
   public callbacks: Function[] = [];
+  public width: number = 0;
+  public height: number = 0;
   public scale: number = 1;
 
   constructor() {
@@ -37,14 +39,13 @@ export default class Game {
     this.tweener = new Tweener();
     this.twister = new Twister(this);
     this.cube = new Cube();
-    this.scale = 1;
 
     this.scene.add(this.cube);
     for (let key in CubeletGroup.GROUPS) {
       this.scene.add(CubeletGroup.GROUPS[key]);
     }
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
     this.renderer.setClearColor(0xffffff);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.canvas = this.renderer.domElement;
@@ -53,14 +54,14 @@ export default class Game {
     this.loop();
   }
 
-  resize(width: number, height: number) {
-    this.camera.aspect = width / height;
-    let min = ((height / Math.min(width, height)) * Game.SIZE) / 3;
+  resize() {
+    this.camera.aspect = this.width / this.height;
+    let min = ((this.height / Math.min(this.width, this.height)) * Game.SIZE) / 3;
     let fov = (2 * Math.atan(min / Game.SIZE) * 180) / Math.PI;
     this.camera.fov = fov * this.scale;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(width, height, true);
+    this.renderer.setSize(this.width, this.height, true);
     this.dirty = true;
   }
 

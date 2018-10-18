@@ -14,9 +14,9 @@ export default class ScriptPanel extends Vue {
   show: boolean;
 
   @Watch("show")
-  onShowChange(to: boolean, from: boolean) {
+  onShowChange(value: boolean) {
     this.stick();
-    if (to) {
+    if (value) {
       this.onTypeChange();
       this.onIndexChange();
       this.onScriptChange();
@@ -24,6 +24,10 @@ export default class ScriptPanel extends Vue {
     } else {
       this.playing = false;
     }
+  }
+
+  mounted() {
+    this.onShowChange(this.show);
   }
 
   progress: number = 0;

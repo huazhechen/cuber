@@ -1,140 +1,18 @@
 <v-app>
-    <div v-resize="resize">
-        <div ref=cuber></div>
-        <div ref=panel>
-            <keyboard-panel :show="mode == 'play' && keyboard" @hide="keyboard = false"></keyboard-panel>
-            <script-panel :show="mode == 'script'"></script-panel>
-            <timer-panel :show="mode == 'timer'"></timer-panel>
-        </div>
-        <fast-button fixed top right icon large @tap="menu = !menu;">
-            <v-icon large>menu</v-icon>
-        </fast-button>
-        <fast-button v-show="mode == 'play' && !keyboard" fixed bottom right icon large @tap="keyboard = !keyboard;">
-            <v-icon large>keyboard</v-icon>
-        </fast-button>
-        <fast-button fixed top left icon class="title" @tap v-if="exp != ''" style="text-transform:none">{{exp}}</fast-button>
+  <div v-resize="resize">
+    <div ref=cuber></div>
+    <div ref=panel>
+      <keyboard-panel :show="option.mode == 'play' && option.keyboard" @hide="option.keyboard = false"></keyboard-panel>
+      <script-panel :show="option.mode == 'script'"></script-panel>
+      <timer-panel :show="option.mode == 'timer'"></timer-panel>
     </div>
-    <v-bottom-sheet v-model="menu">
-        <v-card flat>
-            <v-container fluid grid-list-md text-xs-center>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs4>
-                        <fast-button class="headline" :color="mode == 'play'?'primary':''" flat block @tap="mode = 'play'" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>games</v-icon>
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs4>
-                        <fast-button class="headline" :color="mode == 'script'?'primary':''" flat block @tap="mode = 'script'" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>school</v-icon>
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs4>
-                        <fast-button class="headline" :color="mode == 'timer'?'primary':''" flat block @tap="mode = 'timer'" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>timer</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs12>
-                        <fast-button class="headline" block outline @tap="menu=false; tune=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>tune</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs12>
-                        <fast-button class="headline" block outline @tap="menu=false; about=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>help</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-card>
-    </v-bottom-sheet>
-    <v-bottom-sheet v-model="tune">
-        <v-card>
-            <v-container fluid grid-list-md text-xs-center>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs3>
-                        <v-icon large color="black">av_timer</v-icon>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button icon :disabled="speed <= -4" @tap="speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>remove</v-icon>
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{speed}}
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button icon :disabled="speed >= 4" @tap="speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>add</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs3>
-                        <v-icon large color="black">crop_rotate</v-icon>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button flat block :disabled="angle <= -2" @tap="angle--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>remove</v-icon>
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{angle}}
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button flat block :disabled="angle >= 2" @tap="angle++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>add</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-                <v-layout row wrap justify-center align-center>
-                    <v-flex xs3>
-                        <v-icon large color="black">transform</v-icon>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button flat block :disabled="size <= -4" @tap="size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>remove</v-icon>
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{size}}
-                        </fast-button>
-                    </v-flex>
-                    <v-flex xs3>
-                        <fast-button flat block :disabled="size >= 4" @tap="size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-                            <v-icon large>add</v-icon>
-                        </fast-button>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-card>
-    </v-bottom-sheet>
-    <v-dialog v-model="about">
-        <v-card>
-            <v-toolbar dark color="primary">
-                <v-toolbar-title>About</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <fast-button icon dark @click.native="about = false">
-                    <v-icon>close</v-icon>
-                </fast-button>
-            </v-toolbar>
-            <v-card-text>
-                <a class="headline" href="https://github.com/huazhechen/cuber">Code</a>
-            </v-card-text>
-
-            <v-card-actions>
-                <fast-button block outline @tap="about = false">OK</fast-button>
-                <fast-button block outline @tap="reset" color="error">RESET</fast-button>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+    <fast-button fixed top right icon large @tap="menu = !menu;">
+      <v-icon large>menu</v-icon>
+    </fast-button>
+    <fast-button v-show="option.mode == 'play' && !option.keyboard" fixed bottom right icon large @tap="option.keyboard = !option.keyboard;">
+      <v-icon large>keyboard</v-icon>
+    </fast-button>
+    <fast-button fixed top left icon class="title" @tap v-if="exp != ''" style="text-transform:none">{{exp}}</fast-button>
+  </div>
+  <app-menu v-model="menu"></app-menu>
 </v-app>

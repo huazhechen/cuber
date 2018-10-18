@@ -31,6 +31,7 @@ export default class TimerPanel extends Vue {
     });
     this.worker.postMessage({ action: "init" });
     this.working = true;
+    this.onShowChange(this.show);
   }
 
   @Watch("scrambles")
@@ -52,8 +53,8 @@ export default class TimerPanel extends Vue {
   show: boolean;
 
   @Watch("show")
-  onShowChange(to: boolean, from: boolean) {
-    if (to) {
+  onShowChange(value: boolean) {
+    if (value) {
       this.init();
     }
   }
