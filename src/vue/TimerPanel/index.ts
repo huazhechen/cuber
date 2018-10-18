@@ -56,6 +56,25 @@ export default class TimerPanel extends Vue {
   onShowChange(value: boolean) {
     if (value) {
       this.init();
+      document.addEventListener("keydown", this.onKeyDown);
+      document.addEventListener("keyup", this.onKeyUp);
+    } else {
+      document.removeEventListener("keydown", this.onKeyDown);
+      document.removeEventListener("keyup", this.onKeyUp);
+    }
+  }
+
+  onKeyDown(e: KeyboardEvent) {
+    var key = e.keyCode;
+    if (key == 32) {
+      this.down();
+    }
+  }
+
+  onKeyUp(e: KeyboardEvent) {
+    var key = e.keyCode;
+    if (key == 32) {
+      this.up();
     }
   }
 
@@ -115,6 +134,9 @@ export default class TimerPanel extends Vue {
 
   down() {
     if (this.exp == "") {
+      return;
+    }
+    if (this.press == true) {
       return;
     }
     if (this.intervalTask != 0) {
