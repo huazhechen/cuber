@@ -393,7 +393,7 @@ export default class CoursePanel extends Vue {
         this.index = length - 1;
       }
     }
-    this.init();
+    this.$nextTick(this.init);
     this.actions = new TwistNode(this.exp).parse();
     let storage = window.localStorage;
     storage.setItem("course.index", String(this.index));

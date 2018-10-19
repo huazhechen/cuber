@@ -338,7 +338,7 @@ export default class ScriptPanel extends Vue {
       storage.setItem(this.script.name, value);
     }
     this.actions = new TwistNode(this.exp).parse();
-    this.init();
+    this.$nextTick(this.init);
   }
 
   @Watch("script")
