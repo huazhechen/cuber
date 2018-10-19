@@ -259,7 +259,7 @@ export class TwistNode {
   private _children: TwistNode[] = [];
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
-    let list = exp.replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "").match(/\([\*#xyzbsfdeulmr'\d\(\)]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
+    let list = exp.replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "").match(/\([\*#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
     if (null === list) {
       return;
     }

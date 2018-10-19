@@ -18,7 +18,8 @@ export default class CoursePanel extends Vue {
       name: "底层棱块",
       steps: [
         {
-          comments: ["这一步的目标是将底层的四个棱块", "白橙", "白红", "白蓝", "白绿", "", "", "按照中心块的顺序放入底层", "然后和中心块对齐"],
+          name: "目标",
+          comments: ["将底层的四个棱块", "白橙", "白红", "白蓝", "白绿", "", "", "按照中心块的顺序放入底层", "然后和中心块对齐"],
           script: "LR'F2U'RB'R'u2",
           finalize: "",
           strips: [
@@ -29,7 +30,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["场景1：底层棱块在中层", "一步直接转到底层"],
+          name: "中层场景",
+          comments: ["底层棱块在中层", "一步直接转到底层"],
           script: "LR'",
           finalize: "",
           strips: [
@@ -40,7 +42,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["场景2：底层棱块在顶层", "先转到中层", "再转到底层", "先转到中层", "再转到底层"],
+          name: "顶层场景",
+          comments: ["底层棱块在顶层", "先转到中层", "再转到底层", "先转到中层", "再转到底层"],
           script: "R'R'F'L",
           finalize: "",
           strips: [
@@ -51,7 +54,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["场景3：底层棱块在底层", "先转到中层", "再转到底层"],
+          name: "底层场景",
+          comments: ["底层棱块在底层", "先转到中层", "再转到底层"],
           script: "RF",
           finalize: "",
           strips: [
@@ -62,9 +66,10 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["如果棱块直接放入底层", "结果棱块间相互关系不对", "重新回到中层", "旋转底层到正确位置", "此时不用关系和中心块的对齐"],
-          script: "R'RD'R'",
-          finalize: "D",
+          name: "异常情况",
+          comments: ["棱块转入底层", "棱块间相对位置不对", "重新回到中层", "旋转底层到正确位置", "相对位置正确"],
+          script: "R'RD'R'D",
+          finalize: "",
           strips: [
             {
               indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
@@ -73,7 +78,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["四个棱块位置全部正确", "将棱块与中心块对齐", "也可以旋转底层"],
+          name: "对齐",
+          comments: ["四个棱块位置全部正确", "旋转上两层将棱块与中心块对齐", "还有另一种方法", "旋转底层"],
           script: "u2u'2D2",
           finalize: "",
           strips: [
@@ -89,8 +95,9 @@ export default class CoursePanel extends Vue {
       name: "底层角块",
       steps: [
         {
+          name: "目标",
           comments: [
-            "这一步的目标是将底层的任意三个角块",
+            "将底层的任意三个角块",
             "白橙蓝",
             "",
             "",
@@ -104,10 +111,10 @@ export default class CoursePanel extends Vue {
             "",
             "",
             "",
-            "复原到底面对应位置",
+            "复原到底层对应位置",
             "留下一个空槽位，称为角槽"
           ],
-          script: "((URU'R')y')3",
+          script: "(URU'R'y')3",
           finalize: "",
           strips: [
             {
@@ -117,7 +124,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["正常情况：找到在顶层的白色角块", "将其与目标槽位对齐", "让开右面旋转的'车道'", "右面旋转上来迎接角块", "角块归位", "右面归位"],
+          name: "正常情况",
+          comments: ["找到在顶层的白色角块", "将其与目标槽位对齐", "让开右层旋转的'车道'", "右层旋转上来迎接角块", "角块归位", "右层归位"],
           script: "U2(URU'R')",
           finalize: "",
           strips: [
@@ -128,13 +136,14 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
+          name: "异常情况",
           comments: [
-            "异常情况：找到在顶层的白色角块",
+            "找到在顶层的白色角块",
             "将其与目标槽位对齐",
-            "让开右面旋转的'车道'",
-            "右面旋转上来迎接角块",
+            "让开右层旋转的'车道'",
+            "右层旋转上来迎接角块",
             "角块归位",
-            "右面归位后发现方向不对",
+            "右层归位后发现方向不对",
             "继续做(第一次)",
             "",
             "",
@@ -154,7 +163,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["异常情况：角块在错误位置", "右面旋转送它出来", "离开右面", "右面旋转回去", "重新放回正确的位置"],
+          name: "异常情况",
+          comments: ["角块在错误位置", "右层旋转送它出来", "离开右层", "右层旋转回去", "重新放回正确的位置"],
           script: "RUR'y'URU'R'",
           finalize: "",
           strips: [
@@ -170,8 +180,9 @@ export default class CoursePanel extends Vue {
       name: "中层棱块",
       steps: [
         {
+          name: "目标",
           comments: [
-            "这一步的目标是将三个棱块",
+            "将三个棱块",
             "橙蓝",
             "",
             "",
@@ -204,14 +215,15 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
+          name: "正常情况",
           comments: [
-            "正常情况：找到在顶层的中层棱块",
+            "找到在顶层的中层棱块",
             "将侧面颜色与中心块对齐",
             "将角槽移过来保护角块",
-            "让开右面旋转的'车道'",
-            "右面旋转上来迎接棱块",
+            "让开右层旋转的'车道'",
+            "右层旋转上来迎接棱块",
             "棱块归位",
-            "右面归位",
+            "右层归位",
             "恢复角块"
           ],
           script: "U'2D(URU'R')D'",
@@ -224,14 +236,15 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
+          name: "镜像情况",
           comments: [
-            "镜像情况：找到在顶层的中层棱块",
+            "找到在顶层的中层棱块",
             "将侧面颜色与中心块对齐",
             "将角槽移过来保护角块",
-            "让开前面旋转的'车道'",
-            "前面(左手)旋转上来迎接棱块",
+            "让开前层旋转的'车道'",
+            "前层(左手)旋转上来迎接棱块",
             "棱块归位",
-            "前面(左手)归位",
+            "前层(左手)归位",
             "恢复角块"
           ],
           script: "U2D(U'F'UF)D'",
@@ -244,7 +257,8 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["异常情况：棱块位置或方向错误", "将角槽移过来保护角块", "右面旋转送它出来", "离开右面", "右面旋转回去", "恢复角块", "重新放回正确的位置"],
+          name: "异常情况",
+          comments: ["棱块位置或方向错误", "将角槽移过来保护角块", "右层旋转送它出来", "离开右层", "右层旋转回去", "恢复角块", "重新放回正确的位置"],
           script: "DRUR'D'D(U'F'UF)D'",
           finalize: "y'",
           strips: [
@@ -260,41 +274,9 @@ export default class CoursePanel extends Vue {
       name: "顶层棱块",
       steps: [
         {
-          comments: ["将棱槽位置上的棱块放到正确位置，同时拿回来一个位置错误的顶层棱块"],
-          script: "RUR'U'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 7, 8, 15, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["与底层棱块类似，正确位置指的是顺序要和中心块的顺序一致"],
-          script: "RUR'U2",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 8, 15, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["三个(按照紧邻顺序标记为ABC)都归位的情况，O->A，B->棱槽，B->C，棱槽归位"],
-          script: "RUR'URUR'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 8, 20, 23, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["单独旋转(O)的情况，左侧为O，标记右侧为A，棱槽->A，O->棱槽，O->A，棱槽归位"],
-          script: "(RU'R'U)(F'UF)",
+          name: "目标",
+          comments: ["将顶层的四个棱块", "黄绿(假定正确)", "黄蓝", "", "", "黄橙", "", "", "黄红", "按中心块颜色顺序复原"],
+          script: "URUR'U'F'U2FU'",
           finalize: "",
           strips: [
             {
@@ -304,8 +286,45 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["依次完成顶层4棱块，此时棱槽已经自动还原"],
-          script: "RU'R'",
+          name: "正常情况",
+          comments: ["观察棱槽颜色", "将目标位置移动到右层中心块上方", "非黄色面(右层)旋转将棱块归位", "将错误棱块放入右层", "右层归位，并带回错误棱块到棱槽"],
+          script: "U2RU'R'",
+          finalize: "U",
+          strips: [
+            {
+              indexes: [6, 8, 20, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "镜像情况",
+          comments: ["观察棱槽颜色", "将目标位置移动到右层中心块上方", "非黄色面(前层)旋转将棱块归位", "将错误棱块放入前层", "前层归位，并带回错误棱块到棱槽"],
+          script: "U2F'UF",
+          finalize: "U'",
+          strips: [
+            {
+              indexes: [6, 8, 17, 20, 24, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "异常情况",
+          comments: ["三个正确棱块(橙蓝红)", "绿->橙", "", "橙->蓝", "", "蓝->红", "", "红->棱槽"],
+          script: "RUR'URUR'",
+          finalize: "",
+          strips: [
+            {
+              indexes: [6, 8, 20, 24, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "异常情况",
+          comments: ["单独(橙)旋转", "棱槽->蓝", "", "蓝->橙", "", "橙->蓝(镜像)", "", "蓝->棱槽"],
+          script: "(RU'R'U)(F'UF)",
           finalize: "",
           strips: [
             {
@@ -320,41 +339,39 @@ export default class CoursePanel extends Vue {
       name: "顶层角块",
       steps: [
         {
-          comments: ["通过旋转顶层将角槽与目标位置对齐，把目标位置当作车，'上车四步'"],
-          script: "D'R'DR",
-          finalize: "U(D'R'DR)5U'",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["与底层角块类似，如果方向不对，重复执行上述操作，最差情况下需要5次"],
-          script: "(D'R'DR)5",
-          finalize: "U(D'R'DR)U'",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["此步骤会打乱下两层，因此除了旋转顶层对齐和'上车四步'以外，千万不要有其他操作"],
-          script: "UD'R'DRU'",
-          finalize: "(D'R'DR)5",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
-        },
-        {
-          comments: ["一般情况下，完成最后一个角块，魔方应该就只差顶面一个旋转就复原了"],
-          script: "(D'R'DR)U2",
+          name: "目标",
+          comments: [
+            "将顶层的四个角块",
+            "黄红绿",
+            "",
+            "",
+            "",
+            "",
+            "黄橙绿",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "黄橙蓝",
+            "",
+            "",
+            "",
+            "",
+            "黄红蓝",
+            "",
+            "",
+            "",
+            "全部复原"
+          ],
+          script: "U(D'R'DR)U(D'R'DR)3U(D'R'DR)U(D'R'DR)",
           finalize: "",
           strips: [
             {
@@ -364,9 +381,22 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["如果完成最后一个角块魔方还是乱的，继续做'上车四步'直到其他块复原"],
-          script: "(D'R'DR)2",
-          finalize: "z'(D'R'DR)2U'(D'R'DR)4Uz",
+          name: "正常情况",
+          comments: ["正常情况：观察角槽颜色", "将目标位置和角槽对齐", "角槽让开右层旋转的'车道'", "右层旋转下来迎接角槽", "角槽归位", "右层归位"],
+          script: "U2D'R'DR",
+          finalize: "",
+          strips: [
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 18, 19, 20, 21, 23, 24],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "注意",
+          comments: ["注意", "角块复原过程中", "其他块会全部乱掉", "不要有顶层旋转和复原以外的操作", "不要有魔方整体旋转", "乱掉的块我们最后处理"],
+          script: "U2D'R'DR",
+          finalize: "U2(D'R'DR)5U2",
           strips: [
             {
               indexes: [],
@@ -375,8 +405,65 @@ export default class CoursePanel extends Vue {
           ]
         },
         {
-          comments: ["然后将魔方向左倾倒，随意选择底层角块当做角槽继续复原"],
-          script: "z'(D'R'DR)2U'(D'R'DR)4Uz",
+          name: "异常情况",
+          comments: [
+            "观察角槽颜色",
+            "将目标位置和角槽对齐",
+            "角槽让开右层旋转的'车道'",
+            "右层旋转下来迎接角槽",
+            "角槽归位",
+            "右层归位后发现方向不对",
+            "继续做(第一次)",
+            "",
+            "",
+            "",
+            "继续做(第二次)",
+            "",
+            "",
+            "每多做两次方向会发生旋转"
+          ],
+          script: "U2(D'R'DR)3",
+          finalize: "U2(D'R'DR)3U2",
+          strips: [
+            {
+              indexes: [],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "最佳情况",
+          comments: ["最佳情况", "", "", "", "四个角块复原后", "魔方仅差顶层旋转即可复原"],
+          script: "(D'R'DR)U",
+          finalize: "",
+          strips: [
+            {
+              indexes: [],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "一般情况",
+          comments: [
+            "一般情况",
+            "",
+            "",
+            "四个角块复原后",
+            "其他块仍是乱的",
+            "继续做(第一次)",
+            "",
+            "",
+            "",
+            "继续做(第二次)",
+            "",
+            "",
+            "直到只有两块方向不对",
+            "将魔方向左倾倒",
+            "将两个错误块当作顶层",
+            "在底层任选角块当作角槽复原魔方"
+          ],
+          script: "(D'R'DR)(D'R'DR)2z'(D'R'DR)2U'(D'R'DR)4Uz",
           finalize: "",
           strips: [
             {
