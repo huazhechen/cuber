@@ -22,13 +22,7 @@ export default class Twister {
     this.update();
   }
 
-  twist(
-    exp: string,
-    reverse: boolean = false,
-    times: number = 1,
-    callback: Function | null = null,
-    fast: boolean = false
-  ) {
+  twist(exp: string, reverse: boolean = false, times: number = 1, callback: Function | null = null, fast: boolean = false) {
     this.finish();
     let list = new TwistNode(exp, reverse, times).parse();
     list[list.length - 1].callback = callback;
@@ -126,8 +120,7 @@ export default class Twister {
       for (let callback of this._game.callbacks) {
         callback(action.format);
       }
-      let duration =
-        this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      let duration = this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
       this._game.tweener.tween(
         part.angle,
         part.angle + angle,
@@ -255,10 +248,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-      this.exp +
-      (this.exp.length > 1 ? ")" : "") +
-      (this.reverse ? "'" : "") +
-      (this.times == 1 ? "" : String(this.times));
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
   }
 }
 
@@ -266,11 +259,7 @@ export class TwistNode {
   private _children: TwistNode[] = [];
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
-    let list = exp
-      .replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "")
-      .match(
-        /\([\*#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi
-      );
+    let list = exp.replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "").match(/\([\*#xyzbsfdeulmr'\d\(\)]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
     if (null === list) {
       return;
     }
