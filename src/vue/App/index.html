@@ -3,6 +3,7 @@
     <div ref=cuber></div>
     <div ref=panel>
       <keyboard-panel :show="option.mode == 'play' && option.keyboard" @hide="option.keyboard = false"></keyboard-panel>
+      <course-panel :show="option.mode == 'course'"></course-panel>
       <script-panel :show="option.mode == 'script'"></script-panel>
       <timer-panel :show="option.mode == 'timer'"></timer-panel>
     </div>

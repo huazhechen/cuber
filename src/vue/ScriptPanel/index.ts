@@ -14,20 +14,22 @@ export default class ScriptPanel extends Vue {
   show: boolean;
 
   @Watch("show")
-  onShowChange(value: boolean) {
-    this.stick();
-    if (value) {
+  onShowChange(to: boolean = this.show, from: boolean = this.show) {
+    if (to) {
       this.onTypeChange();
       this.onIndexChange();
       this.onScriptChange();
       this.onExpChange(this.exp);
     } else {
       this.playing = false;
+      if (from) {
+        this.stick();
+      }
     }
   }
 
   mounted() {
-    this.onShowChange(this.show);
+    this.onShowChange();
   }
 
   progress: number = 0;
@@ -72,7 +74,6 @@ export default class ScriptPanel extends Vue {
     this.game.twister.twist(action.exp, !action.reverse, action.times);
   }
 
-  dialog = false;
   type: number = Number(window.localStorage.getItem("script.type") || 0);
   index: number = Number(window.localStorage.getItem("script.index") || 1);
 
@@ -84,7 +85,7 @@ export default class ScriptPanel extends Vue {
   strip() {
     let strips = this.scripts[this.type].strips;
     for (let strip of strips) {
-      for (let index of strip.indexs) {
+      for (let index of strip.indexes) {
         this.game.cube.strip(index, strip.faces);
       }
     }
@@ -121,7 +122,7 @@ export default class ScriptPanel extends Vue {
       name: "F2L",
       strips: [
         {
-          indexs: [6, 7, 8, 15, 16, 17, 24, 25, 26],
+          indexes: [6, 7, 8, 15, 16, 17, 24, 25, 26],
           faces: [0, 1, 2, 3, 4, 5]
         }
       ],
@@ -173,7 +174,7 @@ export default class ScriptPanel extends Vue {
       name: "OLL",
       strips: [
         {
-          indexs: [6, 7, 8, 15, 16, 17, 24, 25, 26],
+          indexes: [6, 7, 8, 15, 16, 17, 24, 25, 26],
           faces: [0, 1, 2, 4, 5]
         }
       ],

@@ -173,8 +173,8 @@ export default class Cubelet extends THREE.Group {
   );
 
   private static readonly _MATERIALS = {
-    p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#000000" }),
-    i: new THREE.MeshBasicMaterial({ wireframe: false, color: "#303030" }),
+    p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#101010" }),
+    i: new THREE.MeshBasicMaterial({ wireframe: false, color: "#808080" }),
     g: new THREE.MeshBasicMaterial({ wireframe: false, color: "#009D54" }),
     o: new THREE.MeshBasicMaterial({ wireframe: false, color: "#FF6C00" }),
     b: new THREE.MeshBasicMaterial({ wireframe: false, color: "#3D81F6" }),

@@ -2,19 +2,25 @@
   <v-card flat>
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap justify-center align-center>
-        <v-flex xs4>
+        <v-flex xs3>
           <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="mode('play')"
             style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>games</v-icon>
           </fast-button>
         </v-flex>
-        <v-flex xs4>
-          <fast-button class="headline" :color="option.mode == 'script'?'primary':''" flat block @tap="mode('script')"
+        <v-flex xs3>
+          <fast-button class="headline" :color="option.mode == 'course'?'primary':''" flat block @tap="mode('course')"
             style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>school</v-icon>
           </fast-button>
         </v-flex>
-        <v-flex xs4>
+        <v-flex xs3>
+          <fast-button class="headline" :color="option.mode == 'script'?'primary':''" flat block @tap="mode('script')"
+            style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-icon large>edit</v-icon>
+          </fast-button>
+        </v-flex>
+        <v-flex xs3>
           <fast-button class="headline" :color="option.mode == 'timer'?'primary':''" flat block @tap="mode('timer')"
             style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>timer</v-icon>

@@ -6,11 +6,13 @@ import ScriptPanel from "../ScriptPanel";
 import TimerPanel from "../TimerPanel";
 import Option from "../Option"
 import AppMenu from "../AppMenu";
+import CoursePanel from "../CoursePanel";
 
 @Component({
   template: require("./index.html"),
   components: {
     "keyboard-panel": KeyboardPanel,
+    "course-panel": CoursePanel,
     "script-panel": ScriptPanel,
     "timer-panel": TimerPanel,
     "app-menu": AppMenu
