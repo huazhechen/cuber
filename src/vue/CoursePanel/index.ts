@@ -18,162 +18,193 @@ export default class CoursePanel extends Vue {
       name: "基础知识",
       steps: [
         {
-          name: "块",
-          comments: ["魔方由", "6个中心块", "8个角块", "12个棱块构成"],
-          script: "---",
-          finalize: "",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 25],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 2, 4, 6, 8, 10, 12, 13, 14, 16, 18, 20, 22, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "魔方由中心块、角块和棱块构成",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "持",
-          comments: [
-            "找到魔方的黄色中心块",
-            "旋转魔方使其朝上",
-            "这三块就是最常用的操作区域",
-            "区域左侧称为左层",
-            "区域右侧称为右层",
-            "黄色中心块所在的层称为顶层",
-            "白色中心块所在的层称为底层",
-            "左手握住这部分",
-            "则右手可以操作顶层",
-            "",
-            "底层",
-            "",
-            "右层",
-            "",
-            "右手握住这部分",
-            "则左手可以操作顶层",
-            "",
-            "底层",
-            "",
-            "左层",
-            ""
-          ],
-          script: "x------UU'D'DRR'-U'UDD'F'F",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 25],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 3, 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22, 24, 25],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "这是6个中心块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "色",
-          comments: [
-            "魔方侧面的四个中心块顺序是固定的",
-            "蓝-红",
-            "红-绿",
-            "绿-橙",
-            "橙-蓝",
-            "因此顶层和底层的棱块也要按照此顺序",
-            "蓝-红",
-            "红-绿",
-            "绿-橙",
-            "橙-蓝",
-            "才能与中心块对齐"
-          ],
-          script: "-yyyy-yyyy",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            },
-            {
-              indexes: [0, 2, 3, 5, 6, 8, 18, 20, 21, 23, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "这是8个角块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 25],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "这是12个棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 2, 4, 6, 8, 10, 12, 13, 14, 16, 18, 20, 22, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原时需要将黄色中心块朝上",
+          exp: "x",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "此时对面中心块颜色为白色",
+          exp: "xx'",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "侧面中心块颜色顺序为蓝-红-绿-橙",
+          exp: "yyyy",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "黄色中心块所在层称为顶层",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "白色中心块所在层称为底层",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "这三块是我们的工作区称为槽",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 25],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "工作区右边称为右层",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 3, 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22, 24, 25],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "工作区左边称为左层",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "转动左右层使槽进入/离开顶层的操作称为槽出/槽归",
+          exp: "RR'F'F",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 25],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "左手握住这里方便右层操作",
+          exp: "RR'",
+          initial: "",
+          strip: {
+            indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "右手握住这里方便左层操作",
+          exp: "F'F",
+          initial: "",
+          strip: {
+            indexes: [6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "我们按照以下顺序复原",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原底层棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原三个底层角块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [3, 5, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原三个中层棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原顶层棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [6, 8, 20, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原顶层角块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     },
@@ -181,76 +212,58 @@ export default class CoursePanel extends Vue {
       name: "底层棱块",
       steps: [
         {
-          name: "目标",
-          comments: ["将底层的四个棱块", "白橙", "白红", "白蓝", "白绿", "", "", "按照中心块的顺序放入底层", "然后和中心块对齐"],
-          script: "LR'F2U'RB'R'u2",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "底层棱块是有白色的棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "中层场景",
-          comments: ["底层棱块在中层", "一步直接转到底层"],
-          script: "LR'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "如果在中层可以直接复原",
+          exp: "R'",
+          initial: "R",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "顶层场景",
-          comments: ["底层棱块在顶层", "先转到中层", "再转到底层", "先转到中层", "再转到底层"],
-          script: "R'R'F'L",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "位置要和已经复原的块相互吻合",
+          exp: "D'R'D",
+          initial: "u'Bu",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "底层场景",
-          comments: ["底层棱块在底层", "先转到中层", "再转到底层"],
-          script: "RF",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "如果在底层转入中层后复原",
+          exp: "RD'R'D",
+          initial: "B2UR2",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: ["棱块转入底层", "棱块间相对位置不对", "重新回到中层", "旋转底层到正确位置", "相对位置正确"],
-          script: "R'RD'R'D",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "如果在顶层转入中层后复原",
+          exp: "R'D'FD",
+          initial: "u'R'uR",
+          strip: {
+            indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "对齐",
-          comments: ["四个棱块位置全部正确", "旋转上两层将棱块与中心块对齐", "还有另一种方法", "旋转底层"],
-          script: "u2u'2D2",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "全部复原后和侧面中心块对齐",
+          exp: "D",
+          initial: "D'",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     },
@@ -258,84 +271,76 @@ export default class CoursePanel extends Vue {
       name: "底层角块",
       steps: [
         {
-          name: "目标",
-          comments: [
-            "将底层的任意三个角块",
-            "白橙蓝",
-            "",
-            "",
-            "",
-            "白橙绿",
-            "",
-            "",
-            "",
-            "",
-            "白红绿",
-            "",
-            "",
-            "",
-            "复原到底层对应位置",
-            "留下一个空槽位，称为角槽"
-          ],
-          script: "(URU'R'y')3",
-          finalize: "",
-          strips: [
-            {
-              indexes: [3, 5, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "底层角块是有白色的角块",
+          exp: "",
+          initial: "x",
+          strip: {
+            indexes: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "正常情况",
-          comments: ["找到在顶层的白色角块", "将其与目标槽位对齐", "让开右层旋转的'车道'", "右层旋转上来迎接角块", "角块归位", "右层归位"],
-          script: "U2(URU'R')",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "将角块与目标位置上下对齐",
+          exp: "U",
+          initial: "RUR'U2",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: [
-            "找到在顶层的白色角块",
-            "将其与目标槽位对齐",
-            "让开右层旋转的'车道'",
-            "右层旋转上来迎接角块",
-            "角块归位",
-            "右层归位后发现方向不对",
-            "继续做(第一次)",
-            "",
-            "",
-            "",
-            "继续做(第二次)",
-            "",
-            "",
-            "每多做两次方向会发生旋转"
-          ],
-          script: "U2(URU'R')3",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "让路-槽出-入槽-槽归",
+          exp: "URU'R'",
+          initial: "RUR'U'",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: ["角块在错误位置", "右层旋转送它出来", "离开右层", "右层旋转回去", "重新放回正确的位置"],
-          script: "RUR'y'URU'R'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "用角块白色朝向的层槽出结果错误",
+          exp: "URU'R'",
+          initial: "F'U'FU",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "用角块非白色朝向的层槽出结果正确",
+          exp: "U'F'UF",
+          initial: "F'U'FU",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "如果白色朝向顶层，任选一侧执行三次",
+          exp: "(URU'R')3",
+          initial: "(RUR'U')3",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "如果角块在错误槽中，用一个顶层角块置换出来再复原",
+          exp: "(URU'R'U')y(URU'R')",
+          initial: "RUR'y'RUR'",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "任选三个复原，留一个作为后续步骤的槽",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [3, 5, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     },
@@ -343,93 +348,58 @@ export default class CoursePanel extends Vue {
       name: "中层棱块",
       steps: [
         {
-          name: "目标",
-          comments: [
-            "将三个棱块",
-            "橙蓝",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "橙绿",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "红绿",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "复原到三个角块上方对应位置",
-            "留下一个空槽位，称为棱槽"
-          ],
-          script: "(D'URU'R'Dy')(D2'URU'R'D2y')(DURU'R'D'y')",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "中层棱块是没有黄白色的棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "正常情况",
-          comments: [
-            "找到在顶层的中层棱块",
-            "将侧面颜色与中心块对齐",
-            "将角槽移过来保护角块",
-            "让开右层旋转的'车道'",
-            "右层旋转上来迎接棱块",
-            "棱块归位",
-            "右层归位",
-            "恢复角块"
-          ],
-          script: "U'2D(URU'R')D'",
-          finalize: "y'",
-          strips: [
-            {
-              indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "将棱块侧面与中心块颜色对齐",
+          exp: "U'",
+          initial: "yRUR'U'F'U'FU2",
+          strip: {
+            indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "镜像情况",
-          comments: [
-            "找到在顶层的中层棱块",
-            "将侧面颜色与中心块对齐",
-            "将角槽移过来保护角块",
-            "让开左层旋转的'车道'",
-            "左层(左手)旋转上来迎接棱块",
-            "棱块归位",
-            "左层(左手)归位",
-            "恢复角块"
-          ],
-          script: "U2D(U'F'UF)D'",
-          finalize: "y'",
-          strips: [
-            {
-              indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "借角块-让路-槽出-入槽-槽归-还角块",
+          exp: "DURU'R'D'",
+          initial: "yRUR'U'F'U'FU",
+          strip: {
+            indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: ["棱块位置或方向错误", "将角槽移过来保护角块", "右层旋转送它出来", "离开右层", "右层旋转回去", "恢复角块", "重新放回正确的位置"],
-          script: "DRUR'D'D(U'F'UF)D'",
-          finalize: "y'",
-          strips: [
-            {
-              indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "镜像情况使用左层槽出",
+          exp: "D'U'F'UFD",
+          initial: "y'F'U'FURUR'U'",
+          strip: {
+            indexes: [3, 5, 6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "如果棱块位置或方向不对，用一个顶层棱块置换出来再复原",
+          exp: "D(URU'R')D'U2D(U'F'UF)D'",
+          initial: "y(RU'2R'U)2y'(R'U'R)y",
+          strip: {
+            indexes: [3, 6, 7, 8, 17, 20, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原三个正确角块上方的棱块，留一个作为后续步骤的槽",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     },
@@ -437,64 +407,67 @@ export default class CoursePanel extends Vue {
       name: "顶层棱块",
       steps: [
         {
-          name: "目标",
-          comments: ["将顶层的四个棱块", "黄绿(假定正确)", "黄蓝", "", "", "黄橙", "", "", "黄红", "按中心块颜色顺序复原"],
-          script: "URUR'U'F'U2FU'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 8, 20, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "顶层棱块是有黄色的棱块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20, 21, 22, 23, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "正常情况",
-          comments: ["观察棱槽颜色", "将目标位置移动到右层中心块上方", "非黄色面(右层)旋转将棱块归位", "将错误棱块放入右层", "右层归位，并带回错误棱块到棱槽"],
-          script: "U2RU'R'",
-          finalize: "U",
-          strips: [
-            {
-              indexes: [6, 8, 20, 24, 25, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "将目标位置提前放置到槽出的地方",
+          exp: "U",
+          initial: "RU'R'U'",
+          strip: {
+            indexes: [6, 8, 17, 20, 23, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "镜像情况",
-          comments: ["观察棱槽颜色", "将目标位置移动到左层中心块上方", "非黄色面(左层)旋转将棱块归位", "将错误棱块放入左层", "左层归位，并带回错误棱块到棱槽"],
-          script: "U2F'UF",
-          finalize: "U'",
-          strips: [
-            {
-              indexes: [6, 8, 17, 20, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "槽出-错误块入槽-槽归",
+          exp: "RUR'",
+          initial: "RU'R'",
+          strip: {
+            indexes: [6, 8, 17, 20, 23, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: ["三个正确棱块(橙蓝红)", "绿->橙", "", "橙->蓝", "", "蓝->红", "", "红->棱槽"],
-          script: "RUR'URUR'",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 8, 20, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "镜像情况使用左层槽出",
+          exp: "F'U'F",
+          initial: "F'UF",
+          strip: {
+            indexes: [6, 8, 20, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: ["单独(橙)旋转", "棱槽->蓝", "", "蓝->橙", "", "橙->蓝(镜像)", "", "蓝->棱槽"],
-          script: "(RU'R'U)(F'UF)",
-          finalize: "",
-          strips: [
-            {
-              indexes: [6, 8, 20, 24, 26],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "三个复原(ABC)：槽出到A-槽归B-槽出到C-槽归",
+          exp: "RUR'URUR'",
+          initial: "RU'R'U'RU'R'",
+          strip: {
+            indexes: [6, 8, 20, 23, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "单独旋转O：槽出到O的邻居A-槽归O-镜像槽出到A-槽归",
+          exp: "(RU'R'U)(F'UF)",
+          initial: "(F'U'FU')(RUR')",
+          strip: {
+            indexes: [6, 8, 20, 23, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "复原四个顶层棱块后，剩余的一个棱块也复原了",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [6, 8, 20, 24, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     },
@@ -502,138 +475,112 @@ export default class CoursePanel extends Vue {
       name: "顶层角块",
       steps: [
         {
-          name: "目标",
-          comments: [
-            "将顶层的四个角块",
-            "黄红绿",
-            "",
-            "",
-            "",
-            "",
-            "黄橙绿",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "黄橙蓝",
-            "",
-            "",
-            "",
-            "",
-            "黄红蓝",
-            "",
-            "",
-            "",
-            "全部复原"
-          ],
-          script: "U(D'R'DR)U(D'R'DR)3U(D'R'DR)U(D'R'DR)",
-          finalize: "",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "顶层角块是有黄色的角块",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "正常情况",
-          comments: ["正常情况：观察角槽颜色", "将目标位置和角槽对齐", "角槽让开右层旋转的'车道'", "右层旋转下来迎接角槽", "角槽归位", "右层归位"],
-          script: "U2D'R'DR",
-          finalize: "",
-          strips: [
-            {
-              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 18, 19, 20, 21, 23, 24],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "复原过程中，底层和中层会乱，不要关注和担心",
+          exp: "",
+          initial: "",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "注意",
-          comments: ["注意", "角块复原过程中", "其他块会全部乱掉", "不要有顶层旋转和复原以外的操作", "不要有魔方整体旋转", "乱掉的块我们最后处理"],
-          script: "U2D'R'DR",
-          finalize: "U2(D'R'DR)5U2",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "将角块与目标位置上下对齐",
+          exp: "U'",
+          initial: "(D'R'DR)5U",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "异常情况",
-          comments: [
-            "观察角槽颜色",
-            "将目标位置和角槽对齐",
-            "角槽让开右层旋转的'车道'",
-            "右层旋转下来迎接角槽",
-            "角槽归位",
-            "右层归位后发现方向不对",
-            "继续做(第一次)",
-            "",
-            "",
-            "",
-            "继续做(第二次)",
-            "",
-            "",
-            "每多做两次方向会发生旋转"
-          ],
-          script: "U2(D'R'DR)3",
-          finalize: "U2(D'R'DR)3U2",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "让路-槽出-入槽-槽归",
+          exp: "D'R'DR",
+          initial: "(D'R'DR)5",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "最佳情况",
-          comments: ["最佳情况", "", "", "", "四个角块复原后", "魔方仅差顶层旋转即可复原"],
-          script: "(D'R'DR)U",
-          finalize: "",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "用角块黄色朝向的层槽出结果错误",
+          exp: "D'R'DR",
+          initial: "(DFD'F')5",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         },
         {
-          name: "一般情况",
-          comments: [
-            "一般情况",
-            "",
-            "",
-            "四个角块复原后",
-            "其他块仍是乱的",
-            "继续做(第一次)",
-            "",
-            "",
-            "",
-            "继续做(第二次)",
-            "",
-            "",
-            "直到只有两块方向不对",
-            "将魔方向左倾倒",
-            "将两个错误块当作顶层",
-            "在底层任选角块当作角槽复原魔方"
-          ],
-          script: "(D'R'DR)(D'R'DR)2z'(D'R'DR)2U'(D'R'DR)4Uz",
-          finalize: "",
-          strips: [
-            {
-              indexes: [],
-              faces: [0, 1, 2, 3, 4, 5]
-            }
-          ]
+          comment: "用角块非黄色朝向的层槽出结果正确",
+          exp: "DFD'F'",
+          initial: "(DFD'F')5",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "如果黄色朝向底层，任选一侧执行三次",
+          exp: "(D'R'DR)3",
+          initial: "(D'R'DR)3",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "如果角块在错误槽中，用其他角块置换出来再复原",
+          exp: "(D'R'DR)U(D'R'DR)",
+          initial: "(D'R'DR)U'(D'R'DR)3",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "所有角块复原后，有时下两层已经复原了，此时对齐即可完成复原",
+          exp: "U",
+          initial: "U'",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "所有角块复原后，有时下两层还是乱的",
+          exp: "",
+          initial: "z'(D'R'DR)4U'(D'R'DR)2Uz(D'R'DR)4U'",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "将顶层与中心块对齐，偶数次执行还原步骤直到只剩两块错误",
+          exp: "U(D'R'DR)2",
+          initial: "z'(D'R'DR)4U'(D'R'DR)2Uz(D'R'DR)4U'",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "然后将魔方向左倾倒，全部使用右层出槽复原剩余的两块",
+          exp: "z'(D'R'DR)2U'(D'R'DR)4Uz",
+          initial: "z'(D'R'DR)4U'(D'R'DR)2Uz",
+          strip: {
+            indexes: [],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
         }
       ]
     }
@@ -657,28 +604,6 @@ export default class CoursePanel extends Vue {
 
   progress: number = 0;
 
-  forward() {
-    if (this.progress == this.actions.length) {
-      return;
-    }
-    let action = this.actions[this.progress];
-    this.progress++;
-    this.stick();
-    this.strip();
-    this.game.twister.twist(action.exp, action.reverse, action.times);
-  }
-
-  backward() {
-    if (this.progress == 0) {
-      return;
-    }
-    this.progress--;
-    this.stick();
-    this.strip();
-    let action = this.actions[this.progress];
-    this.game.twister.twist(action.exp, !action.reverse, action.times);
-  }
-
   type: number = Number(window.localStorage.getItem("course.type") || 1);
   index: number = Number(window.localStorage.getItem("course.index") || 0);
 
@@ -688,13 +613,7 @@ export default class CoursePanel extends Vue {
   }
 
   strip() {
-    let i = this.progress;
-    let strips = this.course[this.type - 1].steps[this.index].strips;
-    let strip = undefined;
-    while (strip == undefined) {
-      strip = strips[i];
-      i--;
-    }
+    let strip = this.course[this.type - 1].steps[this.index].strip;
     for (let index of strip.indexes) {
       this.game.cube.strip(index, strip.faces);
     }
@@ -738,30 +657,65 @@ export default class CoursePanel extends Vue {
   }
 
   get exp() {
-    return this.course[this.type - 1].steps[this.index].script;
+    return this.course[this.type - 1].steps[this.index].exp;
   }
 
-  get finalize() {
-    return this.course[this.type - 1].steps[this.index].finalize;
+  get initial() {
+    return this.course[this.type - 1].steps[this.index].initial;
   }
 
   get comment() {
-    let i = this.progress;
-    let comments = this.course[this.type - 1].steps[this.index].comments;
-    let comment = "";
-    while (comment == "" || comment == undefined) {
-      comment = comments[i];
-      i--;
-    }
-    return comment;
+    return this.course[this.type - 1].steps[this.index].comment;
   }
 
   actions: TwistAction[] = new TwistNode(this.exp).parse();
 
+  playing: boolean = false;
+
+  forward() {
+    if (this.progress == this.actions.length) {
+      return;
+    }
+    this.playing = false;
+    let action = this.actions[this.progress];
+    this.progress++;
+    this.game.twister.twist(action.exp, action.reverse, action.times);
+  }
+
+  backward() {
+    if (this.progress == 0) {
+      return;
+    }
+    this.playing = false;
+    this.progress--;
+    let action = this.actions[this.progress];
+    this.game.twister.twist(action.exp, !action.reverse, action.times);
+  }
+
+  play() {
+    if (this.progress == this.actions.length) {
+      this.playing = false;
+    }
+    if (this.playing) {
+      let action = this.actions[this.progress];
+      this.progress++;
+      this.game.twister.twist(action.exp, action.reverse, action.times, this.play, false);
+    }
+  }
+
+  toggle() {
+    if (this.playing) {
+      this.playing = false;
+    } else {
+      this.playing = !this.playing;
+      this.play();
+    }
+  }
+
   init() {
+    this.playing = false;
     this.game.twister.twist("#");
-    this.game.twister.twist(this.finalize, true, 1, null, true);
-    this.game.twister.twist(this.exp, true, 1, null, true);
+    this.game.twister.twist(this.initial, false, 1, null, true);
     this.progress = 0;
     this.stick();
     this.strip();

@@ -25,7 +25,9 @@ export default class Twister {
   twist(exp: string, reverse: boolean = false, times: number = 1, callback: Function | null = null, fast: boolean = false) {
     this.finish();
     let list = new TwistNode(exp, reverse, times).parse();
-    list[list.length - 1].callback = callback;
+    if (list.length > 0) {
+      list[list.length - 1].callback = callback;
+    }
     for (let element of list) {
       element.fast = fast;
       this.queue.push(element);
@@ -321,7 +323,7 @@ export class TwistNode {
           }
         }
       }
-    } else {
+    } else if (this._twist.exp != "") {
       let action = new TwistAction();
       action.exp = this._twist.exp;
       action.reverse = reverse;

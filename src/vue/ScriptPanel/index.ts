@@ -68,7 +68,6 @@ export default class ScriptPanel extends Vue {
       return;
     }
     this.playing = false;
-    this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
     this.game.twister.twist(action.exp, !action.reverse, action.times);
