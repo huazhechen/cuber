@@ -94,6 +94,13 @@ export default class Twister {
       this.update();
       return;
     }
+    if (action.exp == "-") {
+      if (action.callback) {
+        action.callback();
+      }
+      this.update();
+      return;
+    }
     let angle = -Math.PI / 2;
     if (action.reverse) {
       angle = -angle;
@@ -259,14 +266,16 @@ export class TwistNode {
   private _children: TwistNode[] = [];
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
-    let list = exp.replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "").match(/\([\*#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
+    let list = exp
+      .replace(/[^\*#\-xyzbsfdeulmr\(\)'0123456789]/gi, "")
+      .match(/\([\*#\-xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#\-xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
     if (null === list) {
       return;
     }
     if (list.length == 1) {
       var values = list[0].match(/^\((\S+)\)('?)(\d*)('?)$/i);
       if (values === null) {
-        values = list[0].match(/([\*#xyzbsfdeulmr])('?)(\d*)('?)/i);
+        values = list[0].match(/([\*#\-xyzbsfdeulmr])('?)(\d*)('?)/i);
         if (null === values) {
           return;
         }

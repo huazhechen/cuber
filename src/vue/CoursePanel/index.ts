@@ -15,6 +15,169 @@ export default class CoursePanel extends Vue {
 
   course = [
     {
+      name: "基础知识",
+      steps: [
+        {
+          name: "块",
+          comments: ["魔方由", "6个中心块", "8个角块", "12个棱块构成"],
+          script: "---",
+          finalize: "",
+          strips: [
+            {
+              indexes: [],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [1, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 25],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 2, 4, 6, 8, 10, 12, 13, 14, 16, 18, 20, 22, 24, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "持",
+          comments: [
+            "找到魔方的黄色中心块",
+            "旋转魔方使其朝上",
+            "这三块就是最常用的操作区域",
+            "区域左侧称为左层",
+            "区域右侧称为右层",
+            "黄色中心快所在的层称为顶层",
+            "白色中心快所在的层称为底层",
+            "左手握住这部分",
+            "则右手可以操作顶层",
+            "",
+            "底层",
+            "",
+            "右层",
+            "",
+            "右手握住这部分",
+            "则左手可以操作顶层",
+            "",
+            "底层",
+            "",
+            "左层",
+            ""
+          ],
+          script: "x------UU'D'DRR'-U'UDD'F'F",
+          finalize: "",
+          strips: [
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 25],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 3, 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22, 24, 25],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [2, 5, 6, 7, 8, 11, 14, 15, 16, 17, 20, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          name: "色",
+          comments: [
+            "魔方侧面的四个中心块顺序是固定的",
+            "蓝-红",
+            "红-绿",
+            "绿-橙",
+            "橙-蓝",
+            "因此顶层和底层的棱块也要按照此顺序",
+            "蓝-红",
+            "红-绿",
+            "绿-橙",
+            "橙-蓝",
+            "才能与中心块对齐"
+          ],
+          script: "-yyyy-yyyy",
+          finalize: "",
+          strips: [
+            {
+              indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            },
+            {
+              indexes: [0, 2, 3, 5, 6, 8, 18, 20, 21, 23, 24, 26],
+              faces: [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        }
+      ]
+    },
+    {
       name: "底层棱块",
       steps: [
         {
@@ -241,10 +404,10 @@ export default class CoursePanel extends Vue {
             "找到在顶层的中层棱块",
             "将侧面颜色与中心块对齐",
             "将角槽移过来保护角块",
-            "让开前层旋转的'车道'",
-            "前层(左手)旋转上来迎接棱块",
+            "让开左层旋转的'车道'",
+            "左层(左手)旋转上来迎接棱块",
             "棱块归位",
-            "前层(左手)归位",
+            "左层(左手)归位",
             "恢复角块"
           ],
           script: "U2D(U'F'UF)D'",
@@ -299,7 +462,7 @@ export default class CoursePanel extends Vue {
         },
         {
           name: "镜像情况",
-          comments: ["观察棱槽颜色", "将目标位置移动到右层中心块上方", "非黄色面(前层)旋转将棱块归位", "将错误棱块放入前层", "前层归位，并带回错误棱块到棱槽"],
+          comments: ["观察棱槽颜色", "将目标位置移动到左层中心块上方", "非黄色面(左层)旋转将棱块归位", "将错误棱块放入左层", "左层归位，并带回错误棱块到棱槽"],
           script: "U2F'UF",
           finalize: "U'",
           strips: [
@@ -500,6 +663,8 @@ export default class CoursePanel extends Vue {
     }
     let action = this.actions[this.progress];
     this.progress++;
+    this.stick();
+    this.strip();
     this.game.twister.twist(action.exp, action.reverse, action.times);
   }
 
@@ -508,6 +673,8 @@ export default class CoursePanel extends Vue {
       return;
     }
     this.progress--;
+    this.stick();
+    this.strip();
     let action = this.actions[this.progress];
     this.game.twister.twist(action.exp, !action.reverse, action.times);
   }
@@ -521,12 +688,15 @@ export default class CoursePanel extends Vue {
   }
 
   strip() {
+    let i = this.progress;
     let strips = this.course[this.type - 1].steps[this.index].strips;
-
-    for (let strip of strips) {
-      for (let index of strip.indexes) {
-        this.game.cube.strip(index, strip.faces);
-      }
+    let strip = undefined;
+    while (strip == undefined) {
+      strip = strips[i];
+      i--;
+    }
+    for (let index of strip.indexes) {
+      this.game.cube.strip(index, strip.faces);
     }
     this.game.dirty = true;
   }
@@ -589,11 +759,11 @@ export default class CoursePanel extends Vue {
   actions: TwistAction[] = new TwistNode(this.exp).parse();
 
   init() {
-    this.stick();
-    this.strip();
-    this.progress = 0;
     this.game.twister.twist("#");
     this.game.twister.twist(this.finalize, true, 1, null, true);
     this.game.twister.twist(this.exp, true, 1, null, true);
+    this.progress = 0;
+    this.stick();
+    this.strip();
   }
 }
