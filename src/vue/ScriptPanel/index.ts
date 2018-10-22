@@ -43,13 +43,7 @@ export default class ScriptPanel extends Vue {
     if (this.playing) {
       let action = this.actions[this.progress];
       this.progress++;
-      this.game.twister.twist(
-        action.exp,
-        action.reverse,
-        action.times,
-        this.play,
-        false
-      );
+      this.game.twister.twist(action.exp, action.reverse, action.times, this.play, false);
     }
   }
 
@@ -127,29 +121,29 @@ export default class ScriptPanel extends Vue {
       ],
       scripts: [
         { name: "F2L-01", exp: "URU'R'" },
-        { name: "F2L-02", exp: "x(UR'U'l)" },
+        { name: "F2L-02", exp: "y'(U'R'UR)y" },
         { name: "F2L-03", exp: "y'(R'U'R)y" },
         { name: "F2L-04", exp: "(RUR')" },
-        { name: "F2L-05", exp: "y'R2y'(R'U'RU)yR2y" },
-        { name: "F2L-06", exp: "R2y(RUR'U')y'R2" },
-        { name: "F2L-07", exp: "U'(RU'U')(R'U2)(RU'R')" },
-        { name: "F2L-08", exp: "d(R'U2)(RU'U')(R'UR)y" },
-        { name: "F2L-09", exp: "(R2U)y(RU'R'F2)y'" },
-        { name: "F2L-10", exp: "y'(R2U')(F'UF)R2y" },
-        { name: "F2L-11", exp: "y'(RU'U')R'2U'R2U'R'y" },
-        { name: "F2L-12", exp: "(R'U2)(R2'U)(R2'UR)" },
+        { name: "F2L-05", exp: "U'(RUR')U2(RU'R')" },
+        { name: "F2L-06", exp: "d(R'U'R)U2(R'UR)y" },
+        { name: "F2L-07", exp: "U'(RU'2)(R'U2)(RU'R')" },
+        { name: "F2L-08", exp: "d(R'U2)(RU'2)(R'UR)y" },
+        { name: "F2L-09", exp: "y'(UR'U'RU'R'U'R)y" },
+        { name: "F2L-10", exp: "U'(RUR'URUR')" },
+        { name: "F2L-11", exp: "y'(R'URU')(R'URU'2)(R'UR)y" },
+        { name: "F2L-12", exp: "(RU'R'U)(RU'R'U2)(RU'R')" },
         { name: "F2L-13", exp: "d(R'URU')(R'U'R)y" },
         { name: "F2L-14", exp: "U'(RU'R'U)(RUR')" },
-        { name: "F2L-15", exp: "y'(R'U)(Rd'U')(RUR')" },
+        { name: "F2L-15", exp: "(RUR')(U2RU'R'URU'R')" },
         { name: "F2L-16", exp: "(RU'R'U)(dR'U'R)y" },
-        { name: "F2L-17", exp: "(RU'U')(R'U'RU)R'" },
-        { name: "F2L-18", exp: "y'(R'U2)(RUR'U')Ry" },
-        { name: "F2L-19", exp: "U(RU'U')(R'URU')R'" },
-        { name: "F2L-20", exp: "d'zU'(R2U)(R'U'RU)z'y'" },
-        { name: "F2L-21", exp: "Ry(RU2R'F')y'" },
-        { name: "F2L-22", exp: "F'L'U2rUx'" },
-        { name: "F2L-23", exp: "(U2R2'U2)(R'U'RU'R2)" },
-        { name: "F2L-24", exp: "y'(U2R2'U2)(RUR'UR2)y" },
+        { name: "F2L-17", exp: "(RU'2)(R'U'RUR')" },
+        { name: "F2L-18", exp: "y'(R'U2)(RUR'U'R)y" },
+        { name: "F2L-19", exp: "U(RU'2)(R'URU')R'" },
+        { name: "F2L-20", exp: "y'(U'R'U2RU')(R'UR)y" },
+        { name: "F2L-21", exp: "(RU'R'U2)(RUR')" },
+        { name: "F2L-22", exp: "y'U2(R'U'RU')(R'UR)y" },
+        { name: "F2L-23", exp: "(RUR'U2)(RUR'U')(RUR')" },
+        { name: "F2L-24", exp: "y'(R'U'RU2)(R'U'RU)(R'U'R)y" },
         { name: "F2L-25", exp: "yU'(L'ULU)y'(RU'R')" },
         { name: "F2L-26", exp: "(URU'R'U')y'(R'UR)y" },
         { name: "F2L-27", exp: "(RU'R'U)(RU'R')" },
@@ -158,15 +152,15 @@ export default class ScriptPanel extends Vue {
         { name: "F2L-30", exp: "(RUR'U')(RUR')" },
         { name: "F2L-31", exp: "(RU'R')y'(R'U2R)y" },
         { name: "F2L-32", exp: "(RUR'U')2(RUR')" },
-        { name: "F2L-33", exp: "U'(RU')(R'U2)(RU'R')" },
-        { name: "F2L-34", exp: "U'(RU'U'R'U)(RUR')" },
+        { name: "F2L-33", exp: "(RUR'U')(RU'R'URU'R')" },
+        { name: "F2L-34", exp: "U'(RU'2R'U)(RUR')" },
         { name: "F2L-35", exp: "U'(RUR')d(R'U'R)y" },
         { name: "F2L-36", exp: "d(R'U'R)d'(RUR')" },
         { name: "F2L-37", exp: "(RU'2R'U)2y'(R'U'R)y" },
-        { name: "F2L-38", exp: "(RUR'U')(RU'U'R'U')(RUR')" },
-        { name: "F2L-39", exp: "(RU'U')(RUR'U)(RU'U')R2" },
-        { name: "F2L-40", exp: "(RU'RU)y(RU'R'F2)y'" },
-        { name: "F2L-41", exp: "R2y(RUR'U')y'(R'UR')" }
+        { name: "F2L-38", exp: "(RUR'U')(RU2R'U')(RUR')" },
+        { name: "F2L-39", exp: "(RU'R'U)(RU'2R'U)(RU'R')" },
+        { name: "F2L-40", exp: "(RU'R'U')(RU'R')d(R'U'R)y" },
+        { name: "F2L-41", exp: "(RUR'U')(RU'R'U)d(R'U'R)y" }
       ]
     },
     {

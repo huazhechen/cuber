@@ -214,7 +214,7 @@ export default class CoursePanel extends Vue {
         {
           comment: "底层棱块是有白色的棱块",
           exp: "",
-          initial: "",
+          initial: "x",
           strip: {
             indexes: [0, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
@@ -289,7 +289,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "让路-槽出-入槽-槽归",
+          comment: "让路槽出入槽槽归(单步播放理解)",
           exp: "URU'R'",
           initial: "RUR'U'",
           strip: {
@@ -316,16 +316,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "如果白色朝向顶层，任选一侧执行三次",
-          exp: "(URU'R')3",
-          initial: "(RUR'U')3",
-          strip: {
-            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
-            faces: [0, 1, 2, 3, 4, 5]
-          }
-        },
-        {
-          comment: "如果角块在错误槽中，用一个顶层角块置换出来再复原",
+          comment: "如果角块位置或方向错误 用其他角块置换出来再复原",
           exp: "(URU'R'U')y(URU'R')",
           initial: "RUR'y'RUR'",
           strip: {
@@ -334,7 +325,16 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "任选三个复原，留一个作为后续步骤的槽",
+          comment: "如果白色朝向顶层 任选一侧复原后置换出来再复原",
+          exp: "(URU'R')3",
+          initial: "(RUR'U')3",
+          strip: {
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "任选三个复原 留一个作为后续步骤的槽",
           exp: "",
           initial: "",
           strip: {
@@ -366,7 +366,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "借角块-让路-槽出-入槽-槽归-还角块",
+          comment: "借角-让路-槽出-入槽-槽归-还角(单步播放理解)",
           exp: "DURU'R'D'",
           initial: "yRUR'U'F'U'FU",
           strip: {
@@ -384,7 +384,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "如果棱块位置或方向不对，用一个顶层棱块置换出来再复原",
+          comment: "如果棱块位置或方向不对 用其他棱块置换出来再复原",
           exp: "D(URU'R')D'U2D(U'F'UF)D'",
           initial: "y(RU'2R'U)2y'(R'U'R)y",
           strip: {
@@ -393,7 +393,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "复原三个正确角块上方的棱块，留一个作为后续步骤的槽",
+          comment: "复原三个正确角块上方的棱块 留一个作为后续步骤的槽",
           exp: "",
           initial: "",
           strip: {
@@ -425,7 +425,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "槽出-错误块入槽-槽归",
+          comment: "槽出到目标位置-错误块入槽-槽归(单步播放理解)",
           exp: "RUR'",
           initial: "RU'R'",
           strip: {
@@ -443,7 +443,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "三个复原(ABC)：槽出到A-槽归B-槽出到C-槽归",
+          comment: "三个正确块场景按顺序命名为ABC 槽出到A-槽归B-槽出到C-槽归",
           exp: "RUR'URUR'",
           initial: "RU'R'U'RU'R'",
           strip: {
@@ -452,7 +452,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "单独旋转O：槽出到O的邻居A-槽归O-镜像槽出到A-槽归",
+          comment: "单独旋转一块场景命名为O 槽出到邻居A-槽归O-镜像槽出到A-槽归",
           exp: "(RU'R'U)(F'UF)",
           initial: "(F'U'FU')(RUR')",
           strip: {
@@ -461,7 +461,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "复原四个顶层棱块后，剩余的一个棱块也复原了",
+          comment: "复原四个顶层棱块后 剩余的一个中层棱块自动复原",
           exp: "",
           initial: "",
           strip: {
@@ -484,7 +484,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "复原过程中，底层和中层会乱，不要关注和担心",
+          comment: "!!复原过程中底层和中层会乱!!",
           exp: "",
           initial: "",
           strip: {
@@ -502,7 +502,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "让路-槽出-入槽-槽归",
+          comment: "让路-槽出-入槽-槽归(单步播放理解)",
           exp: "D'R'DR",
           initial: "(D'R'DR)5",
           strip: {
@@ -529,16 +529,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "如果黄色朝向底层，任选一侧执行三次",
-          exp: "(D'R'DR)3",
-          initial: "(D'R'DR)3",
-          strip: {
-            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
-            faces: [0, 1, 2, 3, 4, 5]
-          }
-        },
-        {
-          comment: "如果角块在错误槽中，用其他角块置换出来再复原",
+          comment: "如果角块位置或方向错误 用槽里的另一角块置换出来再复原",
           exp: "(D'R'DR)U(D'R'DR)",
           initial: "(D'R'DR)U'(D'R'DR)3",
           strip: {
@@ -547,7 +538,16 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "所有角块复原后，有时下两层已经复原了，此时对齐即可完成复原",
+          comment: "如果黄色朝向顶层 任选一侧复原后置换出来再复原",
+          exp: "(D'R'DR)3",
+          initial: "(D'R'DR)3",
+          strip: {
+            indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
+            faces: [0, 1, 2, 3, 4, 5]
+          }
+        },
+        {
+          comment: "所有角块复原后下两层已经复原了 此时对齐即可完成复原",
           exp: "U",
           initial: "U'",
           strip: {
@@ -556,7 +556,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "所有角块复原后，有时下两层还是乱的",
+          comment: "所有角块复原后下两层还是乱的",
           exp: "",
           initial: "z'(D'R'DR)4U'(D'R'DR)2Uz(D'R'DR)4U'",
           strip: {
@@ -565,7 +565,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "将顶层与中心块对齐，偶数次执行还原步骤直到只剩两块错误",
+          comment: "将顶层与中心块对齐 重复交换上下两个角块直到其他块复原",
           exp: "U(D'R'DR)2",
           initial: "z'(D'R'DR)4U'(D'R'DR)2Uz(D'R'DR)4U'",
           strip: {
@@ -574,7 +574,7 @@ export default class CoursePanel extends Vue {
           }
         },
         {
-          comment: "然后将魔方向左倾倒，全部使用右层出槽复原剩余的两块",
+          comment: "然后将魔方向左倾倒 全部使用右层出槽复原剩余的两块",
           exp: "z'(D'R'DR)2U'(D'R'DR)4Uz",
           initial: "z'(D'R'DR)4U'(D'R'DR)2Uz",
           strip: {
