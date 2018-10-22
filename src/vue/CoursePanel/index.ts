@@ -55,8 +55,8 @@ export default class CoursePanel extends Vue {
         },
         {
           comment: "复原时需要将黄色中心块朝上",
-          exp: "x",
-          initial: "",
+          exp: "z",
+          initial: "z'",
           strip: {
             indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
