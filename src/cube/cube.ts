@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Euler } from "three";
-import Cubelet, {FACES} from "./cubelet";
+import Cubelet, { FACES } from "./cubelet";
 import CubeletGroup from "./group";
 export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
@@ -22,6 +22,10 @@ export default class Cube extends THREE.Group {
     return left.index - right.index;
   }
 
+  index(value: number) {
+    return this._initial[value].index;
+  }
+
   reset() {
     for (let cubelet of this.cubelets) {
       cubelet.setRotationFromEuler(new Euler(0, 0, 0));
@@ -41,6 +45,10 @@ export default class Cube extends THREE.Group {
     for (let face of faces) {
       this._initial[index].strip(face);
     }
+  }
+
+  highlight(index: number) {
+    this.cubelets[index].highlight();
   }
   //                +------------+
   //                | U1  U2  U3 |

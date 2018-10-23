@@ -29,7 +29,7 @@
                   min-height: 0%;
                   word-break: keep-all;
               ">
-        {{comment}}
+        <span v-html="comment"></span>
       </p>
     </v-flex>
     <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
@@ -47,7 +47,7 @@
     </v-flex>
     <v-flex xs2.4>
       <fast-button icon large :disabled="progress == actions.length" @tap="toggle" style="margin: 0%; padding: 0%;">
-        <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
+        <v-icon large color="error">{{playing?'pause':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
     <v-flex xs2.4>

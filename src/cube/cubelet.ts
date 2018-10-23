@@ -155,25 +155,16 @@ export enum FACES {
 }
 
 export default class Cubelet extends THREE.Group {
-
   private static readonly _SIZE: number = 32;
   private static readonly _BORDER_WIDTH: number = 2;
   private static readonly _EDGE_WIDTH: number = 1;
-  private static readonly _FRAME: Frame = new Frame(
-    Cubelet._SIZE,
-    Cubelet._BORDER_WIDTH
-  );
-  private static readonly _EDGE: Edge = new Edge(
-    Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH,
-    Cubelet._EDGE_WIDTH
-  );
-  private static readonly _STICKER: Sticker = new Sticker(
-    Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH,
-    Cubelet._EDGE_WIDTH
-  );
+  private static readonly _FRAME: Frame = new Frame(Cubelet._SIZE, Cubelet._BORDER_WIDTH);
+  private static readonly _EDGE: Edge = new Edge(Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+  private static readonly _STICKER: Sticker = new Sticker(Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
-    p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#101010" }),
+    h: new THREE.MeshBasicMaterial({ wireframe: false, color: "#EA80FC" }),
+    p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#202020" }),
     i: new THREE.MeshBasicMaterial({ wireframe: false, color: "#808080" }),
     g: new THREE.MeshBasicMaterial({ wireframe: false, color: "#009D54" }),
     o: new THREE.MeshBasicMaterial({ wireframe: false, color: "#FF6C00" }),
@@ -189,13 +180,8 @@ export default class Cubelet extends THREE.Group {
   private _quaternion: THREE.Quaternion = new THREE.Quaternion();
 
   set vector(vector) {
-    this._vector.set(
-      Math.round(vector.x),
-      Math.round(vector.y),
-      Math.round(vector.z)
-    );
-    this._index =
-      (this.vector.z + 1) * 9 + (this.vector.y + 1) * 3 + (this.vector.x + 1);
+    this._vector.set(Math.round(vector.x), Math.round(vector.y), Math.round(vector.z));
+    this._index = (this.vector.z + 1) * 9 + (this.vector.y + 1) * 3 + (this.vector.x + 1);
     this.position.x = Cubelet._SIZE * this._vector.x;
     this.position.y = Cubelet._SIZE * this._vector.y;
     this.position.z = Cubelet._SIZE * this._vector.z;
@@ -249,20 +235,15 @@ export default class Cubelet extends THREE.Group {
     let side = 0;
     if (x < 0) {
       side = FACES.L;
-    }
-    else if (x > 0) {
+    } else if (x > 0) {
       side = FACES.R;
-    }
-    else if (y < 0) {
+    } else if (y < 0) {
       side = FACES.D;
-    }
-    else if (y > 0) {
+    } else if (y > 0) {
       side = FACES.U;
-    }
-    else if (z < 0) {
+    } else if (z < 0) {
       side = FACES.B;
-    }
-    else if (z > 0) {
+    } else if (z > 0) {
       side = FACES.F;
     }
     return this._stickers[side].name;
@@ -353,5 +334,11 @@ export default class Cubelet extends THREE.Group {
 
   strip(face: number) {
     this._stickers[face].material = Cubelet._MATERIALS.i;
+  }
+
+  highlight() {
+    for (let face = 0; face < 6; face++) {
+      this._stickers[face].material = Cubelet._MATERIALS.h;
+    }
   }
 }
