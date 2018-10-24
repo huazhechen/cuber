@@ -397,7 +397,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "将工作区的棱块移动到{顶层} 工作区带其他顶层棱块回归 可以使棱块复原回中层",
+          comment: "将工作区的错误棱块移动到{顶层} 将{正确棱块}放入工作区带回 复原中层棱块但{破坏}角块",
           exp: "RUR'",
           initial: "y(DRUR'D')'",
           strip: {
