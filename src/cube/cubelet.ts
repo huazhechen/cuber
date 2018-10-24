@@ -155,12 +155,12 @@ export enum FACES {
 }
 
 export default class Cubelet extends THREE.Group {
-  private static readonly _SIZE: number = 64;
-  private static readonly _BORDER_WIDTH: number = 4;
-  private static readonly _EDGE_WIDTH: number = 1;
-  private static readonly _FRAME: Frame = new Frame(Cubelet._SIZE, Cubelet._BORDER_WIDTH);
-  private static readonly _EDGE: Edge = new Edge(Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
-  private static readonly _STICKER: Sticker = new Sticker(Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+  public static readonly SIZE: number = 64;
+  private static readonly _BORDER_WIDTH: number = Cubelet.SIZE / 16;
+  private static readonly _EDGE_WIDTH: number = Cubelet.SIZE / 64;
+  private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
+  private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
     h: new THREE.MeshBasicMaterial({ wireframe: false, color: "#EA80FC" }),
@@ -182,9 +182,9 @@ export default class Cubelet extends THREE.Group {
   set vector(vector) {
     this._vector.set(Math.round(vector.x), Math.round(vector.y), Math.round(vector.z));
     this._index = (this.vector.z + 1) * 9 + (this.vector.y + 1) * 3 + (this.vector.x + 1);
-    this.position.x = Cubelet._SIZE * this._vector.x;
-    this.position.y = Cubelet._SIZE * this._vector.y;
-    this.position.z = Cubelet._SIZE * this._vector.z;
+    this.position.x = Cubelet.SIZE * this._vector.x;
+    this.position.y = Cubelet.SIZE * this._vector.y;
+    this.position.z = Cubelet.SIZE * this._vector.z;
   }
   get vector() {
     return this._vector;
@@ -275,44 +275,44 @@ export default class Cubelet extends THREE.Group {
       switch (i) {
         case FACES.L:
           _edge.rotation.y = -Math.PI / 2;
-          _edge.position.x = -Cubelet._SIZE / 2;
+          _edge.position.x = -Cubelet.SIZE / 2;
           _sticker.rotation.y = -Math.PI / 2;
-          _sticker.position.x = -Cubelet._SIZE / 2;
+          _sticker.position.x = -Cubelet.SIZE / 2;
           _sticker.name = "L";
           break;
         case FACES.R:
           _edge.rotation.y = Math.PI / 2;
-          _edge.position.x = Cubelet._SIZE / 2;
+          _edge.position.x = Cubelet.SIZE / 2;
           _sticker.rotation.y = Math.PI / 2;
-          _sticker.position.x = Cubelet._SIZE / 2;
+          _sticker.position.x = Cubelet.SIZE / 2;
           _sticker.name = "R";
           break;
         case FACES.D:
           _edge.rotation.x = Math.PI / 2;
-          _edge.position.y = -Cubelet._SIZE / 2;
+          _edge.position.y = -Cubelet.SIZE / 2;
           _sticker.rotation.x = Math.PI / 2;
-          _sticker.position.y = -Cubelet._SIZE / 2;
+          _sticker.position.y = -Cubelet.SIZE / 2;
           _sticker.name = "D";
           break;
         case FACES.U:
           _edge.rotation.x = -Math.PI / 2;
-          _edge.position.y = Cubelet._SIZE / 2;
+          _edge.position.y = Cubelet.SIZE / 2;
           _sticker.rotation.x = -Math.PI / 2;
-          _sticker.position.y = Cubelet._SIZE / 2;
+          _sticker.position.y = Cubelet.SIZE / 2;
           _sticker.name = "U";
           break;
         case FACES.B:
           _edge.rotation.x = Math.PI;
-          _edge.position.z = -Cubelet._SIZE / 2;
+          _edge.position.z = -Cubelet.SIZE / 2;
           _sticker.rotation.x = Math.PI;
-          _sticker.position.z = -Cubelet._SIZE / 2;
+          _sticker.position.z = -Cubelet.SIZE / 2;
           _sticker.name = "B";
           break;
         case FACES.F:
           _edge.rotation.z = 0;
-          _edge.position.z = Cubelet._SIZE / 2;
+          _edge.position.z = Cubelet.SIZE / 2;
           _sticker.rotation.z = 0;
-          _sticker.position.z = Cubelet._SIZE / 2;
+          _sticker.position.z = Cubelet.SIZE / 2;
           _sticker.name = "F";
           break;
         default:

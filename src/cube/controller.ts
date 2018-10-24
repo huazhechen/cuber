@@ -3,6 +3,7 @@ import * as THREE from "three";
 import Game from "./game";
 import CubeletGroup from "./group";
 import Holder from "./holder";
+import Cubelet from "./cubelet";
 
 export default class Controller {
   private _game: Game;
@@ -28,9 +29,9 @@ export default class Controller {
     this._holder.vector = new THREE.Vector3();
     this._vector = new THREE.Vector3();
     this._planes = [
-      new THREE.Plane(new THREE.Vector3(1, 0, 0), (-Game.SIZE * 3) / 64),
-      new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Game.SIZE * 3) / 64),
-      new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Game.SIZE * 3) / 64)
+      new THREE.Plane(new THREE.Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
+      new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
+      new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Cubelet.SIZE * 3) / 2)
     ];
     this._game.canvas.addEventListener("mousedown", this._onMouseDown);
     this._game.canvas.addEventListener("mousemove", this._onMouseMove);
@@ -50,8 +51,8 @@ export default class Controller {
   update() {
     if (this._rotating) {
       if (this._group.angle != this._angle) {
-        let delta = (this._angle - this._group.angle) / 2
-        let max = Math.PI / this._game.duration * 4;
+        let delta = (this._angle - this._group.angle) / 2;
+        let max = (Math.PI / this._game.duration) * 4;
         if (delta > max) {
           delta = max;
         }
@@ -73,9 +74,7 @@ export default class Controller {
       .unproject(this._game.camera)
       .sub(this._ray.origin)
       .normalize();
-    this._ray.applyMatrix4(
-      this._matrix.identity().getInverse(this._game.scene.matrix)
-    );
+    this._ray.applyMatrix4(this._matrix.identity().getInverse(this._game.scene.matrix));
     var result = new THREE.Vector3();
     this._ray.intersectPlane(plane, result);
     return result;
@@ -89,14 +88,14 @@ export default class Controller {
       var point = this._intersect(this._down, plane);
       if (point !== null) {
         if (
-          Math.abs(point.x) <= 48 + 0.01 &&
-          Math.abs(point.y) <= 48 + 0.01 &&
-          Math.abs(point.z) <= 48 + 0.01
+          Math.abs(point.x) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
+          Math.abs(point.y) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
+          Math.abs(point.z) <= (Cubelet.SIZE * 3) / 2 + 0.01
         ) {
           this._holder.plane = plane;
-          var x = Math.ceil(Math.round(point.x) / 32 - 0.5);
-          var y = Math.ceil(Math.round(point.y) / 32 - 0.5);
-          var z = Math.ceil(Math.round(point.z) / 32 - 0.5);
+          var x = Math.ceil(Math.round(point.x) / Cubelet.SIZE - 0.5);
+          var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
+          var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
           if (this._game.enable && x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
             this._holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
           } else {
@@ -115,14 +114,7 @@ export default class Controller {
       var dx = this._move.x - this._down.x;
       var dy = this._move.y - this._down.y;
       var d = Math.sqrt(dx * dx + dy * dy);
-      if (
-        Math.min(
-          this._game.canvas.clientWidth,
-          this._game.canvas.clientHeight
-        ) /
-        d >
-        100
-      ) {
+      if (Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight) / d > 100) {
         return true;
       }
       if (this._game.lock) {
@@ -154,9 +146,7 @@ export default class Controller {
         y = Math.abs(y) === max ? y : 0;
         z = Math.abs(z) === max ? z : 0;
         this._vector.set(x, y, z);
-        this._holder.vector.copy(
-          this._vector.multiply(this._vector).normalize()
-        );
+        this._holder.vector.copy(this._vector.multiply(this._vector).normalize());
 
         let groups = this._game.twister.match(this._holder);
         groups.some(element => {
@@ -166,13 +156,8 @@ export default class Controller {
           }
           return false;
         }, this);
-        this._vector.crossVectors(
-          this._holder.vector,
-          this._holder.plane.normal
-        );
-        this._holder.vector.multiplyScalar(
-          this._vector.x + this._vector.y + this._vector.z
-        );
+        this._vector.crossVectors(this._holder.vector, this._holder.plane.normal);
+        this._holder.vector.multiplyScalar(this._vector.x + this._vector.y + this._vector.z);
       }
       this._group.hold(this._game);
     }
@@ -181,33 +166,12 @@ export default class Controller {
         var dx = this._move.x - this._down.x;
         var dy = this._move.y - this._down.y;
         if (this._group === CubeletGroup.GROUPS.y) {
-          this._angle =
-            (dx /
-              Math.min(
-                this._game.canvas.clientWidth,
-                this._game.canvas.clientHeight
-              )) *
-            Math.PI *
-            2;
+          this._angle = ((dx / Cubelet.SIZE) * Math.PI) / 4;
         } else {
           if (this._group === CubeletGroup.GROUPS.x) {
-            this._angle =
-              (dy /
-                Math.min(
-                  this._game.canvas.clientWidth,
-                  this._game.canvas.clientHeight
-                )) *
-              Math.PI *
-              2;
+            this._angle = ((dy / Cubelet.SIZE) * Math.PI) / 4;
           } else {
-            this._angle =
-              (-dy /
-                Math.min(
-                  this._game.canvas.clientWidth,
-                  this._game.canvas.clientHeight
-                )) *
-              Math.PI *
-              2;
+            this._angle = ((-dy / Cubelet.SIZE) * Math.PI) / 4;
           }
         }
       } else {
@@ -215,11 +179,8 @@ export default class Controller {
         var end = this._intersect(this._move, this._holder.plane);
         this._vector.subVectors(end, start).multiply(this._holder.vector);
         this._angle =
-          ((-(this._vector.x + this._vector.y + this._vector.z) *
-            (this._group.axis.x + this._group.axis.y + this._group.axis.z)) /
-            Game.SIZE) *
-          Math.PI *
-          8;
+          (((-(this._vector.x + this._vector.y + this._vector.z) * (this._group.axis.x + this._group.axis.y + this._group.axis.z)) / Cubelet.SIZE) * Math.PI) /
+          4;
       }
     }
   }
