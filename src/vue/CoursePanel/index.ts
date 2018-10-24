@@ -306,13 +306,13 @@ export default class CoursePanel extends Vue {
           exp: "RUR'U'",
           initial: "(RUR'U')'",
           strip: {
-            indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25],
+            indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
-          comment: "将{目标块}和{目标位置} 移动到{同一工作区}内 为交换角块做准备",
+          comment: "旋转顶层将{目标块}和{目标位置} 移动到{同一工作区}内 为交换角块做准备",
           exp: "U",
           initial: "(RUR'U')'U'",
           strip: {
@@ -397,7 +397,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "将工作区的棱块移动到{顶层} 换一个棱块回归 可以使顶层棱块进入中层",
+          comment: "将工作区的棱块移动到{顶层} 工作区带其他顶层棱块回归 可以使棱块复原回中层",
           exp: "RUR'",
           initial: "y(DRUR'D')'",
           strip: {
@@ -417,27 +417,17 @@ export default class CoursePanel extends Vue {
           highlights: [26]
         },
         {
-          comment: "使顶层棱块复原到中层 复原后归还脏角块",
+          comment: "使顶层棱块复原到中层 复原后恢复正确角块",
           exp: "RUR'D'",
           initial: "y(RUR'D')'",
           strip: {
             indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: [17]
+          highlights: [17, 26]
         },
         {
-          comment: "用与棱块顶层颜色(蓝)相同的右层 交换后棱块方向错误 ({错误示范})",
-          exp: "D'RUR'D",
-          initial: "y'(D'U'F'U'FD)'",
-          strip: {
-            indexes: [3, 5, 6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
-            faces: [0, 1, 2, 3, 4, 5]
-          },
-          highlights: [25, 26]
-        },
-        {
-          comment: "用与棱块顶层颜色(蓝)不同的左层 交换后棱块方向正确 ({正确示范})",
+          comment: "选择左右层中 与目标棱块{侧面}颜色 相同的层进行操作",
           exp: "D'F'U2FD",
           initial: "y'(D'U'F'U'FD)'",
           strip: {
@@ -482,7 +472,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "将{目标位置}转到 {目标棱块}去往顶层的落点",
+          comment: "将{目标位置}转到 {目标棱块}去到顶层后的落点",
           exp: "U",
           initial: "RU'R'U'",
           strip: {
@@ -502,7 +492,7 @@ export default class CoursePanel extends Vue {
           highlights: [23]
         },
         {
-          comment: "去往顶层后黄色需要朝上 据此选择左右层操作",
+          comment: "选择左右层中 {目标棱块}去到顶层后 黄色朝上的层进行操作",
           exp: "F'U'F",
           initial: "F'UF",
           strip: {
@@ -577,7 +567,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "将{目标块}和{目标位置} 移动到{同一工作区}内 为交换角块做准备",
+          comment: "转动顶层将{目标块}和{目标位置} 移动到{同一工作区}内 为交换角块做准备",
           exp: "U'",
           initial: "(R'D'RD)5U",
           strip: {
@@ -638,7 +628,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "然后将魔方向左倾倒 全部使用右层复原剩余的两块",
+          comment: "然后将魔方向左倾倒 使错误的两块都在顶层 正常复原剩余的两块",
           exp: "z'(R'D'RD)2U'(R'D'RD)4Uz",
           initial: "z'(R'D'RD)4U'(R'D'RD)2Uz",
           strip: undefined,
