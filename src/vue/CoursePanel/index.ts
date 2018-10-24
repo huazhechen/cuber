@@ -587,7 +587,7 @@ export default class CoursePanel extends Vue {
           highlights: [20]
         },
         {
-          comment: "为了保证下两层可以恢复 只允许使用一侧交换角块 用多次交换的方式旋转角块",
+          comment: "为了保护下两层状态 只能使用{右层}交换角块 角块的方向通过{多次交换}旋转",
           exp: "(R'D'RD)5",
           initial: "R'D'RD",
           strip: {
@@ -608,8 +608,8 @@ export default class CoursePanel extends Vue {
         },
         {
           comment: "所有角块复原后 有时下两层已经复原了 此时对齐即可完成复原",
-          exp: "U",
-          initial: "U'",
+          exp: "R'D'RDU",
+          initial: "U'(R'D'RD)5",
           strip: undefined,
           highlights: []
         },

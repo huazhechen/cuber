@@ -128,7 +128,11 @@ export default class Controller {
         if (dx * dx > dy * dy) {
           this._group = CubeletGroup.GROUPS.y;
         } else {
-          if (this._down.x < this._game.canvas.clientWidth / 2) {
+          let vector = new THREE.Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
+          vector.applyMatrix4(this._game.scene.matrix).project(this._game.camera);
+          let half = this._game.canvas.clientWidth / 2;
+          let x = Math.round(vector.x * half + half);
+          if (this._down.x < x) {
             this._group = CubeletGroup.GROUPS.x;
           } else {
             this._group = CubeletGroup.GROUPS.z;
