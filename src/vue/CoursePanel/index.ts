@@ -597,7 +597,7 @@ export default class CoursePanel extends Vue {
           highlights: [20, 24]
         },
         {
-          comment: "如果黄色朝向顶层 任选一侧复原后置换出来再复原",
+          comment: "如果黄色朝向底层 任选一侧复原后置换出来再复原",
           exp: "(D'R'DR)3",
           initial: "(D'R'DR)3",
           strip: {
