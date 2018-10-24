@@ -56,8 +56,8 @@ export default class CoursePanel extends Vue {
         },
         {
           comment: "复原时需要将{黄色}中心块朝上",
-          exp: "z",
-          initial: "z'",
+          exp: "z'",
+          initial: "z",
           strip: {
             indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
@@ -145,7 +145,7 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "旋转左右层使槽出去{迎接}/{接回}目标块 称为{槽出}/{槽归}",
+          comment: "槽{迎接}/{接回}目标块 称为{槽出}/{槽归}",
           exp: "RR'F'F",
           initial: "",
           strip: {
@@ -254,7 +254,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [5]
         },
         {
           comment: "位置要和已经复原的块{顺序}吻合 绿色需要在蓝色对面",
@@ -264,7 +264,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [5]
         },
         {
           comment: "如果目标棱块在底层 先{转入中层}后复原",
@@ -274,17 +274,17 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 9, 11, 15, 17, 18, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [5]
         },
         {
           comment: "如果目标棱块在顶层 先{转入中层}后复原",
-          exp: "R'D'FD",
-          initial: "u'R'uR",
+          exp: "B'R",
+          initial: "(B'R)'",
           strip: {
             indexes: [0, 1, 2, 3, 5, 6, 7, 8, 9, 15, 17, 18, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [23]
         },
         {
           comment: "全部复原后和侧面中心块对齐",
@@ -312,14 +312,14 @@ export default class CoursePanel extends Vue {
           highlights: []
         },
         {
-          comment: "将角块与目标位置({槽})上下对齐",
+          comment: "将角块与目标位置({槽})对齐",
           exp: "U",
           initial: "RUR'U2",
           strip: {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
           comment: "{让路}-{槽出}-{入槽}-{槽归} (单步播放理解)",
@@ -329,7 +329,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
           comment: "根据白色朝向选择左右层用于槽出 ({错误示范})",
@@ -339,7 +339,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
           comment: "根据白色朝向选择左右层用于槽出 ({正确示范})",
@@ -349,17 +349,17 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
           comment: "如果角块位置或方向错误 用其他角块置换出来再复原",
           exp: "(URU'R'U')y(URU'R')",
           initial: "RUR'y'RUR'",
           strip: {
-            indexes: [0, 2, 3, 5, 6, 7, 15, 17, 18, 21, 23, 24, 25, 26],
+            indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [8, 26]
         },
         {
           comment: "如果白色朝向顶层 任选一侧复原后置换出来再复原",
@@ -369,7 +369,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [26]
         },
         {
           comment: "任选三个复原 留一个用于复原顶层角块",
@@ -379,7 +379,7 @@ export default class CoursePanel extends Vue {
             indexes: [3, 5, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20]
         }
       ]
     },
@@ -404,27 +404,27 @@ export default class CoursePanel extends Vue {
             indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [7]
         },
         {
           comment: "{借角}-{让路}-{槽出}-{入槽}-{槽归}-{还角} (单步播放理解)",
           exp: "DURU'R'D'",
-          initial: "yRUR'U'F'U'FU",
+          initial: "y(DURU'R'D')'",
           strip: {
             indexes: [3, 6, 7, 8, 15, 17, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [15]
         },
         {
           comment: "镜像情况使用左层槽出",
           exp: "D'U'F'UFD",
-          initial: "y'F'U'FURUR'U'",
+          initial: "y'(D'U'F'UFD)'",
           strip: {
             indexes: [3, 5, 6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [7]
         },
         {
           comment: "如果棱块位置或方向不对 用其他棱块置换出来再复原",
@@ -434,7 +434,7 @@ export default class CoursePanel extends Vue {
             indexes: [3, 6, 7, 8, 17, 20, 21, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [15]
         },
         {
           comment: "复原三个正确角块上方的棱块 留一个作为后续步骤的槽",
@@ -444,7 +444,7 @@ export default class CoursePanel extends Vue {
             indexes: [6, 7, 8, 15, 17, 20, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [23]
         }
       ]
     },
@@ -469,7 +469,7 @@ export default class CoursePanel extends Vue {
             indexes: [6, 8, 17, 20, 23, 24, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [17]
         },
         {
           comment: "{槽出到目标位置}-{错误块入槽}-{槽归} (单步播放理解)",
@@ -479,7 +479,7 @@ export default class CoursePanel extends Vue {
             indexes: [6, 8, 17, 20, 23, 24, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [17, 23]
         },
         {
           comment: "根据黄色朝向选择左右层用于槽出",
@@ -489,7 +489,7 @@ export default class CoursePanel extends Vue {
             indexes: [6, 8, 20, 23, 24, 25, 26],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [25]
         },
         {
           comment: "三个正确块场景按顺序命名为ABC 槽出到A-槽归B-槽出到C-槽归",
@@ -564,7 +564,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20]
         },
         {
           comment: "根据黄色朝向选择左右层用于槽出 ({错误示范})",
@@ -574,7 +574,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20]
         },
         {
           comment: "根据黄色朝向选择左右层用于槽出 ({正确示范})",
@@ -584,7 +584,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20]
         },
         {
           comment: "如果角块位置或方向错误 用槽里的另一角块置换出来再复原",
@@ -594,7 +594,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20, 24]
         },
         {
           comment: "如果黄色朝向顶层 任选一侧复原后置换出来再复原",
@@ -604,7 +604,7 @@ export default class CoursePanel extends Vue {
             indexes: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24],
             faces: [0, 1, 2, 3, 4, 5]
           },
-          highlights: []
+          highlights: [20]
         },
         {
           comment: "所有角块复原后下两层已经复原了 此时对齐即可完成复原",
@@ -643,7 +643,7 @@ export default class CoursePanel extends Vue {
     if (to) {
       this.onTypeChange();
       this.onIndexChange();
-      this.onIdentityChange();
+      this.onStepChange();
     } else {
       if (from) {
         this.stick();
@@ -666,14 +666,16 @@ export default class CoursePanel extends Vue {
   }
 
   strip() {
-    let strip = this.course[this.type - 1].steps[this.index].strip;
+    let strip = this.step.strip;
     if (strip == undefined) {
       return;
     }
-    let indexes = [];
     for (let index of strip.indexes) {
       this.game.cube.strip(index, strip.faces);
-      indexes.push(this.game.cube.index(index));
+    }
+    let highlights = this.step.highlights;
+    for (let index of highlights) {
+      this.game.cube.highlight(index);
     }
     this.game.dirty = true;
   }
@@ -712,26 +714,26 @@ export default class CoursePanel extends Vue {
     storage.setItem("course.index", String(this.index));
   }
 
-  @Watch("identity")
-  onIdentityChange() {
+  @Watch("step")
+  onStepChange() {
     this.actions = new TwistNode(this.exp).parse();
     this.$nextTick(this.init);
   }
 
-  get identity() {
-    return [this.type, this.index];
+  get step() {
+    return this.course[this.type - 1].steps[this.index];
   }
 
   get exp() {
-    return this.course[this.type - 1].steps[this.index].exp || "";
+    return this.step.exp || "";
   }
 
   get initial() {
-    return this.course[this.type - 1].steps[this.index].initial || "";
+    return this.step.initial || "";
   }
 
   get comment() {
-    return this.course[this.type - 1].steps[this.index].comment.replace(/{/gi, "<b>").replace(/}/gi, "</b>");
+    return this.step.comment.replace(/ /gi, "<br/>").replace(/{/gi, "<strong>").replace(/}/gi, "</strong>");
   }
 
   actions: TwistAction[] = new TwistNode(this.exp).parse();

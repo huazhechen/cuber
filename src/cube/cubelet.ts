@@ -155,8 +155,8 @@ export enum FACES {
 }
 
 export default class Cubelet extends THREE.Group {
-  private static readonly _SIZE: number = 32;
-  private static readonly _BORDER_WIDTH: number = 2;
+  private static readonly _SIZE: number = 64;
+  private static readonly _BORDER_WIDTH: number = 4;
   private static readonly _EDGE_WIDTH: number = 1;
   private static readonly _FRAME: Frame = new Frame(Cubelet._SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _EDGE: Edge = new Edge(Cubelet._SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);

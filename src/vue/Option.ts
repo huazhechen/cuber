@@ -66,6 +66,6 @@ export default class Option {
     this.keyboard = this._storage.getItem("option.keyboard") == "true";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.angle = Number(this._storage.getItem("option.angle") || 1);
-    this.size = Number(this._storage.getItem("option.size") || 2);
+    this.size = Number(this._storage.getItem("option.size") || 0);
   }
 }

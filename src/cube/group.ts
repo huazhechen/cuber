@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import Game from "./game";
 import Cubelet from "./cubelet";
-import { TwistNode, TwistAction } from "./twister";
+import { TwistAction } from "./twister";
 
 export default class CubeletGroup extends THREE.Group {
   public static readonly GROUPS: { [key: string]: CubeletGroup } = {

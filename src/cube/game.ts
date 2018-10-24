@@ -32,10 +32,10 @@ export default class Game {
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 8;
     this.scene.rotation.y = Math.PI / 16 - Math.PI / 4;
-    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Game.SIZE);
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Game.SIZE * 2);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
-    this.camera.position.z = Game.SIZE / 3;
+    this.camera.position.z = Game.SIZE * 2 / 3;
     this.tweener = new Tweener();
     this.twister = new Twister(this);
     this.cube = new Cube();
@@ -56,8 +56,8 @@ export default class Game {
 
   resize() {
     this.camera.aspect = this.width / this.height;
-    let min = ((this.height / Math.min(this.width, this.height)) * Game.SIZE) / 3;
-    let fov = (2 * Math.atan(min / Game.SIZE) * 180) / Math.PI;
+    let min = ((this.height / Math.min(this.width, this.height)) * Game.SIZE) * 2 / 3;
+    let fov = (Math.atan(min / Game.SIZE) * 180) / Math.PI;
     this.camera.fov = fov * this.scale;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
