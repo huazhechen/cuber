@@ -735,8 +735,8 @@ export default class CoursePanel extends Vue {
   get comment() {
     return this.step.comment
       .replace(/ /gi, "<br/>")
-      .replace(/{/gi, "<strong>")
-      .replace(/}/gi, "</strong>");
+      .replace(/{/gi, "<strong><font  color='red'>")
+      .replace(/}/gi, "</font></strong>");
   }
 
   actions: TwistAction[] = new TwistNode(this.exp).parse();
