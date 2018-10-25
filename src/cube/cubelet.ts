@@ -382,12 +382,18 @@ export default class Cubelet extends THREE.Group {
       for (let i = 0; i < 6; i++) {
         if (this._stickers[i].material == Cubelet._MATERIALS.i) {
           this._stickers[i].material = Cubelet._MATERIALS.h;
+          if (this._mirrors[i] instanceof THREE.Mesh) {
+            this._mirrors[i].material = Cubelet._MATERIALS.h;
+          }
         }
       }
     } else {
       for (let i = 0; i < 6; i++) {
         if (this._stickers[i].material == Cubelet._MATERIALS.h) {
           this._stickers[i].material = Cubelet._MATERIALS.i;
+          if (this._mirrors[i] instanceof THREE.Mesh) {
+            this._mirrors[i].material = Cubelet._MATERIALS.i;
+          }
         }
       }
     }
