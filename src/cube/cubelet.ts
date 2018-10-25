@@ -362,7 +362,7 @@ export default class Cubelet extends THREE.Group {
     for (let i = 0; i < 6; i++) {
       this._stickers[i].material = this._materials[i];
       if (this._mirrors[i] instanceof THREE.Mesh) {
-        this._mirrors[i].visible = true;
+        this._mirrors[i].material = this._materials[i];
       }
     }
   }
@@ -370,7 +370,7 @@ export default class Cubelet extends THREE.Group {
   strip(face: number) {
     this._stickers[face].material = Cubelet._MATERIALS.i;
     if (this._mirrors[face] instanceof THREE.Mesh) {
-      this._mirrors[face].visible = false;
+      this._mirrors[face].material = Cubelet._MATERIALS.i;
     }
   }
 
