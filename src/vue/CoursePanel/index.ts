@@ -675,7 +675,7 @@ export default class CoursePanel extends Vue {
     }
     let highlights = this.step.highlights;
     for (let index of highlights) {
-      this.game.cube.highlight(index);
+      this.game.cube.highlight(index, true);
     }
     this.game.dirty = true;
   }
@@ -733,7 +733,10 @@ export default class CoursePanel extends Vue {
   }
 
   get comment() {
-    return this.step.comment.replace(/ /gi, "<br/>").replace(/{/gi, "<strong>").replace(/}/gi, "</strong>");
+    return this.step.comment
+      .replace(/ /gi, "<br/>")
+      .replace(/{/gi, "<strong>")
+      .replace(/}/gi, "</strong>");
   }
 
   actions: TwistAction[] = new TwistNode(this.exp).parse();

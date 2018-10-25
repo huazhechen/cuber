@@ -177,6 +177,8 @@ export default class Cubelet extends THREE.Group {
   private _index: number;
   private _vector: THREE.Vector3 = new THREE.Vector3();
   private _stickers: THREE.Mesh[] = [];
+  private _edges: THREE.Mesh[] = [];
+  private _frame: THREE.Mesh;
   private _mirrors: THREE.Mesh[] = [];
   private _quaternion: THREE.Quaternion = new THREE.Quaternion();
 
@@ -283,8 +285,8 @@ export default class Cubelet extends THREE.Group {
       this._vector.z > 0 ? Cubelet._MATERIALS.b : Cubelet._MATERIALS.i
     ];
 
-    let _frame = new THREE.Mesh(Cubelet._FRAME, Cubelet._MATERIALS.p);
-    this.add(_frame);
+    this._frame = new THREE.Mesh(Cubelet._FRAME, Cubelet._MATERIALS.p);
+    this.add(this._frame);
 
     for (let i = 0; i < 6; i++) {
       let _edge = new THREE.Mesh(Cubelet._EDGE, Cubelet._MATERIALS.p);
@@ -336,7 +338,9 @@ export default class Cubelet extends THREE.Group {
           break;
       }
       this.add(_edge);
+      this._edges.push(_edge);
       this.add(_sticker);
+      this._stickers.push(_sticker);
       if (this._materials[i] != Cubelet._MATERIALS.i) {
         let _mirror = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
@@ -352,7 +356,6 @@ export default class Cubelet extends THREE.Group {
         this.add(_mirror);
         this._mirrors[i] = _mirror;
       }
-      this._stickers.push(_sticker);
       this.matrixAutoUpdate = false;
       this.updateMatrix();
     }
@@ -374,9 +377,19 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  highlight() {
-    for (let face = 0; face < 6; face++) {
-      this._stickers[face].material = Cubelet._MATERIALS.h;
+  set highlight(value: boolean) {
+    if (value) {
+      for (let i = 0; i < 6; i++) {
+        if (this._stickers[i].material == Cubelet._MATERIALS.i) {
+          this._stickers[i].material = Cubelet._MATERIALS.h;
+        }
+      }
+    } else {
+      for (let i = 0; i < 6; i++) {
+        if (this._stickers[i].material == Cubelet._MATERIALS.h) {
+          this._stickers[i].material = Cubelet._MATERIALS.i;
+        }
+      }
     }
   }
 }

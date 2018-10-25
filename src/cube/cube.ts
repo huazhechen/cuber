@@ -28,6 +28,7 @@ export default class Cube extends THREE.Group {
 
   reset() {
     for (let cubelet of this.cubelets) {
+      cubelet.highlight = false;
       cubelet.setRotationFromEuler(new Euler(0, 0, 0));
       cubelet.index = cubelet.initial;
       cubelet.updateMatrix();
@@ -36,9 +37,11 @@ export default class Cube extends THREE.Group {
   }
 
   private _mirror: boolean = true;
+
   get mirror() {
     return this._mirror;
   }
+
   set mirror(value: boolean) {
     this._mirror = value;
     for (let cubelet of this.cubelets) {
@@ -58,8 +61,8 @@ export default class Cube extends THREE.Group {
     }
   }
 
-  highlight(index: number) {
-    this._initial[index].highlight();
+  highlight(index: number, highlight: boolean) {
+    this._initial[index].highlight = highlight;
   }
   //                +------------+
   //                | U1  U2  U3 |
