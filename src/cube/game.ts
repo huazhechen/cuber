@@ -46,7 +46,7 @@ export default class Game {
     }
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-    this.renderer.setClearColor(0xffffff);
+    this.renderer.setClearColor(0xE0E0E0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.canvas = this.renderer.domElement;
     this.controller = new Controller(this);

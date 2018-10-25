@@ -28,6 +28,16 @@ export default class Option {
     this._storage.setItem("option.keyboard", String(this._keyboard));
   }
 
+  get mirror() {
+    return this._game.cube.mirror;
+  }
+
+  set mirror(value: boolean) {
+    this._game.cube.mirror = value;
+    this._game.dirty = true;
+    this._storage.setItem("option.mirror", String(value));
+  }
+
   get angle() {
     return this._angle;
   }
@@ -67,5 +77,6 @@ export default class Option {
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.angle = Number(this._storage.getItem("option.angle") || 1);
     this.size = Number(this._storage.getItem("option.size") || 0);
+    this.mirror = this._storage.getItem("option.mirror") == "true";
   }
 }

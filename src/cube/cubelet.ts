@@ -177,6 +177,7 @@ export default class Cubelet extends THREE.Group {
   private _index: number;
   private _vector: THREE.Vector3 = new THREE.Vector3();
   private _stickers: THREE.Mesh[] = [];
+  private _mirrors: THREE.Mesh[] = [];
   private _quaternion: THREE.Quaternion = new THREE.Quaternion();
 
   set vector(vector) {
@@ -188,6 +189,22 @@ export default class Cubelet extends THREE.Group {
   }
   get vector() {
     return this._vector;
+  }
+
+  set mirror(value: boolean) {
+    if (value) {
+      for (let i = 0; i < 6; i++) {
+        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) < 0) {
+          this.add(this._mirrors[i]);
+        }
+      }
+    } else {
+      for (let i = 0; i < 6; i++) {
+        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) >= 0) {
+          this.remove(this._mirrors[i]);
+        }
+      }
+    }
   }
 
   set index(index) {
@@ -320,6 +337,21 @@ export default class Cubelet extends THREE.Group {
       }
       this.add(_edge);
       this.add(_sticker);
+      if (this._materials[i] != Cubelet._MATERIALS.i) {
+        let _mirror = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
+        _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
+        _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
+        _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
+        if (_mirror.rotation.x + _mirror.rotation.y + _mirror.rotation.z == 0) {
+          _mirror.rotation.y = Math.PI;
+        }
+
+        _mirror.position.x = _sticker.position.x * 3;
+        _mirror.position.y = _sticker.position.y * 3;
+        _mirror.position.z = _sticker.position.z * 3;
+        this.add(_mirror);
+        this._mirrors[i] = _mirror;
+      }
       this._stickers.push(_sticker);
       this.matrixAutoUpdate = false;
       this.updateMatrix();
@@ -329,11 +361,17 @@ export default class Cubelet extends THREE.Group {
   stick() {
     for (let i = 0; i < 6; i++) {
       this._stickers[i].material = this._materials[i];
+      if (this._mirrors[i] instanceof THREE.Mesh) {
+        this._mirrors[i].visible = true;
+      }
     }
   }
 
   strip(face: number) {
     this._stickers[face].material = Cubelet._MATERIALS.i;
+    if (this._mirrors[face] instanceof THREE.Mesh) {
+      this._mirrors[face].visible = false;
+    }
   }
 
   highlight() {

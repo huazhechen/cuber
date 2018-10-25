@@ -35,6 +35,17 @@ export default class Cube extends THREE.Group {
     this.cubelets.sort(this.compare);
   }
 
+  private _mirror: boolean = true;
+  get mirror() {
+    return this._mirror;
+  }
+  set mirror(value: boolean) {
+    this._mirror = value;
+    for (let cubelet of this.cubelets) {
+      cubelet.mirror = value;
+    }
+  }
+
   stick() {
     for (let cubelet of this.cubelets) {
       cubelet.stick();
