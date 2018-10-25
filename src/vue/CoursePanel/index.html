@@ -1,7 +1,7 @@
 <v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; background: white">
   <v-layout row wrap>
     <v-flex xs12 style="margin: 0%; padding: 0%; display: flex">
-      <template v-for="(group, i) in course">
+      <template v-for="(group, i) in database.course">
         <fast-button class="headline" :color="(type >= i + 1)?'primary':''" :outline="type == i + 1" flat block style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1" @tap="type = i + 1">
           {{type <= i + 1?i + 1:''}} <v-icon large v-show="type > i + 1">done</v-icon>
         </fast-button>
@@ -16,7 +16,7 @@
                     min-width: 0%;
                     min-height: 0%;
                 ">
-        {{course[type - 1].name}}({{(index + 1)}}/{{course[type - 1].steps.length}})
+        {{database.course[type - 1].name}}({{(index + 1)}}/{{database.course[type - 1].steps.length}})
       </p>
     </v-flex>
     <v-flex xs12 style="margin: 0%; padding: 0%; display: table; width: 100%;">
@@ -55,7 +55,7 @@
       </fast-button>
     </v-flex>
     <v-flex xs2.4>
-      <fast-button icon large :disabled="type == course.length && index == course[type - 1].steps.length - 1" @tap="index++" style="margin: 0%; padding: 0%;">
+      <fast-button icon large :disabled="type == database.course.length && index == course[type - 1].steps.length - 1" @tap="index++" style="margin: 0%; padding: 0%;">
         <v-icon large>skip_next</v-icon>
       </fast-button>
     </v-flex>

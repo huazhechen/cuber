@@ -4,9 +4,9 @@ import Game from "../../cube/game";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import TimerPanel from "../TimerPanel";
-import Option from "../Option"
 import AppMenu from "../AppMenu";
 import CoursePanel from "../CoursePanel";
+import Database from "../../common/Database";
 
 @Component({
   template: require("./index.html"),
@@ -22,12 +22,12 @@ export default class App extends Vue {
   @Provide("game")
   game: Game = new Game();
 
-  @Provide("option")
-  option: Option = new Option(this.game);
+  @Provide("database")
+  database: Database = new Database(this.game);
 
   menu: boolean = false;
 
-  @Watch("option.speed")
+  @Watch("database.option.speed")
   onSpeedChange() {
     this.game.twister.twist("R", false, 1, () => { this.game.twister.twist("R", true, 1, null, true) }, false);
   }
@@ -67,12 +67,12 @@ export default class App extends Vue {
     }, 500);
   }
 
-  @Watch("option.mode")
+  @Watch("database.option.mode")
   onModeChange(to: string, from: string) {
     this.$nextTick(this.resize);
   }
 
-  @Watch("option.keyboard")
+  @Watch("database.option.keyboard")
   onKeyboardChange(to: string, from: string) {
     this.$nextTick(this.resize);
   }
