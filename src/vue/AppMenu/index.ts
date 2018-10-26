@@ -73,6 +73,15 @@ export default class AppMenu extends Vue {
     link.dispatchEvent(evt);
   }
 
+  upload() {
+    let input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    let evt = document.createEvent("MouseEvents");
+    evt.initEvent("click", false, false);
+    input.dispatchEvent(evt);
+    input.onchange = () => { console.log(input.value); this.snackbar = true; };
+  }
+
   snackbar: boolean = false;
 
   unfinished() {

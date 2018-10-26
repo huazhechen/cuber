@@ -55,7 +55,7 @@
       </fast-button>
     </v-flex>
     <v-flex xs2.4>
-      <fast-button icon large :disabled="type == database.course.length && index == course[type - 1].steps.length - 1" @tap="index++" style="margin: 0%; padding: 0%;">
+      <fast-button icon large :disabled="type == database.course.length && index == database.course[type - 1].steps.length - 1" @tap="index++" style="margin: 0%; padding: 0%;">
         <v-icon large>skip_next</v-icon>
       </fast-button>
     </v-flex>
