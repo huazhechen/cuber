@@ -52,7 +52,8 @@ export default class Controller {
 
   update() {
     if (this._rotating) {
-      if (this._game.enable && this.magic && Math.abs(this._group.angle) > Math.PI / 4) {
+      if (this._game.enable && this.magic && Math.abs(this._group.angle) > Math.PI / 8) {
+        this._angle = ((this._group.angle / Math.abs(this._group.angle)) * Math.PI) / 2;
         this._handleUp();
         return;
       }
@@ -202,7 +203,7 @@ export default class Controller {
           for (let callback of this._game.callbacks) {
             callback(this._group.exp);
           }
-          this._group.adjust(this._game);
+          this._group.adjust(this._game, this._angle);
         } else {
           this._group.revert(this._game);
         }
