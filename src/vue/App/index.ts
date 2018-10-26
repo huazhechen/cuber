@@ -27,14 +27,11 @@ export default class App extends Vue {
 
   @Watch("database.option.speed")
   onSpeedChange() {
-    this.game.twister.twist("R", false, 1, () => { this.game.twister.twist("R", true, 1, null, true) }, false);
+    this.game.twister.twist("UU'");
   }
 
   resize() {
-    if (
-      this.$refs.cuber instanceof HTMLElement &&
-      this.$refs.panel instanceof HTMLElement
-    ) {
+    if (this.$refs.cuber instanceof HTMLElement && this.$refs.panel instanceof HTMLElement) {
       let cuber = this.$refs.cuber;
       let panel = this.$refs.panel;
       let panelHeight = panel.clientHeight;
