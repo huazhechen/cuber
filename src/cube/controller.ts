@@ -19,6 +19,8 @@ export default class Controller {
   private _planes: THREE.Plane[];
   private _angle: number = 0;
 
+  public magic: boolean = true;
+
   constructor(game: Game) {
     this._game = game;
     this._ray = new THREE.Ray();
@@ -50,6 +52,10 @@ export default class Controller {
 
   update() {
     if (this._rotating) {
+      if (this._game.enable && this.magic && Math.abs(this._group.angle) > Math.PI / 4) {
+        this._handleUp();
+        return;
+      }
       if (this._group.angle != this._angle) {
         let delta = (this._angle - this._group.angle) / 2;
         let max = (Math.PI / this._game.duration) * 4;

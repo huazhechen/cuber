@@ -14,7 +14,7 @@ class Option {
 
   set mode(value: string) {
     this._mode = value;
-    this._storage.setItem("option.mode", this._mode);
+    this._storage.setItem("option.mode", value);
     this._game.enable = this.mode == "play";
   }
 
@@ -24,7 +24,7 @@ class Option {
 
   set keyboard(value: boolean) {
     this._keyboard = value;
-    this._storage.setItem("option.keyboard", String(this._keyboard));
+    this._storage.setItem("option.keyboard", String(value));
   }
 
   get mirror() {
@@ -43,7 +43,7 @@ class Option {
 
   set angle(value: number) {
     this._angle = value;
-    this._storage.setItem("option.angle", String(this._angle));
+    this._storage.setItem("option.angle", String(value));
     this._game.scene.rotation.y = -Math.PI / 4 + (this._angle * Math.PI) / 16;
     this._game.dirty = true;
   }
@@ -54,7 +54,7 @@ class Option {
 
   set size(value: number) {
     this._size = value;
-    this._storage.setItem("option.size", String(this._size));
+    this._storage.setItem("option.size", String(value));
     this._game.scale = Math.pow(2, -this.size / 8);
     this._game.resize();
   }
@@ -65,9 +65,19 @@ class Option {
 
   set speed(value: number) {
     this._speed = value;
-    this._storage.setItem("option.speed", String(this._speed));
+    this._storage.setItem("option.speed", String(value));
     this._game.duration = 50 - 10 * this.speed;
   }
+
+  get magic() {
+    return this._game.controller.magic;
+  }
+
+  set magic(value: boolean) {
+    this._game.controller.magic = value;
+    this._storage.setItem("option.magic", String(value));
+  }
+
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
@@ -76,6 +86,7 @@ class Option {
     this.angle = Number(this._storage.getItem("option.angle") || 1);
     this.size = Number(this._storage.getItem("option.size") || 0);
     this.mirror = this._storage.getItem("option.mirror") == "true";
+    this.magic = this._storage.getItem("option.magic") != "false";
   }
 
   toJSON() {
