@@ -24,6 +24,7 @@ export default class CoursePanel extends Vue {
       this.onIndexChange();
       this.onStepChange();
     } else {
+      this.playing = false;
       if (from) {
         this.stick();
       }
@@ -146,7 +147,6 @@ export default class CoursePanel extends Vue {
     if (this.progress == this.actions.length) {
       this.playing = false;
     }
-    this.strip();
     if (this.playing) {
       let action = this.actions[this.progress];
       this.progress++;

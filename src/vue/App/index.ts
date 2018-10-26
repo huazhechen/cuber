@@ -3,7 +3,6 @@ import { Component, Provide, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
-import TimerPanel from "../TimerPanel";
 import AppMenu from "../AppMenu";
 import CoursePanel from "../CoursePanel";
 import Database from "../../common/Database";
@@ -14,7 +13,6 @@ import Database from "../../common/Database";
     "keyboard-panel": KeyboardPanel,
     "course-panel": CoursePanel,
     "script-panel": ScriptPanel,
-    "timer-panel": TimerPanel,
     "app-menu": AppMenu
   }
 })

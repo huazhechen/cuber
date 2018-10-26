@@ -88,6 +88,16 @@ class Option {
       mirror: this.mirror
     };
   }
+
+  load(json: string) {
+    let data = JSON.parse(json);
+    this.mode = data.mode || "play";
+    this.keyboard = data.keyboard;
+    this.speed = data.speed || 0;
+    this.angle = data.angle || 1;
+    this.size = data.size || 0;
+    this.mirror = data.mirror;
+  }
 }
 
 export default class Database {
@@ -98,5 +108,12 @@ export default class Database {
   option: Option;
   constructor(game: Game) {
     this.option = new Option(game);
+  }
+
+  load(json: string) {
+    let data = JSON.parse(json);
+    this.course = data.course || this.course;
+    this.scripts = data.scripts || this.scripts;
+    this.option.load(JSON.stringify(data.option));
   }
 }

@@ -3,11 +3,13 @@ import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Database from "../../common/Database";
 import TuneMenu from "../TuneMenu";
+import DeveloperMenu from "../DeveloperMenu";
 
 @Component({
   template: require("./index.html"),
   components: {
-    "tune-menu": TuneMenu
+    "tune-menu": TuneMenu,
+    "developer-menu": DeveloperMenu
   }
 })
 export default class AppMenu extends Vue {
@@ -25,21 +27,12 @@ export default class AppMenu extends Vue {
     this.$emit("input", value);
   }
 
+  tune: boolean = false;
+  developer: boolean = false;
+
   mode(value: string) {
     this.database.option.mode = value;
     this.$emit("input", false);
-  }
-
-  tune: boolean = false;
-
-  reset() {
-    let storage = window.localStorage;
-    storage.clear();
-    window.location.reload();
-  }
-
-  code() {
-    window.open("https://gitee.com/huazhechen/cuber");
   }
 
   png() {
@@ -60,26 +53,6 @@ export default class AppMenu extends Vue {
     link.download = "cuber.png";
     link.href = URL.createObjectURL(blob);
     link.dispatchEvent(evt);
-  }
-
-  download() {
-    let blob = new Blob([JSON.stringify(this.database, null, 2)], { type: "json" });
-
-    let link = document.createElement("a");
-    let evt = document.createEvent("MouseEvents");
-    evt.initEvent("click", false, false);
-    link.download = "data.json";
-    link.href = URL.createObjectURL(blob);
-    link.dispatchEvent(evt);
-  }
-
-  upload() {
-    let input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    let evt = document.createEvent("MouseEvents");
-    evt.initEvent("click", false, false);
-    input.dispatchEvent(evt);
-    input.onchange = () => { console.log(input.value); this.snackbar = true; };
   }
 
   snackbar: boolean = false;

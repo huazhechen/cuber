@@ -5,7 +5,6 @@
       <keyboard-panel :show="database.option.mode == 'play' && database.option.keyboard" @hide="database.option.keyboard = false"></keyboard-panel>
       <course-panel :show="database.option.mode == 'course'"></course-panel>
       <script-panel :show="database.option.mode == 'script'"></script-panel>
-      <timer-panel :show="database.option.mode == 'timer'"></timer-panel>
     </div>
     <fast-button fixed top right icon large @tap="menu = !menu;">
       <v-icon large>menu</v-icon>
