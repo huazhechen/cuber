@@ -101,9 +101,23 @@ class Option {
 }
 
 export default class Database {
-  course = require("./course.json");
+  private _storage = window.localStorage;
 
-  scripts = require("./scripts.json");
+  course = (() => {
+    let json = this._storage.getItem("course");
+    if (json == null) {
+      return require("./course.json");
+    }
+    return JSON.parse(json);
+  })();
+
+  scripts = (() => {
+    let json = this._storage.getItem("scripts");
+    if (json == null) {
+      return require("./scripts.json");
+    }
+    return JSON.parse(json);
+  })();
 
   option: Option;
   constructor(game: Game) {
@@ -113,7 +127,17 @@ export default class Database {
   load(json: string) {
     let data = JSON.parse(json);
     this.course = data.course || this.course;
+    this._storage.setItem("course", JSON.stringify(data.course));
     this.scripts = data.scripts || this.scripts;
+    this._storage.setItem("scripts", JSON.stringify(data.scripts));
     this.option.load(JSON.stringify(data.option));
+  }
+
+  toJSON() {
+    return {
+      course: this.course,
+      scripts: this.scripts,
+      option: this.option
+    };
   }
 }
