@@ -20,6 +20,7 @@ export default class Controller {
   private _angle: number = 0;
 
   public magic: boolean = true;
+  public tolerance: boolean = true;
 
   constructor(game: Game) {
     this._game = game;
@@ -88,6 +89,12 @@ export default class Controller {
   }
 
   _handleDown() {
+    if (this._game.enable && this.tolerance) {
+      this._game.tweener.finish();
+    }
+    if (this._game.lock) {
+      return true;
+    }
     this._dragging = true;
     this._holder.index = -1;
 
@@ -216,10 +223,6 @@ export default class Controller {
   }
 
   _onMouseDown = (event: MouseEvent) => {
-    if (this._game.lock) {
-      return true;
-    }
-
     this._down.x = event.offsetX;
     this._down.y = event.offsetY;
 
@@ -244,9 +247,6 @@ export default class Controller {
     let first = touches[0];
     switch (event.type) {
       case "touchstart":
-        if (this._game.lock) {
-          return true;
-        }
         this._down.x = first.clientX;
         this._down.y = first.clientY;
         this._handleDown();

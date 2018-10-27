@@ -96,6 +96,15 @@ class Option {
     this._storage.setItem("option.magic", String(value));
   }
 
+  get tolerance() {
+    return this._game.controller.tolerance;
+  }
+
+  set tolerance(value: boolean) {
+    this._game.controller.tolerance = value;
+    this._storage.setItem("option.tolerance", String(value));
+  }
+  
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
@@ -105,6 +114,7 @@ class Option {
     this.size = Number(this._storage.getItem("option.size") || 0);
     this.mirror = this._storage.getItem("option.mirror") == "true";
     this.magic = this._storage.getItem("option.magic") != "false";
+    this.tolerance = this._storage.getItem("option.tolerance") != "false";
   }
 
   toJSON() {
