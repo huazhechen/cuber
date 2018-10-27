@@ -20,7 +20,6 @@ export default class Controller {
   private _angle: number = 0;
 
   public magic: boolean = true;
-  public tolerance: boolean = true;
 
   constructor(game: Game) {
     this._game = game;
@@ -89,7 +88,7 @@ export default class Controller {
   }
 
   _handleDown() {
-    if (this._game.enable && this.tolerance) {
+    if (this._game.enable) {
       this._game.tweener.finish();
     }
     if (this._game.lock) {

@@ -4,7 +4,6 @@ class Option {
   private _game: Game;
   private _mode: string = "";
   private _keyboard: boolean = false;
-  private _angle: number = 1;
   private _size: number = 0;
   private _speed: number = 0;
   private _storage = window.localStorage;
@@ -35,23 +34,6 @@ class Option {
     this._game.cube.mirror = value;
     this._game.dirty = true;
     this._storage.setItem("option.mirror", String(value));
-  }
-
-  get angle() {
-    return this._angle;
-  }
-
-  set angle(value: number) {
-    if (value < -2) {
-      value = -2;
-    }
-    if (value > 2) {
-      value = 2;
-    }
-    this._angle = value;
-    this._storage.setItem("option.angle", String(value));
-    this._game.scene.rotation.y = -Math.PI / 4 + (this._angle * Math.PI) / 16;
-    this._game.dirty = true;
   }
 
   get size() {
@@ -96,25 +78,14 @@ class Option {
     this._storage.setItem("option.magic", String(value));
   }
 
-  get tolerance() {
-    return this._game.controller.tolerance;
-  }
-
-  set tolerance(value: boolean) {
-    this._game.controller.tolerance = value;
-    this._storage.setItem("option.tolerance", String(value));
-  }
-  
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
     this.keyboard = this._storage.getItem("option.keyboard") == "true";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
-    this.angle = Number(this._storage.getItem("option.angle") || 1);
     this.size = Number(this._storage.getItem("option.size") || 0);
     this.mirror = this._storage.getItem("option.mirror") == "true";
     this.magic = this._storage.getItem("option.magic") != "false";
-    this.tolerance = this._storage.getItem("option.tolerance") != "false";
   }
 
   toJSON() {
@@ -122,7 +93,6 @@ class Option {
       mode: this.mode,
       keyboard: this.keyboard,
       speed: this.speed,
-      angle: this.angle,
       size: this.size,
       mirror: this.mirror
     };
@@ -133,7 +103,6 @@ class Option {
     this.mode = data.mode || "play";
     this.keyboard = data.keyboard;
     this.speed = data.speed || 0;
-    this.angle = data.angle || 1;
     this.size = data.size || 0;
     this.mirror = data.mirror;
   }
