@@ -42,6 +42,12 @@ class Option {
   }
 
   set angle(value: number) {
+    if (value < -2) {
+      value = -2;
+    }
+    if (value > 2) {
+      value = 2;
+    }
     this._angle = value;
     this._storage.setItem("option.angle", String(value));
     this._game.scene.rotation.y = -Math.PI / 4 + (this._angle * Math.PI) / 16;
@@ -53,6 +59,12 @@ class Option {
   }
 
   set size(value: number) {
+    if (value < -4) {
+      value = -4;
+    }
+    if (value > 4) {
+      value = 4;
+    }
     this._size = value;
     this._storage.setItem("option.size", String(value));
     this._game.scale = Math.pow(2, -this.size / 8);
@@ -64,6 +76,12 @@ class Option {
   }
 
   set speed(value: number) {
+    if (value < -4) {
+      value = -4;
+    }
+    if (value > 4) {
+      value = 4;
+    }
     this._speed = value;
     this._storage.setItem("option.speed", String(value));
     this._game.duration = 50 - 10 * this.speed;
