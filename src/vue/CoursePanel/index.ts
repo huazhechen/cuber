@@ -47,15 +47,16 @@ export default class CoursePanel extends Vue {
 
   strip() {
     let strip = this.step.strip;
-    if (strip == undefined) {
-      return;
-    }
-    for (let index of strip.indexes) {
-      this.game.cube.strip(index, strip.faces);
+    if (strip != undefined) {
+      for (let index of strip.indexes) {
+        this.game.cube.strip(index, strip.faces);
+      }
     }
     let highlights = this.step.highlights;
-    for (let index of highlights) {
-      this.game.cube.highlight(index, true);
+    if (highlights != undefined) {
+      for (let index of highlights) {
+        this.game.cube.highlight(index, true);
+      }
     }
     this.game.dirty = true;
   }
