@@ -106,9 +106,9 @@ export default class CubeletGroup extends THREE.Group {
 
   adjust(game: Game, angle: number = this._angle) {
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    let delte = angle - this._angle;
+    let delta = angle - this._angle;
 
-    if (delte === 0) {
+    if (delta === 0) {
       while (true) {
         let cubelet = this._cubelets.pop();
         if (undefined === cubelet) {
@@ -123,10 +123,10 @@ export default class CubeletGroup extends THREE.Group {
       game.dirty = true;
       this._angle = 0;
     } else {
-      var duration = game.duration * Math.min(1, Math.abs(angle) / Math.PI);
+      var duration = game.duration * Math.min(1, Math.abs(delta) / Math.PI);
       game.tweener.tween(
         this.angle,
-        this.angle + delte,
+        this.angle + delta,
         duration,
         (value: number) => {
           this.angle = value;
