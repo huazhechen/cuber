@@ -30,7 +30,16 @@ export default class App extends Vue {
     this.game.twister.twist("UU'");
   }
 
+  width: string = "100%";
+
   resize() {
+    let body = document.getElementsByTagName("body")[0];
+    if (body.clientHeight / body.clientWidth < 16 / 9) {
+      this.width = body.clientHeight / (18 / 9) + "px";
+      body.style.width = this.width;
+      this.$nextTick(this.resize);
+      return;
+    }
     if (this.$refs.cuber instanceof HTMLElement && this.$refs.panel instanceof HTMLElement) {
       let cuber = this.$refs.cuber;
       let panel = this.$refs.panel;

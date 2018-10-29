@@ -6,13 +6,12 @@
       <course-panel :show="database.option.mode == 'course'"></course-panel>
       <script-panel :show="database.option.mode == 'script'"></script-panel>
     </div>
-    <fast-button fixed top right icon large @tap="menu = !menu;">
+    <fast-button icon large @tap="menu = !menu;" style="position:absolute;right:1em;top:1em">
       <v-icon large>menu</v-icon>
     </fast-button>
-    <fast-button v-show="database.option.mode == 'play' && !database.option.keyboard" fixed bottom right icon large @tap="database.option.keyboard = !database.option.keyboard;">
+    <fast-button v-show="database.option.mode == 'play' && !database.option.keyboard" icon large @tap="database.option.keyboard = !database.option.keyboard;" style="position:absolute;right:1em;bottom:1em">
       <v-icon large>keyboard</v-icon>
     </fast-button>
-    <fast-button fixed top left icon class="title" @tap v-if="exp != ''" style="text-transform:none">{{exp}}</fast-button>
   </div>
-  <app-menu v-model="menu"></app-menu>
+  <app-menu :width="width" v-model="menu"></app-menu>
 </v-app>

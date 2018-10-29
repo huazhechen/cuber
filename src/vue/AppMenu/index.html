@@ -1,22 +1,19 @@
 <v-bottom-sheet v-model="value">
-  <v-card flat>
+  <v-card flat :style="{ margin: 'auto', width: width}">
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')"
-            style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="database.option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>games</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'course'?'primary':''" flat block @tap="$emit('input', false); mode('course')"
-            style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="database.option.mode == 'course'?'primary':''" flat block @tap="$emit('input', false); mode('course')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>school</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')"
-            style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="database.option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>edit</v-icon>
           </fast-button>
         </v-flex>
@@ -46,8 +43,8 @@
       </v-layout>
     </v-container>
   </v-card>
-  <tune-menu v-model="tune"></tune-menu>
-  <developer-menu v-model="developer"></developer-menu>
+  <tune-menu :width="width" v-model="tune"></tune-menu>
+  <developer-menu :width="width" v-model="developer"></developer-menu>
 
   <v-snackbar v-model="snackbar" timeout="2000" top>
     UNFINISHED

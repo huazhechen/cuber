@@ -15,10 +15,10 @@ export default class KeyboardPanel extends Vue {
   layers: number = 0;
 
   operations: string[][] = [
-    ["L'", "U'", "F'", "F", "U", "R", "L", "D", "B", "B'", "D'", "R'"],
-    ["M'", "E", "S'", "S", "E'", "M'", "M", "E", "S'", "S", "E'", "M"],
-    ["l'", "u'", "f'", "f", "u", "r", "l", "d", "b", "b'", "d'", "r'"],
-    ["x", "y'", "z'", "z", "y", "x", "x'", "y'", "z'", "z", "y", "x'"]
+    ["L", "D", "B", "F", "U", "R", "L'", "D'", "B'", "F'", "U'", "R'"],
+    ["M", "E", "S'", "S", "E'", "M'", "M'", "E'", "S", "S'", "E", "M"],
+    ["l", "d", "b", "f", "u", "r", "l'", "d'", "b'", "f'", "u'", "r'"],
+    ["x'", "y'", "z'", "z", "y", "x", "x", "y", "z", "z'", "y'", "x'"]
   ];
 
   get exps() {
@@ -27,5 +27,6 @@ export default class KeyboardPanel extends Vue {
 
   twist(exp: string) {
     this.game.twister.twist(exp);
+    this.layers = 0;
   }
 }

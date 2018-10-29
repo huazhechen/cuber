@@ -16,6 +16,9 @@ export default class DeveloperMenu extends Vue {
 
   @Inject("database")
   database: Database;
+  
+  @Prop({ default: "100%" })
+  width: string;
 
   @Prop({ required: true })
   value: boolean;
