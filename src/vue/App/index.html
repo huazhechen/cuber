@@ -3,8 +3,8 @@
     <div ref=cuber></div>
     <div ref=panel>
       <keyboard-panel :show="database.option.mode == 'play' && database.option.keyboard" @hide="database.option.keyboard = false"></keyboard-panel>
-      <course-panel :show="database.option.mode == 'course'"></course-panel>
       <script-panel :show="database.option.mode == 'script'"></script-panel>
+      <timer-panel :show="database.option.mode == 'timer'"></timer-panel>
     </div>
     <fast-button icon large @tap="menu = !menu;" style="position:absolute;right:1em;top:1em">
       <v-icon large>menu</v-icon>

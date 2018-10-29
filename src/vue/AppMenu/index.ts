@@ -3,13 +3,13 @@ import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Database from "../../common/Database";
 import TuneMenu from "../TuneMenu";
-import DeveloperMenu from "../DeveloperMenu";
+import DataMenu from "../DataMenu";
 
 @Component({
   template: require("./index.html"),
   components: {
     "tune-menu": TuneMenu,
-    "developer-menu": DeveloperMenu
+    "data-menu": DataMenu
   }
 })
 export default class AppMenu extends Vue {
@@ -31,7 +31,7 @@ export default class AppMenu extends Vue {
   }
 
   tune: boolean = false;
-  developer: boolean = false;
+  data: boolean = false;
 
   mode(value: string) {
     this.database.option.mode = value;
@@ -56,11 +56,5 @@ export default class AppMenu extends Vue {
     link.download = "cuber.png";
     link.href = URL.createObjectURL(blob);
     link.dispatchEvent(evt);
-  }
-
-  snackbar: boolean = false;
-
-  unfinished() {
-    this.snackbar = true;
   }
 }

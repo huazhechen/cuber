@@ -46,7 +46,7 @@ export default class Game {
     }
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-    this.renderer.setClearColor(0xE0E0E0);
+    this.renderer.setClearColor(0xe0e0e0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.canvas = this.renderer.domElement;
     this.controller = new Controller(this);
@@ -75,5 +75,31 @@ export default class Game {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.render();
+  }
+
+  random() {
+    let result = "";
+    let exps: string[] = [];
+    let last = -1;
+    let actions = ["U", "D", "R", "L", "F", "B"];
+    let axis = -1;
+    for (let i = 0; i < 24; i++) {
+      let exp: string[] = [];
+      while (axis == last) {
+        axis = Math.floor(Math.random() * 3);
+      }
+      let side = Math.floor(Math.random() * 2);
+      exp.push(actions[axis * 2 + side]);
+      let suffix = Math.random();
+      if (suffix < 0.2) {
+        exp.push("2");
+      } else if (suffix < 0.6) {
+        exp.push("'");
+      }
+      exps.push(exp.join(""));
+      last = axis;
+    }
+    result = exps.join(" ");
+    return result;
   }
 }

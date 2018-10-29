@@ -47,32 +47,6 @@ export default class Twister {
     return true;
   }
 
-  random() {
-    let result = "";
-    let exps: string[] = [];
-    let last = -1;
-    let actions = ["U", "D", "R", "L", "F", "B"];
-    let axis = -1;
-    for (let i = 0; i < 20; i++) {
-      let exp: string[] = [];
-      while (axis == last) {
-        axis = Math.floor(Math.random() * 3);
-      }
-      let side = Math.floor(Math.random() * 2);
-      exp.push(actions[axis * 2 + side]);
-      let suffix = Math.random();
-      if (suffix < 0.2) {
-        exp.push("2");
-      } else if (suffix < 0.6) {
-        exp.push("'");
-      }
-      exps.push(exp.join(""));
-      last = axis;
-    }
-    result = exps.join(" ");
-    return result;
-  }
-
   start(action: TwistAction) {
     if (action.exp == "#") {
       this._game.cube.reset();
@@ -86,7 +60,7 @@ export default class Twister {
     if (action.exp == "*") {
       this._game.cube.reset();
       this._game.dirty = true;
-      let exp = this.random();
+      let exp = this._game.random();
       let list = new TwistNode(exp).parse();
       list[list.length - 1].callback = action.callback;
       for (let element of list) {

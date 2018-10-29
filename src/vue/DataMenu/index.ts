@@ -2,21 +2,17 @@ import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Database from "../../common/Database";
-import TuneMenu from "../TuneMenu";
 
 @Component({
-  template: require("./index.html"),
-  components: {
-    "tune-menu": TuneMenu
-  }
+  template: require("./index.html")
 })
-export default class DeveloperMenu extends Vue {
+export default class DataMenu extends Vue {
   @Inject("game")
   game: Game;
 
   @Inject("database")
   database: Database;
-  
+
   @Prop({ default: "100%" })
   width: string;
 
@@ -34,10 +30,6 @@ export default class DeveloperMenu extends Vue {
     window.location.reload();
   }
 
-  code() {
-    window.open("https://gitee.com/huazhechen/cuber");
-  }
-
   download() {
     let blob = new Blob([JSON.stringify(this.database, null, 2)], { type: "json" });
 
@@ -50,8 +42,8 @@ export default class DeveloperMenu extends Vue {
   }
 
   upload() {
-    let input = document.createElement('input');
-    input.setAttribute('type', 'file');
+    let input = document.createElement("input");
+    input.setAttribute("type", "file");
     let evt = document.createEvent("MouseEvents");
     evt.initEvent("click", false, false);
     input.dispatchEvent(evt);
@@ -69,7 +61,7 @@ export default class DeveloperMenu extends Vue {
           return;
         }
         this.database.load(text);
-      }
+      };
       reader.readAsText(input.files[0]);
     };
   }

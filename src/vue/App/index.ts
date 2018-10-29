@@ -4,15 +4,15 @@ import Game from "../../cube/game";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
-import CoursePanel from "../CoursePanel";
+import TimerPanel from "../TimerPanel";
 import Database from "../../common/Database";
 
 @Component({
   template: require("./index.html"),
   components: {
     "keyboard-panel": KeyboardPanel,
-    "course-panel": CoursePanel,
     "script-panel": ScriptPanel,
+    "timer-panel": TimerPanel,
     "app-menu": AppMenu
   }
 })

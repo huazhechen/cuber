@@ -64,6 +64,7 @@ export default class Cube extends THREE.Group {
   highlight(index: number, highlight: boolean) {
     this._initial[index].highlight = highlight;
   }
+  
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |
