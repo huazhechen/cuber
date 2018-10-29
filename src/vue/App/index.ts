@@ -34,8 +34,8 @@ export default class App extends Vue {
 
   resize() {
     let body = document.getElementsByTagName("body")[0];
-    if (body.clientHeight / body.clientWidth < 16 / 9) {
-      this.width = body.clientHeight / (18 / 9) + "px";
+    if (body.clientHeight / body.clientWidth < 4 / 3) {
+      this.width = body.clientHeight / (16 / 9) + "px";
       body.style.width = this.width;
       this.$nextTick(this.resize);
       return;
