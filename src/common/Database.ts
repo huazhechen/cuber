@@ -69,13 +69,13 @@ class Option {
     this._game.duration = 50 - 10 * this.speed;
   }
 
-  get magic() {
-    return this._game.controller.magic;
+  get swipe() {
+    return this._game.controller.swipe;
   }
 
-  set magic(value: boolean) {
-    this._game.controller.magic = value;
-    this._storage.setItem("option.magic", String(value));
+  set swipe(value: boolean) {
+    this._game.controller.swipe = value;
+    this._storage.setItem("option.swipe", String(value));
   }
 
   constructor(game: Game) {
@@ -85,7 +85,7 @@ class Option {
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
     this.mirror = this._storage.getItem("option.mirror") == "true";
-    this.magic = this._storage.getItem("option.magic") != "false";
+    this.swipe = this._storage.getItem("option.swipe") != "false";
   }
 
   toJSON() {

@@ -19,7 +19,7 @@ export default class Controller {
   private _planes: THREE.Plane[];
   private _angle: number = 0;
 
-  public magic: boolean = true;
+  public swipe: boolean = true;
 
   constructor(game: Game) {
     this._game = game;
@@ -51,12 +51,10 @@ export default class Controller {
   }
 
   update() {
+    if (this._game.enable && this.swipe) {
+      return;
+    }
     if (this._rotating) {
-      if (this._game.enable && this.magic && Math.abs(this._group.angle) > Math.PI / 8) {
-        this._angle = ((this._group.angle / Math.abs(this._group.angle)) * Math.PI) / 2;
-        this._handleUp();
-        return;
-      }
       if (this._group.angle != this._angle) {
         let delta = (this._angle - this._group.angle) / 2;
         let max = (Math.PI / this._game.duration) * 4;
@@ -198,6 +196,11 @@ export default class Controller {
         this._angle =
           (((-(this._vector.x + this._vector.y + this._vector.z) * (this._group.axis.x + this._group.axis.y + this._group.axis.z)) / Cubelet.SIZE) * Math.PI) /
           4;
+      }
+      if (this._game.enable && this.swipe) {
+        this._angle = ((this._angle / Math.abs(this._angle)) * Math.PI) / 2;
+        this._handleUp();
+        return;
       }
     }
   }
