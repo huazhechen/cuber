@@ -69,15 +69,6 @@ class Option {
     this._game.duration = 50 - 10 * this.speed;
   }
 
-  get swipe() {
-    return this._game.controller.swipe;
-  }
-
-  set swipe(value: boolean) {
-    this._game.controller.swipe = value;
-    this._storage.setItem("option.swipe", String(value));
-  }
-
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
@@ -85,7 +76,6 @@ class Option {
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
     this.mirror = this._storage.getItem("option.mirror") == "true";
-    this.swipe = this._storage.getItem("option.swipe") != "false";
   }
 
   toJSON() {
