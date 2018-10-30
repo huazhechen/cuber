@@ -10,10 +10,13 @@ declare module "cubejs" {
   }
 }
 
-declare module "worker-loader*" {
-  class WebpackWorker extends Worker {
-    constructor();
+declare module "whammy" {
+  export namespace Whammy {
+    class Video {
+      constructor(rate: number);
+      add(canvas: HTMLCanvasElement): null;
+      compile(b: boolean): Blob;
+    }
   }
-
-  export default WebpackWorker;
+  export default Whammy;
 }

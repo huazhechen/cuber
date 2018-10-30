@@ -28,6 +28,7 @@
     "text-loader": "*",
     "ts-loader": "*",
     "vue-template-compiler": "*",
+    "whammy": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "@types/webpack-env": "*",

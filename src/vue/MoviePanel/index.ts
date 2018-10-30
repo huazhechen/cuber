@@ -2,6 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Cubelet from "../../cube/cubelet";
+import Whammy from "whammy";
 
 @Component({
   template: require("./index.html")
@@ -11,6 +12,7 @@ export default class TimerPanel extends Vue {
   game: Game;
 
   mounted() {
+    this.loop();
     this.game.controller.taps.push(this.tap);
     this.onShowChange(this.show);
   }
@@ -35,7 +37,6 @@ export default class TimerPanel extends Vue {
       }
     }
   }
-
 
   scene: string = window.localStorage.getItem("movie.scene") || "";
   @Watch("scene")
@@ -114,8 +115,41 @@ export default class TimerPanel extends Vue {
     link.dispatchEvent(evt);
   }
 
-  film() {
+  loop() {
+    requestAnimationFrame(this.loop.bind(this));
+    this.record();
+  }
 
+  record() {
+    if (!this.recording) {
+      return;
+    }
+    this.encoder.add(this.game.canvas);
+    console.log("record");
+  }
+
+  save() {
+    if (!this.recording) {
+      return;
+    }
+    this.recording = false;
+    let blob = this.encoder.compile(false);
+    let link = document.createElement("a");
+    let evt = document.createEvent("MouseEvents");
+    evt.initEvent("click", false, false);
+    link.download = "cuber.webm";
+    link.href = URL.createObjectURL(blob);
+    link.dispatchEvent(evt);
+  }
+
+  encoder: Whammy.Video = new Whammy.Video(15);
+  recording: boolean = false;
+  film() {
+    this.encoder = new Whammy.Video(15);
+    this.init();
+    this.playing = true;
+    this.recording = true;
+    this.game.twister.twist(this.action, false, 1, this.save, false);
   }
 
   strips: number[] = JSON.parse(window.localStorage.getItem("movie.strips") || "[]");
@@ -186,5 +220,4 @@ export default class TimerPanel extends Vue {
         break;
     }
   }
-
 }
