@@ -14,7 +14,7 @@ class Option {
   set mode(value: string) {
     this._mode = value;
     this._storage.setItem("option.mode", value);
-    this._game.enable = this.mode == "play";
+    this._game.enable = this.mode == "play" || this.mode == "movie";
   }
 
   get keyboard() {

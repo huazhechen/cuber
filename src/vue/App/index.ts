@@ -34,12 +34,25 @@ export default class App extends Vue {
   width: string = "100%";
 
   resize() {
-    let body = document.getElementsByTagName("body")[0];
-    if (body.clientHeight / body.clientWidth < 4 / 3) {
-      this.width = body.clientHeight / (16 / 9) + "px";
-      body.style.width = this.width;
-      this.$nextTick(this.resize);
+    let el = this.$el;
+    if (window.innerWidth > window.innerHeight / (4 / 3)) {
+      if (this.width == "100%") {
+        this.width = window.innerHeight / (16 / 9) + "px";
+        el.style.width = this.width;
+        this.$nextTick(this.resize);
+        console.log("limit");
+        return;
+      }
+    } else {
+      if (this.width != "100%") {
+        this.width = "100%";
+        el.style.width = this.width;
+        this.$nextTick(this.resize);
+        console.log("100%");
+        return;
+      }
     }
+
     if (this.$refs.cuber instanceof HTMLElement && this.$refs.panel instanceof HTMLElement) {
       let cuber = this.$refs.cuber;
       let panel = this.$refs.panel;

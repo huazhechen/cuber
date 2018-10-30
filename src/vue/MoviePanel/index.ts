@@ -61,7 +61,6 @@ export default class TimerPanel extends Vue {
       } else {
         this.game.cube.hide(index);
       }
-      this.game.cube.hide(13);
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
         if (this.highlights.indexOf(identity) >= 0) {
@@ -126,7 +125,6 @@ export default class TimerPanel extends Vue {
       return;
     }
     this.encoder.add(this.game.canvas);
-    console.log("record");
   }
 
   save() {

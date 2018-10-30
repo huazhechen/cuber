@@ -156,22 +156,22 @@ export enum FACES {
 
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
-  private static readonly _BORDER_WIDTH: number = Cubelet.SIZE / 16;
-  private static readonly _EDGE_WIDTH: number = Cubelet.SIZE / 48;
+  private static readonly _BORDER_WIDTH: number = 3;
+  private static readonly _EDGE_WIDTH: number = 2;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
-    h: new THREE.MeshBasicMaterial({ wireframe: false, color: "#EA80FC" }),
-    p: new THREE.MeshBasicMaterial({ wireframe: false, color: "#202020" }),
-    i: new THREE.MeshBasicMaterial({ wireframe: false, color: "#808080" }),
-    g: new THREE.MeshBasicMaterial({ wireframe: false, color: "#009D54" }),
-    o: new THREE.MeshBasicMaterial({ wireframe: false, color: "#FF6C00" }),
-    b: new THREE.MeshBasicMaterial({ wireframe: false, color: "#3D81F6" }),
-    y: new THREE.MeshBasicMaterial({ wireframe: false, color: "#FDCC09" }),
-    w: new THREE.MeshBasicMaterial({ wireframe: false, color: "#FFFFFF" }),
-    r: new THREE.MeshBasicMaterial({ wireframe: false, color: "#DC422F" })
+    h: new THREE.MeshBasicMaterial({ color: "#EA80FC" }),
+    p: new THREE.MeshBasicMaterial({ color: "#202020" }),
+    i: new THREE.MeshBasicMaterial({ color: "#808080" }),
+    g: new THREE.MeshBasicMaterial({ color: "#009D54" }),
+    o: new THREE.MeshBasicMaterial({ color: "#FF6C00" }),
+    b: new THREE.MeshBasicMaterial({ color: "#3D81F6" }),
+    y: new THREE.MeshBasicMaterial({ color: "#FDCC09" }),
+    w: new THREE.MeshBasicMaterial({ color: "#FFFFFF" }),
+    r: new THREE.MeshBasicMaterial({ color: "#DC422F" })
   };
   public initial: number;
   private _index: number;
@@ -313,7 +313,7 @@ export default class Cubelet extends THREE.Group {
         case FACES.F:
           _edge.rotation.z = 0;
           _edge.position.z = Cubelet.SIZE / 2;
-          _sticker.rotation.z = 0;
+          _sticker.rotation.x = 2 * Math.PI;
           _sticker.position.z = Cubelet.SIZE / 2;
           _sticker.name = "F";
           break;
@@ -324,6 +324,23 @@ export default class Cubelet extends THREE.Group {
       this._edges.push(_edge);
       this.add(_sticker);
       this._stickers.push(_sticker);
+      if (this.initial == 13) {
+        this.children = [];
+        let geometry = new THREE.CylinderGeometry(Cubelet.SIZE / 6, Cubelet.SIZE / 6, Cubelet.SIZE, 16);
+        let material = new THREE.MeshNormalMaterial();
+        let mesh: THREE.Mesh;
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.x = Math.PI / 2;
+        this.add(mesh);
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.y = Math.PI / 2;
+        this.add(mesh);
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.z = Math.PI / 2;
+        this.add(mesh);
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(Cubelet.SIZE / 3.2, 16, 16), material);
+        this.add(mesh);
+      }
       this.matrixAutoUpdate = false;
       this.updateMatrix();
     }
