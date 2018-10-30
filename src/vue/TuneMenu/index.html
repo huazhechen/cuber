@@ -2,34 +2,19 @@
   <v-card flat v-bind:style="{ margin: 'auto', width: width}">
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap justify-center align-center>
-        <v-flex xs2>
+        <v-flex xs3>
           <v-icon large color="black">av_timer</v-icon>
         </v-flex>
-        <v-flex xs4>
-          <p class="subheading" style="
-                          text-align:start;
-                          vertical-align:middle;
-                          width: 100%;
-                          height: 1em;
-                          line-height: 100%;
-                          min-width: 0%;
-                          min-height: 0%;
-                          margin: 0%;
-                          padding: 0%;
-                      ">
-            Twist Speed:
-          </p>
-        </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button icon :disabled="database.option.speed <= -4" @tap="database.option.speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>remove</v-icon>
           </fast-button>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{database.option.speed}}
           </fast-button>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button icon :disabled="database.option.speed >= 4" @tap="database.option.speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>add</v-icon>
           </fast-button>
@@ -37,34 +22,19 @@
       </v-layout>
       <v-divider></v-divider>
       <v-layout row wrap justify-center align-center>
-        <v-flex xs2>
+        <v-flex xs3>
           <v-icon large color="black">transform</v-icon>
         </v-flex>
-        <v-flex xs4>
-          <p class="subheading" style="
-                          text-align:start;
-                          vertical-align:middle;
-                          width: 100%;
-                          height: 1em;
-                          line-height: 100%;
-                          min-width: 0%;
-                          min-height: 0%;
-                          margin: 0%;
-                          padding: 0%;
-                      ">
-            Cube Size:
-          </p>
-        </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button flat block :disabled="database.option.size <= -4" @tap="database.option.size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>remove</v-icon>
           </fast-button>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{database.option.size}}
           </fast-button>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs3>
           <fast-button flat block :disabled="database.option.size >= 4" @tap="database.option.size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>add</v-icon>
           </fast-button>
