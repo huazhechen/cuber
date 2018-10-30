@@ -85,7 +85,7 @@ export default class Cube extends THREE.Group {
   //                | D7  D8  D9 |
   //                +------------+
   get state() {
-    let result: string[] = [];
+    let result: FACES[] = [];
     for (let i of CubeletGroup.GROUPS.U.indices) {
       result.push(this.cubelets[i].getColor(FACES.U));
     }

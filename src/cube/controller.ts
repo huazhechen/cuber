@@ -2,8 +2,8 @@ import * as THREE from "three";
 
 import Game from "./game";
 import CubeletGroup from "./group";
+import Cubelet, { FACES } from "./cubelet";
 import Holder from "./holder";
-import Cubelet from "./cubelet";
 
 export default class Controller {
   private _game: Game;
@@ -18,6 +18,7 @@ export default class Controller {
   private _group: CubeletGroup;
   private _planes: THREE.Plane[];
   private _angle: number = 0;
+  public taps: Function[] = [];
 
   constructor(game: Game) {
     this._game = game;
@@ -37,9 +38,9 @@ export default class Controller {
     this._game.canvas.addEventListener("mousemove", this._onMouseMove);
     this._game.canvas.addEventListener("mouseup", this._onMouseUp);
     this._game.canvas.addEventListener("mouseout", this._onMouseOut);
-    this._game.canvas.addEventListener("touchstart", this._onTouch, true);
-    this._game.canvas.addEventListener("touchmove", this._onTouch, true);
-    this._game.canvas.addEventListener("touchend", this._onTouch, true);
+    this._game.canvas.addEventListener("touchstart", this._onTouch);
+    this._game.canvas.addEventListener("touchmove", this._onTouch);
+    this._game.canvas.addEventListener("touchend", this._onTouch);
     this.loop();
   }
 
@@ -68,6 +69,98 @@ export default class Controller {
     }
   }
 
+  match(): CubeletGroup[] {
+    let g: CubeletGroup;
+    let result: CubeletGroup[] = [];
+
+    var index = this._holder.index;
+    if (this._holder.index === -1) {
+      g = CubeletGroup.GROUPS.x;
+      if (g.axis.dot(this._holder.plane.normal) === 0) {
+        result.push(g);
+      }
+      g = CubeletGroup.GROUPS.y;
+      if (g.axis.dot(this._holder.plane.normal) === 0) {
+        result.push(g);
+      }
+      g = CubeletGroup.GROUPS.z;
+      if (g.axis.dot(this._holder.plane.normal) === 0) {
+        result.push(g);
+      }
+      return result;
+    }
+    var x = (index % 3) - 1;
+    var y = Math.floor((index % 9) / 3) - 1;
+    var z = Math.floor(index / 9) - 1;
+    switch (x) {
+      case -1:
+        g = CubeletGroup.GROUPS.L;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 0:
+        g = CubeletGroup.GROUPS.M;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 1:
+        g = CubeletGroup.GROUPS.R;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      default:
+        break;
+    }
+    switch (y) {
+      case -1:
+        g = CubeletGroup.GROUPS.D;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 0:
+        g = CubeletGroup.GROUPS.E;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 1:
+        g = CubeletGroup.GROUPS.U;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      default:
+        break;
+    }
+    switch (z) {
+      case -1:
+        g = CubeletGroup.GROUPS.B;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 0:
+        g = CubeletGroup.GROUPS.S;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      case 1:
+        g = CubeletGroup.GROUPS.F;
+        if (g.axis.dot(this._holder.plane.normal) === 0) {
+          result.push(g);
+        }
+        break;
+      default:
+        break;
+    }
+    return result;
+  }
+
   _intersect(point: THREE.Vector2, plane: THREE.Plane) {
     var x = (point.x / this._game.canvas.clientWidth) * 2 - 1;
     var y = -(point.y / this._game.canvas.clientHeight) * 2 + 1;
@@ -93,7 +186,7 @@ export default class Controller {
     this._dragging = true;
     this._holder.index = -1;
 
-    this._planes.some(plane => {
+    this._planes.some((plane) => {
       var point = this._intersect(this._down, plane);
       if (point !== null) {
         if (
@@ -161,7 +254,7 @@ export default class Controller {
         this._vector.set(x, y, z);
         this._holder.vector.copy(this._vector.multiply(this._vector).normalize());
 
-        let groups = this._game.twister.match(this._holder);
+        let groups = this.match();
         groups.some(element => {
           if (element.axis.dot(this._vector) === 0) {
             this._group = element;
@@ -204,12 +297,26 @@ export default class Controller {
   }
 
   _handleUp() {
+    if (this._dragging) {
+      let face: FACES | null = null;
+      switch (this._holder.plane) {
+        case this._planes[0]:
+          face = FACES.R;
+          break;
+        case this._planes[1]:
+          face = FACES.U;
+          break;
+        case this._planes[2]:
+          face = FACES.F;
+          break;
+      }
+      for (let tap of this.taps) {
+        tap(this._holder.index, face);
+      }
+    }
     if (this._rotating) {
       if (this._group && this._group !== null) {
         if (this._game.enable) {
-          for (let callback of this._game.callbacks) {
-            callback(this._group.exp);
-          }
           this._group.adjust(this._game, this._angle);
         } else {
           this._group.revert(this._game);
@@ -227,19 +334,27 @@ export default class Controller {
     this._down.y = event.offsetY;
 
     this._handleDown();
+    event.returnValue = false;
+    return false;
   };
 
   _onMouseMove = (event: MouseEvent) => {
     this._move.x = event.offsetX;
     this._move.y = event.offsetY;
     this._handleMove();
+    event.returnValue = false;
+    return false;
   };
   _onMouseUp = (event: MouseEvent) => {
     this._handleUp();
+    event.returnValue = false;
+    return false;
   };
 
   _onMouseOut = (event: MouseEvent) => {
     this._handleUp();
+    event.returnValue = false;
+    return false;
   };
 
   _onTouch = (event: TouchEvent) => {
@@ -262,5 +377,7 @@ export default class Controller {
       default:
         return;
     }
+    event.returnValue = false;
+    return false;
   };
 }

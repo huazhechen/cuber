@@ -6,6 +6,7 @@ import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
 import TimerPanel from "../TimerPanel";
 import Database from "../../common/Database";
+import { FACES } from "../../cube/cubelet";
 
 @Component({
   template: require("./index.html"),
@@ -38,7 +39,6 @@ export default class App extends Vue {
       this.width = body.clientHeight / (16 / 9) + "px";
       body.style.width = this.width;
       this.$nextTick(this.resize);
-      return;
     }
     if (this.$refs.cuber instanceof HTMLElement && this.$refs.panel instanceof HTMLElement) {
       let cuber = this.$refs.cuber;
@@ -51,24 +51,17 @@ export default class App extends Vue {
     }
   }
 
-  exp: string = "";
-  task = 0;
-
   mounted() {
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.game.canvas);
       this.resize();
     }
-    this.game.callbacks.push(this.onTwist);
+    this.game.controller.taps.push(this.onTap);
   }
 
-  onTwist(exp: string) {
-    this.exp = exp;
-    clearTimeout(this.task);
-    this.task = setTimeout(() => {
-      this.exp = "";
-    }, 500);
+  onTap(index: number, face: number) {
+    console.log(FACES[this.game.cube.cubelets[index].getColor(face)])
   }
 
   @Watch("database.option.mode")

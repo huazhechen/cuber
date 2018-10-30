@@ -93,9 +93,6 @@ export default class Twister {
       this.update();
       return;
     } else {
-      for (let callback of this._game.callbacks) {
-        callback(action.format);
-      }
       let duration = this._game.duration * Math.min(1, Math.abs(angle) / Math.PI);
       this._game.tweener.tween(
         part.angle,
@@ -115,98 +112,6 @@ export default class Twister {
         }
       );
     }
-  }
-
-  match(holder: Holder): CubeletGroup[] {
-    let g: CubeletGroup;
-    let result: CubeletGroup[] = [];
-
-    var index = holder.index;
-    if (holder.index === -1) {
-      g = CubeletGroup.GROUPS.x;
-      if (g.axis.dot(holder.plane.normal) === 0) {
-        result.push(g);
-      }
-      g = CubeletGroup.GROUPS.y;
-      if (g.axis.dot(holder.plane.normal) === 0) {
-        result.push(g);
-      }
-      g = CubeletGroup.GROUPS.z;
-      if (g.axis.dot(holder.plane.normal) === 0) {
-        result.push(g);
-      }
-      return result;
-    }
-    var x = (index % 3) - 1;
-    var y = Math.floor((index % 9) / 3) - 1;
-    var z = Math.floor(index / 9) - 1;
-    switch (x) {
-      case -1:
-        g = CubeletGroup.GROUPS.L;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = CubeletGroup.GROUPS.M;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = CubeletGroup.GROUPS.R;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    switch (y) {
-      case -1:
-        g = CubeletGroup.GROUPS.D;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = CubeletGroup.GROUPS.E;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = CubeletGroup.GROUPS.U;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    switch (z) {
-      case -1:
-        g = CubeletGroup.GROUPS.B;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = CubeletGroup.GROUPS.S;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = CubeletGroup.GROUPS.F;
-        if (g.axis.dot(holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    return result;
   }
 }
 

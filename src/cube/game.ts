@@ -23,15 +23,14 @@ export default class Game {
 
   public dirty: boolean = true;
   public duration: number = 60;
-  public callbacks: Function[] = [];
   public width: number = 0;
   public height: number = 0;
   public scale: number = 1;
 
   constructor() {
     this.scene = new THREE.Scene();
-    this.scene.rotation.x = Math.PI / 8;
-    this.scene.rotation.y = Math.PI / 16 - Math.PI / 4;
+    this.scene.rotation.x = Math.PI / 6;
+    this.scene.rotation.y = -Math.PI / 5;
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;
     this.camera.position.y = 0;

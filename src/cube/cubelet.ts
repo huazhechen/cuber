@@ -222,9 +222,9 @@ export default class Cubelet extends THREE.Group {
 
   private _materials: THREE.MeshBasicMaterial[];
 
-  getColor(i: number) {
+  getColor(face: FACES) {
     let position = new THREE.Vector3(0, 0, 0);
-    switch (i) {
+    switch (face) {
       case FACES.L:
         position.x = -1;
         break;
@@ -251,21 +251,21 @@ export default class Cubelet extends THREE.Group {
     let x = Math.round(position.x);
     let y = Math.round(position.y);
     let z = Math.round(position.z);
-    let side = 0;
+    let color = 0;
     if (x < 0) {
-      side = FACES.L;
+      color = FACES.L;
     } else if (x > 0) {
-      side = FACES.R;
+      color = FACES.R;
     } else if (y < 0) {
-      side = FACES.D;
+      color = FACES.D;
     } else if (y > 0) {
-      side = FACES.U;
+      color = FACES.U;
     } else if (z < 0) {
-      side = FACES.B;
+      color = FACES.B;
     } else if (z > 0) {
-      side = FACES.F;
+      color = FACES.F;
     }
-    return this._stickers[side].name;
+    return color;
   }
 
   constructor(index: number) {
@@ -350,9 +350,9 @@ export default class Cubelet extends THREE.Group {
           _mirror.rotation.y = Math.PI;
         }
 
-        _mirror.position.x = _sticker.position.x * 3;
-        _mirror.position.y = _sticker.position.y * 3;
-        _mirror.position.z = _sticker.position.z * 3;
+        _mirror.position.x = _sticker.position.x * 4;
+        _mirror.position.y = _sticker.position.y * 4;
+        _mirror.position.z = _sticker.position.z * 4;
         this.add(_mirror);
         this._mirrors[i] = _mirror;
       }
