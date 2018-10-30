@@ -15,10 +15,10 @@ export default class Twister {
   }
 
   finish() {
-    this._game.tweener.finish();
     for (const action of this.queue) {
       action.fast = true;
     }
+    this._game.tweener.finish();
     this.update();
   }
 
@@ -129,10 +129,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-          this.exp +
-          (this.exp.length > 1 ? ")" : "") +
-          (this.reverse ? "'" : "") +
-          (this.times == 1 ? "" : String(this.times));
+      this.exp +
+      (this.exp.length > 1 ? ")" : "") +
+      (this.reverse ? "'" : "") +
+      (this.times == 1 ? "" : String(this.times));
   }
 }
 

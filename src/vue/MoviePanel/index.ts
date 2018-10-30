@@ -1,0 +1,190 @@
+import Vue from "vue";
+import { Component, Inject, Prop, Watch } from "vue-property-decorator";
+import Game from "../../cube/game";
+import Cubelet from "../../cube/cubelet";
+
+@Component({
+  template: require("./index.html")
+})
+export default class TimerPanel extends Vue {
+  @Inject("game")
+  game: Game;
+
+  mounted() {
+    this.game.controller.taps.push(this.tap);
+    this.onShowChange(this.show);
+  }
+
+  @Prop({ default: false })
+  show: boolean;
+
+  @Watch("show")
+  onShowChange(to: boolean = this.show, from: boolean = this.show) {
+    if (to) {
+      this.init();
+    } else {
+      this.playing = false;
+      if (from) {
+        for (let i = 0; i < 27; i++) {
+          this.game.cube.cubelets[i].show();
+          for (let face = 0; face < 6; face++) {
+            this.game.cube.stick(i, face);
+          }
+        }
+        this.game.dirty = true;
+      }
+    }
+  }
+
+
+  scene: string = window.localStorage.getItem("movie.scene") || "";
+  @Watch("scene")
+  onSceneChange() {
+    window.localStorage.setItem("movie.scene", this.scene);
+    this.init();
+  }
+
+  action: string = window.localStorage.getItem("movie.action") || "";
+  @Watch("action")
+  onActionChange() {
+    window.localStorage.setItem("movie.action", this.action);
+  }
+
+  operate: number = 0;
+  playing: boolean = false;
+
+  init() {
+    for (let index = 0; index < 27; index++) {
+      if (this.hides.indexOf(index) < 0) {
+        this.game.cube.show(index);
+      } else {
+        this.game.cube.hide(index);
+      }
+      for (let face = 0; face < 6; face++) {
+        let identity = index * 6 + face;
+        if (this.highlights.indexOf(identity) >= 0) {
+          this.game.cube.highlight(index, face);
+        } else if (this.strips.indexOf(identity) >= 0) {
+          this.game.cube.strip(index, face);
+        } else {
+          this.game.cube.stick(index, face);
+        }
+      }
+    }
+    this.playing = false;
+    this.game.twister.twist("#");
+    this.game.twister.twist(this.scene, false, 1, null, true);
+  }
+
+  reset() {
+    this.hides = [];
+    this.strips = [];
+    this.highlights = [];
+    this.init();
+    this.game.dirty = true;
+  }
+
+  toggle() {
+    if (this.playing) {
+      this.init();
+    } else {
+      this.init();
+      this.playing = true;
+      this.game.twister.twist(this.action);
+    }
+  }
+
+  snap() {
+    let content = this.game.canvas.toDataURL("image/png");
+    let parts = content.split(";base64,");
+    let type = parts[0].split(":")[1];
+    let raw = window.atob(parts[1]);
+    let length = raw.length;
+    let data = new Uint8Array(length);
+    for (let i = 0; i < length; ++i) {
+      data[i] = raw.charCodeAt(i);
+    }
+    let blob = new Blob([data], { type: type });
+
+    let link = document.createElement("a");
+    let evt = document.createEvent("MouseEvents");
+    evt.initEvent("click", false, false);
+    link.download = "cuber.png";
+    link.href = URL.createObjectURL(blob);
+    link.dispatchEvent(evt);
+  }
+
+  film() {
+
+  }
+
+  strips: number[] = JSON.parse(window.localStorage.getItem("movie.strips") || "[]");
+  @Watch("strips")
+  onStripsChange() {
+    window.localStorage.setItem("movie.strips", JSON.stringify(this.strips));
+  }
+
+  highlights: number[] = JSON.parse(window.localStorage.getItem("movie.highlights") || "[]");
+  @Watch("highlights")
+  onHighlightsChange() {
+    window.localStorage.setItem("movie.highlights", JSON.stringify(this.highlights));
+  }
+
+  hides: number[] = JSON.parse(window.localStorage.getItem("movie.hides") || "[]");
+  @Watch("hides")
+  onHidesChange() {
+    window.localStorage.setItem("movie.hides", JSON.stringify(this.hides));
+  }
+
+  tap(index: number, face: number) {
+    if (index < 0) {
+      return;
+    }
+    let cubelet: Cubelet = this.game.cube.cubelets[index];
+    index = cubelet.initial;
+    face = cubelet.getColor(face);
+    let identity = index * 6 + face;
+    let position = 0;
+    switch (this.operate) {
+      case 0:
+        position = this.strips.indexOf(identity);
+        if (position < 0) {
+          cubelet.strip(face);
+          this.strips.push(identity);
+          position = this.highlights.indexOf(identity);
+          if (position >= 0) {
+            this.highlights.splice(position, 1);
+          }
+        } else {
+          cubelet.stick(face);
+          this.strips.splice(position, 1);
+        }
+        break;
+      case 1:
+        position = this.highlights.indexOf(identity);
+        if (position < 0) {
+          cubelet.highlight(face);
+          this.highlights.push(identity);
+          position = this.strips.indexOf(identity);
+          if (position >= 0) {
+            this.strips.splice(position, 1);
+          }
+        } else {
+          cubelet.stick(face);
+          this.highlights.splice(position, 1);
+        }
+        break;
+      case 2:
+        position = this.hides.indexOf(index);
+        if (position < 0) {
+          cubelet.hide();
+          this.hides.push(index);
+        } else {
+          cubelet.show();
+          this.hides.splice(position, 1);
+        }
+        break;
+    }
+  }
+
+}

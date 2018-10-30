@@ -4,7 +4,7 @@ import Game from "../../cube/game";
 import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
-import TimerPanel from "../TimerPanel";
+import MoviePanel from "../MoviePanel";
 import Database from "../../common/Database";
 import { FACES } from "../../cube/cubelet";
 
@@ -13,7 +13,7 @@ import { FACES } from "../../cube/cubelet";
   components: {
     "keyboard-panel": KeyboardPanel,
     "script-panel": ScriptPanel,
-    "timer-panel": TimerPanel,
+    "movie-panel": MoviePanel,
     "app-menu": AppMenu
   }
 })
@@ -57,11 +57,6 @@ export default class App extends Vue {
       cuber.appendChild(this.game.canvas);
       this.resize();
     }
-    this.game.controller.taps.push(this.onTap);
-  }
-
-  onTap(index: number, face: number) {
-    console.log(FACES[this.game.cube.cubelets[index].getColor(face)])
   }
 
   @Watch("database.option.mode")

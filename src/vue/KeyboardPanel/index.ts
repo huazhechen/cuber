@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
+import Database from "../../common/Database";
 
 @Component({
   template: require("./index.html")
@@ -8,6 +9,9 @@ import Game from "../../cube/game";
 export default class KeyboardPanel extends Vue {
   @Inject("game")
   game: Game;
+
+  @Inject("database")
+  database: Database;
 
   @Prop({ default: false })
   show: boolean;

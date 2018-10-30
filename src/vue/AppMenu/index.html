@@ -13,8 +13,8 @@
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'timer'?'primary':''" flat block @tap="$emit('input', false); mode('timer')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-            <v-icon large>timer</v-icon>
+          <fast-button class="headline" :color="database.option.mode == 'movie'?'primary':''" flat block @tap="$emit('input', false); mode('movie')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-icon large>movie</v-icon>
           </fast-button>
         </v-flex>
       </v-layout>
@@ -26,13 +26,8 @@
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" flat block @tap="$emit('input', false); png()" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-            <v-icon large>camera_alt</v-icon>
-          </fast-button>
-        </v-flex>
-        <v-flex xs4>
           <fast-button class="headline" flat block @tap="$emit('input', false); data=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-            <v-icon large>storage</v-icon>
+            <v-icon large>folder</v-icon>
           </fast-button>
         </v-flex>
       </v-layout>

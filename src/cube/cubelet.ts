@@ -179,7 +179,6 @@ export default class Cubelet extends THREE.Group {
   private _stickers: THREE.Mesh[] = [];
   private _edges: THREE.Mesh[] = [];
   private _frame: THREE.Mesh;
-  private _mirrors: THREE.Mesh[] = [];
   private _quaternion: THREE.Quaternion = new THREE.Quaternion();
 
   set vector(vector) {
@@ -191,22 +190,6 @@ export default class Cubelet extends THREE.Group {
   }
   get vector() {
     return this._vector;
-  }
-
-  set mirror(value: boolean) {
-    if (value) {
-      for (let i = 0; i < 6; i++) {
-        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) < 0) {
-          this.add(this._mirrors[i]);
-        }
-      }
-    } else {
-      for (let i = 0; i < 6; i++) {
-        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) >= 0) {
-          this.remove(this._mirrors[i]);
-        }
-      }
-    }
   }
 
   set index(index) {
@@ -341,61 +324,28 @@ export default class Cubelet extends THREE.Group {
       this._edges.push(_edge);
       this.add(_sticker);
       this._stickers.push(_sticker);
-      if (this._materials[i] != Cubelet._MATERIALS.i) {
-        let _mirror = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
-        _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
-        _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
-        _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
-        if (_mirror.rotation.x + _mirror.rotation.y + _mirror.rotation.z == 0) {
-          _mirror.rotation.y = Math.PI;
-        }
-
-        _mirror.position.x = _sticker.position.x * 4;
-        _mirror.position.y = _sticker.position.y * 4;
-        _mirror.position.z = _sticker.position.z * 4;
-        this.add(_mirror);
-        this._mirrors[i] = _mirror;
-      }
       this.matrixAutoUpdate = false;
       this.updateMatrix();
     }
   }
 
-  stick() {
-    for (let i = 0; i < 6; i++) {
-      this._stickers[i].material = this._materials[i];
-      if (this._mirrors[i] instanceof THREE.Mesh) {
-        this._mirrors[i].material = this._materials[i];
-      }
-    }
+  stick(face: number) {
+    this._stickers[face].material = this._materials[face];
   }
 
   strip(face: number) {
     this._stickers[face].material = Cubelet._MATERIALS.i;
-    if (this._mirrors[face] instanceof THREE.Mesh) {
-      this._mirrors[face].material = Cubelet._MATERIALS.i;
-    }
   }
 
-  set highlight(value: boolean) {
-    if (value) {
-      for (let i = 0; i < 6; i++) {
-        if (this._stickers[i].material == Cubelet._MATERIALS.i) {
-          this._stickers[i].material = Cubelet._MATERIALS.h;
-          if (this._mirrors[i] instanceof THREE.Mesh) {
-            this._mirrors[i].material = Cubelet._MATERIALS.h;
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < 6; i++) {
-        if (this._stickers[i].material == Cubelet._MATERIALS.h) {
-          this._stickers[i].material = Cubelet._MATERIALS.i;
-          if (this._mirrors[i] instanceof THREE.Mesh) {
-            this._mirrors[i].material = Cubelet._MATERIALS.i;
-          }
-        }
-      }
-    }
+  highlight(face: number) {
+    this._stickers[face].material = Cubelet._MATERIALS.h;
+  }
+
+  show() {
+    this.visible = true;
+  }
+
+  hide() {
+    this.visible = false;
   }
 }

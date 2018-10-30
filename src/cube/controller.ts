@@ -178,7 +178,7 @@ export default class Controller {
 
   _handleDown() {
     if (this._game.enable) {
-      this._game.tweener.finish();
+      this._game.twister.finish();
     }
     if (this._game.lock) {
       return true;
@@ -198,7 +198,7 @@ export default class Controller {
           var x = Math.ceil(Math.round(point.x) / Cubelet.SIZE - 0.5);
           var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
           var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
-          if (this._game.enable && x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
+          if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
             this._holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
           } else {
             this._holder.index = -1;
@@ -226,7 +226,7 @@ export default class Controller {
       }
       this._dragging = false;
       this._rotating = true;
-      if (this._holder.index === -1) {
+      if (this._holder.index === -1 || !this._game.enable) {
         if (dx * dx > dy * dy) {
           this._group = CubeletGroup.GROUPS.y;
         } else {
@@ -268,7 +268,7 @@ export default class Controller {
       this._group.hold(this._game);
     }
     if (this._rotating) {
-      if (this._holder.index === -1) {
+      if (this._holder.index === -1 || !this._game.enable) {
         var dx = this._move.x - this._down.x;
         var dy = this._move.y - this._down.y;
         if (this._group === CubeletGroup.GROUPS.y) {

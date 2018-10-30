@@ -26,16 +26,6 @@ class Option {
     this._storage.setItem("option.keyboard", String(value));
   }
 
-  get mirror() {
-    return this._game.cube.mirror;
-  }
-
-  set mirror(value: boolean) {
-    this._game.cube.mirror = value;
-    this._game.dirty = true;
-    this._storage.setItem("option.mirror", String(value));
-  }
-
   get size() {
     return this._size;
   }
@@ -75,7 +65,6 @@ class Option {
     this.keyboard = this._storage.getItem("option.keyboard") == "true";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
-    this.mirror = this._storage.getItem("option.mirror") == "true";
   }
 
   toJSON() {
@@ -83,8 +72,7 @@ class Option {
       mode: this.mode,
       keyboard: this.keyboard,
       speed: this.speed,
-      size: this.size,
-      mirror: this.mirror
+      size: this.size
     };
   }
 
@@ -94,7 +82,6 @@ class Option {
     this.keyboard = data.keyboard;
     this.speed = data.speed || 0;
     this.size = data.size || 0;
-    this.mirror = data.mirror;
   }
 }
 

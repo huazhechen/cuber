@@ -24,6 +24,7 @@ export default class ScriptPanel extends Vue {
       this.onIndexChange();
       this.onScriptChange();
       this.onExpChange(this.exp);
+      this.$nextTick(this.strip);
     } else {
       this.playing = false;
       if (from) {
@@ -75,15 +76,22 @@ export default class ScriptPanel extends Vue {
   index: number = Number(window.localStorage.getItem("script.index") || 1);
 
   stick() {
-    this.game.cube.stick();
+    for (let i = 0; i < 27; i++) {
+      for (let face = 0; face < 6; face++) {
+        this.game.cube.stick(i, face);
+      }
+    }
     this.game.dirty = true;
   }
 
   strip() {
+    this.stick();
     let strips = this.database.scripts[this.type].strips;
     for (let strip of strips) {
       for (let index of strip.indexes) {
-        this.game.cube.strip(index, strip.faces);
+        for (let face of strip.faces) {
+          this.game.cube.strip(index, face);
+        }
       }
     }
     this.game.dirty = true;
@@ -110,7 +118,6 @@ export default class ScriptPanel extends Vue {
     if (to != from) {
       this.index = 1;
     }
-    this.stick();
     this.strip();
   }
 

@@ -14,6 +14,7 @@ export default class Cube extends THREE.Group {
       this._initial.push(cubelet);
       this.add(cubelet);
     }
+    this._initial[13].visible = false;
     this.matrixAutoUpdate = false;
     this.updateMatrix();
   }
@@ -28,7 +29,6 @@ export default class Cube extends THREE.Group {
 
   reset() {
     for (let cubelet of this.cubelets) {
-      cubelet.highlight = false;
       cubelet.setRotationFromEuler(new Euler(0, 0, 0));
       cubelet.index = cubelet.initial;
       cubelet.updateMatrix();
@@ -36,35 +36,26 @@ export default class Cube extends THREE.Group {
     this.cubelets.sort(this.compare);
   }
 
-  private _mirror: boolean = true;
-
-  get mirror() {
-    return this._mirror;
+  stick(index: number, face: number) {
+    this._initial[index].stick(face);
   }
 
-  set mirror(value: boolean) {
-    this._mirror = value;
-    for (let cubelet of this.cubelets) {
-      cubelet.mirror = value;
-    }
+  strip(index: number, face: number) {
+    this._initial[index].strip(face);
   }
 
-  stick() {
-    for (let cubelet of this.cubelets) {
-      cubelet.stick();
-    }
+  highlight(index: number, face: number) {
+    this._initial[index].highlight(face);
   }
 
-  strip(index: number, faces: number[]) {
-    for (let face of faces) {
-      this._initial[index].strip(face);
-    }
+  show(index: number) {
+    this._initial[index].show();
   }
 
-  highlight(index: number, highlight: boolean) {
-    this._initial[index].highlight = highlight;
+  hide(index: number) {
+    this._initial[index].hide();
   }
-  
+
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |
