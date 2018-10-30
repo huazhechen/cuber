@@ -6,6 +6,7 @@ module.exports = {
     vendor: [
       "three",
       "vue",
+      "whammy",
       "vue-property-decorator",
       "vuetify",
       "vuetify/dist/vuetify.css",

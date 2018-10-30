@@ -40,7 +40,6 @@ export default class App extends Vue {
         this.width = window.innerHeight / (16 / 9) + "px";
         el.style.width = this.width;
         this.$nextTick(this.resize);
-        console.log("limit");
         return;
       }
     } else {
@@ -48,7 +47,6 @@ export default class App extends Vue {
         this.width = "100%";
         el.style.width = this.width;
         this.$nextTick(this.resize);
-        console.log("100%");
         return;
       }
     }
