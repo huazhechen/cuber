@@ -14,7 +14,6 @@ export default class Cube extends THREE.Group {
       this._initial.push(cubelet);
       this.add(cubelet);
     }
-    this._initial[13].visible = false;
     this.matrixAutoUpdate = false;
     this.updateMatrix();
   }

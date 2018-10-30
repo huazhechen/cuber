@@ -216,7 +216,7 @@ export default class Controller {
       var dx = this._move.x - this._down.x;
       var dy = this._move.y - this._down.y;
       var d = Math.sqrt(dx * dx + dy * dy);
-      if (Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight) / d > 100) {
+      if (Math.min(this._game.canvas.clientWidth, this._game.canvas.clientHeight) / d > 64) {
         return true;
       }
       if (this._game.lock) {
