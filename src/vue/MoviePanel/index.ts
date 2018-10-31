@@ -27,7 +27,7 @@ export default class TimerPanel extends Vue {
           this.highlights = option.movie.highlights || [];
           this.hides = option.movie.hides || [];
           this.database.option.mode = "movie";
-          window.location.search = "";
+          window.location.href = window.location.origin + window.location.pathname;
         }
       } catch (e) {}
     }
@@ -175,6 +175,7 @@ export default class TimerPanel extends Vue {
   share() {
     this.link =
       window.location.origin +
+      window.location.pathname +
       "?" +
       encodeURI(JSON.stringify({ movie: { scene: this.scene, action: this.action, strips: this.strips, highlights: this.highlights, hides: this.hides } }));
     this.dialog = true;
