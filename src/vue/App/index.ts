@@ -6,7 +6,6 @@ import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
 import MoviePanel from "../MoviePanel";
 import Database from "../../common/database";
-import { FACES } from "../../cube/cubelet";
 
 @Component({
   template: require("./index.html"),

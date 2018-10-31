@@ -2,7 +2,8 @@ import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Cubelet from "../../cube/cubelet";
-import { Encoder } from "../../common/apng"
+import { Encoder } from "../../common/apng";
+import Database from "../../common/database";
 
 @Component({
   template: require("./index.html")
@@ -11,7 +12,25 @@ export default class TimerPanel extends Vue {
   @Inject("game")
   game: Game;
 
+  @Inject("database")
+  database: Database;
+
   mounted() {
+    let search = decodeURI(window.location.search.toString().substr(1));
+    if (search.length > 0) {
+      try {
+        let option = JSON.parse(search);
+        if (option.movie != null) {
+          this.scene = option.movie.scene || "";
+          this.action = option.movie.action || "";
+          this.strips = option.movie.strips || [];
+          this.highlights = option.movie.highlights || [];
+          this.hides = option.movie.hides || [];
+          this.database.option.mode = "movie";
+          window.location.href = window.location.origin;
+        }
+      } catch (e) {}
+    }
     this.loop();
     this.game.controller.taps.push(this.tap);
     this.onShowChange(this.show);
@@ -152,6 +171,17 @@ export default class TimerPanel extends Vue {
     this.encoder.addFrame();
     this.game.twister.twist("-" + this.action + "-", false, 1, this.save, false);
   }
+
+  share() {
+    this.link =
+      window.location.origin +
+      "?" +
+      encodeURI(JSON.stringify({ movie: { scene: this.scene, action: this.action, strips: this.strips, highlights: this.highlights, hides: this.hides } }));
+    this.dialog = true;
+  }
+
+  link: string = "";
+  dialog: boolean = false;
 
   strips: number[] = JSON.parse(window.localStorage.getItem("movie.strips") || "[]");
   @Watch("strips")

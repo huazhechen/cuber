@@ -22,9 +22,6 @@ export default class AppMenu extends Vue {
   @Prop({ required: true })
   value: boolean;
 
-  @Prop({ default: "100%" })
-  width: string;
-
   @Watch("value")
   onValueChange(value: boolean) {
     this.$emit("input", value);

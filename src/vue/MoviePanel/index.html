@@ -26,20 +26,31 @@
         <v-icon large>replay</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs4>
-      <fast-button icon large @tap="snap" style="margin: 0%; padding: 0%;">
-        <v-icon large>camera_alt</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs4>
+    <v-flex xs3>
       <fast-button icon large :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs4>
+    <v-flex xs3>
+      <fast-button icon large @tap="snap" style="margin: 0%; padding: 0%;">
+        <v-icon large>camera_alt</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs3>
       <fast-button icon large :disabled="action == '' || recording" @tap="film" style="margin: 0%; padding: 0%;">
         <v-icon large>videocam</v-icon>
       </fast-button>
     </v-flex>
+    <v-flex xs3>
+      <fast-button icon large :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
+        <v-icon large>share</v-icon>
+      </fast-button>
+    </v-flex>
   </v-layout>
+
+  <v-dialog v-model="dialog" :width="game.canvas.width">
+    <v-card flat>
+      <v-card-text class="headline" style="word-break: break-all; margin: 0%">{{link}}</v-card-text>
+    </v-card>
+  </v-dialog>
 </v-container>
