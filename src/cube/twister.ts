@@ -52,7 +52,7 @@ export default class Twister {
         0,
         1,
         this._game.duration / 2,
-        (value: number) => { },
+        (value: number) => {},
         () => {
           if (action.callback) {
             action.callback();
@@ -144,10 +144,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-      this.exp +
-      (this.exp.length > 1 ? ")" : "") +
-      (this.reverse ? "'" : "") +
-      (this.times == 1 ? "" : String(this.times));
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
   }
 }
 
@@ -156,15 +156,15 @@ export class TwistNode {
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
     let list = exp
-      .replace(/[^\*#-xyzbsfdeulmr\(\)'0123456789]/gi, "")
-      .match(/\([\*#-xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#-xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
+      .replace(/[^\*#\-xyzbsfdeulmr\(\)'0123456789]/gi, "")
+      .match(/\([\*#\-xyzbsfdeulmr'\(\)\d]+\)('\d*|\d*'|\d*)|[\*#\-xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
     if (null === list) {
       return;
     }
     if (list.length == 1) {
       var values = list[0].match(/^\((\S+)\)('?)(\d*)('?)$/i);
       if (values === null) {
-        values = list[0].match(/([\*#-xyzbsfdeulmr])('?)(\d*)('?)/i);
+        values = list[0].match(/(\([\*#\-xyzbsfdeulmr'\(\)\d]+\)|[\*#\-xyzbsfdeulmr])('?)(\d*)('?)/i);
         if (null === values) {
           return;
         }
@@ -178,7 +178,7 @@ export class TwistNode {
       } else {
         this._children.push(new TwistNode(values[1]));
       }
-      this._twist.reverse = (values[2] + values[4]).length == 0 ? false : true;
+      this._twist.reverse = (values[2] + values[4]).length == 1 ? true : false;
       this._twist.times = values[3].length == 0 ? 1 : parseInt(values[3]);
       this._twist.reverse = this._twist.reverse !== reverse;
       this._twist.times = this._twist.times * times;
