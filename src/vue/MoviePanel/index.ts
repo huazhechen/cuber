@@ -150,7 +150,7 @@ export default class TimerPanel extends Vue {
     this.recording = true;
     this.encoder.start();
     this.encoder.addFrame();
-    this.game.twister.twist(this.action, false, 1, this.save, false);
+    this.game.twister.twist("-" + this.action + "-", false, 1, this.save, false);
   }
 
   strips: number[] = JSON.parse(window.localStorage.getItem("movie.strips") || "[]");

@@ -1,6 +1,5 @@
 import CubeletGroup from "./group";
 import Game from "./game";
-import Holder from "./holder";
 
 export default class Twister {
   public queue: TwistAction[] = [];
@@ -48,6 +47,22 @@ export default class Twister {
   }
 
   start(action: TwistAction) {
+    if (action.exp == "-") {
+      this._game.tweener.tween(
+        0,
+        1,
+        this._game.duration / 2,
+        (value: number) => { },
+        () => {
+          if (action.callback) {
+            action.callback();
+          }
+          this.update();
+          return;
+        }
+      );
+      return;
+    }
     if (action.exp == "#") {
       this._game.cube.reset();
       this._game.dirty = true;
@@ -141,15 +156,15 @@ export class TwistNode {
   private _twist: TwistAction = new TwistAction();
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
     let list = exp
-      .replace(/[^\*#xyzbsfdeulmr\(\)'0123456789]/gi, "")
-      .match(/\([\*#xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
+      .replace(/[^\*#-xyzbsfdeulmr\(\)'0123456789]/gi, "")
+      .match(/\([\*#-xyzbsfdeulmr'\d]+\)('\d*|\d*'|\d*)|[\*#-xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
     if (null === list) {
       return;
     }
     if (list.length == 1) {
       var values = list[0].match(/^\((\S+)\)('?)(\d*)('?)$/i);
       if (values === null) {
-        values = list[0].match(/([\*#xyzbsfdeulmr])('?)(\d*)('?)/i);
+        values = list[0].match(/([\*#-xyzbsfdeulmr])('?)(\d*)('?)/i);
         if (null === values) {
           return;
         }

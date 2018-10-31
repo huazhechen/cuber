@@ -6,7 +6,8 @@ export class Encoder {
   }
 
   public repeat = 0;
-  public delay = 1
+  public delay_num = 1;
+  public delay_den = 60;
   public dispose = 0;
   public blend = 1;
 
@@ -64,8 +65,8 @@ export class Encoder {
           fcTL = concat(fcTL, int32ToBytes4(this._canvas.height))
           fcTL = concat(fcTL, int32ToBytes4(0))
           fcTL = concat(fcTL, int32ToBytes4(0))
-          fcTL = concat(fcTL, int16ToBytes2(this.delay))
-          fcTL = concat(fcTL, int16ToBytes2(100))
+          fcTL = concat(fcTL, int16ToBytes2(this.delay_num))
+          fcTL = concat(fcTL, int16ToBytes2(this.delay_den))
           fcTL = concat(fcTL, new Uint8Array([this.dispose]))
           fcTL = concat(fcTL, new Uint8Array([this.blend]))
 
@@ -94,8 +95,8 @@ export class Encoder {
           fcTL = concat(fcTL, int32ToBytes4(this._canvas.height));
           fcTL = concat(fcTL, int32ToBytes4(0));
           fcTL = concat(fcTL, int32ToBytes4(0));
-          fcTL = concat(fcTL, int16ToBytes2(this.delay));
-          fcTL = concat(fcTL, int16ToBytes2(100));
+          fcTL = concat(fcTL, int16ToBytes2(this.delay_num));
+          fcTL = concat(fcTL, int16ToBytes2(this.delay_den));
           fcTL = concat(fcTL, new Uint8Array([this.dispose]));
           fcTL = concat(fcTL, new Uint8Array([this.blend]));
 
