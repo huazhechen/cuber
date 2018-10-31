@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
-import Database from "../../common/Database";
+import Database from "../../common/database";
 
 @Component({
   template: require("./index.html")

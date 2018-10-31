@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cube/twister";
 import Game from "../../cube/game";
-import Database from "../../common/Database";
+import Database from "../../common/database";
 
 @Component({
   template: require("./index.html")

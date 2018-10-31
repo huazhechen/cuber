@@ -5,7 +5,7 @@ import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
 import MoviePanel from "../MoviePanel";
-import Database from "../../common/Database";
+import Database from "../../common/database";
 import { FACES } from "../../cube/cubelet";
 
 @Component({

@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Cubelet from "../../cube/cubelet";
-import Whammy from "whammy";
+import { Encoder } from "../../common/apng"
 
 @Component({
   template: require("./index.html")
@@ -124,7 +124,7 @@ export default class TimerPanel extends Vue {
     if (!this.recording) {
       return;
     }
-    this.encoder.add(this.game.canvas);
+    this.encoder.addFrame();
   }
 
   save() {
@@ -132,22 +132,24 @@ export default class TimerPanel extends Vue {
       return;
     }
     this.recording = false;
-    let blob = this.encoder.compile(false);
+    let data = this.encoder.finish();
+    let blob = new Blob([new Uint8Array(data)], { type: "image/png" });
     let link = document.createElement("a");
     let evt = document.createEvent("MouseEvents");
     evt.initEvent("click", false, false);
-    link.download = "cuber.webm";
+    link.download = "cuber.png";
     link.href = URL.createObjectURL(blob);
     link.dispatchEvent(evt);
   }
 
-  encoder: Whammy.Video = new Whammy.Video(15);
+  encoder: Encoder = new Encoder(this.game.canvas);
   recording: boolean = false;
   film() {
-    this.encoder = new Whammy.Video(15);
     this.init();
     this.playing = true;
     this.recording = true;
+    this.encoder.start();
+    this.encoder.addFrame();
     this.game.twister.twist(this.action, false, 1, this.save, false);
   }
 
