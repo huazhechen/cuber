@@ -27,7 +27,7 @@ export default class TimerPanel extends Vue {
           this.highlights = option.movie.highlights || [];
           this.hides = option.movie.hides || [];
           this.database.option.mode = "movie";
-          window.location.href = window.location.origin;
+          window.location.search = "";
         }
       } catch (e) {}
     }
