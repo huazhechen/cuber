@@ -30,7 +30,7 @@ export default class TimerPanel extends Vue {
           window.location.href = window.location.origin + window.location.pathname;
           console.log(window.location.href);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     this.loop();
     this.game.controller.taps.push(this.tap);
@@ -152,6 +152,8 @@ export default class TimerPanel extends Vue {
       return;
     }
     this.recording = false;
+    let speed = this.database.option.speed;
+    this.database.option.speed = speed;
     let data = this.encoder.finish();
     let blob = new Blob([new Uint8Array(data)], { type: "image/png" });
     let link = document.createElement("a");
@@ -165,6 +167,7 @@ export default class TimerPanel extends Vue {
   encoder: Encoder = new Encoder(this.game.canvas);
   recording: boolean = false;
   film() {
+    this.game.duration = 60;
     this.init();
     this.playing = true;
     this.recording = true;
