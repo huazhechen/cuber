@@ -178,7 +178,6 @@ export default class TimerPanel extends Vue {
   film() {
     this.game.duration = 60;
     this.init();
-    this.playing = true;
     this.recording = true;
     this.encoder.start();
     this.encoder.addFrame();
