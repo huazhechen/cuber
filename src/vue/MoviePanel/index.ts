@@ -30,7 +30,7 @@ export default class TimerPanel extends Vue {
           window.location.href = window.location.origin + window.location.pathname;
           console.log(window.location.href);
         }
-      } catch (e) { }
+      } catch (e) {}
     }
     this.loop();
     this.game.controller.taps.push(this.tap);
@@ -74,7 +74,7 @@ export default class TimerPanel extends Vue {
   operate: number = 0;
   playing: boolean = false;
 
-  init() {
+  refresh() {
     for (let index = 0; index < 27; index++) {
       if (this.hides.indexOf(index) < 0) {
         this.game.cube.show(index);
@@ -92,6 +92,10 @@ export default class TimerPanel extends Vue {
         }
       }
     }
+  }
+
+  init() {
+    this.refresh();
     this.playing = false;
     this.game.twister.twist("#");
     this.game.twister.twist(this.scene, false, 1, null, true);
@@ -101,7 +105,7 @@ export default class TimerPanel extends Vue {
     this.hides = [];
     this.strips = [];
     this.highlights = [];
-    this.init();
+    this.refresh();
     this.game.dirty = true;
   }
 
@@ -109,7 +113,7 @@ export default class TimerPanel extends Vue {
     if (this.playing) {
       this.init();
       this.playing = true;
-      this.game.twister.twist("-" + this.action + "-", false, 1, this.play, false);
+      this.game.twister.twist("-" + this.action + "--", false, 1, this.play, false);
     } else {
       return;
     }

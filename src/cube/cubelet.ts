@@ -82,6 +82,7 @@ class Frame extends THREE.Geometry {
       let _face = new THREE.Face3(_indice[0], _indice[1], _indice[2]);
       this.faces.push(_face);
     }
+    this.computeFaceNormals();
   }
 }
 
@@ -163,6 +164,7 @@ export default class Cubelet extends THREE.Group {
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
+    n: new THREE.MeshNormalMaterial(),
     h: new THREE.MeshBasicMaterial({ color: "#EA80FC" }),
     p: new THREE.MeshBasicMaterial({ color: "#202020" }),
     i: new THREE.MeshBasicMaterial({ color: "#808080" }),
@@ -327,7 +329,7 @@ export default class Cubelet extends THREE.Group {
       if (this.initial == 13) {
         this.children = [];
         let geometry = new THREE.CylinderGeometry(Cubelet.SIZE / 6, Cubelet.SIZE / 6, Cubelet.SIZE, 16);
-        let material = new THREE.MeshNormalMaterial();
+        let material = Cubelet._MATERIALS.n;
         let mesh: THREE.Mesh;
         mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = Math.PI / 2;
