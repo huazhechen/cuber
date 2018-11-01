@@ -16,7 +16,7 @@ export default class TimerPanel extends Vue {
   database: Database;
 
   mounted() {
-    let search = decodeURI(window.location.search.toString().substr(1));
+    let search = decodeURI(window.location.search.toString().substr(1)).replace(/\+/gi, '"');
     if (search.length > 0) {
       try {
         let option = JSON.parse(search);
@@ -28,6 +28,7 @@ export default class TimerPanel extends Vue {
           this.hides = option.movie.hides || [];
           this.database.option.mode = "movie";
           window.location.href = window.location.origin + window.location.pathname;
+          console.log(window.location.href);
         }
       } catch (e) {}
     }
@@ -173,11 +174,9 @@ export default class TimerPanel extends Vue {
   }
 
   share() {
-    this.link =
-      window.location.origin +
-      window.location.pathname +
-      "?" +
-      encodeURI(JSON.stringify({ movie: { scene: this.scene, action: this.action, strips: this.strips, highlights: this.highlights, hides: this.hides } }));
+    let json = JSON.stringify({ movie: { scene: this.scene, action: this.action, strips: this.strips, highlights: this.highlights, hides: this.hides } });
+    console.log(json.replace(/"/gi, "+"));
+    this.link = window.location.origin + window.location.pathname + "?" + encodeURI(json.replace(/"/gi, "+"));
     this.dialog = true;
   }
 
