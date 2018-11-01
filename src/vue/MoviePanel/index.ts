@@ -3,7 +3,7 @@ import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Cubelet from "../../cube/cubelet";
 import { Encoder } from "../../common/apng";
-import Database from "../../common/database";
+import Option from "../../common/option";
 
 @Component({
   template: require("./index.html")
@@ -12,8 +12,8 @@ export default class TimerPanel extends Vue {
   @Inject("game")
   game: Game;
 
-  @Inject("database")
-  database: Database;
+  @Inject("option")
+  option: Option;
 
   mounted() {
     let search = decodeURI(window.location.search.toString().substr(1)).replace(/\+/gi, '"');
@@ -26,7 +26,7 @@ export default class TimerPanel extends Vue {
           this.strips = option.movie.strips || [];
           this.highlights = option.movie.highlights || [];
           this.hides = option.movie.hides || [];
-          this.database.option.mode = "movie";
+          this.option.mode = "movie";
           window.location.href = window.location.origin + window.location.pathname;
           console.log(window.location.href);
         }
@@ -105,13 +105,22 @@ export default class TimerPanel extends Vue {
     this.game.dirty = true;
   }
 
+  play() {
+    if (this.playing) {
+      this.init();
+      this.playing = true;
+      this.game.twister.twist("-" + this.action + "-", false, 1, this.play, false);
+    } else {
+      return;
+    }
+  }
+
   toggle() {
     if (this.playing) {
       this.init();
     } else {
-      this.init();
       this.playing = true;
-      this.game.twister.twist(this.action);
+      this.play();
     }
   }
 
@@ -152,8 +161,8 @@ export default class TimerPanel extends Vue {
       return;
     }
     this.recording = false;
-    let speed = this.database.option.speed;
-    this.database.option.speed = speed;
+    let speed = this.option.speed;
+    this.option.speed = speed;
     let data = this.encoder.finish();
     let blob = new Blob([new Uint8Array(data)], { type: "image/png" });
     let link = document.createElement("a");

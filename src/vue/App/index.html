@@ -2,14 +2,14 @@
   <div v-resize="resize">
     <div ref=cuber></div>
     <div ref=panel>
-      <keyboard-panel :show="database.option.mode == 'play' && database.option.keyboard"></keyboard-panel>
-      <script-panel :show="database.option.mode == 'script'"></script-panel>
-      <movie-panel :show="database.option.mode == 'movie'"></movie-panel>
+      <keyboard-panel :show="option.mode == 'play' && option.keyboard"></keyboard-panel>
+      <script-panel :show="option.mode == 'script'"></script-panel>
+      <movie-panel :show="option.mode == 'movie'"></movie-panel>
     </div>
     <fast-button icon large @tap="menu = !menu;" style="position:absolute;right:1em;top:1em">
       <v-icon large>menu</v-icon>
     </fast-button>
-    <fast-button v-show="database.option.mode == 'play' && !database.option.keyboard" icon large @tap="database.option.keyboard = !database.option.keyboard;" style="position:absolute;right:1em;bottom:1em">
+    <fast-button v-show="option.mode == 'play' && !option.keyboard" icon large @tap="option.keyboard = !option.keyboard;" style="position:absolute;right:1em;bottom:1em">
       <v-icon large>keyboard</v-icon>
     </fast-button>
   </div>

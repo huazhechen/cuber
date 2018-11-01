@@ -1,6 +1,6 @@
 import Game from "../cube/game";
 
-class Option {
+export default class Option {
   private _game: Game;
   private _mode: string = "";
   private _keyboard: boolean = false;
@@ -65,53 +65,5 @@ class Option {
     this.keyboard = this._storage.getItem("option.keyboard") == "true";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
-  }
-
-  toJSON() {
-    return {
-      mode: this.mode,
-      keyboard: this.keyboard,
-      speed: this.speed,
-      size: this.size
-    };
-  }
-
-  load(json: string) {
-    let data = JSON.parse(json);
-    this.mode = data.mode || "play";
-    this.keyboard = data.keyboard;
-    this.speed = data.speed || 0;
-    this.size = data.size || 0;
-  }
-}
-
-export default class Database {
-  private _storage = window.localStorage;
-
-  scripts = (() => {
-    let json = this._storage.getItem("scripts");
-    if (json == null) {
-      return require("./scripts.json");
-    }
-    return JSON.parse(json);
-  })();
-
-  option: Option;
-  constructor(game: Game) {
-    this.option = new Option(game);
-  }
-
-  load(json: string) {
-    let data = JSON.parse(json);
-    this.scripts = data.scripts || this.scripts;
-    this._storage.setItem("scripts", JSON.stringify(data.scripts));
-    this.option.load(JSON.stringify(data.option));
-  }
-
-  toJSON() {
-    return {
-      scripts: this.scripts,
-      option: this.option
-    };
   }
 }

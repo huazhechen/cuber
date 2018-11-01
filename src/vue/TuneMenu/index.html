@@ -6,16 +6,16 @@
           <v-icon large color="black">av_timer</v-icon>
         </v-flex>
         <v-flex xs3>
-          <fast-button icon :disabled="database.option.speed <= -4" @tap="database.option.speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button icon :disabled="option.speed <= -4" @tap="option.speed--;demo();" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>remove</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs3>
-          <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{database.option.speed}}
+          <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{option.speed}}
           </fast-button>
         </v-flex>
         <v-flex xs3>
-          <fast-button icon :disabled="database.option.speed >= 4" @tap="database.option.speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button icon :disabled="option.speed >= 4" @tap="option.speed++;demo();" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>add</v-icon>
           </fast-button>
         </v-flex>
@@ -26,16 +26,16 @@
           <v-icon large color="black">transform</v-icon>
         </v-flex>
         <v-flex xs3>
-          <fast-button flat block :disabled="database.option.size <= -4" @tap="database.option.size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button flat block :disabled="option.size <= -4" @tap="option.size--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>remove</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs3>
-          <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{database.option.size}}
+          <fast-button class="headline" flat block outline @tap :ripple="false" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">{{option.size}}
           </fast-button>
         </v-flex>
         <v-flex xs3>
-          <fast-button flat block :disabled="database.option.size >= 4" @tap="database.option.size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button flat block :disabled="option.size >= 4" @tap="option.size++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>add</v-icon>
           </fast-button>
         </v-flex>

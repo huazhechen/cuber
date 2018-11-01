@@ -5,7 +5,7 @@ import KeyboardPanel from "../KeyboardPanel";
 import ScriptPanel from "../ScriptPanel";
 import AppMenu from "../AppMenu";
 import MoviePanel from "../MoviePanel";
-import Database from "../../common/database";
+import Option from "../../common/option";
 
 @Component({
   template: require("./index.html"),
@@ -20,15 +20,10 @@ export default class App extends Vue {
   @Provide("game")
   game: Game = new Game();
 
-  @Provide("database")
-  database: Database = new Database(this.game);
+  @Provide("option")
+  option: Option = new Option(this.game);
 
   menu: boolean = false;
-
-  @Watch("database.option.speed")
-  onSpeedChange() {
-    this.game.twister.twist("UU'");
-  }
 
   width: string = "100%";
 
@@ -69,12 +64,12 @@ export default class App extends Vue {
     }
   }
 
-  @Watch("database.option.mode")
+  @Watch("option.mode")
   onModeChange(to: string, from: string) {
     this.$nextTick(this.resize);
   }
 
-  @Watch("database.option.keyboard")
+  @Watch("option.keyboard")
   onKeyboardChange(to: string, from: string) {
     this.$nextTick(this.resize);
   }

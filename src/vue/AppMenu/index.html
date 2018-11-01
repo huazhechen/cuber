@@ -3,17 +3,20 @@
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')"
+            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>games</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')"
+            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>school</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="database.option.mode == 'movie'?'primary':''" flat block @tap="$emit('input', false); mode('movie')" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'movie'?'primary':''" flat block @tap="$emit('input', false); mode('movie')"
+            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
             <v-icon large>movie</v-icon>
           </fast-button>
         </v-flex>
@@ -26,13 +29,12 @@
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" flat block @tap="$emit('input', false); data=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-            <v-icon large>folder</v-icon>
+          <fast-button class="headline" color="error" flat block @tap="$emit('input', false); reset()" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <v-icon large>delete</v-icon>
           </fast-button>
         </v-flex>
       </v-layout>
     </v-container>
   </v-card>
   <tune-menu v-model="tune"></tune-menu>
-  <data-menu v-model="data"></data-menu>
 </v-bottom-sheet>

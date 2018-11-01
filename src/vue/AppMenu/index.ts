@@ -1,23 +1,21 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Game from "../../cube/game";
-import Database from "../../common/database";
+import Option from "../../common/option";
 import TuneMenu from "../TuneMenu";
-import DataMenu from "../DataMenu";
 
 @Component({
   template: require("./index.html"),
   components: {
-    "tune-menu": TuneMenu,
-    "data-menu": DataMenu
+    "tune-menu": TuneMenu
   }
 })
 export default class AppMenu extends Vue {
   @Inject("game")
   game: Game;
 
-  @Inject("database")
-  database: Database;
+  @Inject("option")
+  option: Option;
 
   @Prop({ required: true })
   value: boolean;
@@ -31,7 +29,12 @@ export default class AppMenu extends Vue {
   data: boolean = false;
 
   mode(value: string) {
-    this.database.option.mode = value;
+    this.option.mode = value;
     this.$emit("input", false);
+  }
+  reset() {
+    let storage = window.localStorage;
+    storage.clear();
+    window.location.reload();
   }
 }

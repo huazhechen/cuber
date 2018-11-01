@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cube/twister";
 import Game from "../../cube/game";
-import Database from "../../common/database";
+import Option from "../../common/option";
 
 @Component({
   template: require("./index.html")
@@ -11,11 +11,13 @@ export default class ScriptPanel extends Vue {
   @Inject("game")
   game: Game;
 
-  @Inject("database")
-  database: Database;
+  @Inject("option")
+  option: Option;
 
   @Prop({ default: false })
   show: boolean;
+
+  scripts = require("./scripts.json");
 
   @Watch("show")
   onShowChange(to: boolean = this.show, from: boolean = this.show) {
@@ -86,7 +88,7 @@ export default class ScriptPanel extends Vue {
 
   strip() {
     this.stick();
-    let strips = this.database.scripts[this.type].strips;
+    let strips = this.scripts[this.type].strips;
     for (let strip of strips) {
       for (let index of strip.indexes) {
         for (let face of strip.faces) {
@@ -99,7 +101,7 @@ export default class ScriptPanel extends Vue {
 
   @Watch("index")
   onIndexChange() {
-    let length = this.database.scripts[this.type].scripts.length;
+    let length = this.scripts[this.type].scripts.length;
     this.index;
     while (this.index < 1) {
       this.index = this.index + length;
@@ -122,7 +124,7 @@ export default class ScriptPanel extends Vue {
   }
 
   get script() {
-    let script = this.database.scripts[this.type].scripts[this.index - 1];
+    let script = this.scripts[this.type].scripts[this.index - 1];
     let result = { name: "", exp: "" };
     result.name = script.name;
     result.exp = script.exp;
