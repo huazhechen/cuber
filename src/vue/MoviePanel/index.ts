@@ -238,5 +238,6 @@ export default class TimerPanel extends Vue {
       cubelet.stick(face, this.colors[this.color]);
       this.stickers[identity] = this.color;
     }
+    window.localStorage.setItem("movie.stickers", JSON.stringify(this.stickers));
   }
 }

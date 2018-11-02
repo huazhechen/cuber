@@ -48,6 +48,9 @@ export default class Twister {
 
   start(action: TwistAction) {
     if (action.exp == "-") {
+      if (action.fast) {
+        return;
+      }
       this._game.tweener.tween(
         0,
         1,
