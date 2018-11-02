@@ -55,7 +55,7 @@ export default class Twister {
       this._game.tweener.tween(
         0,
         1,
-        this._game.duration / 2,
+        this._game.duration * action.times / 2,
         (value: number) => {},
         () => {
           if (action.callback) {
@@ -158,44 +158,92 @@ export class TwistAction {
 export class TwistNode {
   private _children: TwistNode[] = [];
   private _twist: TwistAction = new TwistAction();
+  private static readonly _ACTIONS = "*#-xyzbsfdeulmrXYZBFSDEULMR";
+  private static readonly _SUFFIX = "'0123456789";
   constructor(exp: string, reverse: boolean = false, times: number = 1) {
-    let list = exp
-      .replace(/[^\*#\-xyzbsfdeulmr\(\)'0123456789]/gi, "")
-      .match(/\([\*#\-xyzbsfdeulmr'\(\)\d]+\)('\d*|\d*'|\d*)|[\*#\-xyzbsfdeulmr]('\d*|\d*'|\d*)/gi);
-    if (null === list) {
+    // 合法性校验
+    exp = exp.replace(/[^\*#\-xyzbsfdeulmr\(\)'0123456789]/gi, "");
+    this._twist.exp = exp;
+    this._twist.reverse = reverse;
+    this._twist.times = times;
+    // 不用解析场景
+    if (exp.length == 1) {
+      if (/[XYZ]/.test(this._twist.exp)) {
+        this._twist.exp = this._twist.exp.toLowerCase();
+      }
+      if (/[mes]/.test(this._twist.exp)) {
+        this._twist.exp = this._twist.exp.toUpperCase();
+      }
       return;
     }
-    if (list.length == 1) {
-      var values = list[0].match(/^\((\S+)\)('?)(\d*)('?)$/i);
-      if (values === null) {
-        values = list[0].match(/(\([\*#\-xyzbsfdeulmr'\(\)\d]+\)|[\*#\-xyzbsfdeulmr])('?)(\d*)('?)/i);
-        if (null === values) {
+    // 先分段
+    let list: string[] = [];
+    let buffer: string = "";
+    let stack: number = 0;
+    for (let i = 0; i < exp.length; i++) {
+      let c = exp.charAt(i);
+      // 起始字符
+      if (buffer.length == 0) {
+        if (TwistNode._ACTIONS.indexOf(c) >= 0) {
+          buffer = buffer.concat(c);
+          continue;
+        } else if (c === "(") {
+          buffer = buffer.concat(c);
+          stack++;
+          continue;
+        } else {
           return;
         }
-        this._twist.exp = values[1];
-        if (/[XYZ]/.test(this._twist.exp)) {
-          this._twist.exp = this._twist.exp.toLowerCase();
-        }
-        if (/[mes]/.test(this._twist.exp)) {
-          this._twist.exp = this._twist.exp.toUpperCase();
-        }
-      } else {
-        this._children.push(new TwistNode(values[1]));
       }
-      this._twist.reverse = (values[2] + values[4]).length == 1 ? true : false;
-      this._twist.times = values[3].length == 0 ? 1 : parseInt(values[3]);
-      this._twist.reverse = this._twist.reverse !== reverse;
-      this._twist.times = this._twist.times * times;
-    } else {
-      this._twist.exp = exp;
-      this._twist.reverse = reverse;
-      this._twist.times = times;
-      for (let element of list) {
-        var node = new TwistNode(element);
-        this._children.push(node);
+      // 后续字符
+      else {
+        // 非括号场景
+        if (stack == 0) {
+          // 后缀追加到buff中
+          if (TwistNode._SUFFIX.indexOf(c) >= 0) {
+            buffer = buffer.concat(c);
+            continue;
+          }
+          // 处理完一组
+          else {
+            list.push(buffer);
+            buffer = "";
+            i--;
+          }
+        } else {
+          if (c === "(") {
+            stack++;
+          } else if (c === ")") {
+            stack--;
+          }
+          buffer = buffer.concat(c);
+          continue;
+        }
       }
     }
+    if (buffer.length > 0) {
+      list.push(buffer);
+    }
+    if (list.length == 0) {
+      return;
+    }
+    for (let item of list) {
+      // 拆解括号
+      var values = item.match(/^\((\S+)\)('?)(\d*)('?)$/i);
+      // 无括号
+      if (null === values) {
+        values = item.match(/([\*#\-xyzbsfdeulmr])('?)(\d*)('?)/i);
+      }
+      // 异常情况
+      if (null === values) {
+        return;
+      }
+      let reverse = (values[2] + values[4]).length == 1;
+      let times = values[3].length == 0 ? 1 : parseInt(values[3]);
+      this._children.push(new TwistNode(values[1], reverse, times));
+    }
   }
+
   parse(reverse: boolean = false): TwistAction[] {
     reverse = this._twist.reverse !== reverse;
     let _result: TwistAction[] = [];

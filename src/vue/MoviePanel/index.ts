@@ -65,6 +65,7 @@ export default class TimerPanel extends Vue {
   @Watch("action")
   onActionChange() {
     window.localStorage.setItem("movie.action", this.action);
+    this.init();
   }
 
   operate: number = 0;
