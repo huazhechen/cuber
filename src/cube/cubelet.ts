@@ -183,7 +183,7 @@ export default class Cubelet extends THREE.Group {
     w: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.w }),
     r: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.r }),
     i: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.i }),
-    p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#080808" }),
+    p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#040404" }),
     h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h }),
     n: new THREE.MeshNormalMaterial(),
   };
