@@ -173,9 +173,11 @@ export default class Cubelet extends THREE.Group {
     i: "#808080",
     p: "#202020",
     h: "#EA80FC",
+    c: "#8B4513"
   }
 
   private static readonly _MATERIALS = {
+    p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#040404" }),
     g: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.g }),
     o: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.o }),
     b: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.b }),
@@ -183,8 +185,8 @@ export default class Cubelet extends THREE.Group {
     w: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.w }),
     r: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.r }),
     i: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.i }),
-    p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#040404" }),
-    h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h })
+    h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h }),
+    c: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.c })
   };
   public initial: number;
   private _index: number;
@@ -367,6 +369,12 @@ export default class Cubelet extends THREE.Group {
         break;
       case Cubelet.COLORS.h:
         this._stickers[face].material = Cubelet._MATERIALS.h;
+        break;
+      case Cubelet.COLORS.c:
+        this._stickers[face].material = Cubelet._MATERIALS.c;
+        break;
+      case Cubelet.COLORS.p:
+        this._stickers[face].material = Cubelet._MATERIALS.p;
         break;
       default:
         this._stickers[face].material = this._materials[face];

@@ -1,8 +1,18 @@
 <v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; background: #FAFAFA">
   <v-layout row wrap>
-    <v-flex v-for="(item, index) in colors" xs3 style="margin: 0%; padding: 0%;">
+    <v-flex v-for="(item, index) in colors" xs2 style="margin: 0%; padding: 0%;">
       <fast-button @tap="color = index" :color="item" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
-        <v-icon large v-show="color == index">colorize</v-icon>
+        <v-icon large v-show="color == index" color="black">colorize</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs2 style="margin: 0%; padding: 0%;">
+      <fast-button @tap="color = -1" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+        <v-icon large :color="color == -1?'primary':'black'">settings_backup_restore</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs2 style="margin: 0%; padding: 0%;">
+      <fast-button @tap="reset" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+        <v-icon large color="red">clear</v-icon>
       </fast-button>
     </v-flex>
   </v-layout>
@@ -23,27 +33,22 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap>
-    <v-flex xs2.4>
+    <v-flex xs3>
       <fast-button icon large :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs2.4>
+    <v-flex xs3>
       <fast-button icon large @tap="snap" style="margin: 0%; padding: 0%;">
         <v-icon large>camera_alt</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs2.4>
+    <v-flex xs3>
       <fast-button icon large :disabled="action == '' || recording" @tap="film" style="margin: 0%; padding: 0%;">
         <v-icon large>videocam</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs2.4>
-      <fast-button @tap="reset" icon large style="margin: 0%; padding: 0%;">
-        <v-icon large color="red">replay</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs2.4>
+    <v-flex xs3>
       <fast-button icon large :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
         <v-icon large>share</v-icon>
       </fast-button>
