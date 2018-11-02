@@ -16,21 +16,20 @@ export default class TimerPanel extends Vue {
   option: Option;
 
   mounted() {
-    let search = decodeURI(window.location.search.toString().substr(1)).replace(/\+/gi, '"');
+    let search = decodeURI(window.location.search.toString().substr(1));
     if (search.length > 0) {
       try {
         let option = JSON.parse(search);
         if (option.movie != null) {
-          this.scene = option.movie.scene || "";
-          this.action = option.movie.action || "";
-          this.strips = option.movie.strips || [];
-          this.highlights = option.movie.highlights || [];
-          this.hides = option.movie.hides || [];
+          this.scene = option.movie.scene || this.scene
+          this.action = option.movie.action || this.action
+          this.stickers = option.movie.stickers || this.stickers;
+          this.hides = option.movie.hides || this.hides;
           this.option.mode = "movie";
           window.location.href = window.location.origin + window.location.pathname;
           console.log(window.location.href);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     this.loop();
     this.game.controller.taps.push(this.tap);
@@ -50,7 +49,7 @@ export default class TimerPanel extends Vue {
         for (let i = 0; i < 27; i++) {
           this.game.cube.cubelets[i].show();
           for (let face = 0; face < 6; face++) {
-            this.game.cube.stick(i, face);
+            this.game.cube.stick(i, face, "");
           }
         }
         this.game.dirty = true;
@@ -83,12 +82,11 @@ export default class TimerPanel extends Vue {
       }
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
-        if (this.highlights.indexOf(identity) >= 0) {
-          this.game.cube.highlight(index, face);
-        } else if (this.strips.indexOf(identity) >= 0) {
-          this.game.cube.strip(index, face);
+        let sticker = this.stickers[identity].valueOf();
+        if (sticker < 0) {
+          this.game.cube.stick(index, face, "");
         } else {
-          this.game.cube.stick(index, face);
+          this.game.cube.stick(index, face, this.colors[sticker]);
         }
       }
     }
@@ -102,9 +100,8 @@ export default class TimerPanel extends Vue {
   }
 
   reset() {
+    this.stickers.fill(-1);
     this.hides = [];
-    this.strips = [];
-    this.highlights = [];
     this.refresh();
     this.game.dirty = true;
   }
@@ -189,25 +186,40 @@ export default class TimerPanel extends Vue {
   }
 
   share() {
-    let json = JSON.stringify({ movie: { scene: this.scene, action: this.action, strips: this.strips, highlights: this.highlights, hides: this.hides } });
-    console.log(json.replace(/"/gi, "+"));
-    this.link = window.location.origin + window.location.pathname + "?" + encodeURI(json.replace(/"/gi, "+"));
-    this.dialog = true;
+    let data = { movie: { scene: this.scene, action: this.action, stickers: this.stickers, hides: this.hides } };
+    let json = JSON.stringify(data);
+    this.link = window.location.origin + window.location.pathname + "?" + encodeURI(json);
+    this.shared = true;
   }
 
   link: string = "";
-  dialog: boolean = false;
+  shared: boolean = false;
+  colord: boolean = false;
+  colors = [
+    Cubelet.COLORS.h,
+    Cubelet.COLORS.i,
+    Cubelet.COLORS.y,
+    Cubelet.COLORS.w,
+    Cubelet.COLORS.r,
+    Cubelet.COLORS.o,
+    Cubelet.COLORS.b,
+    Cubelet.COLORS.g,
+  ]
+  color = 0;
+  stickers: Array<Number> = ((): Array<Number> => {
+    let save = window.localStorage.getItem("movie.stickers");
+    if (save) {
+      try {
+        let stickers = JSON.parse(save);
+        return stickers;
+      } catch (e) { }
+    }
+    return new Array<Number>(27 * 6).fill(-1);
+  })()
 
-  strips: number[] = JSON.parse(window.localStorage.getItem("movie.strips") || "[]");
-  @Watch("strips")
-  onStripsChange() {
-    window.localStorage.setItem("movie.strips", JSON.stringify(this.strips));
-  }
-
-  highlights: number[] = JSON.parse(window.localStorage.getItem("movie.highlights") || "[]");
-  @Watch("highlights")
+  @Watch("stickers")
   onHighlightsChange() {
-    window.localStorage.setItem("movie.highlights", JSON.stringify(this.highlights));
+    window.localStorage.setItem("movie.stickers", JSON.stringify(this.stickers));
   }
 
   hides: number[] = JSON.parse(window.localStorage.getItem("movie.hides") || "[]");
@@ -230,34 +242,15 @@ export default class TimerPanel extends Vue {
     let position = 0;
     switch (this.operate) {
       case 0:
-        position = this.strips.indexOf(identity);
-        if (position < 0) {
-          cubelet.strip(face);
-          this.strips.push(identity);
-          position = this.highlights.indexOf(identity);
-          if (position >= 0) {
-            this.highlights.splice(position, 1);
-          }
+        if (this.stickers[identity] == this.color) {
+          cubelet.stick(face, "");
+          Vue.set(this.stickers, identity, -1);
         } else {
-          cubelet.stick(face);
-          this.strips.splice(position, 1);
+          cubelet.stick(face, this.colors[this.color]);
+          Vue.set(this.stickers, identity, this.color);
         }
         break;
       case 1:
-        position = this.highlights.indexOf(identity);
-        if (position < 0) {
-          cubelet.highlight(face);
-          this.highlights.push(identity);
-          position = this.strips.indexOf(identity);
-          if (position >= 0) {
-            this.strips.splice(position, 1);
-          }
-        } else {
-          cubelet.stick(face);
-          this.highlights.splice(position, 1);
-        }
-        break;
-      case 2:
         position = this.hides.indexOf(index);
         if (position < 0) {
           cubelet.hide();

@@ -35,16 +35,8 @@ export default class Cube extends THREE.Group {
     this.cubelets.sort(this.compare);
   }
 
-  stick(index: number, face: number) {
-    this._initial[index].stick(face);
-  }
-
-  strip(index: number, face: number) {
-    this._initial[index].strip(face);
-  }
-
-  highlight(index: number, face: number) {
-    this._initial[index].highlight(face);
+  stick(index: number, face: number, color: string) {
+    this._initial[index].stick(face, color);
   }
 
   show(index: number) {

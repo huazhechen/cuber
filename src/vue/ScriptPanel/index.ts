@@ -3,6 +3,7 @@ import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cube/twister";
 import Game from "../../cube/game";
 import Option from "../../common/option";
+import Cubelet from "../../cube/cubelet";
 
 @Component({
   template: require("./index.html")
@@ -80,7 +81,7 @@ export default class ScriptPanel extends Vue {
   stick() {
     for (let i = 0; i < 27; i++) {
       for (let face = 0; face < 6; face++) {
-        this.game.cube.stick(i, face);
+        this.game.cube.stick(i, face, "");
       }
     }
     this.game.dirty = true;
@@ -92,7 +93,7 @@ export default class ScriptPanel extends Vue {
     for (let strip of strips) {
       for (let index of strip.indexes) {
         for (let face of strip.faces) {
-          this.game.cube.strip(index, face);
+          this.game.cube.stick(index, face, Cubelet.COLORS.i);
         }
       }
     }

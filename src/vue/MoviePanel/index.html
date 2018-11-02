@@ -1,35 +1,40 @@
 <v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; background: #FAFAFA">
   <v-layout row wrap>
-    <v-flex xs3>
-      <fast-button @tap="operate = 0" :color="operate == 0?'primary':''" :outline="operate == 0" flat block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large>colorize</v-icon>
+    <v-flex xs4>
+      <fast-button @tap="operate = 0; colord = true;" :color="colors[color]" :flat="operate != 0" block class="headline"
+        style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
+        <v-icon large color="black">colorize</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
-      <fast-button @tap="operate = 1" :color="operate == 1?'primary':''" :outline="operate == 1" flat block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large>highlight</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs3>
-      <fast-button @tap="operate = 2" :color="operate == 2?'primary':''" :outline="operate == 2" flat block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
+    <v-flex xs4>
+      <fast-button @tap="operate = 1" :color="operate == 1?'primary':''" :outline="operate == 1" flat block class="headline"
+        style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
         <v-icon large>visibility</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
+    <v-flex xs4>
       <fast-button @tap="reset" color="red" flat block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
         <v-icon large>replay</v-icon>
       </fast-button>
     </v-flex>
+  </v-layout>
+  <v-layout row wrap>
     <v-flex xs12>
-      <v-text-field outline single-line hide-details class="headline" :append-icon="scene == ''?'':'clear'" @click:append="scene = ''" v-model="scene">
+      <v-text-field outline single-line hide-details class="headline" :append-icon="scene == ''?'':'clear'"
+        @click:append="scene = ''" v-model="scene">
         <v-icon style="vertical-align: middle" slot="label">terrain</v-icon>
       </v-text-field>
     </v-flex>
+  </v-layout>
+  <v-layout row wrap>
     <v-flex xs12>
-      <v-text-field outline single-line hide-details class="headline" :append-icon="action == ''?'':'clear'" @click:append="action = ''" v-model="action">
+      <v-text-field outline single-line hide-details class="headline" :append-icon="action == ''?'':'clear'"
+        @click:append="action = ''" v-model="action">
         <v-icon style="vertical-align: middle" slot="label">theaters</v-icon>
       </v-text-field>
     </v-flex>
+  </v-layout>
+  <v-layout row wrap>
     <v-flex xs3>
       <fast-button icon large :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
@@ -52,9 +57,22 @@
     </v-flex>
   </v-layout>
 
-  <v-dialog v-model="dialog" :width="game.width">
+  <v-dialog v-model="shared" :width="game.width">
     <v-card flat>
       <v-card-text class="title" style="word-break: break-all;">{{link}}</v-card-text>
     </v-card>
   </v-dialog>
+
+  <v-bottom-sheet v-model="colord">
+    <v-card flat :width="game.width" style="margin: auto">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap>
+          <v-flex v-for="(item, index) in colors" d-flex xs3>
+            <fast-button @tap="color = index; colord = false;" :color="item" block depressed class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
+            </fast-button>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
 </v-container>

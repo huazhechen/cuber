@@ -157,6 +157,17 @@ export enum FACES {
 
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
+  public static readonly COLORS = {
+    g: "#009D54",
+    o: "#FF6C00",
+    b: "#3D81F6",
+    y: "#FDCC09",
+    w: "#FFFFFF",
+    r: "#DC422F",
+    i: "#808080",
+    p: "#202020",
+    h: "#EA80FC",
+  }
   private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _EDGE_WIDTH: number = 2;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
@@ -164,16 +175,16 @@ export default class Cubelet extends THREE.Group {
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
+    g: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.g }),
+    o: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.o }),
+    b: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.b }),
+    y: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.y }),
+    w: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.w }),
+    r: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.r }),
+    i: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.i }),
+    p: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.p }),
+    h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h }),
     n: new THREE.MeshNormalMaterial(),
-    h: new THREE.MeshBasicMaterial({ color: "#EA80FC" }),
-    p: new THREE.MeshBasicMaterial({ color: "#202020" }),
-    i: new THREE.MeshBasicMaterial({ color: "#808080" }),
-    g: new THREE.MeshBasicMaterial({ color: "#009D54" }),
-    o: new THREE.MeshBasicMaterial({ color: "#FF6C00" }),
-    b: new THREE.MeshBasicMaterial({ color: "#3D81F6" }),
-    y: new THREE.MeshBasicMaterial({ color: "#FDCC09" }),
-    w: new THREE.MeshBasicMaterial({ color: "#FFFFFF" }),
-    r: new THREE.MeshBasicMaterial({ color: "#DC422F" })
   };
   public initial: number;
   private _index: number;
@@ -348,16 +359,36 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  stick(face: number) {
-    this._stickers[face].material = this._materials[face];
-  }
-
-  strip(face: number) {
-    this._stickers[face].material = Cubelet._MATERIALS.i;
-  }
-
-  highlight(face: number) {
-    this._stickers[face].material = Cubelet._MATERIALS.h;
+  stick(face: number, color: string) {
+    switch (color) {
+      case Cubelet.COLORS.y:
+        this._stickers[face].material = Cubelet._MATERIALS.y;
+        break;
+      case Cubelet.COLORS.w:
+        this._stickers[face].material = Cubelet._MATERIALS.w;
+        break;
+      case Cubelet.COLORS.b:
+        this._stickers[face].material = Cubelet._MATERIALS.b;
+        break;
+      case Cubelet.COLORS.g:
+        this._stickers[face].material = Cubelet._MATERIALS.g;
+        break;
+      case Cubelet.COLORS.r:
+        this._stickers[face].material = Cubelet._MATERIALS.r;
+        break;
+      case Cubelet.COLORS.o:
+        this._stickers[face].material = Cubelet._MATERIALS.o;
+        break;
+      case Cubelet.COLORS.i:
+        this._stickers[face].material = Cubelet._MATERIALS.i;
+        break;
+      case Cubelet.COLORS.h:
+        this._stickers[face].material = Cubelet._MATERIALS.h;
+        break;
+      default:
+        this._stickers[face].material = this._materials[face];
+        break;
+    }
   }
 
   show() {
