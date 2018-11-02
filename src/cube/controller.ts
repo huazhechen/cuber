@@ -226,7 +226,7 @@ export default class Controller {
       }
       this._dragging = false;
       this._rotating = true;
-      if (this._holder.index === -1 || !this._game.enable) {
+      if (this._holder.index === -1) {
         if (dx * dx > dy * dy) {
           this._group = CubeletGroup.GROUPS.y;
         } else {
@@ -268,7 +268,7 @@ export default class Controller {
       this._group.hold(this._game);
     }
     if (this._rotating) {
-      if (this._holder.index === -1 || !this._game.enable) {
+      if (this._holder.index === -1) {
         var dx = this._move.x - this._down.x;
         var dy = this._move.y - this._down.y;
         if (this._group === CubeletGroup.GROUPS.y) {
