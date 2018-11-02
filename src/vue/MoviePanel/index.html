@@ -1,8 +1,8 @@
 <v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; background: #FAFAFA">
   <v-layout row wrap>
-    <v-flex v-for="(item, index) in colors">
-      <fast-button @tap="color = index" :color="item" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%;margin: 0%;padding: 0%">
-        <v-icon large v-show="color == index" style="min-width: 0%; min-height: 0%;">colorize</v-icon>
+    <v-flex v-for="(item, index) in colors" xs3 style="margin: 0%; padding: 0%;">
+      <fast-button @tap="color = index" :color="item" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+        <v-icon large v-show="color == index">colorize</v-icon>
       </fast-button>
     </v-flex>
   </v-layout>
