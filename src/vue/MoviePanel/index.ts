@@ -24,7 +24,6 @@ export default class TimerPanel extends Vue {
           this.scene = option.movie.scene || this.scene
           this.action = option.movie.action || this.action
           this.stickers = option.movie.stickers || this.stickers;
-          this.hides = option.movie.hides || this.hides;
           this.option.mode = "movie";
           window.location.href = window.location.origin + window.location.pathname;
           console.log(window.location.href);
@@ -47,7 +46,6 @@ export default class TimerPanel extends Vue {
       this.playing = false;
       if (from) {
         for (let i = 0; i < 27; i++) {
-          this.game.cube.cubelets[i].show();
           for (let face = 0; face < 6; face++) {
             this.game.cube.stick(i, face, "");
           }
@@ -73,13 +71,8 @@ export default class TimerPanel extends Vue {
   operate: number = 0;
   playing: boolean = false;
 
-  refresh() {
+  init() {
     for (let index = 0; index < 27; index++) {
-      if (this.hides.indexOf(index) < 0) {
-        this.game.cube.show(index);
-      } else {
-        this.game.cube.hide(index);
-      }
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
         let sticker = this.stickers[identity].valueOf();
@@ -90,19 +83,16 @@ export default class TimerPanel extends Vue {
         }
       }
     }
-  }
-
-  init() {
-    this.refresh();
     this.playing = false;
     this.game.twister.twist("#");
     this.game.twister.twist(this.scene, false, 1, null, true);
   }
 
   reset() {
+    this.scene = "";
+    this.action = "";
     this.stickers.fill(-1);
-    this.hides = [];
-    this.refresh();
+    this.init();
     this.game.dirty = true;
   }
 
@@ -186,15 +176,14 @@ export default class TimerPanel extends Vue {
   }
 
   share() {
-    let data = { movie: { scene: this.scene, action: this.action, stickers: this.stickers, hides: this.hides } };
+    let data = { movie: { scene: this.scene, action: this.action, stickers: this.stickers } };
     let json = JSON.stringify(data);
     this.link = window.location.origin + window.location.pathname + "?" + encodeURI(json);
-    this.shared = true;
+    this.dialog = true;
   }
 
   link: string = "";
-  shared: boolean = false;
-  colord: boolean = false;
+  dialog: boolean = false;
   colors = [
     Cubelet.COLORS.h,
     Cubelet.COLORS.i,
@@ -222,12 +211,6 @@ export default class TimerPanel extends Vue {
     window.localStorage.setItem("movie.stickers", JSON.stringify(this.stickers));
   }
 
-  hides: number[] = JSON.parse(window.localStorage.getItem("movie.hides") || "[]");
-  @Watch("hides")
-  onHidesChange() {
-    window.localStorage.setItem("movie.hides", JSON.stringify(this.hides));
-  }
-
   tap(index: number, face: number) {
     if (!this.show) {
       return;
@@ -239,27 +222,12 @@ export default class TimerPanel extends Vue {
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let identity = index * 6 + face;
-    let position = 0;
-    switch (this.operate) {
-      case 0:
-        if (this.stickers[identity] == this.color) {
-          cubelet.stick(face, "");
-          Vue.set(this.stickers, identity, -1);
-        } else {
-          cubelet.stick(face, this.colors[this.color]);
-          Vue.set(this.stickers, identity, this.color);
-        }
-        break;
-      case 1:
-        position = this.hides.indexOf(index);
-        if (position < 0) {
-          cubelet.hide();
-          this.hides.push(index);
-        } else {
-          cubelet.show();
-          this.hides.splice(position, 1);
-        }
-        break;
+    if (this.stickers[identity] == this.color) {
+      cubelet.stick(face, "");
+      Vue.set(this.stickers, identity, -1);
+    } else {
+      cubelet.stick(face, this.colors[this.color]);
+      Vue.set(this.stickers, identity, this.color);
     }
   }
 }

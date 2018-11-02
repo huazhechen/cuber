@@ -39,14 +39,6 @@ export default class Cube extends THREE.Group {
     this._initial[index].stick(face, color);
   }
 
-  show(index: number) {
-    this._initial[index].show();
-  }
-
-  hide(index: number) {
-    this._initial[index].hide();
-  }
-
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |

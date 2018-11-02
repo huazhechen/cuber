@@ -184,8 +184,7 @@ export default class Cubelet extends THREE.Group {
     r: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.r }),
     i: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.i }),
     p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#040404" }),
-    h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h }),
-    n: new THREE.MeshNormalMaterial(),
+    h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h })
   };
   public initial: number;
   private _index: number;
@@ -338,23 +337,6 @@ export default class Cubelet extends THREE.Group {
       this._edges.push(_edge);
       this.add(_sticker);
       this._stickers.push(_sticker);
-      if (this.initial == 13) {
-        this.children = [];
-        let geometry = new THREE.CylinderGeometry(Cubelet.SIZE / 6, Cubelet.SIZE / 6, Cubelet.SIZE, 16);
-        let material = Cubelet._MATERIALS.n;
-        let mesh: THREE.Mesh;
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.x = Math.PI / 2;
-        this.add(mesh);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.y = Math.PI / 2;
-        this.add(mesh);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.z = Math.PI / 2;
-        this.add(mesh);
-        mesh = new THREE.Mesh(new THREE.SphereGeometry(Cubelet.SIZE / 3.2, 16, 16), material);
-        this.add(mesh);
-      }
       this.matrixAutoUpdate = false;
       this.updateMatrix();
     }
@@ -390,13 +372,5 @@ export default class Cubelet extends THREE.Group {
         this._stickers[face].material = this._materials[face];
         break;
     }
-  }
-
-  show() {
-    this.visible = true;
-  }
-
-  hide() {
-    this.visible = false;
   }
 }

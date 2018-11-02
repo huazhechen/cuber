@@ -1,20 +1,8 @@
 <v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; background: #FAFAFA">
   <v-layout row wrap>
-    <v-flex xs4>
-      <fast-button @tap="operate = 0; colord = true;" :color="colors[color]" :flat="operate != 0" block class="headline"
-        style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large color="black">colorize</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs4>
-      <fast-button @tap="operate = 1" :color="operate == 1?'primary':''" :outline="operate == 1" flat block class="headline"
-        style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large>visibility</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs4>
-      <fast-button @tap="reset" color="red" flat block class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large>replay</v-icon>
+    <v-flex v-for="(item, index) in colors">
+      <fast-button @tap="color = index" :color="item" block depressed class="headline" style="height: 2em; min-width: 0%; min-height: 0%;margin: 0%;padding: 0%">
+        <v-icon large v-show="color == index" style="min-width: 0%; min-height: 0%;">colorize</v-icon>
       </fast-button>
     </v-flex>
   </v-layout>
@@ -35,44 +23,35 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap>
-    <v-flex xs3>
+    <v-flex xs2.4>
       <fast-button icon large :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
+    <v-flex xs2.4>
       <fast-button icon large @tap="snap" style="margin: 0%; padding: 0%;">
         <v-icon large>camera_alt</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
+    <v-flex xs2.4>
       <fast-button icon large :disabled="action == '' || recording" @tap="film" style="margin: 0%; padding: 0%;">
         <v-icon large>videocam</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
+    <v-flex xs2.4>
+      <fast-button @tap="reset" icon large style="margin: 0%; padding: 0%;">
+        <v-icon large color="red">replay</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs2.4>
       <fast-button icon large :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
         <v-icon large>share</v-icon>
       </fast-button>
     </v-flex>
   </v-layout>
-
-  <v-dialog v-model="shared" :width="game.width">
+  <v-dialog v-model="dialog" :width="game.width">
     <v-card flat>
       <v-card-text class="title" style="word-break: break-all;">{{link}}</v-card-text>
     </v-card>
   </v-dialog>
-
-  <v-bottom-sheet v-model="colord">
-    <v-card flat :width="game.width" style="margin: auto">
-      <v-container fluid grid-list-md text-xs-center>
-        <v-layout row wrap>
-          <v-flex v-for="(item, index) in colors" d-flex xs3>
-            <fast-button @tap="color = index; colord = false;" :color="item" block depressed class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-            </fast-button>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-card>
-  </v-bottom-sheet>
 </v-container>
