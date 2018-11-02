@@ -19,7 +19,6 @@ export default class TimerPanel extends Vue {
 
   mounted() {
     let search = window.location.search.toString().substr(1);
-    console.log(search)
     if (search.length > 0) {
       try {
         let string = Base64.decode(search);
