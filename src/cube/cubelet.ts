@@ -157,6 +157,12 @@ export enum FACES {
 
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
+  private static readonly _BORDER_WIDTH: number = 3;
+  private static readonly _EDGE_WIDTH: number = 2;
+  private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
+  private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+
   public static readonly COLORS = {
     g: "#009D54",
     o: "#FF6C00",
@@ -168,11 +174,6 @@ export default class Cubelet extends THREE.Group {
     p: "#202020",
     h: "#EA80FC",
   }
-  private static readonly _BORDER_WIDTH: number = 3;
-  private static readonly _EDGE_WIDTH: number = 2;
-  private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
-  private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
-  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
   private static readonly _MATERIALS = {
     g: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.g }),
@@ -182,7 +183,7 @@ export default class Cubelet extends THREE.Group {
     w: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.w }),
     r: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.r }),
     i: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.i }),
-    p: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.p }),
+    p: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.p, specular: "#080808" }),
     h: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.h }),
     n: new THREE.MeshNormalMaterial(),
   };
