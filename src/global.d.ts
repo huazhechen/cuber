@@ -3,20 +3,10 @@ declare module "*.vue" {
   export default Vue;
 }
 
-declare module "cubejs" {
-  export default class Cube {
-    static initSolver(): null;
-    static scramble(): string;
+declare module "pako" {
+  export namespace pako {
+    function deflate(s: string, option: any): string;
+    function inflate(s: string, option: any): string;
   }
-}
-
-declare module "whammy" {
-  export namespace Whammy {
-    class Video {
-      constructor(rate: number);
-      add(canvas: HTMLCanvasElement): null;
-      compile(b: boolean): Blob;
-    }
-  }
-  export default Whammy;
+  export default pako;
 }

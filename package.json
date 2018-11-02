@@ -12,6 +12,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "pako": "*",
     "typescript": "*",
     "@types/three": "*",
     "three": "*",

@@ -4,6 +4,8 @@ import Game from "../../cube/game";
 import Cubelet from "../../cube/cubelet";
 import { Encoder } from "../../common/apng";
 import Option from "../../common/option";
+import pako from "pako";
+import Base64 from "../../common/base64";
 
 @Component({
   template: require("./index.html")
@@ -16,18 +18,20 @@ export default class TimerPanel extends Vue {
   option: Option;
 
   mounted() {
-    let search = decodeURI(window.location.search.toString().substr(1));
+    let search = window.location.search.toString().substr(1);
     if (search.length > 0) {
       try {
-        let option = JSON.parse(search);
+        let string = Base64.decode(search);
+        string = pako.inflate(string, { to: "string" });
+        let option = JSON.parse(string);
         if (option.movie) {
-          this.scene = option.scene || this.scene
-          this.action = option.action || this.action
+          this.scene = option.scene || this.scene;
+          this.action = option.action || this.action;
           this.stickers = option.stickers || this.stickers;
           this.option.mode = "movie";
           history.pushState({}, "Cuber", window.location.origin + window.location.pathname);
         }
-      } catch (e) { }
+      } catch (e) {}
     }
     this.loop();
     this.game.controller.taps.push(this.tap);
@@ -186,7 +190,9 @@ export default class TimerPanel extends Vue {
     }
     data["stickers"] = this.stickers;
     let json = JSON.stringify(data);
-    this.link = window.location.origin + window.location.pathname + "?" + encodeURI(json);
+    let string = pako.deflate(json, { to: "string" });
+    string = Base64.encode(string);
+    this.link = window.location.origin + window.location.pathname + "?" + string;
     this.dialog = true;
   }
 
@@ -203,7 +209,7 @@ export default class TimerPanel extends Vue {
     Cubelet.COLORS.c,
     Cubelet.COLORS.i,
     Cubelet.COLORS.p
-  ]
+  ];
   color = 0;
   stickers: { [idx: number]: number } = ((): { [idx: number]: number } => {
     let save = window.localStorage.getItem("movie.stickers");
@@ -211,10 +217,10 @@ export default class TimerPanel extends Vue {
       try {
         let stickers = JSON.parse(save);
         return stickers;
-      } catch (e) { }
+      } catch (e) {}
     }
     return {};
-  })()
+  })();
 
   @Watch("stickers")
   onStickersChange() {
