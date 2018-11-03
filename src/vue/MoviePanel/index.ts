@@ -6,16 +6,44 @@ import { Encoder } from "../../common/apng";
 import Option from "../../common/option";
 import pako from "pako";
 import Base64 from "../../common/base64";
+import * as THREE from "three";
 
 @Component({
   template: require("./index.html")
 })
-export default class TimerPanel extends Vue {
+export default class MoviePanel extends Vue {
   @Inject("game")
   game: Game;
 
   @Inject("option")
   option: Option;
+
+  public camera: THREE.PerspectiveCamera;
+  public renderer: THREE.WebGLRenderer;
+  encoder: Encoder;
+  constructor() {
+    super();
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
+    this.camera.position.x = 0;
+    this.camera.position.y = 0;
+    this.camera.position.z = Cubelet.SIZE * 3 * 4;
+
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    this.renderer.setClearColor(0xe0e0e0);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+
+    this.encoder = new Encoder(this.renderer.domElement);
+  }
+  size = 128;
+
+  resize() {
+    this.camera.aspect = 1;
+    let fov = (2 * Math.atan(1 / 4) * 180) / Math.PI;
+    this.camera.fov = fov;
+    this.camera.lookAt(this.game.scene.position);
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(this.size, this.size, true);
+  }
 
   mounted() {
     let search = window.location.search.toString().substr(1);
@@ -75,7 +103,8 @@ export default class TimerPanel extends Vue {
   operate: number = 0;
   playing: boolean = false;
 
-  init() {
+  init() {    
+    this.resize();
     for (let index = 0; index < 27; index++) {
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
@@ -146,6 +175,7 @@ export default class TimerPanel extends Vue {
     if (!this.recording) {
       return;
     }
+    this.renderer.render(this.game.scene, this.camera);
     this.encoder.addFrame();
   }
 
@@ -159,14 +189,13 @@ export default class TimerPanel extends Vue {
     let data = this.encoder.finish();
     let blob = new Blob([new Uint8Array(data)], { type: "image/png" });
     let link = document.createElement("a");
-    let evt = document.createEvent("MouseEvents");
-    evt.initEvent("click", false, false);
+    let click = document.createEvent("MouseEvents");
+    click.initEvent("click", false, false);
     link.download = "cuber.png";
     link.href = URL.createObjectURL(blob);
-    link.dispatchEvent(evt);
+    link.dispatchEvent(click);
   }
 
-  encoder: Encoder = new Encoder(this.game.canvas);
   recording: boolean = false;
   film() {
     this.game.duration = 60;

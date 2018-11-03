@@ -62,8 +62,8 @@ export default class Game {
 
   resize() {
     this.camera.aspect = this.width / this.height;
-    let min = ((this.height / Math.min(this.width, this.height)) * Cubelet.SIZE) / 4;
-    let fov = (2 * Math.atan(min / Cubelet.SIZE) * 180) / Math.PI;
+    let min = this.height / Math.min(this.width, this.height) / 4;
+    let fov = (2 * Math.atan(min) * 180) / Math.PI;
     this.camera.fov = fov * this.scale;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
