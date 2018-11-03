@@ -174,12 +174,10 @@ export default class Cubelet extends THREE.Group {
     black: "#202020",
     purple: "#E040FB",
     lime: "#C6FF00",
-    cyan: "#18FFFF",
-    brown: "#8B4513"
+    cyan: "#18FFFF"
   };
 
   private static readonly _MATERIALS = {
-    black: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.black }),
     green: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.green }),
     orange: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.orange }),
     blue: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.blue }),
@@ -187,7 +185,10 @@ export default class Cubelet extends THREE.Group {
     white: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.white }),
     red: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.red }),
     gray: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.gray }),
-    purple: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.purple })
+    black: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.black }),
+    purple: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.purple }),
+    lime: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.lime }),
+    cyan: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.cyan })
   };
   public initial: number;
   private _index: number;
@@ -346,37 +347,10 @@ export default class Cubelet extends THREE.Group {
   }
 
   stick(face: number, color: string) {
-    switch (color) {
-      case Cubelet.COLORS.yellow:
-        this._stickers[face].material = Cubelet._MATERIALS.yellow;
-        break;
-      case Cubelet.COLORS.white:
-        this._stickers[face].material = Cubelet._MATERIALS.white;
-        break;
-      case Cubelet.COLORS.blue:
-        this._stickers[face].material = Cubelet._MATERIALS.blue;
-        break;
-      case Cubelet.COLORS.green:
-        this._stickers[face].material = Cubelet._MATERIALS.green;
-        break;
-      case Cubelet.COLORS.red:
-        this._stickers[face].material = Cubelet._MATERIALS.red;
-        break;
-      case Cubelet.COLORS.orange:
-        this._stickers[face].material = Cubelet._MATERIALS.orange;
-        break;
-      case Cubelet.COLORS.gray:
-        this._stickers[face].material = Cubelet._MATERIALS.gray;
-        break;
-      case Cubelet.COLORS.purple:
-        this._stickers[face].material = Cubelet._MATERIALS.purple;
-        break;
-      case Cubelet.COLORS.black:
-        this._stickers[face].material = Cubelet._MATERIALS.black;
-        break;
-      default:
-        this._stickers[face].material = this._materials[face];
-        break;
+    if (color.length > 0) {
+      this._stickers[face].material = new THREE.MeshBasicMaterial({ color: color });
+    } else {
+      this._stickers[face].material = this._materials[face];
     }
   }
 }
