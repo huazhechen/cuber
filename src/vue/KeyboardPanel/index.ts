@@ -30,6 +30,5 @@ export default class KeyboardPanel extends Vue {
 
   twist(exp: string) {
     this.game.twister.twist(exp);
-    this.layers = 0;
   }
 }
