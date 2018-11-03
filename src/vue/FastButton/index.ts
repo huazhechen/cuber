@@ -42,4 +42,10 @@ export default class FastButton extends Vue {
 
   @Prop({ default: false })
   right: boolean;
+
+  @Prop({ default: false })
+  depressed: boolean;
+
+  @Prop({ default: false })
+  fab: boolean;
 }

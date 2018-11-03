@@ -30,11 +30,17 @@ export default class MoviePanel extends Vue {
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
     this.renderer.setClearColor(0xe0e0e0);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(1);
 
     this.encoder = new Encoder(this.renderer.domElement);
   }
   size = 128;
+  @Watch("size")
+  onSizeChange() {
+    this.resize();
+  }
+
+  speed = 0;
 
   resize() {
     this.camera.aspect = 1;
@@ -103,7 +109,7 @@ export default class MoviePanel extends Vue {
   operate: number = 0;
   playing: boolean = false;
 
-  init() {    
+  init() {
     this.resize();
     for (let index = 0; index < 27; index++) {
       for (let face = 0; face < 6; face++) {
@@ -146,26 +152,6 @@ export default class MoviePanel extends Vue {
     }
   }
 
-  snap() {
-    let content = this.game.canvas.toDataURL("image/png");
-    let parts = content.split(";base64,");
-    let type = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let length = raw.length;
-    let data = new Uint8Array(length);
-    for (let i = 0; i < length; ++i) {
-      data[i] = raw.charCodeAt(i);
-    }
-    let blob = new Blob([data], { type: type });
-
-    let link = document.createElement("a");
-    let evt = document.createEvent("MouseEvents");
-    evt.initEvent("click", false, false);
-    link.download = "cuber.png";
-    link.href = URL.createObjectURL(blob);
-    link.dispatchEvent(evt);
-  }
-
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.record();
@@ -176,7 +162,7 @@ export default class MoviePanel extends Vue {
       return;
     }
     this.renderer.render(this.game.scene, this.camera);
-    this.encoder.addFrame();
+    this.encoder.add();
   }
 
   save() {
@@ -198,11 +184,12 @@ export default class MoviePanel extends Vue {
 
   recording: boolean = false;
   film() {
-    this.game.duration = 60;
+    this.game.duration = 60 - this.speed * 10;
     this.init();
     this.recording = true;
+    this.renderer.render(this.game.scene, this.camera);
     this.encoder.start();
-    this.encoder.addFrame();
+    this.encoder.add();
     this.game.twister.twist("-" + this.action + "-", false, 1, this.save, false);
   }
 
@@ -220,22 +207,26 @@ export default class MoviePanel extends Vue {
     let string = pako.deflate(json, { to: "string" });
     string = Base64.encode(string);
     this.link = window.location.origin + window.location.pathname + "?" + string;
-    this.dialog = true;
+    this.shareDialog = true;
   }
 
   link: string = "";
-  dialog: boolean = false;
+  shareDialog: boolean = false;
+  colorDialog: boolean = false;
+  qualityDialog: boolean = false;
+
   colors = [
-    Cubelet.COLORS.y,
-    Cubelet.COLORS.w,
-    Cubelet.COLORS.r,
-    Cubelet.COLORS.o,
-    Cubelet.COLORS.b,
-    Cubelet.COLORS.g,
-    Cubelet.COLORS.h,
-    Cubelet.COLORS.c,
-    Cubelet.COLORS.i,
-    Cubelet.COLORS.p
+    Cubelet.COLORS.yellow,
+    Cubelet.COLORS.white,
+    Cubelet.COLORS.blue,
+    Cubelet.COLORS.green,
+    Cubelet.COLORS.red,
+    Cubelet.COLORS.orange,
+    Cubelet.COLORS.black,
+    Cubelet.COLORS.gray,
+    Cubelet.COLORS.cyan,
+    Cubelet.COLORS.lime,
+    Cubelet.COLORS.purple
   ];
   color = 0;
   stickers: number[] = ((): number[] => {
@@ -268,12 +259,16 @@ export default class MoviePanel extends Vue {
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let identity = index * 6 + face;
-    if (this.color < 0) {
+    if (this.stickers[identity] == this.color) {
+      this.stickers[identity] = -1;
+    } else {
+      this.stickers[identity] = this.color;
+    }
+    if (this.stickers[identity] < 0) {
       cubelet.stick(face, "");
     } else {
-      cubelet.stick(face, this.colors[this.color]);
+      cubelet.stick(face, this.colors[this.stickers[identity]]);
     }
-    this.stickers[identity] = this.color;
     window.localStorage.setItem("movie.stickers", JSON.stringify(this.stickers));
   }
 }

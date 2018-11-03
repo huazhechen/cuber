@@ -93,7 +93,7 @@ export default class ScriptPanel extends Vue {
     for (let strip of strips) {
       for (let index of strip.indexes) {
         for (let face of strip.faces) {
-          this.game.cube.stick(index, face, Cubelet.COLORS.i);
+          this.game.cube.stick(index, face, Cubelet.COLORS.gray);
         }
       }
     }

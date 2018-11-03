@@ -3,20 +3,17 @@
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs4>
-          <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')"
-            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')" outline style="height: 2em;margin: 0%; padding: 0%;">
             <v-icon large>games</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')"
-            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'script'?'primary':''" flat block @tap="$emit('input', false); mode('script')" outline style="height: 2em;margin: 0%; padding: 0%;">
             <v-icon large>school</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" :color="option.mode == 'movie'?'primary':''" flat block @tap="$emit('input', false); mode('movie')"
-            outline style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" :color="option.mode == 'movie'?'primary':''" flat block @tap="$emit('input', false); mode('movie')" outline style="height: 2em;margin: 0%; padding: 0%;">
             <v-icon large>movie</v-icon>
           </fast-button>
         </v-flex>
@@ -24,12 +21,17 @@
       <v-divider></v-divider>
       <v-layout row wrap>
         <v-flex xs4>
-          <fast-button class="headline" flat block @tap="$emit('input', false); tune=true" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" flat block fab @tap="$emit('input', false); tune=true" style="margin: 0%; padding: 0%;">
             <v-icon large>palette</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" color="error" flat block @tap="$emit('input', false); reset()" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+          <fast-button class="headline" flat block fab @tap="$emit('input', false); snap()" style="margin: 0%; padding: 0%;">
+            <v-icon large>camera_alt</v-icon>
+          </fast-button>
+        </v-flex>
+        <v-flex xs4>
+          <fast-button class="headline" color="error" flat block fab @tap="$emit('input', false); reset()" style="margin: 0%; padding: 0%;">
             <v-icon large>delete</v-icon>
           </fast-button>
         </v-flex>

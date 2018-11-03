@@ -24,7 +24,7 @@ export class Encoder {
     return 0;
   }
 
-  addFrame() {
+  add() {
     if ((this._canvas === null) || !this.encoding || this.data === null) {
       throw new Error();
     }
