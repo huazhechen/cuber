@@ -184,7 +184,7 @@ export default class MoviePanel extends Vue {
 
   recording: boolean = false;
   film() {
-    this.game.duration = 60 - this.speed * 10;
+    this.game.duration = 30 - this.speed * 5;
     this.init();
     this.recording = true;
     this.renderer.render(this.game.scene, this.camera);

@@ -175,11 +175,11 @@ export default class Cubelet extends THREE.Group {
     purple: "#E040FB",
     lime: "#C6FF00",
     cyan: "#18FFFF",
-    brown: "#8B4513",
-  }
+    brown: "#8B4513"
+  };
 
   private static readonly _MATERIALS = {
-    black: new THREE.MeshPhongMaterial({ color: Cubelet.COLORS.black, specular: "#040404" }),
+    black: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.black }),
     green: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.green }),
     orange: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.orange }),
     blue: new THREE.MeshBasicMaterial({ color: Cubelet.COLORS.blue }),

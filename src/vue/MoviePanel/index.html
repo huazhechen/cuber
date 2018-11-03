@@ -17,22 +17,22 @@
   </v-layout>
   <v-layout row wrap>
     <v-flex xs3>
-      <fast-button @tap="colorDialog = true" block flat fab class="headline" style="margin: 0%; padding: 0%;">
+      <fast-button @tap="colorDialog = true" flat fab class="headline" style="margin: 0%; padding: 0%;">
         <v-icon large :color="colors[color]">colorize</v-icon>
       </fast-button>
     </v-flex>
     <v-flex xs3>
-      <fast-button block flat fab :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
+      <fast-button flat fab :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
         <v-icon large>share</v-icon>
       </fast-button>
     </v-flex>
     <v-flex xs3>
-      <fast-button block flat fab :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
+      <fast-button flat fab :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
     <v-flex xs3>
-      <fast-button block flat fab :disabled="action == '' || recording" @tap="qualityDialog = true" style="margin: 0%; padding: 0%;">
+      <fast-button flat fab :disabled="action == '' || recording" @tap="qualityDialog = true" style="margin: 0%; padding: 0%;">
         <v-icon large>videocam</v-icon>
       </fast-button>
     </v-flex>
@@ -67,7 +67,7 @@
             <v-icon large color="black">av_timer</v-icon>
           </v-flex>
           <v-flex xs3>
-            <fast-button icon :disabled="speed <= -4" @tap="speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <fast-button flat block :disabled="speed <= -4" @tap="speed--" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>remove</v-icon>
             </fast-button>
           </v-flex>
@@ -76,7 +76,7 @@
             </fast-button>
           </v-flex>
           <v-flex xs3>
-            <fast-button icon :disabled="speed >= 4" @tap="speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <fast-button flat block :disabled="speed >= 4" @tap="speed++" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>add</v-icon>
             </fast-button>
           </v-flex>

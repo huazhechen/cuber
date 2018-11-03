@@ -44,13 +44,6 @@ export default class Game {
       this.scene.add(CubeletGroup.GROUPS[key]);
     }
 
-    let light;
-    light = new THREE.DirectionalLight();
-    light.position.x = Cubelet.SIZE;
-    light.position.y = Cubelet.SIZE;
-    light.position.z = Cubelet.SIZE / 2;
-    this.scene.add(light);
-
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
     this.renderer.setClearColor(0xe0e0e0);
     this.renderer.setPixelRatio(window.devicePixelRatio);

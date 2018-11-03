@@ -7,7 +7,7 @@ export class Encoder {
 
   public repeat = 0;
   public delay_num = 1;
-  public delay_den = 60;
+  public delay_den = 30;
   public dispose = 0;
   public blend = 1;
 
