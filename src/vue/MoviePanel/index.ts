@@ -29,7 +29,7 @@ export default class TimerPanel extends Vue {
           this.action = option.action || this.action;
           this.stickers = option.stickers || this.stickers;
           this.option.mode = "movie";
-          history.pushState({}, "Cuber", window.location.origin + window.location.pathname);
+          history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
         }
       } catch (e) {}
     }
@@ -79,7 +79,7 @@ export default class TimerPanel extends Vue {
     for (let index = 0; index < 27; index++) {
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
-        let sticker = this.stickers[identity] || -1;
+        let sticker = this.stickers[identity];
         if (sticker < 0) {
           this.game.cube.stick(index, face, "");
         } else {
@@ -95,7 +95,7 @@ export default class TimerPanel extends Vue {
   reset() {
     this.scene = "";
     this.action = "";
-    this.stickers = {};
+    this.stickers.fill(-1);
     this.init();
     this.game.dirty = true;
   }
@@ -211,7 +211,7 @@ export default class TimerPanel extends Vue {
     Cubelet.COLORS.p
   ];
   color = 0;
-  stickers: { [idx: number]: number } = ((): { [idx: number]: number } => {
+  stickers: number[] = ((): number[] => {
     let save = window.localStorage.getItem("movie.stickers");
     if (save) {
       try {
@@ -219,7 +219,10 @@ export default class TimerPanel extends Vue {
         return stickers;
       } catch (e) {}
     }
-    return {};
+    let stickers: number[] = [];
+    stickers.length = 27 * 6;
+    stickers.fill(-1);
+    return stickers;
   })();
 
   @Watch("stickers")
@@ -238,13 +241,12 @@ export default class TimerPanel extends Vue {
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let identity = index * 6 + face;
-    if (this.color == -1) {
+    if (this.color < 0) {
       cubelet.stick(face, "");
-      delete this.stickers[identity];
     } else {
       cubelet.stick(face, this.colors[this.color]);
-      this.stickers[identity] = this.color;
     }
+    this.stickers[identity] = this.color;
     window.localStorage.setItem("movie.stickers", JSON.stringify(this.stickers));
   }
 }
