@@ -59,9 +59,9 @@ export default class MoviePanel extends Vue {
         string = pako.inflate(string, { to: "string" });
         let option = JSON.parse(string);
         if (option.movie) {
-          this.scene = option.scene || this.scene;
-          this.action = option.action || this.action;
-          this.stickers = option.stickers || this.stickers;
+          this.scene = option.scene || "";
+          this.action = option.action || "";
+          this.stickers = option.stickers || [];
           this.option.mode = "movie";
           history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
         }
@@ -114,7 +114,7 @@ export default class MoviePanel extends Vue {
     for (let index = 0; index < 27; index++) {
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
-        let sticker = this.stickers[identity];
+        let sticker = this.stickers[identity] || -1;
         if (sticker < 0) {
           this.game.cube.stick(index, face, "");
         } else {
@@ -128,7 +128,7 @@ export default class MoviePanel extends Vue {
   }
 
   reset() {
-    this.stickers.fill(-1);
+    this.stickers = [];
     this.init();
     this.game.dirty = true;
   }
@@ -196,12 +196,8 @@ export default class MoviePanel extends Vue {
   share() {
     let data: { [key: string]: any } = {};
     data["movie"] = true;
-    if (this.scene.length > 0) {
-      data["scene"] = this.scene;
-    }
-    if (this.action.length > 0) {
-      data["action"] = this.action;
-    }
+    data["scene"] = this.scene;
+    data["action"] = this.action;
     data["stickers"] = this.stickers;
     let json = JSON.stringify(data);
     let string = pako.deflate(json, { to: "string" });
@@ -237,10 +233,7 @@ export default class MoviePanel extends Vue {
         return stickers;
       } catch (e) {}
     }
-    let stickers: number[] = [];
-    stickers.length = 27 * 6;
-    stickers.fill(-1);
-    return stickers;
+    return [];
   })();
 
   @Watch("stickers")
