@@ -93,8 +93,6 @@ export default class TimerPanel extends Vue {
   }
 
   reset() {
-    this.scene = "";
-    this.action = "";
     this.stickers.fill(-1);
     this.init();
     this.game.dirty = true;
