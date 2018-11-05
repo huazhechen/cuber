@@ -1,6 +1,6 @@
 <v-bottom-sheet v-model="value">
   <v-card flat :width="game.width" style="margin: auto">
-    <v-container fluid grid-list-md text-xs-center>
+    <v-container fluid grid-list-md text-xs-center style="padding-bottom: 0%; background: #FAFAFA">
       <v-layout row wrap>
         <v-flex xs4>
           <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')" outline style="height: 2em;margin: 0%; padding: 0%;">

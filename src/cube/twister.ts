@@ -60,7 +60,7 @@ export default class Twister {
         0,
         1,
         (this._game.duration * action.times) / 2,
-        (value: number) => {},
+        (value: number) => { },
         () => {
           if (action.callback) {
             action.callback();
@@ -82,8 +82,9 @@ export default class Twister {
       return;
     }
     if (action.exp == "*") {
+      this._game.history = [];
       let exp = this._game.random();
-      this.twist(exp, false, 1, action.callback, action.fast);
+      this.twist(exp, false, 1, action.callback, true, false);
       return;
     }
     let angle = -Math.PI / 2;
@@ -142,10 +143,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-          this.exp +
-          (this.exp.length > 1 ? ")" : "") +
-          (this.reverse ? "'" : "") +
-          (this.times == 1 ? "" : String(this.times));
+      this.exp +
+      (this.exp.length > 1 ? ")" : "") +
+      (this.reverse ? "'" : "") +
+      (this.times == 1 ? "" : String(this.times));
   }
 }
 

@@ -1,4 +1,4 @@
-<v-container fluid grid-list-md text-xs-center v-show="show" style="padding-top: 0%; padding-bottom: 0%; background: #FAFAFA;">
+<v-container fluid grid-list-md text-xs-center v-show="show" style="background: #FAFAFA;">
   <v-layout row wrap>
     <v-flex v-for="exp in exps" d-flex xs2>
       <fast-button block flat outline @tap="twist(exp)" class="headline" style="width:auto; height:2em; min-width: 0%; min-height: 0%; margin: 0%; text-transform:none">{{exp}}
@@ -15,17 +15,17 @@
       </fast-button>
     </v-flex>
     <v-flex xs2>
-      <fast-button @tap="layers=2" :color="layers == 2?'primary':''" :outline="layers == 2" block flat outline class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
-        <v-icon large>looks_3</v-icon>
-      </fast-button>
-    </v-flex>
-    <v-flex xs2>
-      <fast-button @tap="layers=3" :color="layers == 3?'primary':''" :outline="layers ==3" block flat outline class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
+      <fast-button @tap="layers=2" :color="layers == 2?'primary':''" :outline="layers ==2" block flat outline class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;">
         <v-icon large>view_carousel</v-icon>
       </fast-button>
     </v-flex>
     <v-flex xs2>
-      <fast-button block flat outline @tap="random" class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+      <fast-button block flat outline @tap="twist('#')" class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+        <v-icon large>format_paint</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs2>
+      <fast-button block flat outline @tap="twist('*')" class="headline" style="height:2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
         <v-icon large>casino</v-icon>
       </fast-button>
     </v-flex>

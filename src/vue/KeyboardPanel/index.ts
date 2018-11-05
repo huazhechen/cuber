@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Inject, Prop } from "vue-property-decorator";
+import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Game from "../../cube/game";
 import Option from "../../common/option";
 
@@ -16,13 +16,17 @@ export default class KeyboardPanel extends Vue {
   @Prop({ default: false })
   show: boolean;
 
+  @Watch("show")
+  onShowChange() {
+    this.game.history = [];
+  }
+
   layers: number = 0;
 
   operations: string[][] = [
     ["L", "D", "B", "F", "U", "R", "L'", "D'", "B'", "F'", "U'", "R'"],
     ["l", "d", "b", "f", "u", "r", "l'", "d'", "b'", "f'", "u'", "r'"],
-    ["x", "y", "z", "z", "y", "x", "x'", "y'", "z'", "z'", "y'", "x'"],
-    ["M", "E", "S", "S", "M", "E", "M'", "E'", "S'", "S'", "M'", "E'"]
+    ["M", "E", "S", "z", "y", "x", "M'", "E'", "S'", "z'", "y'", "x'"],
   ];
 
   get exps() {
@@ -38,15 +42,6 @@ export default class KeyboardPanel extends Vue {
       return;
     }
     let exp = this.game.history.pop() || "";
-    let fast = false;
-    console.log(exp);
-    if (exp.length > 3) {
-      fast = true;
-    }
-    this.game.twister.twist(exp, true, 1, null, fast, false);
-  }
-
-  random() {
-    this.game.twister.twist("*", false, 1, null, true);
+    this.game.twister.twist(exp, true, 1, null, false, false);
   }
 }
