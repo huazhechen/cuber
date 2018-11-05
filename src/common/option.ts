@@ -3,7 +3,6 @@ import Game from "../cube/game";
 export default class Option {
   private _game: Game;
   private _mode: string = "";
-  private _keyboard: boolean = false;
   private _size: number = 0;
   private _speed: number = 0;
   private _storage = window.localStorage;
@@ -15,15 +14,6 @@ export default class Option {
     this._mode = value;
     this._storage.setItem("option.mode", value);
     this._game.enable = this.mode == "play" || this.mode == "movie";
-  }
-
-  get keyboard() {
-    return this._keyboard;
-  }
-
-  set keyboard(value: boolean) {
-    this._keyboard = value;
-    this._storage.setItem("option.keyboard", String(value));
   }
 
   get size() {
@@ -62,7 +52,6 @@ export default class Option {
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
-    this.keyboard = this._storage.getItem("option.keyboard") == "true";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
   }

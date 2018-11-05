@@ -50,16 +50,6 @@ export default class CubeletGroup extends THREE.Group {
     return this._angle;
   }
 
-  get exp() {
-    let reverse = this._angle > 0;
-    let times = Math.round(Math.abs(this._angle) / (Math.PI / 2));
-    let action = new TwistAction();
-    action.exp = this.name;
-    action.times = times;
-    action.reverse = reverse;
-    return action.format;
-  }
-
   hold(game: Game): void {
     this._angle = 0;
     for (let i of this.indices) {
@@ -138,6 +128,7 @@ export default class CubeletGroup extends THREE.Group {
       );
     }
   }
+
   rotate(cubelet: Cubelet) {
     cubelet.rotateOnWorldAxis(this.axis, this._angle);
     cubelet.vector = cubelet.vector.applyAxisAngle(this.axis, this._angle);

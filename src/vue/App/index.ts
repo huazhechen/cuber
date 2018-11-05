@@ -69,9 +69,4 @@ export default class App extends Vue {
   onModeChange(to: string, from: string) {
     this.$nextTick(this.resize);
   }
-
-  @Watch("option.keyboard")
-  onKeyboardChange(to: string, from: string) {
-    this.$nextTick(this.resize);
-  }
 }

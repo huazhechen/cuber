@@ -21,9 +21,13 @@ export default class Twister {
     this.update();
   }
 
-  twist(exp: string, reverse: boolean = false, times: number = 1, callback: Function | null = null, fast: boolean = false) {
+  twist(exp: string, reverse: boolean = false, times: number = 1, callback: Function | null = null, fast: boolean = false, history: boolean = true) {
     this.finish();
-    let list = new TwistNode(exp, reverse, times).parse();
+    let node = new TwistNode(exp, reverse, times);
+    if (history) {
+      this._game.history.push(node.value);
+    }
+    let list = node.parse();
     if (list.length > 0) {
       list[list.length - 1].callback = callback;
     }
@@ -55,7 +59,7 @@ export default class Twister {
       this._game.tweener.tween(
         0,
         1,
-        this._game.duration * action.times / 2,
+        (this._game.duration * action.times) / 2,
         (value: number) => {},
         () => {
           if (action.callback) {
@@ -68,6 +72,7 @@ export default class Twister {
       return;
     }
     if (action.exp == "#") {
+      this._game.history = [];
       this._game.cube.reset();
       this._game.dirty = true;
       if (action.callback) {
@@ -77,16 +82,8 @@ export default class Twister {
       return;
     }
     if (action.exp == "*") {
-      this._game.cube.reset();
-      this._game.dirty = true;
       let exp = this._game.random();
-      let list = new TwistNode(exp).parse();
-      list[list.length - 1].callback = action.callback;
-      for (let element of list) {
-        element.fast = true;
-        this.queue.unshift(element);
-      }
-      this.update();
+      this.twist(exp, false, 1, action.callback, action.fast);
       return;
     }
     let angle = -Math.PI / 2;
@@ -141,10 +138,7 @@ export class TwistAction {
   public fast: boolean = false;
   public callback: Function | null = null;
 
-  get format() {
-    if (this.fast) {
-      return "";
-    }
+  get value() {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
@@ -270,5 +264,9 @@ export class TwistNode {
       _result.push(action);
     }
     return _result;
+  }
+
+  get value() {
+    return this._twist.value;
   }
 }

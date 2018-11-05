@@ -186,7 +186,7 @@ export default class Controller {
     this._dragging = true;
     this._holder.index = -1;
 
-    this._planes.some((plane) => {
+    this._planes.some(plane => {
       var point = this._intersect(this._down, plane);
       if (point !== null) {
         if (
@@ -317,6 +317,13 @@ export default class Controller {
     if (this._rotating) {
       if (this._group && this._group !== null) {
         if (this._game.enable) {
+          let reverse = this._angle > 0;
+          let times = Math.round(Math.abs(this._angle) / (Math.PI / 2));
+          let exp = this._group.name;
+          exp = exp + (reverse ? "'" : "") + (times == 1 ? "" : times);
+          if (history && times != 0) {
+            this._game.history.push(exp);
+          }
           this._group.adjust(this._game, this._angle);
         } else {
           this._group.revert(this._game);

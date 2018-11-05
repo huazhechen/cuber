@@ -26,6 +26,7 @@ export default class Game {
   public width: number = 0;
   public height: number = 0;
   public scale: number = 1;
+  public history: string[] = [];
 
   constructor() {
     this.scene = new THREE.Scene();
