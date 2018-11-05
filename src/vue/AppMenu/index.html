@@ -1,6 +1,6 @@
 <v-bottom-sheet v-model="value">
   <v-card flat :width="game.width" style="margin: auto">
-    <v-container fluid grid-list-md text-xs-center style="padding-bottom: 0%; background: #FAFAFA">
+    <v-container fluid grid-list-md text-xs-center style="background: #FAFAFA">
       <v-layout row wrap>
         <v-flex xs4>
           <fast-button class="headline" :color="option.mode == 'play'?'primary':''" flat block @tap="$emit('input', false); mode('play')" outline style="height: 2em;margin: 0%; padding: 0%;">
@@ -21,17 +21,17 @@
       <v-divider></v-divider>
       <v-layout row wrap>
         <v-flex xs4>
-          <fast-button class="headline" flat block @tap="$emit('input', false); tune=true" style="margin: 0%; padding: 0%;">
+          <fast-button class="headline" flat block @tap="$emit('input', false); tune=true" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>palette</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" flat block @tap="$emit('input', false); snap()" style="margin: 0%; padding: 0%;">
+          <fast-button class="headline" flat block @tap="$emit('input', false); snap()" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>camera_alt</v-icon>
           </fast-button>
         </v-flex>
         <v-flex xs4>
-          <fast-button class="headline" color="error" flat block @tap="$emit('input', false); reset()" style="margin: 0%; padding: 0%;">
+          <fast-button class="headline" color="error" flat block @tap="$emit('input', false); reset()" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>delete</v-icon>
           </fast-button>
         </v-flex>
