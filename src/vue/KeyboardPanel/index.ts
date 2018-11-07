@@ -19,6 +19,7 @@ export default class KeyboardPanel extends Vue {
   @Watch("show")
   onShowChange() {
     this.game.history = [];
+    this.game.twister.finish();
   }
 
   layers: number = 0;
