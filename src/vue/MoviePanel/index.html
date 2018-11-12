@@ -16,23 +16,28 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap>
-    <v-flex xs3>
-      <fast-button @tap="colorDialog = true" flat fab class="headline" style="margin: 0%; padding: 0%;">
+    <v-flex xs2.4>
+      <fast-button @tap="colorDialog = true" icon large class="headline" style="margin: 0%; padding: 0%;">
         <v-icon large :color="colors[color]">colorize</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
-      <fast-button flat fab :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
+    <v-flex xs2.4>
+      <fast-button icon large :disabled="recording" @tap="share" style="margin: 0%; padding: 0%;">
         <v-icon large>share</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
-      <fast-button flat fab :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
+    <v-flex xs2.4>
+      <fast-button icon large :disabled="action == '' || recording" @tap="toggle" style="margin: 0%; padding: 0%;">
         <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
       </fast-button>
     </v-flex>
-    <v-flex xs3>
-      <fast-button flat fab :disabled="action == '' || recording" @tap="qualityDialog = true" style="margin: 0%; padding: 0%;">
+    <v-flex xs2.4>
+      <fast-button icon large :disabled="action == '' || recording" @tap="mode = 'snap';qualityDialog = true;" style="margin: 0%; padding: 0%;">
+        <v-icon large>camera_alt</v-icon>
+      </fast-button>
+    </v-flex>
+    <v-flex xs2.4>
+      <fast-button icon large :disabled="action == '' || recording" @tap="mode = 'film';qualityDialog = true;" style="margin: 0%; padding: 0%;">
         <v-icon large>videocam</v-icon>
       </fast-button>
     </v-flex>
@@ -61,8 +66,8 @@
   </v-bottom-sheet>
   <v-bottom-sheet v-model="qualityDialog">
     <v-card flat :width="game.width" style="margin: auto">
-      <v-container fluid grid-list-md text-xs-center>
-        <v-layout row wrap justify-center align-center>
+      <v-container fluid grid-list-md text-xs-center style="margin: 0%; padding-bottom: 0%">
+        <v-layout row wrap justify-center align-center v-show="mode=='film'">
           <v-flex xs3>
             <v-icon large color="black">av_timer</v-icon>
           </v-flex>
@@ -81,7 +86,7 @@
             </fast-button>
           </v-flex>
         </v-layout>
-        <v-divider></v-divider>
+        <v-divider v-show="mode=='film'"></v-divider>
         <v-layout row wrap justify-center align-center>
           <v-flex xs3>
             <v-icon large color="black">transform</v-icon>
@@ -104,7 +109,7 @@
         <v-divider></v-divider>
         <v-layout row wrap justify-center align-center>
           <v-flex xs12>
-            <fast-button flat color="success" fab @tap="qualityDialog = false;film()" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
+            <fast-button flat color="success" fab @tap="qualityDialog = false;generate();" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large>check</v-icon>
             </fast-button>
           </v-flex>
