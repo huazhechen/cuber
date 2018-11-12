@@ -38,7 +38,7 @@ export default class Twister {
     this.update();
   }
 
-  update(): boolean {
+  update() {
     if (this.queue.length === 0 || this._game.lock) {
       return false;
     }
@@ -47,12 +47,14 @@ export default class Twister {
       return false;
     }
     this.start(twist);
-    return true;
   }
 
   start(action: TwistAction) {
     if (action.exp == "-") {
       if (action.fast) {
+        if (action.callback) {
+          action.callback();
+        }
         this.update();
         return;
       }
@@ -60,7 +62,7 @@ export default class Twister {
         0,
         1,
         (this._game.duration * action.times) / 2,
-        (value: number) => { },
+        (value: number) => {},
         () => {
           if (action.callback) {
             action.callback();
@@ -143,10 +145,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-      this.exp +
-      (this.exp.length > 1 ? ")" : "") +
-      (this.reverse ? "'" : "") +
-      (this.times == 1 ? "" : String(this.times));
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
   }
 }
 
