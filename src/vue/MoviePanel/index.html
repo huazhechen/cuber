@@ -3,21 +3,21 @@
   </v-layout>
   <v-layout row wrap>
     <v-flex xs12>
-      <v-text-field outline single-line hide-details class="headline" :append-icon="scene == ''?'':'clear'" @click:append="scene = ''" v-model="scene">
+      <v-text-field outline single-line hide-details class="headline" :disabled="recording" :append-icon="scene == ''?'':'clear'" @click:append="scene = ''" v-model="scene">
         <v-icon style="vertical-align: middle" slot="label">terrain</v-icon>
       </v-text-field>
     </v-flex>
   </v-layout>
   <v-layout row wrap>
     <v-flex xs12>
-      <v-text-field outline single-line hide-details class="headline" :append-icon="action == ''?'':'clear'" @click:append="action = ''" v-model="action">
+      <v-text-field outline single-line hide-details class="headline" :disabled="recording" :append-icon="action == ''?'':'clear'" @click:append="action = ''" v-model="action">
         <v-icon style="vertical-align: middle" slot="label">theaters</v-icon>
       </v-text-field>
     </v-flex>
   </v-layout>
   <v-layout row wrap>
     <v-flex xs2.4>
-      <fast-button @tap="colorDialog = true" icon large class="headline" style="margin: 0%; padding: 0%;">
+      <fast-button @tap="colorDialog = true" :disabled="recording" icon large class="headline" style="margin: 0%; padding: 0%;">
         <v-icon large :color="colors[color]">colorize</v-icon>
       </fast-button>
     </v-flex>
@@ -32,7 +32,7 @@
       </fast-button>
     </v-flex>
     <v-flex xs2.4>
-      <fast-button icon large :disabled="action == '' || recording" @tap="mode = 'snap';qualityDialog = true;" style="margin: 0%; padding: 0%;">
+      <fast-button icon large :disabled="recording" @tap="mode = 'snap';qualityDialog = true;" style="margin: 0%; padding: 0%;">
         <v-icon large>camera_alt</v-icon>
       </fast-button>
     </v-flex>
