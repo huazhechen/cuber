@@ -114,7 +114,10 @@ export default class MoviePanel extends Vue {
     for (let index = 0; index < 27; index++) {
       for (let face = 0; face < 6; face++) {
         let identity = index * 6 + face;
-        let sticker = this.stickers[identity] || -1;
+        let sticker = this.stickers[identity];
+        if (null == sticker) {
+          sticker = -1;
+        }
         if (sticker < 0) {
           this.game.cube.stick(index, face, "");
         } else {
