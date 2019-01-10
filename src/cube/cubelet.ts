@@ -197,6 +197,7 @@ export default class Cubelet extends THREE.Group {
   private _edges: THREE.Mesh[] = [];
   private _frame: THREE.Mesh;
   private _quaternion: THREE.Quaternion = new THREE.Quaternion();
+  private _mirrors: THREE.Mesh[] = [];
 
   set vector(vector) {
     this._vector.set(Math.round(vector.x), Math.round(vector.y), Math.round(vector.z));
@@ -218,6 +219,21 @@ export default class Cubelet extends THREE.Group {
 
   get index() {
     return this._index;
+  }
+  set mirror(value: boolean) {
+    if (value) {
+      for (let i = 0; i < 6; i++) {
+        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) < 0) {
+          this.add(this._mirrors[i]);
+        }
+      }
+    } else {
+      for (let i = 0; i < 6; i++) {
+        if (this._mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this._mirrors[i]) >= 0) {
+          this.remove(this._mirrors[i]);
+        }
+      }
+    }
   }
 
   private _materials: THREE.MeshBasicMaterial[];
@@ -341,16 +357,36 @@ export default class Cubelet extends THREE.Group {
       this._edges.push(_edge);
       this.add(_sticker);
       this._stickers.push(_sticker);
+      if (this._materials[i] != Cubelet._MATERIALS.gray) {
+        let _mirror = new THREE.Mesh(Cubelet._STICKER, this._materials[i]);
+        _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
+        _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
+        _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
+        if (_mirror.rotation.x + _mirror.rotation.y + _mirror.rotation.z == 0) {
+          _mirror.rotation.y = Math.PI;
+        }
+
+        _mirror.position.x = _sticker.position.x * 3;
+        _mirror.position.y = _sticker.position.y * 3;
+        _mirror.position.z = _sticker.position.z * 3;
+        this.add(_mirror);
+        this._mirrors[i] = _mirror;
+      }
       this.matrixAutoUpdate = false;
       this.updateMatrix();
     }
   }
 
   stick(face: number, color: string) {
+    let material;
     if (color.length > 0) {
-      this._stickers[face].material = new THREE.MeshBasicMaterial({ color: color });
+      material = new THREE.MeshBasicMaterial({ color: color });
     } else {
-      this._stickers[face].material = this._materials[face];
+      material = this._materials[face];
+    }
+    this._stickers[face].material = material;
+    if (this._mirrors[face] instanceof THREE.Mesh) {
+      this._mirrors[face].material = material;
     }
   }
 }

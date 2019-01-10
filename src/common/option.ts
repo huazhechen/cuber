@@ -5,6 +5,8 @@ export default class Option {
   private _mode: string = "";
   private _size: number = 0;
   private _speed: number = 0;
+  private _pose: number = 1;
+  private _mirror: boolean = false;
   private _storage = window.localStorage;
   get mode() {
     return this._mode;
@@ -49,10 +51,41 @@ export default class Option {
     this._game.duration = 50 - 10 * this.speed;
   }
 
+  get pose() {
+    return this._pose;
+  }
+
+  set pose(value: number) {
+    if (this._pose < -2) {
+      this._pose = -2;
+    }
+    if (this._pose > 2) {
+      this._pose = 2;
+    }
+    this._pose = value;
+    this._storage.setItem("option.pose", String(value));
+    this._game.scene.rotation.y = -Math.PI / 4 + (this._pose * Math.PI) / 16;
+    this._game.dirty = true;
+  }
+
+  get mirror() {
+    return this._mirror;
+  }
+
+  set mirror(value: boolean) {
+    this._mirror = value;
+    for (let cubelet of this._game.cube.cubelets) {
+      cubelet.mirror = value;
+    }
+    this._game.dirty = true;
+  }
+
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";
     this.speed = Number(this._storage.getItem("option.speed") || 0);
     this.size = Number(this._storage.getItem("option.size") || 0);
+    this.pose = Number(this._storage.getItem("option.pose") || 1);
+    this.mirror = Boolean(this._storage.getItem("option.mirror") || false);
   }
 }
