@@ -177,6 +177,8 @@ export default class Controller {
   }
 
   _handleDown() {
+    this._game.canvas.tabIndex = 1;
+    this._game.canvas.focus();
     if (this._game.enable) {
       this._game.twister.finish();
     }
