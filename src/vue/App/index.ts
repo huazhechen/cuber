@@ -27,6 +27,8 @@ export default class App extends Vue {
 
   width: string = "100%";
 
+  fixed: boolean = false;
+
   resize() {
     let el = this.$el;
     if (window.innerWidth > window.innerHeight / (4 / 3)) {
@@ -53,9 +55,16 @@ export default class App extends Vue {
       cuber.style.height = cuberHeight + "px";
       panel.style.position = "fixed";
       panel.style.width = cuber.clientWidth + "px";
+      panel.style.bottom = "0px";
       this.game.width = cuber.clientWidth;
-      this.game.height = cuberHeight;
+      this.game.height = cuberHeight + 100;
       this.game.resize();
+      if (!this.fixed) {
+        this.fixed = true;
+        this.$nextTick(this.resize);
+      } else {
+        this.fixed = false;
+      }
     }
     window.scrollTo(1, 0);
   }
