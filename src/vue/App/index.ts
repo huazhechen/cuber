@@ -78,7 +78,13 @@ export default class App extends Vue {
     };
 
     if (window.innerWidth > window.innerHeight / (4 / 3)) {
-      this.width = Math.floor(Math.max(window.innerHeight / (16 / 9), 320));
+      this.width = Math.floor(window.innerHeight / (16 / 9));
+      if (this.width < 320) {
+        this.width = 320;
+      }
+      if (this.width > window.innerWidth) {
+        this.width = window.innerWidth;
+      }
       this.$el.style.width = this.width + "px";
       this.$nextTick(this.resize);
     } else {
