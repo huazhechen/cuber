@@ -32,10 +32,31 @@ export default class AppMenu extends Vue {
     this.option.mode = value;
     this.$emit("input", false);
   }
-  
+
   reset() {
     let storage = window.localStorage;
     storage.clear();
     window.location.reload();
+  }
+
+  fullscreen() {
+    if (this.option.fullscreen) {
+      this.option.fullscreen = false;
+      let cfs = document as any;
+      if (cfs.exitFullscreen) {
+        cfs.exitFullscreen();
+      } else if (cfs.webkitCancelFullScreen) {
+        cfs.webkitCancelFullScreen();
+      } else {
+        cfs.msExitFullscreen();
+      }
+    } else {
+      this.option.fullscreen = true;
+      let el = document.documentElement as any;
+      let rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (typeof rfs != "undefined" && rfs) {
+        rfs.call(el);
+      }
+    }
   }
 }

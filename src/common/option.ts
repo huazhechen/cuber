@@ -80,6 +80,8 @@ export default class Option {
     this._game.dirty = true;
   }
 
+  fullscreen: boolean = false;
+
   constructor(game: Game) {
     this._game = game;
     this.mode = this._storage.getItem("option.mode") || "play";

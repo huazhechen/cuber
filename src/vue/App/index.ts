@@ -55,6 +55,7 @@ export default class App extends Vue {
       this.game.height = cuberHeight;
       this.game.resize();
     }
+    window.scrollTo(1, 0);
   }
 
   mounted() {
@@ -63,6 +64,9 @@ export default class App extends Vue {
       cuber.appendChild(this.game.canvas);
       this.resize();
     }
+    document.onfullscreenchange = () => {
+      this.$nextTick(this.resize);
+    };
   }
 
   @Watch("option.mode")
