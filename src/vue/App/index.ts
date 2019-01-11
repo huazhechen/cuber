@@ -51,6 +51,8 @@ export default class App extends Vue {
       let panelHeight = panel.clientHeight;
       let cuberHeight = window.innerHeight - panelHeight;
       cuber.style.height = cuberHeight + "px";
+      panel.style.position = "fixed";
+      panel.style.width = cuber.clientWidth + "px";
       this.game.width = cuber.clientWidth;
       this.game.height = cuberHeight;
       this.game.resize();
