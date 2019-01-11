@@ -41,7 +41,6 @@ export default class AppMenu extends Vue {
 
   fullscreen() {
     if (this.option.fullscreen) {
-      this.option.fullscreen = false;
       let cfs = document as any;
       if (cfs.exitFullscreen) {
         cfs.exitFullscreen();
@@ -51,7 +50,6 @@ export default class AppMenu extends Vue {
         cfs.msExitFullscreen();
       }
     } else {
-      this.option.fullscreen = true;
       let el = document.documentElement as any;
       let rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
       if (typeof rfs != "undefined" && rfs) {

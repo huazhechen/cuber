@@ -80,7 +80,11 @@ export default class Option {
     this._game.dirty = true;
   }
 
-  fullscreen: boolean = false;
+  get fullscreen() {
+    let d = document as any;
+    let el = d.fullscreenElement || d.mozFullScreenElement || d.webkitFullscreenElement;
+    return el != null;
+  }
 
   constructor(game: Game) {
     this._game = game;
