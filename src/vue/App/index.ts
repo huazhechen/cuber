@@ -33,18 +33,25 @@ export default class App extends Vue {
     if (this.$refs.cuber instanceof HTMLElement && this.$refs.panel instanceof HTMLElement) {
       let cuber = this.$refs.cuber;
       let panel = this.$refs.panel;
-      if (cuber.clientWidth > window.innerWidth) {
-        this.$el.style.width = window.innerWidth + "px";
-        cuber.style.width = window.innerWidth + "px";
-        panel.style.width = window.innerWidth + "px";
-        this.$nextTick(this.resize);
-        return;
+      let width = cuber.clientWidth;
+      if (window.innerWidth > window.innerHeight / (4 / 3)) {
+        width = Math.floor(window.innerHeight / (16 / 9));
+        if (width < 320) {
+          width = 320;
+        }
       }
-      let width = Math.min(window.innerWidth, this.width);
+      let min =  Math.min(window.innerWidth, this.width);
+      if (width < min) {
+        width = min;
+      }
+      let max = window.innerWidth
+      if (width > max) {
+        width = max;
+      }
       if (cuber.clientWidth != width) {
-        this.$el.style.width = this.width + "px";
-        cuber.style.width = this.width + "px";
-        panel.style.width = this.width + "px";
+        this.$el.style.width = width + "px";
+        cuber.style.width = width + "px";
+        panel.style.width = width + "px";
         this.$nextTick(this.resize);
         return;
       }
