@@ -10,18 +10,18 @@ export default class Option {
 
   load() {
     this.mirror = this._storage.getItem("setting.mirror") == "true";
-    this.scale = Number(this._storage.getItem("setting.scale") || 1);
-    this.perspective = Number(this._storage.getItem("setting.perspective") || 1);
-    this.angle = Number(this._storage.getItem("setting.angle") || Math.PI / 16);
-    this.gradient = Number(this._storage.getItem("setting.gradient") || Math.PI / 6);
+    this.scale = Number(this._storage.getItem("setting.scale") || 80);
+    this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
+    this.angle = Number(this._storage.getItem("setting.angle") || 20);
+    this.gradient = Number(this._storage.getItem("setting.gradient") || 50);
   }
 
   reset() {
     this.mirror = false;
-    this.scale = 1;
-    this.perspective = 1;
-    this.angle = Math.PI / 16;
-    this.gradient = Math.PI / 6;
+    this.scale = 80;
+    this.perspective = 50;
+    this.angle = 20;
+    this.gradient = 50;
   }
 
   private _mirror: boolean;
@@ -41,7 +41,8 @@ export default class Option {
   set scale(value) {
     this._scale = value;
     this._storage.setItem("setting.scale", String(value));
-    this.cuber.scale = value;
+    value = 0.8 - value / 100;
+    this.cuber.scale = Math.exp(value);
   }
 
   private _perspective: number;
@@ -51,7 +52,9 @@ export default class Option {
   set perspective(value) {
     this._perspective = value;
     this._storage.setItem("setting.perspective", String(value));
-    this.cuber.perspective = value;
+
+    value = 1 - Math.sqrt(value / 100);
+    this.cuber.perspective = value * 2 + 0.4;
   }
 
   private _angle: number;
@@ -61,6 +64,8 @@ export default class Option {
   set angle(value) {
     this._angle = value;
     this._storage.setItem("setting.angle", String(value));
+
+    value = value / 100;
     this.cuber.angle = value;
   }
 
@@ -71,6 +76,8 @@ export default class Option {
   set gradient(value) {
     this._gradient = value;
     this._storage.setItem("setting.gradient", String(value));
-    this.cuber.gradient = value;
+
+    value = value / 100;
+    this.cuber.gradient = 1 - value * 1.2;
   }
 }

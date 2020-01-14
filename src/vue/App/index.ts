@@ -3,11 +3,13 @@ import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
+import Tune from "../Tune";
 
 @Component({
   template: require("./index.html"),
   components: {
-    keyboard: Keyboard
+    keyboard: Keyboard,
+    tune: Tune
   }
 })
 export default class App extends Vue {
@@ -18,7 +20,7 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
-  menu: boolean = true;
+  tune: boolean = false;
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -34,7 +36,7 @@ export default class App extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.min(this.width / 8, this.height / 15);
-    
+
     this.cuber.width = this.width;
     this.cuber.height = this.height - this.size * 4;
     this.cuber.resize();
@@ -46,7 +48,7 @@ export default class App extends Vue {
 
     let keyboard = this.$refs.keyboard;
     if (keyboard instanceof Keyboard) {
-      keyboard.width = this.size * 8 - this.size / 4;
+      keyboard.width = this.size * 8 - this.size / 8;
       keyboard.height = this.size * 4;
     }
   }
@@ -57,10 +59,5 @@ export default class App extends Vue {
       cuber.appendChild(this.cuber.canvas);
       this.$nextTick(this.resize);
     }
-  }
-
-  @Watch("option.mode")
-  onModeChange(to: string, from: string) {
-    this.$nextTick(this.resize);
   }
 }

@@ -1,0 +1,21 @@
+<v-bottom-sheet v-model="value">
+  <v-card flat style="margin: auto">
+    <v-container fluid grid-list-md text-xs-center>
+      <v-layout row wrap justify-center align-center>
+        <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="缩放"></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider v-model="option.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider v-model="option.angle" always-dirty thumb-label="always" max="100" min="0" label="角度"></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="梯度"></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-btn @click.native.stop.prevent="option.reset" outlined color="red">重置</v-btn>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

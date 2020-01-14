@@ -37,7 +37,14 @@ export default class Keyboard extends Vue {
   ];
 
   get style() {
-    return { margin: this.height / 48 + "px", height: (this.height / 32) * 9 + "px", "min-width": "0%", "min-height": "0%", "text-transform": "none" };
+    return {
+      margin: this.height / 48 + "px",
+      width: (this.height / 32) * 9 + "px",
+      height: (this.height / 32) * 9 + "px",
+      "min-width": "0%",
+      "min-height": "0%",
+      "text-transform": "none"
+    };
   }
 
   get exps() {
