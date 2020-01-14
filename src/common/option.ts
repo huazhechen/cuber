@@ -1,7 +1,6 @@
 import Cuber from "../cuber/cuber";
 
 export default class Option {
-
   private _storage = window.localStorage;
   private cuber: Cuber;
   constructor(cuber: Cuber) {
@@ -10,7 +9,7 @@ export default class Option {
   }
 
   load() {
-    this.mirror = Boolean(this._storage.getItem("setting.mirror") || false);
+    this.mirror = this._storage.getItem("setting.mirror") == "true";
     this.scale = Number(this._storage.getItem("setting.scale") || 1);
     this.perspective = Number(this._storage.getItem("setting.perspective") || 1);
     this.angle = Number(this._storage.getItem("setting.angle") || Math.PI / 16);

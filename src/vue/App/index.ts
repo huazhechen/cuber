@@ -18,41 +18,37 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
-  menu: boolean = false;
+  menu: boolean = true;
   width: number = 0;
   height: number = 0;
+  size: number = 0;
 
   constructor() {
     super();
     let canvas = document.createElement("canvas");
     this.cuber = new Cuber(canvas);
-    this.option = new Option(this.cuber)
+    this.option = new Option(this.cuber);
   }
 
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    let kw = this.width;
-    if (kw > this.height / 1.8) {
-      kw = Math.floor(this.height / 1.8);
-    }
-    let kh = kw * 0.5;
+    this.size = Math.min(this.width / 8, this.height / 15);
+    
     this.cuber.width = this.width;
-    this.cuber.height = this.height - kh;
+    this.cuber.height = this.height - this.size * 4;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - kh + "px";
+      cuber.style.height = this.height - this.size * 4 + "px";
     }
 
     let keyboard = this.$refs.keyboard;
     if (keyboard instanceof Keyboard) {
-      keyboard.width = kw;
-      keyboard.height = kh;
+      keyboard.width = this.size * 8 - this.size / 4;
+      keyboard.height = this.size * 4;
     }
-
-    window.scrollTo(1, 0);
   }
 
   mounted() {

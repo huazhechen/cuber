@@ -23,7 +23,6 @@ export default class Cuber {
   public display: boolean = true;
 
   public lock: boolean = false;
-  public twistable: boolean = true;
   public duration: number = 30;
   public history: History;
   public controller: Controller;
@@ -41,6 +40,27 @@ export default class Cuber {
     this._mirror = value;
     for (let cubelet of this.cube.cubelets) {
       cubelet.mirror = value;
+    }
+    this.dirty = true;
+  }
+
+  stick() {
+    for (let i = 0; i < 27; i++) {
+      for (let face = 0; face < 6; face++) {
+        this.cube.stick(i, face, "");
+      }
+    }
+    this.dirty = true;
+  }
+
+  strip(strips: { indexes: number[]; faces: number[] }[]) {
+    this.stick();
+    for (let strip of strips) {
+      for (let index of strip.indexes) {
+        for (let face of strip.faces) {
+          this.cube.stick(index, face, COLORS.GRAY);
+        }
+      }
     }
     this.dirty = true;
   }

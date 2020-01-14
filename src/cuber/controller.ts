@@ -5,9 +5,9 @@ import Group from "./group";
 import { FACES } from "../common/define";
 
 export class Holder {
-  public vector: THREE.Vector3
-  public index: number
-  public plane: THREE.Plane
+  public vector: THREE.Vector3;
+  public index: number;
+  public plane: THREE.Plane;
   constructor() {
     this.vector = new THREE.Vector3();
   }
@@ -31,6 +31,14 @@ export default class Controller {
     new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
     new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Cubelet.SIZE * 3) / 2)
   ];
+  public _lock: boolean = false;
+  get lock() {
+    return this._lock;
+  }
+  set lock(value) {
+    this._lock = value;
+  }
+
   constructor(cuber: Cuber) {
     this.cuber = cuber;
     this.taps = [];
@@ -50,7 +58,7 @@ export default class Controller {
   }
 
   update() {
-    if (this.cuber.twistable) {
+    if (!this.lock) {
       return;
     }
     if (this.rotating) {
@@ -177,12 +185,12 @@ export default class Controller {
   }
 
   handleDown() {
+    if (this.dragging || this.rotating) {
+      return;
+    }
     this.dragging = true;
     this.holder.index = -1;
     this.cuber.tweener.speedup();
-    if (!this.cuber.twistable) {
-      return;
-    }
     let distance = 0;
     this.planes.forEach(plane => {
       var point = this.intersect(this.down, plane);
@@ -292,7 +300,7 @@ export default class Controller {
         this.angle =
           (((-(this.vector.x + this.vector.y + this.vector.z) * (this.group.axis.x + this.group.axis.y + this.group.axis.z)) / Cubelet.SIZE) * Math.PI) / 4;
       }
-      if (this.cuber.twistable) {
+      if (!this.lock) {
         this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
         this.handleUp();
         return;
@@ -320,7 +328,7 @@ export default class Controller {
     }
     if (this.rotating) {
       if (this.group && this.group !== null) {
-        if (this.cuber.twistable) {
+        if (!this.lock) {
           this.group.twist(this.angle);
         } else {
           this.group.twist(0);

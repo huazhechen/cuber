@@ -155,7 +155,6 @@ export default class Cubelet extends THREE.Group {
   private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
 
-
   private static _MATERIALS = {
     green: new THREE.MeshBasicMaterial({ color: COLORS.GREEN }),
     orange: new THREE.MeshBasicMaterial({ color: COLORS.ORANGE }),
@@ -371,10 +370,6 @@ export default class Cubelet extends THREE.Group {
       material = new THREE.MeshBasicMaterial({ color: color });
     } else {
       material = this.materials[face];
-      if (this.stickers[face].material == material)
-      {
-        material = Cubelet._MATERIALS.gray;
-      }
     }
     this.stickers[face].material = material;
     if (this.mirrors[face] instanceof THREE.Mesh) {

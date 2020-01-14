@@ -2,18 +2,6 @@
   <div v-resize="resize" style="background-color: #E8E8E8;">
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%"><keyboard ref="keyboard"></keyboard></div>
-    <v-btn
-      ref="tune"
-      icon
-      large
-      top
-      right
-      fixed
-      @click.native.stop.prevent="menu = !menu"
-      @touchend.native.stop.prevent="menu = !menu"
-      @touchstart.native.stop.prevent
-    >
-      <v-icon large>tune</v-icon>
-    </v-btn>
+    <v-btn fixed right top icon :style="{width:size+'px', height:size+'px'}" @click="menu = !menu;"> <v-icon :size="size * 0.8">menu</v-icon> </v-btn>
   </div>
 </v-app>
