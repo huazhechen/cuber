@@ -1,97 +1,77 @@
-import Game from "../cube/game";
+import Cuber from "../cuber/cuber";
 
 export default class Option {
-  private _game: Game;
-  private _mode: string = "";
-  private _size: number = 0;
-  private _speed: number = 0;
-  private _pose: number = 1;
-  private _mirror: boolean = false;
+
   private _storage = window.localStorage;
-  get mode() {
-    return this._mode;
+  private cuber: Cuber;
+  constructor(cuber: Cuber) {
+    this.cuber = cuber;
+    this.load();
   }
 
-  set mode(value: string) {
-    this._mode = value;
-    this._storage.setItem("option.mode", value);
-    this._game.enable = this.mode == "play" || this.mode == "movie";
+  load() {
+    this.mirror = Boolean(this._storage.getItem("setting.mirror") || false);
+    this.scale = Number(this._storage.getItem("setting.scale") || 1);
+    this.perspective = Number(this._storage.getItem("setting.perspective") || 1);
+    this.angle = Number(this._storage.getItem("setting.angle") || Math.PI / 16);
+    this.gradient = Number(this._storage.getItem("setting.gradient") || Math.PI / 6);
   }
 
-  get size() {
-    return this._size;
+  reset() {
+    this.mirror = false;
+    this.scale = 1;
+    this.perspective = 1;
+    this.angle = Math.PI / 16;
+    this.gradient = Math.PI / 6;
   }
 
-  set size(value: number) {
-    if (value < -4) {
-      value = -4;
-    }
-    if (value > 4) {
-      value = 4;
-    }
-    this._size = value;
-    this._storage.setItem("option.size", String(value));
-    this._game.scale = Math.pow(2, -this.size / 8);
-    this._game.resize();
-  }
-
-  get speed() {
-    return this._speed;
-  }
-
-  set speed(value: number) {
-    if (value < -4) {
-      value = -4;
-    }
-    if (value > 4) {
-      value = 4;
-    }
-    this._speed = value;
-    this._storage.setItem("option.speed", String(value));
-    this._game.duration = 50 - 10 * this.speed;
-  }
-
-  get pose() {
-    return this._pose;
-  }
-
-  set pose(value: number) {
-    if (this._pose < -2) {
-      this._pose = -2;
-    }
-    if (this._pose > 2) {
-      this._pose = 2;
-    }
-    this._pose = value;
-    this._storage.setItem("option.pose", String(value));
-    this._game.scene.rotation.y = -Math.PI / 4 + (this._pose * Math.PI) / 16;
-    this._game.dirty = true;
-  }
-
+  private _mirror: boolean;
   get mirror() {
     return this._mirror;
   }
-
-  set mirror(value: boolean) {
+  set mirror(value) {
     this._mirror = value;
-    for (let cubelet of this._game.cube.cubelets) {
-      cubelet.mirror = value;
-    }
-    this._game.dirty = true;
+    this._storage.setItem("setting.mirror", String(value));
+    this.cuber.mirror = value;
   }
 
-  get fullscreen() {
-    let d = document as any;
-    let el = d.fullscreenElement || d.mozFullScreenElement || d.webkitFullscreenElement;
-    return el != null;
+  private _scale: number;
+  get scale() {
+    return this._scale;
+  }
+  set scale(value) {
+    this._scale = value;
+    this._storage.setItem("setting.scale", String(value));
+    this.cuber.scale = value;
   }
 
-  constructor(game: Game) {
-    this._game = game;
-    this.mode = this._storage.getItem("option.mode") || "play";
-    this.speed = Number(this._storage.getItem("option.speed") || 0);
-    this.size = Number(this._storage.getItem("option.size") || 0);
-    this.pose = Number(this._storage.getItem("option.pose") || 1);
-    this.mirror = Boolean(this._storage.getItem("option.mirror") || false);
+  private _perspective: number;
+  get perspective() {
+    return this._perspective;
+  }
+  set perspective(value) {
+    this._perspective = value;
+    this._storage.setItem("setting.perspective", String(value));
+    this.cuber.perspective = value;
+  }
+
+  private _angle: number;
+  get angle() {
+    return this._angle;
+  }
+  set angle(value) {
+    this._angle = value;
+    this._storage.setItem("setting.angle", String(value));
+    this.cuber.angle = value;
+  }
+
+  private _gradient: number;
+  get gradient() {
+    return this._gradient;
+  }
+  set gradient(value) {
+    this._gradient = value;
+    this._storage.setItem("setting.gradient", String(value));
+    this.cuber.gradient = value;
   }
 }

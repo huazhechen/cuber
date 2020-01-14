@@ -1,12 +1,19 @@
 <v-app>
-  <div v-resize="resize">
+  <div v-resize="resize" style="background-color: #E8E8E8;">
     <div ref="cuber"></div>
-    <div ref="panel">
-      <keyboard-panel :show="option.mode == 'play'"></keyboard-panel>
-      <script-panel :show="option.mode == 'script'"></script-panel>
-      <movie-panel :show="option.mode == 'movie'"></movie-panel>
-    </div>
-    <fast-button icon large @tap="menu = !menu;" style="position:absolute;right:1em;top:1em"> <v-icon large>menu</v-icon> </fast-button>
+    <div style="margin:0%;padding:0%"><keyboard ref="keyboard"></keyboard></div>
+    <v-btn
+      ref="tune"
+      icon
+      large
+      top
+      right
+      fixed
+      @click.native.stop.prevent="menu = !menu"
+      @touchend.native.stop.prevent="menu = !menu"
+      @touchstart.native.stop.prevent
+    >
+      <v-icon large>tune</v-icon>
+    </v-btn>
   </div>
-  <app-menu v-model="menu"></app-menu>
 </v-app>
