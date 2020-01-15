@@ -19,3 +19,5 @@ export enum FACES {
   B,
   F
 }
+
+export var DURATION = 30;

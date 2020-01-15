@@ -1,15 +1,13 @@
 import Cuber from "./cuber";
 
 export default class Tweener {
-  cuber: Cuber;
   tweens: Tween[];
 
   get length() {
     return this.tweens.length;
   }
 
-  constructor(cuber: Cuber) {
-    this.cuber = cuber;
+  constructor() {
     this.tweens = [];
     this.loop();
   }
@@ -49,6 +47,8 @@ export default class Tweener {
     }
   }
 }
+
+export var tweener: Tweener = new Tweener();
 
 class Tween {
   begin: number;

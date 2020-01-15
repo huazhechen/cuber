@@ -18,8 +18,18 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="cuber.twister.twist('*');menu=false;"
-      @touchstart.native.stop.prevent="cuber.twister.twist('*');menu=false;"
+      @click.native.stop.prevent="alg=true;menu=false;"
+      @touchstart.native.stop.prevent="alg=true;menu=false;"
+    >
+      <v-icon :size="size * 0.55" color="indigo">school</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="cuber.cube.twister.twist('*');menu=false;"
+      @touchstart.native.stop.prevent="cuber.cube.twister.twist('*');menu=false;"
     >
       <v-icon :size="size * 0.55" color="red">casino</v-icon>
     </v-btn>
@@ -38,5 +48,6 @@
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;"><keyboard ref="keyboard"></keyboard></div>
   </div>
-  <tune ref="tune" v-model="tune"></tune>
+  <tune v-model="tune"></tune>
+  <alg v-model="alg"></alg>
 </v-app>

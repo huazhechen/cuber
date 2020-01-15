@@ -1,10 +1,12 @@
-import Cuber from "./cuber";
+import Cube from "./cube";
+import { tweener } from "./tweener";
+import { DURATION } from "../common/define";
 
 export default class Twister {
-  cuber: Cuber;
+  cube: Cube;
   queue: TwistAction[];
-  constructor(cuber: Cuber) {
-    this.cuber = cuber;
+  constructor(cube: Cube) {
+    this.cube = cube;
     this.queue = [];
   }
 
@@ -42,15 +44,15 @@ export default class Twister {
     for (const action of this.queue) {
       action.fast = true;
     }
-    this.cuber.tweener.finish();
+    tweener.finish();
   }
 
   twist(exp: string, reverse = false, times = 1, fast = false) {
     if (this.queue.length > 0){
-      this.cuber.tweener.finish();
+      tweener.finish();
       this.update();
     }
-    this.cuber.tweener.speedup();
+    tweener.speedup();
     let node = new TwistNode(exp, reverse, times);
     let list = node.parse();
     for (let element of list) {
@@ -61,7 +63,7 @@ export default class Twister {
   }
 
   update() {
-    if (this.queue.length === 0 || this.cuber.lock) {
+    if (this.queue.length === 0 || this.cube.lock) {
       return false;
     }
     let twist = this.queue.shift();
@@ -77,7 +79,7 @@ export default class Twister {
         this.update();
         return;
       }
-      this.cuber.tweener.tween(0, 1, this.cuber.duration * action.times, (value: number) => {
+      tweener.tween(0, 1, DURATION * action.times, (value: number) => {
         if (value === 1 || value === 0) {
           this.update();
           return;
@@ -86,16 +88,16 @@ export default class Twister {
       return;
     }
     if (action.exp == "#") {
-      this.cuber.history.clear();
-      this.cuber.cube.reset();
-      this.cuber.dirty = true;
+      this.cube.history.clear();
+      this.cube.reset();
+      this.cube.dirty = true;
       this.update();
       return;
     }
     if (action.exp == "*") {
       let exp = Twister.shuffle();
       this.twist(exp, false, 1, true);
-      this.cuber.history.clear();
+      this.cube.history.clear();
       return;
     }
     let angle = -Math.PI / 2;
@@ -105,7 +107,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let part = this.cuber.cube.groups[action.exp];
+    let part = this.cube.groups[action.exp];
     if (part === undefined) {
       this.update();
       return;

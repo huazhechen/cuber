@@ -4,12 +4,15 @@ import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
+import Capture from "../../cuber/capture";
+import Alg from "../Alg";
 
 @Component({
   template: require("./index.html"),
   components: {
     keyboard: Keyboard,
-    tune: Tune
+    tune: Tune,
+    alg: Alg
   }
 })
 export default class App extends Vue {
@@ -56,10 +59,18 @@ export default class App extends Vue {
 
   mounted() {
     if (this.$refs.cuber instanceof Element) {
-      this.cuber.twister.twist("*");
+      this.cuber.cube.twister.twist("*");
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.cuber.canvas);
       this.$nextTick(this.resize);
     }
+    this.loop();
+  }
+
+  alg: boolean = false;
+
+  loop() {
+    requestAnimationFrame(this.loop.bind(this));
+    this.cuber.render();
   }
 }

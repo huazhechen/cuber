@@ -1,10 +1,12 @@
 import * as THREE from "three";
 import Cubelet from "./cubelet";
-import Cuber from "./cuber";
 import { TwistAction } from "./twister";
+import Cube from "./cube";
+import { DURATION } from "../common/define";
+import { tweener } from "./tweener";
 
 export default class Group extends THREE.Group {
-  cuber: Cuber;
+  cube: Cube;
   cubelets: Cubelet[];
   name: string;
   indices: number[];
@@ -15,15 +17,15 @@ export default class Group extends THREE.Group {
     this.setRotationFromAxisAngle(this.axis, angle);
     this._angle = angle;
     this.updateMatrix();
-    this.cuber.dirty = true;
+    this.cube.dirty = true;
   }
   get angle() {
     return this._angle;
   }
 
-  constructor(cuber: Cuber, name: string, indices: number[], axis: THREE.Vector3) {
+  constructor(cube: Cube, name: string, indices: number[], axis: THREE.Vector3) {
     super();
-    this.cuber = cuber;
+    this.cube = cube;
     this._angle = 0;
     this.cubelets = [];
     this.name = name;
@@ -36,12 +38,12 @@ export default class Group extends THREE.Group {
   hold() {
     this.angle = 0;
     for (let i of this.indices) {
-      let cubelet = this.cuber.cube.cubelets[i];
+      let cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
-      this.cuber.cube.remove(cubelet);
+      this.cube.remove(cubelet);
       this.add(cubelet);
     }
-    this.cuber.lock = true;
+    this.cube.lock = true;
   }
 
   drop() {
@@ -53,10 +55,10 @@ export default class Group extends THREE.Group {
       }
       this.rotate(cubelet);
       this.remove(cubelet);
-      this.cuber.cube.add(cubelet);
-      this.cuber.cube.cubelets[cubelet.index] = cubelet;
+      this.cube.add(cubelet);
+      this.cube.cubelets[cubelet.index] = cubelet;
     }
-    this.cuber.lock = false;
+    this.cube.lock = false;
     this.angle = 0;
   }
 
@@ -66,7 +68,7 @@ export default class Group extends THREE.Group {
     let reverse = angle > 0;
     let times = Math.round(Math.abs(angle) / (Math.PI / 2));
     if (times != 0) {
-      this.cuber.history.record(new TwistAction(exp, reverse, times));
+      this.cube.history.record(new TwistAction(exp, reverse, times));
     }
     let delta = angle - this.angle;
 
@@ -76,8 +78,8 @@ export default class Group extends THREE.Group {
         callback();
       }
     } else {
-      var duration = this.cuber.duration * Math.min(1, Math.abs(delta) / (Math.PI / 2));
-      this.cuber.tweener.tween(this.angle, angle, duration, (value: number) => {
+      var duration = DURATION * Math.min(1, Math.abs(delta) / (Math.PI / 2));
+      tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (this.angle === angle || this.angle === 0) {
           this.drop();

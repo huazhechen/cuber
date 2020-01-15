@@ -45,8 +45,9 @@ export default class Keyboard extends Vue {
 
   check() {
     this.assistant = !this.assistant;
-    this.cuber.strip([]);
-    if (this.assistant) {
+    if (!this.assistant) {
+      this.cuber.cube.strip([]);
+    } else {
       let d = this.cuber.cube.initials[10];
       let r = this.cuber.cube.initials[14];
       let b = this.cuber.cube.initials[4];
@@ -65,7 +66,7 @@ export default class Keyboard extends Vue {
         }
       });
       if (!ok) {
-        this.cuber.strip(this.strips[0]);
+        this.cuber.cube.strip(this.strips[0]);
         return;
       }
       ok = [
@@ -94,7 +95,7 @@ export default class Keyboard extends Vue {
         }
       });
       if (!ok) {
-        this.cuber.strip(this.strips[1]);
+        this.cuber.cube.strip(this.strips[1]);
         return;
       }
       ok = this.cuber.cube.groups[FACES[this.faces[u.index]]].indices.every(i => {
@@ -103,7 +104,7 @@ export default class Keyboard extends Vue {
         }
       });
       if (!ok) {
-        this.cuber.strip(this.strips[2]);
+        this.cuber.cube.strip(this.strips[2]);
         return;
       }
       ok = [
@@ -128,7 +129,7 @@ export default class Keyboard extends Vue {
         }
       });
       if (!ok) {
-        this.cuber.strip(this.strips[3]);
+        this.cuber.cube.strip(this.strips[3]);
         return;
       }
     }
@@ -150,13 +151,13 @@ export default class Keyboard extends Vue {
   }
 
   twist(exp: string) {
-    this.cuber.twister.twist(exp);
+    this.cuber.cube.twister.twist(exp);
   }
 
   reverse() {
-    if (this.cuber.history.last == undefined) {
+    if (this.cuber.cube.history.last == undefined) {
       return;
     }
-    this.cuber.twister.twist(this.cuber.history.last.value, true, 1, false);
+    this.cuber.cube.twister.twist(this.cuber.cube.history.last.value, true, 1, false);
   }
 }

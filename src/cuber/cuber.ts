@@ -2,32 +2,21 @@ import * as THREE from "three";
 
 import Cube from "./cube";
 import Controller from "./controller";
-import Twister from "./twister";
-import Tweener from "./tweener";
+import { tweener } from "./tweener";
 import Cubelet from "./cubelet";
-import History from "./history";
-import { COLORS } from "../common/define";
+import { COLORS, DURATION } from "../common/define";
 
 export default class Cuber {
-  public x: number;
-  public y: number;
   public width: number;
   public height: number;
   public dirty: boolean = false;
 
   public canvas: HTMLCanvasElement;
   public renderer: THREE.WebGLRenderer;
-  public capture: THREE.WebGLRenderer;
   public scene: THREE.Scene;
   public camera: THREE.PerspectiveCamera;
-  public display: boolean = true;
 
-  public lock: boolean = false;
-  public duration: number = 30;
-  public history: History;
   public controller: Controller;
-  public twister: Twister;
-  public tweener: Tweener;
   public cube: Cube;
 
   private _mirror: boolean;
@@ -40,27 +29,6 @@ export default class Cuber {
     this._mirror = value;
     for (let cubelet of this.cube.cubelets) {
       cubelet.mirror = value;
-    }
-    this.dirty = true;
-  }
-
-  stick() {
-    for (let i = 0; i < 27; i++) {
-      for (let face = 0; face < 6; face++) {
-        this.cube.stick(i, face, "");
-      }
-    }
-    this.dirty = true;
-  }
-
-  strip(strips: { indexes: number[]; faces: number[] }[]) {
-    this.stick();
-    for (let strip of strips) {
-      for (let index of strip.indexes) {
-        for (let face of strip.faces) {
-          this.cube.stick(index, face, COLORS.GRAY);
-        }
-      }
     }
     this.dirty = true;
   }
@@ -80,7 +48,7 @@ export default class Cuber {
   }
   set angle(value) {
     this._angle = value;
-    this.scene.rotation.y = (-Math.PI / 4 + value) * (this.left ? -1 : 1);
+    this.scene.rotation.y = (value - Math.PI / 4) * (this.left ? -1 : 1);
     this.dirty = true;
   }
 
@@ -91,9 +59,9 @@ export default class Cuber {
   set left(value) {
     this._left = value;
     let start = this.scene.rotation.y;
-    let finish = (-Math.PI / 4 + this.angle) * (value ? -1 : 1);
-    this.tweener.finish();
-    this.tweener.tween(start, finish, this.duration / 2, (v: number) => {
+    let finish = (this.angle - Math.PI / 4) * (value ? -1 : 1);
+    tweener.finish();
+    tweener.tween(start, finish, DURATION / 2, (v: number) => {
       this.scene.rotation.y = v;
       this.dirty = true;
     });
@@ -122,10 +90,7 @@ export default class Cuber {
     this.canvas = canvas;
 
     this.controller = new Controller(this);
-    this.twister = new Twister(this);
-    this.tweener = new Tweener(this);
-    this.cube = new Cube(this);
-    this.history = new History();
+    this.cube = new Cube();
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -136,11 +101,6 @@ export default class Cuber {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height, true);
 
-    this.capture = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    this.capture.setClearColor(0, 0);
-    this.capture.setPixelRatio(1);
-    this.capture.setSize(128, 128, true);
-
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
@@ -150,8 +110,6 @@ export default class Cuber {
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;
-
-    this.loop();
   }
 
   resize() {
@@ -168,34 +126,11 @@ export default class Cuber {
   }
 
   render() {
-    if (this.dirty) {
+    if (this.dirty || this.cube.dirty) {
       this.renderer.clear();
       this.renderer.render(this.scene, this.camera);
       this.dirty = false;
+      this.cube.dirty = false;
     }
-  }
-
-  loop() {
-    requestAnimationFrame(this.loop.bind(this));
-    this.render();
-  }
-
-  blob() {
-    this.camera.aspect = 1;
-    this.camera.updateProjectionMatrix();
-    this.capture.render(this.scene, this.camera);
-    let content = this.capture.domElement.toDataURL("image/png");
-    let parts = content.split(";base64,");
-    let type = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let length = raw.length;
-    let data = new Uint8Array(length);
-    for (let i = 0; i < length; ++i) {
-      data[i] = raw.charCodeAt(i);
-    }
-    let blob = new Blob([data], { type: type });
-    this.camera.aspect = this.width / this.height;
-    this.camera.updateProjectionMatrix();
-    return blob;
   }
 }

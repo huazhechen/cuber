@@ -2,7 +2,8 @@ import * as THREE from "three";
 import Cuber from "./cuber";
 import Cubelet from "./cubelet";
 import Group from "./group";
-import { FACES } from "../common/define";
+import { FACES, DURATION } from "../common/define";
+import { tweener } from "./tweener";
 
 export class Holder {
   public vector: THREE.Vector3;
@@ -65,7 +66,7 @@ export default class Controller {
     if (this.rotating) {
       if (this.group.angle != this.angle) {
         let delta = (this.angle - this.group.angle) / 2;
-        let max = (Math.PI / 2 / this.cuber.duration) * 4;
+        let max = (Math.PI / 2 / DURATION) * 4;
         if (delta > max) {
           delta = max;
         }
@@ -191,7 +192,7 @@ export default class Controller {
     }
     this.dragging = true;
     this.holder.index = -1;
-    this.cuber.tweener.speedup();
+    tweener.speedup();
     let distance = 0;
     this.planes.forEach(plane => {
       var point = this.intersect(this.down, plane);
@@ -232,8 +233,8 @@ export default class Controller {
       if (Math.min(this.cuber.width, this.cuber.height) / d > 32) {
         return true;
       }
-      this.cuber.tweener.finish();
-      if (this.cuber.lock) {
+      tweener.finish();
+      if (this.cuber.cube.lock) {
         this.dragging = false;
         this.rotating = false;
         return true;

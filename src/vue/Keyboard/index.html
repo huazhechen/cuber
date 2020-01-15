@@ -46,7 +46,7 @@
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
         depressed
-        :disabled="cuber.history.length == 0 || cuber.controller.lock"
+        :disabled="cuber.cube.history.length == 0 || cuber.controller.lock"
         @click.native.stop.prevent="reverse()"
         @touchstart.native.stop.prevent="reverse()"
         :style="style"

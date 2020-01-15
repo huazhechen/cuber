@@ -1,0 +1,14 @@
+<v-dialog v-model="value" scrollable>
+  <v-card outline>
+    <v-card-text>
+      <v-progress-linear v-if="blobs.length!=119" indeterminate height="60"></v-progress-linear>
+      <v-container v-if="blobs.length==119" fluid grid-list-md text-xs-center style="padding:0%;">
+        <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
+          <v-flex v-for="blob in blobs" d-flex xs4 style="padding:0%">
+            <v-img contain :src="URL.createObjectURL(blob)"></v-img>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card-text>
+  </v-card>
+</v-dialog>
