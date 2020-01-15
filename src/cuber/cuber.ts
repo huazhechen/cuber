@@ -80,8 +80,23 @@ export default class Cuber {
   }
   set angle(value) {
     this._angle = value;
-    this.scene.rotation.y = -Math.PI / 4 + value;
+    this.scene.rotation.y = (-Math.PI / 4 + value) * (this.left ? -1 : 1);
     this.dirty = true;
+  }
+
+  private _left: boolean = false;
+  get left() {
+    return this._left;
+  }
+  set left(value) {
+    this._left = value;
+    let start = this.scene.rotation.y;
+    let finish = (-Math.PI / 4 + this.angle) * (value ? -1 : 1);
+    this.tweener.finish();
+    this.tweener.tween(start, finish, this.duration / 2, (v: number) => {
+      this.scene.rotation.y = v;
+      this.dirty = true;
+    });
   }
 
   private _gradient: number = Math.PI / 6;
