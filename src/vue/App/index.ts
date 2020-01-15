@@ -20,6 +20,7 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
+  menu: boolean = false;
   tune: boolean = false;
   width: number = 0;
   height: number = 0;
