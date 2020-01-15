@@ -1,23 +1,14 @@
 export var COLORS = {
-  GREEN: "#009D54",
-  ORANGE: "#FF6C00",
-  BLUE: "#3D81F6",
-  YELLOW: "#FDCC09",
-  WHITE: "#FFFFFF",
-  RED: "#DC422F",
-  GRAY: "#808080",
-  BLACK: "#202020",
-  PURPLE: "#E040FB",
-  LIME: "#C6FF00",
-  CYAN: "#00BCD4",
-  DARK_CYAN: "#0097A7",
-  LIGHT_CYAN: "#B2EBF2",
-  AMBER: "#FFC107",
-  DARK_AMBER: "#FFA000",
-  LIGHT_AMBER: "#FFECB3",
-  ACCENT: "#FF4081",
-  DISABLE: "#BDBDBD",
-  BACKGROUND: "#E8E8E8"
+  GREEN: "#0A0",
+  ORANGE: "#F60",
+  BLUE: "#36F",
+  YELLOW: "#FC0",
+  WHITE: "#EEE",
+  RED: "#D11",
+  GRAY: "#888",
+  BLACK: "#222",
+  DISABLE: "#BBB",
+  BACKGROUND: "#CCC"
 };
 
 export enum FACES {

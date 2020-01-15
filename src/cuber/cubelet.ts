@@ -164,9 +164,6 @@ export default class Cubelet extends THREE.Group {
     red: new THREE.MeshBasicMaterial({ color: COLORS.RED }),
     gray: new THREE.MeshBasicMaterial({ color: COLORS.GRAY }),
     black: new THREE.MeshBasicMaterial({ color: COLORS.BLACK }),
-    purple: new THREE.MeshBasicMaterial({ color: COLORS.PURPLE }),
-    lime: new THREE.MeshBasicMaterial({ color: COLORS.LIME }),
-    cyan: new THREE.MeshBasicMaterial({ color: COLORS.CYAN })
   };
 
   _vector: THREE.Vector3;

@@ -1,7 +1,7 @@
 <v-container fluid grid-list-md text-xs-center :style="{width:width + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
   <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
     <v-flex xs2 d-flex style="padding:0%; min-width: 0%; min-height: 0%;">
-      <v-btn @click.native.stop.prevent="layers=(layers+1)%3" @touchstart.native.stop.prevent="layers=(layers+1)%3" :color="'primary'" outlined :style="style">
+      <v-btn @click.native.stop.prevent="layers=(layers+1)%3" @touchstart.native.stop.prevent="layers=(layers+1)%3" flat :style="style">
         <v-icon :size="height/5">{{['filter_1', 'filter_2', 'filter_3'][layers]}}</v-icon>
       </v-btn>
     </v-flex>
@@ -10,7 +10,7 @@
         @click.native.stop.prevent="option.mirror=!option.mirror"
         @touchstart.native.stop.prevent="option.mirror=!option.mirror"
         :color="option.mirror?'primary':''"
-        outlined
+        flat
         :style="style"
       >
         <v-icon :size="height/5">flip</v-icon>
@@ -21,7 +21,7 @@
         @click.native.stop.prevent="cuber.controller.lock=!cuber.controller.lock"
         @touchstart.native.stop.prevent="cuber.controller.lock=!cuber.controller.lock"
         :color="cuber.controller.lock?'primary':''"
-        outlined
+        flat
         :style="style"
       >
         <v-icon :size="height/5">{{cuber.controller.lock?'lock':'lock_open'}}</v-icon>
@@ -32,7 +32,7 @@
         @click.native.stop.prevent="cfop=(cfop+1)%5;cuber.strip(strips[cfop])"
         @touchstart.native.stop.prevent="cfop=(cfop+1)%5;cuber.strip(strips[cfop])"
         :color="cfop>0?'primary':''"
-        outlined
+        flat
         :style="style"
       >
         <v-icon v-if="cfop==0" :size="height/5">colorize</v-icon>
@@ -40,13 +40,13 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn disabled outlined :style="style">
+      <v-btn disabled flat :style="style">
         <v-icon :size="height/5">school</v-icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
-        outlined
+        flat
         :disabled="cuber.history.length == 0 || cuber.controller.lock"
         @click.native.stop.prevent="reverse()"
         @touchstart.native.stop.prevent="reverse()"
@@ -56,7 +56,7 @@
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" d-flex xs2 style="padding:0%">
-      <v-btn outlined @click.native.stop.prevent="twist(exp)" @touchstart.native.stop.prevent="twist(exp)" :disabled="cuber.controller.lock" :style="style"
+      <v-btn flat @click.native.stop.prevent="twist(exp)" @touchstart.native.stop.prevent="twist(exp)" :disabled="cuber.controller.lock" :style="style"
         ><div :style="{'font-size':(height/8)+'px'}">{{exp}}</div>
       </v-btn>
     </v-flex>

@@ -35,7 +35,7 @@ export default class App extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.min(this.width / 8, this.height / 15);
+    this.size = Math.min(this.width / 8, this.height / 14);
 
     this.cuber.width = this.width;
     this.cuber.height = this.height - this.size * 4;

@@ -36,6 +36,7 @@ export default class Controller {
     return this._lock;
   }
   set lock(value) {
+    this.handleUp();
     this._lock = value;
   }
 
