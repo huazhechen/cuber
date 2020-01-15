@@ -55,7 +55,7 @@ export default class App extends Vue {
 
   mounted() {
     if (this.$refs.cuber instanceof Element) {
-      this.cuber.twister.twist("*");
+      // this.cuber.twister.twist("*");
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.cuber.canvas);
       this.$nextTick(this.resize);
