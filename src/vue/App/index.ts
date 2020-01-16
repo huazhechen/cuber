@@ -4,7 +4,6 @@ import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
-import Capture from "../../cuber/capture";
 import Alg from "../Alg";
 
 @Component({

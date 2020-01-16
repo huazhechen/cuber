@@ -28,8 +28,9 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="check()" @touchstart.native.stop.prevent="check()" :color="assistant?'primary':''" depressed :style="style">
-        <v-icon :size="height/5">assistant</v-icon>
+      <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :color="cfop>0?'primary':''" depressed :style="style">
+        <v-icon v-if="cfop==0" :size="height/5">colorize</v-icon>
+        <div v-if="cfop!=0" :style="{'font-size':(height/8)+'px'}">{{['','Crs','F2L'][cfop]}}</div>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
