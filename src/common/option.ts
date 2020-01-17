@@ -9,29 +9,17 @@ export default class Option {
   }
 
   load() {
-    this.mirror = this._storage.getItem("setting.mirror") == "true";
-    this.scale = Number(this._storage.getItem("setting.scale") || 80);
+    this.scale = Number(this._storage.getItem("setting.scale") || 50);
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
-    this.angle = Number(this._storage.getItem("setting.angle") || 20);
-    this.gradient = Number(this._storage.getItem("setting.gradient") || 50);
+    this.angle = Number(this._storage.getItem("setting.angle") || 25);
+    this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
   }
 
   reset() {
-    this.mirror = false;
-    this.scale = 80;
+    this.scale = 50;
     this.perspective = 50;
-    this.angle = 20;
-    this.gradient = 50;
-  }
-
-  private _mirror: boolean;
-  get mirror() {
-    return this._mirror;
-  }
-  set mirror(value) {
-    this._mirror = value;
-    this._storage.setItem("setting.mirror", String(value));
-    this.cuber.mirror = value;
+    this.angle = 25;
+    this.gradient = 67;
   }
 
   private _scale: number;
@@ -41,8 +29,7 @@ export default class Option {
   set scale(value) {
     this._scale = value;
     this._storage.setItem("setting.scale", String(value));
-    value = 0.8 - value / 100;
-    this.cuber.scale = Math.exp(value);
+    this.cuber.scale = value / 100 + 0.5;
   }
 
   private _perspective: number;
@@ -52,9 +39,7 @@ export default class Option {
   set perspective(value) {
     this._perspective = value;
     this._storage.setItem("setting.perspective", String(value));
-
-    value = 1 - Math.sqrt(value / 100);
-    this.cuber.perspective = value * 2 + 0.4;
+    this.cuber.perspective = Math.exp((1 - value / 50) / 1.2);
   }
 
   private _angle: number;
@@ -64,9 +49,7 @@ export default class Option {
   set angle(value) {
     this._angle = value;
     this._storage.setItem("setting.angle", String(value));
-
-    value = value / 100;
-    this.cuber.angle = value;
+    this.cuber.angle = ((value / 100 - 1) * Math.PI) / 4;
   }
 
   private _gradient: number;
@@ -76,8 +59,6 @@ export default class Option {
   set gradient(value) {
     this._gradient = value;
     this._storage.setItem("setting.gradient", String(value));
-
-    value = value / 100;
-    this.cuber.gradient = 1 - value * 1.2;
+    this.cuber.gradient = ((1 - value / 100) * Math.PI) / 2;
   }
 }

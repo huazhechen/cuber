@@ -7,9 +7,9 @@
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
-        @click.native.stop.prevent="option.mirror=!option.mirror"
-        @touchstart.native.stop.prevent="option.mirror=!option.mirror"
-        :color="option.mirror?'primary':''"
+        @click.native.stop.prevent="cuber.mirror=!cuber.mirror"
+        @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror"
+        :color="cuber.mirror?'primary':''"
         depressed
         :style="style"
       >

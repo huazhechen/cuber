@@ -22,7 +22,7 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
-  alg: boolean = true;
+  alg: boolean = false;
   menu: boolean = false;
   tune: boolean = false;
   width: number = 0;

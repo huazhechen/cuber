@@ -20,11 +20,9 @@ export default class Cuber {
   public cube: Cube;
 
   private _mirror: boolean;
-
   get mirror() {
     return this._mirror;
   }
-
   set mirror(value: boolean) {
     this._mirror = value;
     for (let cubelet of this.cube.cubelets) {
@@ -33,7 +31,7 @@ export default class Cuber {
     this.dirty = true;
   }
 
-  private _scale: number = 1;
+  private _scale: number;
   get scale() {
     return this._scale;
   }
@@ -42,13 +40,13 @@ export default class Cuber {
     this.resize();
   }
 
-  private _angle: number = Math.PI / 16;
+  private _angle: number;
   get angle() {
     return this._angle;
   }
   set angle(value) {
     this._angle = value;
-    this.scene.rotation.y = (value - Math.PI / 4) * (this.left ? -1 : 1);
+    this.scene.rotation.y = value * (this.left ? -1 : 1);
     this.dirty = true;
   }
 
@@ -59,7 +57,7 @@ export default class Cuber {
   set left(value) {
     this._left = value;
     let start = this.scene.rotation.y;
-    let finish = (this.angle - Math.PI / 4) * (value ? -1 : 1);
+    let finish = -start;
     tweener.finish();
     tweener.tween(start, finish, DURATION / 2, (v: number) => {
       this.scene.rotation.y = v;
@@ -110,11 +108,14 @@ export default class Cuber {
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;
+    this.mirror = false;
+    this.scale = 1;
+    this.angle = -Math.PI / 8;
   }
 
   resize() {
-    let min = this.height / Math.min(this.width, this.height / 1.2) / 4;
-    let fov = (2 * Math.atan((min * this.scale) / this.perspective) * 180) / Math.PI;
+    let min = this.height / Math.min(this.width, this.height / 1.2) / 4 / this.scale / this.perspective;
+    let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
     this.camera.fov = fov;
