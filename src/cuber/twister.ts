@@ -96,6 +96,7 @@ export default class Twister {
     }
     if (action.exp == "*") {
       let exp = Twister.shuffle();
+      this.cube.reset();
       this.twist(exp, false, 1, true);
       this.cube.history.clear();
       return;
