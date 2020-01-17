@@ -66,7 +66,7 @@ export default class App extends Vue {
     this.loop();
   }
 
-  alg: boolean = false;
+  alg: boolean = true;
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));

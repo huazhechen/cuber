@@ -14,27 +14,32 @@ export default class Alg extends Vue {
     this.$emit("input", value);
   }
 
+  tab = null;
+
   capture: Capture = new Capture();
-  blobs: Blob[] = [];
-  algs = require("../../common/algs.json");
+  pics: string[][] = [];
+  algs = require("./algs.json");
 
   mounted() {
+    for (let i = 0; i < this.algs.length; i++) {
+      this.pics.push([]);
+    }
     this.loop();
   }
 
   loop() {
-    requestAnimationFrame(this.loop.bind(this));
-    if (!this.value) {
-      return;
-    }
-    let idx = this.blobs.length;
-    if (idx < 119) {
-      let gdx = 0;
-      while (idx >= this.algs[gdx].algs.length) {
-        idx = idx - this.algs[gdx].algs.length;
-        gdx++;
+    if (this.value) {
+      let ret = this.pics.some((group, idx) => {
+        if (this.algs[idx].algs.length == group.length) {
+          return false;
+        }
+        group.push(this.capture.snap(this.algs[idx].strips, this.algs[idx].algs[group.length].exp));
+        return true;
+      });
+      if (!ret) {
+        return;
       }
-      this.blobs.push(this.capture.snap(this.algs[gdx].strips, this.algs[gdx].algs[idx].alg));
     }
+    requestAnimationFrame(this.loop.bind(this));
   }
 }

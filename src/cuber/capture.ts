@@ -37,11 +37,11 @@ export default class Capture {
     this.renderer.setSize(128, 128, true);
   }
 
-  snap(strip: { indexes: number[]; faces: number[] }[], alg: string) {
+  snap(strip: { indexes: number[]; faces: number[] }[], exp: string) {
     this.cube.strip(strip);
     this.cube.reset();
 
-    let node = new TwistNode(alg, true, 1);
+    let node = new TwistNode(exp, true, 1);
     let list = node.parse();
     for (const action of list) {
       let angle = -Math.PI / 2;
@@ -62,15 +62,6 @@ export default class Capture {
     this.camera.updateProjectionMatrix();
     this.renderer.render(this.scene, this.camera);
     let content = this.renderer.domElement.toDataURL("image/png");
-    let parts = content.split(";base64,");
-    let type = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let length = raw.length;
-    let data = new Uint8Array(length);
-    for (let i = 0; i < length; ++i) {
-      data[i] = raw.charCodeAt(i);
-    }
-    let blob = new Blob([data], { type: type });
-    return blob;
+    return content;
   }
 }
