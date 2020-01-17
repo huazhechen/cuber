@@ -9,6 +9,11 @@ export default class Option {
   }
 
   load() {
+    let version = "0.0.1";
+    if (this._storage.getItem("version") != version) {
+      this._storage.clear();
+      this._storage.setItem("version", version);
+    }
     this.scale = Number(this._storage.getItem("setting.scale") || 50);
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
     this.angle = Number(this._storage.getItem("setting.angle") || 25);

@@ -81,7 +81,10 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    if (!this.cuber.cube.complete) {
+    if (this.start == 0 && this.cuber.cube.history.length > 0) {
+      this.start = new Date().getTime();
+    }
+    if (this.start != 0 && !this.cuber.cube.complete) {
       this.now = new Date().getTime();
     }
     this.cuber.render();
@@ -90,6 +93,7 @@ export default class App extends Vue {
   shuffle() {
     this.cuber.cube.twister.twist("*");
     this.menu = false;
-    this.start = new Date().getTime();
+    this.start = 0;
+    this.now = 0;
   }
 }
