@@ -1,7 +1,10 @@
 <v-dialog v-model="value" fullscreen>
   <div style="display: flex;flex-flow: column;height: 100%;background-color: white;">
+    <v-btn fixed right bottom @click.native.stop.prevent="value=!value" @touchstart.native.stop.prevent="value=!value" fab depressed color="primary">
+      <v-icon>close</v-icon>
+    </v-btn>
     <div>
-      <v-tabs v-model="tab" grow>
+      <v-tabs v-model="tab" grow color="cyan">
         <v-tab v-for="(group,i) in algs" :key="i" :href="`#tab-${i}`">
           {{ group.name}}
         </v-tab>
@@ -11,8 +14,11 @@
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(group,i) in pics" :key="i" :value="'tab-' + i" style="height: 100%;">
           <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
-            <v-flex xs3 d-flex style="padding:0%; min-width: 0%; min-height: 0%;" v-for="pic in group">
-              <img :src="pic" style="width:100%;height:100%" />
+            <v-flex xs3 d-flex style="padding:0%; min-width: 0%; min-height: 0%;" v-for="(pic, j) in group">
+              <v-card flat style="width:100%;">
+                <img :src="pic" style="width: 100%;" />
+                <p style="text-align:center;word-wrap:break-word;">{{algs[i].algs[j].exp}}</p>
+              </v-card>
             </v-flex>
           </v-layout>
         </v-tab-item>

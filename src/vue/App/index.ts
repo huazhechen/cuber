@@ -22,6 +22,7 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
+  alg: boolean = true;
   menu: boolean = false;
   tune: boolean = false;
   width: number = 0;
@@ -65,8 +66,6 @@ export default class App extends Vue {
     }
     this.loop();
   }
-
-  alg: boolean = true;
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
