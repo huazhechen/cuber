@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import Group from "./group";
 import Cubelet from "./cubelet";
-import Cuber from "./cuber";
 import History from "./history";
 import { FACES, COLORS } from "../common/define";
 import Twister from "./twister";
@@ -84,6 +83,17 @@ export default class Cube extends THREE.Group {
       }
     }
     this.dirty = true;
+  }
+
+  get complete(): boolean {
+    let complete = [0, 1, 2, 3, 4, 5].every(face => {
+      let color = this.cubelets[this.groups[FACES[face]].indices[0]].getColor(face);
+      let same = this.groups[FACES[face]].indices.every(idx => {
+        return color == this.cubelets[idx].getColor(face);
+      });
+      return same;
+    });
+    return complete;
   }
 
   //                +------------+
