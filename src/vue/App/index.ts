@@ -92,6 +92,7 @@ export default class App extends Vue {
 
   shuffle() {
     this.cuber.cube.twister.twist("*");
+    this.cuber.controller.lock = true;
     this.menu = false;
     this.start = 0;
     this.now = 0;

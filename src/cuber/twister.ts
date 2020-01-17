@@ -12,7 +12,7 @@ export default class Twister {
 
   static shuffle() {
     let result = "";
-    let exps = [];
+    let exps = ["x2"];
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
@@ -48,7 +48,7 @@ export default class Twister {
   }
 
   twist(exp: string, reverse = false, times = 1, fast = false) {
-    if (this.queue.length > 0){
+    if (this.queue.length > 0) {
       tweener.finish();
       this.update();
     }
@@ -139,10 +139,10 @@ export class TwistAction {
     return this.times == 0
       ? ""
       : (this.exp.length > 1 ? "(" : "") +
-      this.exp +
-      (this.exp.length > 1 ? ")" : "") +
-      (this.reverse ? "'" : "") +
-      (this.times == 1 ? "" : String(this.times));
+          this.exp +
+          (this.exp.length > 1 ? ")" : "") +
+          (this.reverse ? "'" : "") +
+          (this.times == 1 ? "" : String(this.times));
   }
 }
 
