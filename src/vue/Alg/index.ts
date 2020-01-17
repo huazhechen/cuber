@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Capture from "../../cuber/capture";
+import Cuber from "../../cuber/cuber";
 
 @Component({
   template: require("./index.html")

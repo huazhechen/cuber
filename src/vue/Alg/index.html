@@ -1,6 +1,6 @@
-<v-dialog v-model="value" fullscreen>
-  <div style="display: flex;flex-flow: column;height: 100%;background-color: white;">
-    <v-btn fixed right bottom @click.native.stop.prevent="value=!value" @touchstart.native.stop.prevent="value=!value" fab depressed color="primary">
+<template>
+  <div v-show="value" style="display: flex;flex-flow: column;height: 100%;background-color: white;">
+    <v-btn fixed right bottom @click.native.stop.prevent="value=!value;" @touchstart.native.stop.prevent="value=!value;" fab depressed color="primary">
       <v-icon>close</v-icon>
     </v-btn>
     <div>
@@ -26,4 +26,4 @@
       </v-tabs-items>
     </div>
   </div>
-</v-dialog>
+</template>
