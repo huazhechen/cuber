@@ -29,6 +29,18 @@ export default class App extends Vue {
   height: number = 0;
   size: number = 0;
 
+  start: number = 0;
+  now: number = 0;
+  get time() {
+    let diff = this.now - this.start;
+    let minute = Math.floor(diff / 1000 / 60);
+    diff = diff % (1000 * 60);
+    let second = Math.floor(diff / 1000);
+    diff = diff % 1000;
+    let ms = Math.floor(diff / 100);
+    return (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
+  }
+
   constructor() {
     super();
     let canvas = document.createElement("canvas");
@@ -58,8 +70,8 @@ export default class App extends Vue {
   }
 
   mounted() {
+    this.shuffle();
     if (this.$refs.cuber instanceof Element) {
-      this.cuber.cube.twister.twist("*");
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.cuber.canvas);
       this.$nextTick(this.resize);
@@ -69,6 +81,15 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    if (!this.cuber.cube.complete) {
+      this.now = new Date().getTime();
+    }
     this.cuber.render();
+  }
+
+  shuffle() {
+    this.cuber.cube.twister.twist("*");
+    this.menu = false;
+    this.start = new Date().getTime();
   }
 }

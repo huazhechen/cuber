@@ -1,4 +1,17 @@
 <v-app>
+  <v-btn
+    fixed
+    left
+    top
+    @click.native.stop.prevent
+    @touchstart.native.stop.prevent
+    text
+    color="primary"
+    style="margin:0%;padding:0%;"
+    :style="{height:size+'px'}"
+  >
+    <div :style="{'font-size':(size * 0.8)+'px'}">{{time}}</div></v-btn
+  >
   <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
     <template v-slot:activator>
       <v-btn
@@ -28,8 +41,8 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="cuber.cube.twister.twist('*');menu=false;"
-      @touchstart.native.stop.prevent="cuber.cube.twister.twist('*');menu=false;"
+      @click.native.stop.prevent="shuffle"
+      @touchstart.native.stop.prevent="shuffle"
     >
       <v-icon :size="size * 0.55" color="red">casino</v-icon>
     </v-btn>
