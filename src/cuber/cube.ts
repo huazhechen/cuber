@@ -12,7 +12,10 @@ export default class Cube extends THREE.Group {
   public twister: Twister;
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
+  public callbacks: Function[] = [];
   public groups: { [key: string]: Group };
+  public complete: boolean = false;
+
   constructor() {
     super();
     this.twister = new Twister(this);
@@ -45,6 +48,16 @@ export default class Cube extends THREE.Group {
     for (let key in this.groups) {
       this.add(this.groups[key]);
     }
+    this.callbacks.push(() => {
+      let complete = [0, 1, 2, 3, 4, 5].every(face => {
+        let color = this.cubelets[this.groups[FACES[face]].indices[0]].getColor(face);
+        let same = this.groups[FACES[face]].indices.every(idx => {
+          return color == this.cubelets[idx].getColor(face);
+        });
+        return same;
+      });
+      this.complete = complete;
+    });
     this.matrixAutoUpdate = false;
     this.updateMatrix();
   }
@@ -83,17 +96,6 @@ export default class Cube extends THREE.Group {
       }
     }
     this.dirty = true;
-  }
-
-  get complete(): boolean {
-    let complete = [0, 1, 2, 3, 4, 5].every(face => {
-      let color = this.cubelets[this.groups[FACES[face]].indices[0]].getColor(face);
-      let same = this.groups[FACES[face]].indices.every(idx => {
-        return color == this.cubelets[idx].getColor(face);
-      });
-      return same;
-    });
-    return complete;
   }
 
   //                +------------+

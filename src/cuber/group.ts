@@ -59,6 +59,11 @@ export default class Group extends THREE.Group {
       this.cube.cubelets[cubelet.index] = cubelet;
     }
     this.cube.lock = false;
+    if (this.angle != 0) {
+      for (let callback of this.cube.callbacks) {
+        callback();
+      }
+    }
     this.angle = 0;
   }
 

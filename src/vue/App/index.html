@@ -1,5 +1,5 @@
 <v-app>
-  <div v-show="!alg">
+  <div v-show="option.page == 'cuber'">
     <v-btn
       fixed
       left
@@ -11,8 +11,8 @@
       style="margin:0%;padding:0%;"
       :style="{height:size+'px'}"
     >
-      <div :style="{'font-size':(size * 0.8)+'px'}">{{time + '/' + cuber.cube.history.length}}</div></v-btn
-    >
+      <div :style="{'font-size':(size * 0.8)+'px'}">{{score}}</div>
+    </v-btn>
     <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
       <template v-slot:activator>
         <v-btn
@@ -32,8 +32,8 @@
         depressed
         color="white"
         :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-        @click.native.stop.prevent="alg=true;menu=false;"
-        @touchstart.native.stop.prevent="alg=true;menu=false;"
+        @click.native.stop.prevent="option.page = 'alg';menu=false;"
+        @touchstart.native.stop.prevent="option.page = 'alg';menu=false;"
       >
         <v-icon :size="size * 0.55" color="indigo">school</v-icon>
       </v-btn>
@@ -64,5 +64,5 @@
     </div>
     <tune v-model="tune"></tune>
   </div>
-  <alg v-model="alg"></alg>
+  <alg v-show="option.page == 'alg'"></alg>
 </v-app>

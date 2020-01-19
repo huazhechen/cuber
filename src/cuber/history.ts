@@ -2,7 +2,6 @@ import { TwistAction } from "./twister";
 
 export default class list {
   list: TwistAction[] = [];
-  callbacks: Function[] = [];
   constructor() {}
 
   record(action: TwistAction) {
@@ -16,16 +15,10 @@ export default class list {
         this.list.push(action);
       }
     }
-    for (let callback of this.callbacks) {
-      callback();
-    }
   }
 
   clear() {
     this.list = [];
-    for (let callback of this.callbacks) {
-      callback();
-    }
   }
 
   get last() {
@@ -34,5 +27,15 @@ export default class list {
 
   get length() {
     return this.list.length;
+  }
+
+  get moves() {
+    let length = this.length;
+    for (const twist of this.list) {
+      if (/[xyz]/.test(twist.exp)) {
+        length--;
+      }
+    }
+    return length;
   }
 }

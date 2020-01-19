@@ -32,14 +32,15 @@ export default class App extends Vue {
 
   start: number = 0;
   now: number = 0;
-  get time() {
+  get score() {
     let diff = this.now - this.start;
     let minute = Math.floor(diff / 1000 / 60);
     diff = diff % (1000 * 60);
     let second = Math.floor(diff / 1000);
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
-    return (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
+    let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
+    return time + "/" + this.cuber.cube.history.moves;
   }
 
   constructor() {
@@ -47,6 +48,11 @@ export default class App extends Vue {
     let canvas = document.createElement("canvas");
     this.cuber = new Cuber(canvas);
     this.option = new Option(this.cuber);
+    this.cuber.cube.callbacks.push(() => {
+      if (this.cuber.cube.complete) {
+        this.option.lock = true;
+      }
+    });
   }
 
   resize() {
@@ -82,7 +88,7 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    if (this.cuber.cube.history.length == 0) {
+    if (this.cuber.cube.history.moves == 0) {
       this.start = 0;
       this.now = 0;
     } else {
@@ -98,8 +104,8 @@ export default class App extends Vue {
 
   shuffle() {
     this.cuber.cube.twister.twist("*");
-    this.cuber.controller.lock = true;
-    this.menu = false;
+    this.menu = false;    
+    this.option.lock = false;
     this.start = 0;
     this.now = 0;
   }

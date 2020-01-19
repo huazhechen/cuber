@@ -18,6 +18,8 @@ export default class Option {
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
     this.angle = Number(this._storage.getItem("setting.angle") || 25);
     this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
+    this.lock = false;
+    this.mirror = false;
   }
 
   reset() {
@@ -66,4 +68,20 @@ export default class Option {
     this._storage.setItem("setting.gradient", String(value));
     this.cuber.gradient = ((1 - value / 100) * Math.PI) / 2;
   }
+
+  get mirror() {
+    return this.cuber.mirror;
+  }
+  set mirror(value) {
+    this.cuber.mirror = value;
+  }
+
+  get lock() {
+    return this.cuber.controller.lock;
+  }
+  set lock(value) {
+    this.cuber.controller.lock = value;
+  }
+
+  page: string = "cuber";
 }

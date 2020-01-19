@@ -29,21 +29,12 @@ export default class Keyboard extends Vue {
     [{ indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26], faces: [0, 1, 2, 3, 4, 5] }],
     [{ indexes: [6, 7, 8, 15, 16, 17, 24, 25, 26], faces: [0, 1, 2, 3, 4, 5] }]
   ];
-  cfop: number = 0;
+  colors: number = 0;
   strip() {
-    this.cfop = (this.cfop + 1) % this.strips.length;
-    this.cuber.cube.strip(this.strips[this.cfop]);
+    this.colors = (this.colors + 1) % this.strips.length;
+    this.cuber.cube.strip(this.strips[this.colors]);
   }
-
-  faces: { [key: number]: FACES } = {
-    4: FACES.B,
-    10: FACES.D,
-    12: FACES.L,
-    14: FACES.R,
-    16: FACES.U,
-    22: FACES.F
-  };
-
+  
   get style() {
     return {
       margin: this.height / 48 + "px",

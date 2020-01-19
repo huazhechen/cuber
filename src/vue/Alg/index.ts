@@ -1,19 +1,14 @@
 import Vue from "vue";
-import { Component, Inject, Watch, Prop } from "vue-property-decorator";
+import { Component, Watch, Inject } from "vue-property-decorator";
 import Capture from "../../cuber/capture";
-import Cuber from "../../cuber/cuber";
+import Option from "../../common/option";
 
 @Component({
   template: require("./index.html")
 })
 export default class Alg extends Vue {
-  @Prop({ required: true })
-  value: boolean;
-
-  @Watch("value")
-  onValueChange(value: boolean) {
-    this.$emit("input", value);
-  }
+  @Inject("option")
+  option: Option;
 
   tab = null;
 
@@ -29,7 +24,7 @@ export default class Alg extends Vue {
   }
 
   loop() {
-    if (this.value) {
+    if (this.option.page == "alg") {
       let ret = this.pics.some((group, idx) => {
         if (this.algs[idx].algs.length == group.length) {
           return false;
