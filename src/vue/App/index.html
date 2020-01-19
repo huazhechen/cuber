@@ -11,7 +11,7 @@
       style="margin:0%;padding:0%;"
       :style="{height:size+'px'}"
     >
-      <div :style="{'font-size':(size * 0.8)+'px'}">{{time}}</div></v-btn
+      <div :style="{'font-size':(size * 0.8)+'px'}">{{time+'/' + cuber.cube.history.length}}</div></v-btn
     >
     <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
       <template v-slot:activator>

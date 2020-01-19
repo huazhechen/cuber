@@ -3,6 +3,18 @@ import { COLORS, FACES } from "../common/define";
 
 class Frame extends THREE.Geometry {
   private static readonly _INDICES = [
+    [0, 2, 1],
+    [0, 3, 2],
+    [4, 6, 5],
+    [4, 7, 6],
+    [8, 10, 9],
+    [8, 11, 10],
+    [12, 14, 13],
+    [12, 15, 14],
+    [16, 18, 17],
+    [16, 19, 18],
+    [20, 22, 21],
+    [20, 23, 22],
     [1, 6, 7],
     [0, 1, 7],
     [3, 0, 10],
@@ -87,10 +99,34 @@ class Frame extends THREE.Geometry {
   }
 }
 
-class Sticker extends THREE.ShapeGeometry {
-  constructor(size: number, edge: number) {
+class Sticker extends THREE.ExtrudeGeometry {
+  constructor(size: number, depth: number) {
     size = size / 2;
-    size = size - edge;
+    let left = -size;
+    let bottom = size;
+    let top = -size;
+    let right = size;
+    let radius = size / 4;
+
+    let shape = new THREE.Shape();
+    shape.moveTo(left, top + radius);
+    shape.lineTo(left, bottom - radius);
+    shape.quadraticCurveTo(left, bottom, left + radius, bottom);
+    shape.lineTo(right - radius, bottom);
+    shape.quadraticCurveTo(right, bottom, right, bottom - radius);
+    shape.lineTo(right, top + radius);
+    shape.quadraticCurveTo(right, top, right - radius, top);
+    shape.lineTo(left + radius, top);
+    shape.quadraticCurveTo(left, top, left, top + radius);
+    shape.closePath();
+
+    super(shape, { bevelEnabled: false, depth: depth });
+  }
+}
+
+class Mirror extends THREE.ShapeGeometry {
+  constructor(size: number, depth: number) {
+    size = size / 2;
     let left = -size;
     let bottom = size;
     let top = -size;
@@ -113,47 +149,13 @@ class Sticker extends THREE.ShapeGeometry {
   }
 }
 
-class Edge extends THREE.ShapeGeometry {
-  constructor(size: number, edge: number) {
-    let shape = new THREE.Shape();
-    size = size / 2;
-    shape.moveTo(-size, -size);
-    shape.lineTo(-size, size);
-    shape.lineTo(size, size);
-    shape.lineTo(size, -size);
-    shape.closePath();
-
-    size = size - edge;
-    let left = -size;
-    let bottom = size;
-    let top = -size;
-    let right = size;
-    let radius = size / 4;
-
-    let hole = new THREE.Shape();
-    hole.moveTo(left, top + radius);
-    hole.quadraticCurveTo(left, top, left + radius, top);
-    hole.lineTo(right - radius, top);
-    hole.quadraticCurveTo(right, top, right, top + radius);
-    hole.lineTo(right, bottom - radius);
-    hole.quadraticCurveTo(right, bottom, right - radius, bottom);
-    hole.lineTo(left + radius, bottom);
-    hole.quadraticCurveTo(left, bottom, left, bottom - radius);
-    hole.lineTo(left, top + radius);
-    hole.closePath();
-
-    shape.holes.push(hole);
-    super(shape);
-  }
-}
-
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
-  private static readonly _BORDER_WIDTH: number = 3;
-  private static readonly _EDGE_WIDTH: number = 2;
+  private static readonly _BORDER_WIDTH: number = 4;
+  private static readonly _STICKER_DEPTH: number = 2;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
-  private static readonly _EDGE: Edge = new Edge(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
-  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH, Cubelet._EDGE_WIDTH);
+  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
+  private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
 
   private static _MATERIALS = {
     green: new THREE.MeshBasicMaterial({ color: COLORS.GREEN }),
@@ -163,7 +165,7 @@ export default class Cubelet extends THREE.Group {
     white: new THREE.MeshBasicMaterial({ color: COLORS.WHITE }),
     red: new THREE.MeshBasicMaterial({ color: COLORS.RED }),
     gray: new THREE.MeshBasicMaterial({ color: COLORS.GRAY }),
-    black: new THREE.MeshBasicMaterial({ color: COLORS.BLACK }),
+    black: new THREE.MeshBasicMaterial({ color: COLORS.BLACK })
   };
 
   _vector: THREE.Vector3;
@@ -258,7 +260,6 @@ export default class Cubelet extends THREE.Group {
 
   initial: number;
   stickers: THREE.Mesh[];
-  edges: THREE.Mesh[];
   _quaternion: THREE.Quaternion;
   frame: THREE.Mesh;
 
@@ -267,7 +268,6 @@ export default class Cubelet extends THREE.Group {
     this.initial = index;
     this._vector = new THREE.Vector3();
     this.stickers = [];
-    this.edges = [];
     this._quaternion = new THREE.Quaternion();
     this.mirrors = [];
 
@@ -289,47 +289,34 @@ export default class Cubelet extends THREE.Group {
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
-      let _edge = new THREE.Mesh(Cubelet._EDGE, Cubelet._MATERIALS.black);
       let _sticker = new THREE.Mesh(Cubelet._STICKER, this.materials[i]);
       switch (i) {
         case FACES.L:
-          _edge.rotation.y = -Math.PI / 2;
-          _edge.position.x = -Cubelet.SIZE / 2;
           _sticker.rotation.y = -Math.PI / 2;
           _sticker.position.x = -Cubelet.SIZE / 2;
           _sticker.name = "L";
           break;
         case FACES.R:
-          _edge.rotation.y = Math.PI / 2;
-          _edge.position.x = Cubelet.SIZE / 2;
           _sticker.rotation.y = Math.PI / 2;
           _sticker.position.x = Cubelet.SIZE / 2;
           _sticker.name = "R";
           break;
         case FACES.D:
-          _edge.rotation.x = Math.PI / 2;
-          _edge.position.y = -Cubelet.SIZE / 2;
           _sticker.rotation.x = Math.PI / 2;
           _sticker.position.y = -Cubelet.SIZE / 2;
           _sticker.name = "D";
           break;
         case FACES.U:
-          _edge.rotation.x = -Math.PI / 2;
-          _edge.position.y = Cubelet.SIZE / 2;
           _sticker.rotation.x = -Math.PI / 2;
           _sticker.position.y = Cubelet.SIZE / 2;
           _sticker.name = "U";
           break;
         case FACES.B:
-          _edge.rotation.x = Math.PI;
-          _edge.position.z = -Cubelet.SIZE / 2;
           _sticker.rotation.x = Math.PI;
           _sticker.position.z = -Cubelet.SIZE / 2;
           _sticker.name = "B";
           break;
         case FACES.F:
-          _edge.rotation.z = 0;
-          _edge.position.z = Cubelet.SIZE / 2;
           _sticker.rotation.x = 2 * Math.PI;
           _sticker.position.z = Cubelet.SIZE / 2;
           _sticker.name = "F";
@@ -337,12 +324,12 @@ export default class Cubelet extends THREE.Group {
         default:
           break;
       }
-      this.add(_edge);
-      this.edges.push(_edge);
-      this.add(_sticker);
       this.stickers.push(_sticker);
+      if (_sticker.material != Cubelet._MATERIALS.gray) {
+        this.add(_sticker);
+      }
       if (this.materials[i] != Cubelet._MATERIALS.gray) {
-        let _mirror = new THREE.Mesh(Cubelet._STICKER, this.materials[i]);
+        let _mirror = new THREE.Mesh(Cubelet._MIRROR, this.materials[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
         _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
         _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;

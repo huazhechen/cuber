@@ -82,11 +82,16 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    if (this.start == 0 && this.cuber.cube.history.length > 0) {
-      this.start = new Date().getTime();
-    }
-    if (this.start != 0 && !this.cuber.cube.complete) {
-      this.now = new Date().getTime();
+    if (this.cuber.cube.history.length == 0) {
+      this.start = 0;
+      this.now = 0;
+    } else {
+      if (this.start == 0) {
+        this.start = new Date().getTime();
+      }
+      if (!this.cuber.cube.complete) {
+        this.now = new Date().getTime();
+      }
     }
     this.cuber.render();
   }

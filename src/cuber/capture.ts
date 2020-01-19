@@ -20,7 +20,7 @@ export default class Capture {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
-    this.renderer.setSize(128, 128, true);
+    this.renderer.setSize(512, 512, true);
 
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 6;
@@ -34,7 +34,6 @@ export default class Capture {
     this.camera.position.z = Cubelet.SIZE * 3 * 4;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(128, 128, true);
   }
 
   snap(strip: { indexes: number[]; faces: number[] }[], exp: string) {

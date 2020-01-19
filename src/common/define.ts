@@ -5,7 +5,7 @@ export var COLORS = {
   YELLOW: "#FC0",
   WHITE: "#EEE",
   RED: "#C00",
-  GRAY: "#888",
+  GRAY: "#444",
   BLACK: "#222",
   DISABLE: "#BBB",
   BACKGROUND: "#CCC"
