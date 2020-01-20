@@ -1,20 +1,18 @@
 import Vue from "vue";
-import { Component, Provide, Watch } from "vue-property-decorator";
+import { Component, Provide } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
-import Alg from "../Alg";
 
 @Component({
   template: require("./index.html"),
   components: {
     keyboard: Keyboard,
-    tune: Tune,
-    alg: Alg
+    tune: Tune
   }
 })
-export default class App extends Vue {
+export default class Playground extends Vue {
   @Provide("cuber")
   cuber: Cuber;
 
@@ -22,7 +20,6 @@ export default class App extends Vue {
   option: Option;
 
   keyboard: Keyboard = new Keyboard();
-  alg: boolean = false;
 
   menu: boolean = false;
   tune: boolean = false;

@@ -2,11 +2,14 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
-  entry: "./src/main.ts",
+  entry: {
+    playground: "./src/playground.ts",
+    algs: "./src/algs.ts"
+  },
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "main.js",
+    filename: "[name].js",
     globalObject: "this"
   },
   module: {

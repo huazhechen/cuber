@@ -82,6 +82,4 @@ export default class Option {
   set lock(value) {
     this.cuber.controller.lock = value;
   }
-
-  page: string = "cuber";
 }

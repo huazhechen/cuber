@@ -1,0 +1,55 @@
+<v-app>
+  <v-btn
+    fixed
+    left
+    top
+    @click.native.stop.prevent
+    @touchstart.native.stop.prevent
+    text
+    color="primary"
+    style="margin:0%;padding:0%;"
+    :style="{height:size+'px'}"
+  >
+    <div :style="{'font-size':(size * 0.8)+'px'}">{{score}}</div>
+  </v-btn>
+  <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
+    <template v-slot:activator>
+      <v-btn
+        @click.native.stop.prevent="menu=!menu"
+        @touchstart.native.stop.prevent="menu=!menu"
+        fab
+        depressed
+        color="primary"
+        :style="{width:size+'px', height:size+'px'}"
+      >
+        <v-icon v-if="menu" :size="size * 0.6">close</v-icon>
+        <v-icon v-else :size="size * 0.6">menu</v-icon>
+      </v-btn>
+    </template>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="shuffle"
+      @touchstart.native.stop.prevent="shuffle"
+    >
+      <v-icon :size="size * 0.55" color="red">casino</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="tune=true;menu=false;"
+      @touchstart.native.stop.prevent="tune=true;menu=false;"
+    >
+      <v-icon :size="size * 0.55" color="indigo">tune</v-icon>
+    </v-btn>
+  </v-speed-dial>
+  <div v-resize="resize" style="background-color: #CCC;user-select: none;">
+    <div ref="cuber"></div>
+    <div style="margin:0%;padding:0%;"><keyboard ref="keyboard"></keyboard></div>
+  </div>
+  <tune v-model="tune"></tune>
+</v-app>
