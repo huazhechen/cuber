@@ -17,21 +17,19 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn
-        :disabled="cuber.cube.complete"
-        @click.native.stop.prevent="option.lock=!option.lock"
-        @touchstart.native.stop.prevent="option.lock=!option.lock"
-        :color="option.lock?'primary':''"
-        depressed
-        :style="style"
-      >
-        <v-icon :size="height/5">{{option.lock?'lock':'lock_open'}}</v-icon>
-      </v-btn>
-    </v-flex>
-    <v-flex xs2 d-flex style="padding:0%">
       <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :color="colors>0?'primary':''" depressed :style="style">
         <v-icon v-if="colors==0" :size="height/5">colorize</v-icon>
         <div v-if="colors!=0" :style="{'font-size':(height/8)+'px'}">{{['','Crs','F2L'][colors]}}</div>
+      </v-btn>
+    </v-flex>
+    <v-flex xs2 d-flex style="padding:0%">
+      <v-btn
+        @click.native.stop.prevent="twist('y')"
+        @touchstart.native.stop.prevent="twist('y')"
+        depressed
+        :style="style"
+      >
+        <v-icon :size="height/5">rotate_90_degrees_ccw</v-icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
