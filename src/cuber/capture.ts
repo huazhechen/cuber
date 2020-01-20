@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import Cube from "./cube";
 import Cubelet from "./cubelet";
-import { COLORS } from "../common/define";
+import { FACE } from "../common/define";
 import { TwistNode } from "./twister";
 
 export default class Capture {
@@ -36,7 +36,7 @@ export default class Capture {
     this.camera.updateProjectionMatrix();
   }
 
-  snap(strip: { indexes: number[]; faces: number[] }[], exp: string) {
+  snap(strip: { [face: string]: number[] | undefined }, exp: string) {
     this.cube.strip(strip);
     this.cube.reset();
 

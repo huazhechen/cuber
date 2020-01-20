@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
-import { FACES } from "../../common/define";
+import { FACE } from "../../common/define";
 
 @Component({
   template: require("./index.html")
@@ -25,16 +25,16 @@ export default class Keyboard extends Vue {
   ];
 
   strips = [
-    [{ indexes: [], faces: [] }],
-    [{ indexes: [0, 2, 3, 5, 6, 7, 8, 15, 17, 18, 20, 21, 23, 24, 25, 26], faces: [0, 1, 2, 3, 4, 5] }],
-    [{ indexes: [6, 7, 8, 15, 16, 17, 24, 25, 26], faces: [0, 1, 2, 3, 4, 5] }]
+    {},
+    { U: [1, 2, 3, 4, 6, 7, 8, 9], F: [1, 2, 3, 4, 6, 7, 9], R: [1, 2, 3, 4, 6, 7, 9], B: [1, 2, 3, 4, 6, 7, 9], L: [1, 2, 3, 4, 6, 7, 9], D: [1, 3, 7, 9] },
+    { U: [1, 2, 3, 4, 5, 6, 7, 8, 9], F: [1, 2, 3], R: [1, 2, 3], B: [1, 2, 3], L: [1, 2, 3] }
   ];
   colors: number = 0;
   strip() {
     this.colors = (this.colors + 1) % this.strips.length;
     this.cuber.cube.strip(this.strips[this.colors]);
   }
-  
+
   get style() {
     return {
       margin: this.height / 48 + "px",

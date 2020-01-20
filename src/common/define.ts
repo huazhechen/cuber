@@ -11,7 +11,7 @@ export var COLORS = {
   BACKGROUND: "#CCC"
 };
 
-export enum FACES {
+export enum FACE {
   L,
   R,
   D,

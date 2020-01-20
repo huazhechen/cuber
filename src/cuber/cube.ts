@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Group from "./group";
 import Cubelet from "./cubelet";
 import History from "./history";
-import { FACES, COLORS } from "../common/define";
+import { FACE, COLORS } from "../common/define";
 import Twister from "./twister";
 
 export default class Cube extends THREE.Group {
@@ -50,8 +50,8 @@ export default class Cube extends THREE.Group {
     }
     this.callbacks.push(() => {
       let complete = [0, 1, 2, 3, 4, 5].every(face => {
-        let color = this.cubelets[this.groups[FACES[face]].indices[0]].getColor(face);
-        let same = this.groups[FACES[face]].indices.every(idx => {
+        let color = this.cubelets[this.groups[FACE[face]].indices[0]].getColor(face);
+        let same = this.groups[FACE[face]].indices.every(idx => {
           return color == this.cubelets[idx].getColor(face);
         });
         return same;
@@ -86,13 +86,17 @@ export default class Cube extends THREE.Group {
     this.dirty = true;
   }
 
-  strip(strips: { indexes: number[]; faces: number[] }[]) {
+  strip(strip: { [face: string]: number[] | undefined }) {
     this.stick();
-    for (let strip of strips) {
-      for (let index of strip.indexes) {
-        for (let face of strip.faces) {
-          this.initials[index].stick(face, COLORS.GRAY);
-        }
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      let key = FACE[face];
+      let indexes = strip[key];
+      if (indexes == undefined) {
+        continue;
+      }
+      let group = this.groups[FACE[face]];
+      for (const index of indexes) {
+        this.initials[group.indices[index - 1]].stick(face, COLORS.GRAY);
       }
     }
     this.dirty = true;
@@ -120,22 +124,22 @@ export default class Cube extends THREE.Group {
   get state() {
     let result = [];
     for (let i of this.groups.U.indices) {
-      result.push(this.cubelets[i].getColor(FACES.U));
+      result.push(this.cubelets[i].getColor(FACE.U));
     }
     for (let i of this.groups.R.indices) {
-      result.push(this.cubelets[i].getColor(FACES.R));
+      result.push(this.cubelets[i].getColor(FACE.R));
     }
     for (let i of this.groups.F.indices) {
-      result.push(this.cubelets[i].getColor(FACES.F));
+      result.push(this.cubelets[i].getColor(FACE.F));
     }
     for (let i of this.groups.D.indices) {
-      result.push(this.cubelets[i].getColor(FACES.D));
+      result.push(this.cubelets[i].getColor(FACE.D));
     }
     for (let i of this.groups.L.indices) {
-      result.push(this.cubelets[i].getColor(FACES.L));
+      result.push(this.cubelets[i].getColor(FACE.L));
     }
     for (let i of this.groups.B.indices) {
-      result.push(this.cubelets[i].getColor(FACES.B));
+      result.push(this.cubelets[i].getColor(FACE.B));
     }
     return result.join("");
   }

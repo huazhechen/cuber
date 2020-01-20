@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { COLORS, FACES } from "../common/define";
+import { COLORS, FACE } from "../common/define";
 
 class Frame extends THREE.Geometry {
   private static readonly _INDICES = [
@@ -212,25 +212,25 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  getColor(face: FACES) {
+  getColor(face: FACE) {
     let position = new THREE.Vector3(0, 0, 0);
     switch (face) {
-      case FACES.L:
+      case FACE.L:
         position.x = -1;
         break;
-      case FACES.R:
+      case FACE.R:
         position.x = 1;
         break;
-      case FACES.D:
+      case FACE.D:
         position.y = -1;
         break;
-      case FACES.U:
+      case FACE.U:
         position.y = 1;
         break;
-      case FACES.B:
+      case FACE.B:
         position.z = -1;
         break;
-      case FACES.F:
+      case FACE.F:
         position.z = 1;
         break;
       default:
@@ -243,17 +243,17 @@ export default class Cubelet extends THREE.Group {
     let z = Math.round(position.z);
     let color = 0;
     if (x < 0) {
-      color = FACES.L;
+      color = FACE.L;
     } else if (x > 0) {
-      color = FACES.R;
+      color = FACE.R;
     } else if (y < 0) {
-      color = FACES.D;
+      color = FACE.D;
     } else if (y > 0) {
-      color = FACES.U;
+      color = FACE.U;
     } else if (z < 0) {
-      color = FACES.B;
+      color = FACE.B;
     } else if (z > 0) {
-      color = FACES.F;
+      color = FACE.F;
     }
     return color;
   }
@@ -290,36 +290,31 @@ export default class Cubelet extends THREE.Group {
 
     for (let i = 0; i < 6; i++) {
       let _sticker = new THREE.Mesh(Cubelet._STICKER, this.materials[i]);
+      _sticker.name = FACE[i];
       switch (i) {
-        case FACES.L:
+        case FACE.L:
           _sticker.rotation.y = -Math.PI / 2;
           _sticker.position.x = -Cubelet.SIZE / 2;
-          _sticker.name = "L";
           break;
-        case FACES.R:
+        case FACE.R:
           _sticker.rotation.y = Math.PI / 2;
           _sticker.position.x = Cubelet.SIZE / 2;
-          _sticker.name = "R";
           break;
-        case FACES.D:
+        case FACE.D:
           _sticker.rotation.x = Math.PI / 2;
           _sticker.position.y = -Cubelet.SIZE / 2;
-          _sticker.name = "D";
           break;
-        case FACES.U:
+        case FACE.U:
           _sticker.rotation.x = -Math.PI / 2;
           _sticker.position.y = Cubelet.SIZE / 2;
-          _sticker.name = "U";
           break;
-        case FACES.B:
+        case FACE.B:
           _sticker.rotation.x = Math.PI;
           _sticker.position.z = -Cubelet.SIZE / 2;
-          _sticker.name = "B";
           break;
-        case FACES.F:
+        case FACE.F:
           _sticker.rotation.x = 2 * Math.PI;
           _sticker.position.z = Cubelet.SIZE / 2;
-          _sticker.name = "F";
           break;
         default:
           break;

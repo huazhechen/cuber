@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Cuber from "./cuber";
 import Cubelet from "./cubelet";
 import Group from "./group";
-import { FACES, DURATION } from "../common/define";
+import { FACE, DURATION } from "../common/define";
 import { tweener } from "./tweener";
 
 export class Holder {
@@ -315,13 +315,13 @@ export default class Controller {
       let face = null;
       switch (this.holder.plane) {
         case this.planes[0]:
-          face = FACES.R;
+          face = FACE.R;
           break;
         case this.planes[1]:
-          face = FACES.U;
+          face = FACE.U;
           break;
         case this.planes[2]:
-          face = FACES.F;
+          face = FACE.F;
           break;
       }
       for (let tap of this.taps) {

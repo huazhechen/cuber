@@ -31,10 +31,14 @@ export default class list {
 
   get moves() {
     let length = this.length;
+    let last = "";
     for (const twist of this.list) {
       if (/[xyz]/.test(twist.exp)) {
         length--;
+      } else if (last == twist.exp) {
+        length--;
       }
+      last = twist.exp;
     }
     return length;
   }
