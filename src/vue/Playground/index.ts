@@ -1,14 +1,14 @@
 import Vue from "vue";
 import { Component, Provide } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
-import Keyboard from "../Keyboard";
+import PlayKeyboard from "../PlayKeyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
 
 @Component({
   template: require("./index.html"),
   components: {
-    keyboard: Keyboard,
+    keyboard: PlayKeyboard,
     tune: Tune
   }
 })
@@ -19,7 +19,7 @@ export default class Playground extends Vue {
   @Provide("option")
   option: Option;
 
-  keyboard: Keyboard = new Keyboard();
+  keyboard: PlayKeyboard = new PlayKeyboard();
 
   menu: boolean = false;
   tune: boolean = false;
@@ -67,7 +67,7 @@ export default class Playground extends Vue {
     }
 
     let keyboard = this.$refs.keyboard;
-    if (keyboard instanceof Keyboard) {
+    if (keyboard instanceof PlayKeyboard) {
       keyboard.width = this.size * 8 - this.size / 8;
       keyboard.height = this.size * 4;
     }

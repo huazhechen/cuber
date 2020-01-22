@@ -2,12 +2,11 @@ import Vue from "vue";
 import { Component, Inject } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
-import { FACE } from "../../common/define";
 
 @Component({
   template: require("./index.html")
 })
-export default class Keyboard extends Vue {
+export default class PlayKeyboard extends Vue {
   @Inject("cuber")
   cuber: Cuber;
 
