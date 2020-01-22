@@ -4,6 +4,7 @@ import Cubelet from "./cubelet";
 import Group from "./group";
 import { FACE, DURATION } from "../common/define";
 import { tweener } from "./tweener";
+import { TwistAction } from "./twister";
 
 export class Holder {
   public vector: THREE.Vector3;
@@ -39,6 +40,15 @@ export default class Controller {
   set lock(value) {
     this.handleUp();
     this._lock = value;
+  }
+
+  public _disable: boolean = false;
+  get disable() {
+    return this._disable;
+  }
+  set disable(value) {
+    this.handleUp();
+    this._disable = value;
   }
 
   constructor(cuber: Cuber) {
@@ -187,7 +197,7 @@ export default class Controller {
   }
 
   handleDown() {
-    if (this.dragging || this.rotating) {
+    if (this.disable || this.dragging || this.rotating) {
       return;
     }
     this.dragging = true;
@@ -226,6 +236,9 @@ export default class Controller {
   }
 
   handleMove() {
+    if (this.disable) {
+      return;
+    }
     if (this.dragging) {
       var dx = this.move.x - this.down.x;
       var dy = this.move.y - this.down.y;
@@ -331,7 +344,17 @@ export default class Controller {
     if (this.rotating) {
       if (this.group && this.group !== null) {
         if (!this.lock) {
-          this.group.twist(this.angle);
+          let exp = this.group.name;
+          let reverse = this.angle > 0;
+          let times = Math.round(Math.abs(this.angle) / (Math.PI / 2));
+          if (times != 0) {
+            this.cuber.cube.history.record(new TwistAction(exp, reverse, times));
+            this.group.twist(this.angle, () => {
+              for (let callback of this.cuber.cube.callbacks) {
+                callback();
+              }
+            });
+          }
         } else {
           this.group.twist(0);
         }

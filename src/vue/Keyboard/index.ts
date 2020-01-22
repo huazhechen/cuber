@@ -6,7 +6,7 @@ import Option from "../../common/option";
 @Component({
   template: require("./index.html")
 })
-export default class PlayKeyboard extends Vue {
+export default class Keyboard extends Vue {
   @Inject("cuber")
   cuber: Cuber;
 

@@ -1,0 +1,108 @@
+<v-app>
+  <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
+    <div ref="cuber"></div>
+    <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:(size * 4) + 'px'}">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-text-field
+              outline
+              single-line
+              hide-details
+              class="headline"
+              :disabled="recording"
+              :append-icon="scene == ''?'':'clear'"
+              @click:append="scene = ''"
+              v-model="scene"
+            >
+              <v-icon style="vertical-align: middle" slot="label">terrain</v-icon>
+            </v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-text-field
+              outline
+              single-line
+              hide-details
+              class="headline"
+              :disabled="recording"
+              :append-icon="action == ''?'':'clear'"
+              @click:append="action = ''"
+              v-model="action"
+            >
+              <v-icon style="vertical-align: middle" slot="label">theaters</v-icon>
+            </v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              @click.native.stop.prevent="tune=!tune"
+              @touchstart.native.stop.prevent="tune=!tune"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>tune</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              @click.native.stop.prevent="cuber.mirror=!cuber.mirror"
+              @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror"
+              :color="cuber.mirror?'primary':''"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>flip</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="action == '' || recording"
+              @click.native.stop.prevent="toggle"
+              @touchstart.native.stop.prevent="toggle"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="recording"
+              @click.native.stop.prevent="snap"
+              @touchstart.native.stop.prevent="snap"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>camera_alt</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="action == '' || recording"
+              @click.native.stop.prevent="film"
+              @touchstart.native.stop.prevent="film"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>videocam</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </div>
+  </div>
+  <tune v-model="tune"></tune>
+</v-app>

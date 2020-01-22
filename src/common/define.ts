@@ -1,17 +1,14 @@
 export var COLORS = {
   GREEN: "#00A020",
-  ORANGE: "#EF6C00",
+  ORANGE: "#FF6D00",
   BLUE: "#0D47A1",
-  YELLOW: "#FFC400",
+  YELLOW: "#FFD600",
   WHITE: "#EEEEEE",
   RED: "#B71C1C",
   GRAY: "#444",
   BLACK: "#222",
   DISABLE: "#BBB",
-  BACKGROUND: "#CCC",
-  CYAN: "#00B8D4",
-  LIME: "#AEEA00",
-  PURPLE: "#AA00FF",
+  BACKGROUND: "#C0C0C0",
 };
 
 export enum FACE {

@@ -59,24 +59,12 @@ export default class Group extends THREE.Group {
       this.cube.cubelets[cubelet.index] = cubelet;
     }
     this.cube.lock = false;
-    if (this.angle != 0) {
-      for (let callback of this.cube.callbacks) {
-        callback();
-      }
-    }
     this.angle = 0;
   }
 
   twist(angle = this.angle, callback: Function | null = null) {
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    let exp = this.name;
-    let reverse = angle > 0;
-    let times = Math.round(Math.abs(angle) / (Math.PI / 2));
-    if (times != 0) {
-      this.cube.history.record(new TwistAction(exp, reverse, times));
-    }
     let delta = angle - this.angle;
-
     if (delta === 0) {
       this.drop();
       if (callback) {

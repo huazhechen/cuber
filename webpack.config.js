@@ -4,7 +4,8 @@ var webpack = require("webpack");
 module.exports = (env, argv) => ({
   entry: {
     playground: "./src/playground.ts",
-    algs: "./src/algs.ts"
+    algs: "./src/algs.ts",
+    director: "./src/director.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),

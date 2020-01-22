@@ -16,7 +16,7 @@ export default class Twister {
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 1; i++) {
       let exp = [];
       while (axis == last) {
         axis = Math.floor(Math.random() * 3);
@@ -63,6 +63,9 @@ export default class Twister {
   }
 
   update() {
+    for (let callback of this.cube.callbacks) {
+      callback();
+    }
     if (this.queue.length === 0 || this.cube.lock) {
       return false;
     }
@@ -100,7 +103,8 @@ export default class Twister {
       this.twist(exp, false, 1, true);
       this.cube.history.clear();
       return;
-    }
+    }    
+    this.cube.history.record(action);
     let angle = -Math.PI / 2;
     if (action.reverse) {
       angle = -angle;
