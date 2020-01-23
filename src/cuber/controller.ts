@@ -344,17 +344,7 @@ export default class Controller {
     if (this.rotating) {
       if (this.group && this.group !== null) {
         if (!this.lock) {
-          let exp = this.group.name;
-          let reverse = this.angle > 0;
-          let times = Math.round(Math.abs(this.angle) / (Math.PI / 2));
-          if (times != 0) {
-            this.cuber.cube.history.record(new TwistAction(exp, reverse, times));
-            this.group.twist(this.angle, () => {
-              for (let callback of this.cuber.cube.callbacks) {
-                callback();
-              }
-            });
-          }
+          this.group.twist(this.angle);
         } else {
           this.group.twist(0);
         }

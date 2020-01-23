@@ -5,9 +5,11 @@ import { DURATION } from "../common/define";
 export default class Twister {
   cube: Cube;
   queue: TwistAction[];
+  public callbacks: Function[] = [];
   constructor(cube: Cube) {
     this.cube = cube;
     this.queue = [];
+    this.cube.callbacks.push(this.update.bind(this));
   }
 
   static shuffle() {
@@ -16,7 +18,7 @@ export default class Twister {
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 24; i++) {
       let exp = [];
       while (axis == last) {
         axis = Math.floor(Math.random() * 3);
@@ -63,15 +65,18 @@ export default class Twister {
   }
 
   update() {
-    for (let callback of this.cube.callbacks) {
-      callback();
+    if (this.queue.length === 0) {
+      for (const callback of this.callbacks) {
+        callback();
+      }
+      return;
     }
-    if (this.queue.length === 0 || this.cube.lock) {
-      return false;
+    if (this.cube.lock) {
+      return;
     }
     let twist = this.queue.shift();
     if (undefined == twist) {
-      return false;
+      return;
     }
     this.start(twist);
   }
@@ -103,8 +108,7 @@ export default class Twister {
       this.twist(exp, false, 1, true);
       this.cube.history.clear();
       return;
-    }    
-    this.cube.history.record(action);
+    }
     let angle = -Math.PI / 2;
     if (action.reverse) {
       angle = -angle;
@@ -123,7 +127,7 @@ export default class Twister {
     if (action.fast) {
       part.angle = angle;
     }
-    part.twist(angle, this.update.bind(this));
+    part.twist(angle);
     return;
   }
 }

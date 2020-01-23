@@ -33,7 +33,7 @@ export default class Director extends Vue {
     let canvas = document.createElement("canvas");
     this.cuber = new Cuber(canvas);
     this.option = new Option(this.cuber);
-    this.cuber.cube.callbacks.push(() => {
+    this.cuber.cube.twister.callbacks.push(() => {
       this.triger();
     });
   }
@@ -72,6 +72,7 @@ export default class Director extends Vue {
   init() {
     this.cuber.controller.disable = false;
     this.playing = false;
+    this.cuber.cube.twister.finish();
     this.cuber.cube.twister.twist("#");
     this.cuber.cube.twister.twist(this.scene, false, 1, true);
   }

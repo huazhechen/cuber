@@ -1,5 +1,19 @@
 <v-app>
   <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
+    <v-btn
+      fixed
+      left
+      top
+      @click.native.stop.prevent
+      @touchstart.native.stop.prevent
+      text
+      color="primary"
+      style="margin:0%;padding:0%;"
+      :style="{height:size+'px'}"
+      v-if="cuber.cube.twister.length != 0"
+    >
+      <div :style="{'font-size':(size * 0.8)+'px'}">{{cuber.cube.twister.length}}</div>
+    </v-btn>
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:(size * 4) + 'px'}">
       <v-container fluid grid-list-md text-xs-center>
@@ -10,7 +24,7 @@
               single-line
               hide-details
               class="headline"
-              :disabled="recording"
+              :disabled="recording || playing"
               :append-icon="scene == ''?'':'clear'"
               @click:append="scene = ''"
               v-model="scene"
@@ -26,7 +40,7 @@
               single-line
               hide-details
               class="headline"
-              :disabled="recording"
+              :disabled="recording || playing"
               :append-icon="action == ''?'':'clear'"
               @click:append="action = ''"
               v-model="action"
@@ -37,14 +51,7 @@
         </v-layout>
         <v-layout row wrap>
           <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              @click.native.stop.prevent="tune=!tune"
-              @touchstart.native.stop.prevent="tune=!tune"
-              style="margin: 0%; padding: 0%;"
-            >
+            <v-btn block text large @click.native.stop.prevent="tune=!tune" @touchstart.native.stop.prevent="tune=!tune" style="margin: 0%; padding: 0%;">
               <v-icon large>tune</v-icon>
             </v-btn>
           </v-flex>
@@ -79,7 +86,7 @@
               block
               text
               large
-              :disabled="recording"
+              :disabled="recording || playing"
               @click.native.stop.prevent="snap"
               @touchstart.native.stop.prevent="snap"
               style="margin: 0%; padding: 0%;"
@@ -92,7 +99,7 @@
               block
               text
               large
-              :disabled="action == '' || recording"
+              :disabled="action == '' || recording || playing"
               @click.native.stop.prevent="film"
               @touchstart.native.stop.prevent="film"
               style="margin: 0%; padding: 0%;"
