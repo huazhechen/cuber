@@ -20,32 +20,32 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              outline
+              dense
               single-line
               hide-details
-              class="headline"
-              :disabled="recording || playing"
+              outlined
+              :readonly="recording || playing"
               :append-icon="scene == ''?'':'clear'"
               @click:append="scene = ''"
               v-model="scene"
+              label="scene"
             >
-              <v-icon style="vertical-align: middle" slot="label">terrain</v-icon>
             </v-text-field>
           </v-flex>
         </v-layout>
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              outline
+              dense
               single-line
               hide-details
-              class="headline"
-              :disabled="recording || playing"
+              outlined
+              :readonly="recording || playing"
               :append-icon="action == ''?'':'clear'"
               @click:append="action = ''"
               v-model="action"
+              label="action"
             >
-              <v-icon style="vertical-align: middle" slot="label">theaters</v-icon>
             </v-text-field>
           </v-flex>
         </v-layout>
