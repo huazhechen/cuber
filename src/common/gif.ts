@@ -235,7 +235,6 @@ export default class GIF {
   height: number;
   delay: number;
   image: Uint8Array;
-  pixels: Uint8Array;
   data: Uint8Array;
   colors: Uint8Array;
   dispose: number;
@@ -245,8 +244,7 @@ export default class GIF {
   constructor(width: number, height: number) {
     this.width = ~~width;
     this.height = ~~height;
-    this.pixels = new Uint8Array(this.width * this.height * 3);
-    this.delay = 3;
+    this.delay = 2;
     this.data = new Uint8Array(this.width * this.height);
     this.colors = new Uint8Array(3 * 10);
     let i = 0;
@@ -310,21 +308,6 @@ export default class GIF {
     this.writePalette();
     this.writeNetscapeExt();
   }
-
-  getPixels() {
-    var w = this.width;
-    var h = this.height;
-    for (var i = 0; i < h; i++) {
-      for (var j = 0; j < w; j++) {
-        let from = i * w + j;
-        let to = (h - i - 1) * w + j;
-        this.pixels[to * 3 + 0] = this.image[from * 4 + 0];
-        this.pixels[to * 3 + 1] = this.image[from * 4 + 1];
-        this.pixels[to * 3 + 2] = this.image[from * 4 + 2];
-      }
-    }
-  }
-
   getColor(r: number, g: number, b: number) {
     let index = 0;
     let dmin = 256 * 256 * 256;
@@ -342,19 +325,38 @@ export default class GIF {
     return best;
   }
 
-  getData() {
-    let num = this.width * this.height;
-    var k = 0;
-    for (var j = 0; j < num; j++) {
-      var index = this.getColor(this.pixels[k++] & 0xff, this.pixels[k++] & 0xff, this.pixels[k++] & 0xff);
-      this.data[j] = index;
+  getPixels() {
+    var w = this.width;
+    var h = this.height;
+    let lr = -1;
+    let lg = -1;
+    let lb = -1;
+    let li = -1;
+    for (var i = 0; i < h; i++) {
+      for (var j = 0; j < w; j++) {
+        let from = i * w + j;
+        let to = (h - i - 1) * w + j;
+        let r = this.image[from * 4 + 0];
+        let g = this.image[from * 4 + 1];
+        let b = this.image[from * 4 + 2];
+        let index;
+        if (r == lr && g == lg && b == lb) {
+          index = li;
+        } else {
+          index = this.getColor(r, g, b);
+          lr = r;
+          lg = g;
+          lb = b;
+          li = index;
+        }
+        this.data[to] = index;
+      }
     }
   }
 
   add(image: Uint8Array) {
     this.image = image;
     this.getPixels();
-    this.getData();
     this.writeGraphicCtrlExt();
     this.writeImageDesc();
     this.writePixels();

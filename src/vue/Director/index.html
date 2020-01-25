@@ -24,7 +24,7 @@
               single-line
               hide-details
               outlined
-              :readonly="recording || playing"
+              :disabled="recording || playing"
               :append-icon="scene == ''?'':'clear'"
               @click:append="scene = ''"
               v-model="scene"
@@ -40,7 +40,7 @@
               single-line
               hide-details
               outlined
-              :readonly="recording || playing"
+              :disabled="recording || playing"
               :append-icon="action == ''?'':'clear'"
               @click:append="action = ''"
               v-model="action"
@@ -50,12 +50,17 @@
           </v-flex>
         </v-layout>
         <v-layout row wrap>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn block text large @click.native.stop.prevent="tune=!tune" @touchstart.native.stop.prevent="tune=!tune" style="margin: 0%; padding: 0%;">
               <v-icon large>tune</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
+            <v-btn block text large @click.native.stop.prevent="sized=!sized" @touchstart.native.stop.prevent="sized=!sized" style="margin: 0%; padding: 0%;">
+              <v-icon large>crop</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2>
             <v-btn
               block
               text
@@ -68,7 +73,7 @@
               <v-icon large>flip</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
@@ -81,7 +86,7 @@
               <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
@@ -94,7 +99,7 @@
               <v-icon large>camera_alt</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
@@ -112,4 +117,15 @@
     </div>
   </div>
   <tune v-model="tune"></tune>
+  <v-bottom-sheet v-model="sized">
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="像素">
+            <template v-slot:thumb-label>{{Math.pow(2, pixel)}}</template>
+          </v-slider>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
 </v-app>

@@ -17,7 +17,6 @@ import GIF from "../../common/gif";
   }
 })
 export default class Director extends Vue {
-  static SIZE = 256;
   @Provide("cuber")
   cuber: Cuber;
 
@@ -31,7 +30,9 @@ export default class Director extends Vue {
   playing: boolean = false;
   renderer: THREE.WebGLRenderer;
   strips: number[] = new Array(6 * 9).fill(0);
+  sized: boolean = false;
   gif: GIF;
+  pixel:number = 9;
 
   constructor() {
     super();
@@ -43,9 +44,7 @@ export default class Director extends Vue {
     });
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setPixelRatio(1);
-    this.renderer.setSize(Director.SIZE, Director.SIZE, true);
     this.renderer.setClearColor(COLORS.BACKGROUND, 1);
-    this.gif = new GIF(Director.SIZE, Director.SIZE);
     let strips = window.localStorage.getItem("director.strips");
     if (strips != null) {
       this.strips = JSON.parse(strips);
@@ -147,8 +146,9 @@ export default class Director extends Vue {
     this.renderer.clear();
     this.renderer.render(this.cuber.scene, this.cuber.camera);
     let content = this.renderer.getContext();
-    let pixels = new Uint8Array(Director.SIZE * Director.SIZE * 4);
-    content.readPixels(0, 0, Director.SIZE, Director.SIZE, content.RGBA, content.UNSIGNED_BYTE, pixels);
+    let size = Math.pow(2, this.pixel);
+    let pixels = new Uint8Array(size * size * 4);
+    content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
     this.cuber.resize();
   }
@@ -174,13 +174,16 @@ export default class Director extends Vue {
     this.cuber.controller.disable = true;
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
+    let size = Math.pow(2, this.pixel);
+    this.gif = new GIF(size, size);
+    this.renderer.setSize(size, size, true);
     this.renderer.setClearColor(COLORS.BACKGROUND, 1);
     this.renderer.clear();
     this.renderer.render(this.cuber.scene, this.cuber.camera);
     this.gif.start();
     let content = this.renderer.getContext();
-    let pixels = new Uint8Array(Director.SIZE * Director.SIZE * 4);
-    content.readPixels(0, 0, Director.SIZE, Director.SIZE, content.RGBA, content.UNSIGNED_BYTE, pixels);
+    let pixels = new Uint8Array(size * size * 4);
+    content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
     this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
   }
