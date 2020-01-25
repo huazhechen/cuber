@@ -28,7 +28,8 @@ export default class Director extends Vue {
   height: number = 0;
   size: number = 0;
   playing: boolean = false;
-  renderer: THREE.WebGLRenderer;
+  snaper: THREE.WebGLRenderer;
+  filmer: THREE.WebGLRenderer;
   strips: number[] = new Array(6 * 9).fill(0);
   sized: boolean = false;
   gif: GIF;
@@ -42,9 +43,12 @@ export default class Director extends Vue {
     this.cuber.cube.twister.callbacks.push(() => {
       this.triger();
     });
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    this.renderer.setPixelRatio(1);
-    this.renderer.setClearColor(COLORS.BACKGROUND, 1);
+    this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.snaper.setPixelRatio(1);
+    this.snaper.setClearColor(COLORS.BACKGROUND, 0);
+    this.filmer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
+    this.filmer.setPixelRatio(1);
+    this.filmer.setClearColor(COLORS.BACKGROUND, 1);
     let strips = window.localStorage.getItem("director.strips");
     if (strips != null) {
       this.strips = JSON.parse(strips);
@@ -143,9 +147,9 @@ export default class Director extends Vue {
   record() {
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    this.renderer.clear();
-    this.renderer.render(this.cuber.scene, this.cuber.camera);
-    let content = this.renderer.getContext();
+    this.filmer.clear();
+    this.filmer.render(this.cuber.scene, this.cuber.camera);
+    let content = this.filmer.getContext();
     let size = Math.pow(2, this.pixel);
     let pixels = new Uint8Array(size * size * 4);
     content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
@@ -158,6 +162,7 @@ export default class Director extends Vue {
     this.cuber.controller.disable = false;
     this.cuber.resize();
     this.gif.finish();
+    this.init();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
     let link = document.createElement("a");
@@ -172,30 +177,23 @@ export default class Director extends Vue {
     this.init();
     this.recording = true;
     this.cuber.controller.disable = true;
-    this.cuber.camera.aspect = 1;
-    this.cuber.camera.updateProjectionMatrix();
     let size = Math.pow(2, this.pixel);
     this.gif = new GIF(size, size);
-    this.renderer.setSize(size, size, true);
-    this.renderer.setClearColor(COLORS.BACKGROUND, 1);
-    this.renderer.clear();
-    this.renderer.render(this.cuber.scene, this.cuber.camera);
+    this.filmer.setSize(size, size, true);
     this.gif.start();
-    let content = this.renderer.getContext();
-    let pixels = new Uint8Array(size * size * 4);
-    content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
-    this.gif.add(pixels);
+    this.record();
     this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
   }
 
   snap() {
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    this.renderer.setClearColor(COLORS.BACKGROUND, 0);
-    this.renderer.clear();
-    this.renderer.render(this.cuber.scene, this.cuber.camera);
+    let size = Math.pow(2, this.pixel);
+    this.snaper.setSize(size, size, true);
+    this.snaper.clear();
+    this.snaper.render(this.cuber.scene, this.cuber.camera);
     this.cuber.resize();
-    let content = this.renderer.domElement.toDataURL("image/png");
+    let content = this.snaper.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
     let raw = window.atob(parts[1]);

@@ -246,37 +246,12 @@ export default class GIF {
     this.height = ~~height;
     this.delay = 2;
     this.data = new Uint8Array(this.width * this.height);
-    this.colors = new Uint8Array(3 * 10);
+    this.colors = new Uint8Array(3 * 16);
     let i = 0;
     // BACKGROUND
     this.colors[i++] = 0xc0;
     this.colors[i++] = 0xc0;
     this.colors[i++] = 0xc0;
-
-    // NULL
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
-
-    // BLACK
-    this.colors[i++] = 0x22;
-    this.colors[i++] = 0x22;
-    this.colors[i++] = 0x22;
-
-    // GRAY
-    this.colors[i++] = 0x44;
-    this.colors[i++] = 0x44;
-    this.colors[i++] = 0x44;
-
-    // WHITE
-    this.colors[i++] = 0xee;
-    this.colors[i++] = 0xee;
-    this.colors[i++] = 0xee;
-
-    // RED
-    this.colors[i++] = 0xb7;
-    this.colors[i++] = 0x1c;
-    this.colors[i++] = 0x1c;
 
     // YELLOW
     this.colors[i++] = 0xff;
@@ -288,6 +263,11 @@ export default class GIF {
     this.colors[i++] = 0x47;
     this.colors[i++] = 0xa1;
 
+    // RED
+    this.colors[i++] = 0xb7;
+    this.colors[i++] = 0x1c;
+    this.colors[i++] = 0x1c;
+
     // ORANGE
     this.colors[i++] = 0xff;
     this.colors[i++] = 0x6d;
@@ -297,6 +277,21 @@ export default class GIF {
     this.colors[i++] = 0x00;
     this.colors[i++] = 0xa0;
     this.colors[i++] = 0x20;
+
+    // WHITE
+    this.colors[i++] = 0xee;
+    this.colors[i++] = 0xee;
+    this.colors[i++] = 0xee;
+
+    // GRAY
+    this.colors[i++] = 0x44;
+    this.colors[i++] = 0x44;
+    this.colors[i++] = 0x44;
+
+    // BLACK
+    this.colors[i++] = 0x22;
+    this.colors[i++] = 0x22;
+    this.colors[i++] = 0x22;
 
     this.dispose = -1;
   }
@@ -308,6 +303,7 @@ export default class GIF {
     this.writePalette();
     this.writeNetscapeExt();
   }
+
   getColor(r: number, g: number, b: number) {
     let index = 0;
     let dmin = 256 * 256 * 256;
@@ -317,6 +313,9 @@ export default class GIF {
       let dg = g - this.colors[i++];
       let db = b - this.colors[i++];
       let d = dr * dr + dg * dg + db * db;
+      if (d == 0) {
+        return index;
+      }
       if (d < dmin) {
         dmin = d;
         best = index;
