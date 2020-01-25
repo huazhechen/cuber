@@ -5,9 +5,8 @@ export var COLORS = {
   YELLOW: "#FFD600",
   WHITE: "#EEEEEE",
   RED: "#B71C1C",
-  GRAY: "#444",
-  BLACK: "#222",
-  DISABLE: "#BBB",
+  GRAY: "#444444",
+  BLACK: "#222222",
   BACKGROUND: "#C0C0C0",
 };
 

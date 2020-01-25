@@ -7,7 +7,7 @@ import Tune from "../Tune";
 import { COLORS, FACE } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import * as THREE from "three";
-import { Encoder } from "../../common/encoder";
+import GIF from "../../common/gif";
 
 @Component({
   template: require("./index.html"),
@@ -17,6 +17,7 @@ import { Encoder } from "../../common/encoder";
   }
 })
 export default class Director extends Vue {
+  static SIZE = 256;
   @Provide("cuber")
   cuber: Cuber;
 
@@ -29,8 +30,8 @@ export default class Director extends Vue {
   size: number = 0;
   playing: boolean = false;
   renderer: THREE.WebGLRenderer;
-  encoder: Encoder;
   strips: number[] = new Array(6 * 9).fill(0);
+  gif: GIF;
 
   constructor() {
     super();
@@ -42,8 +43,9 @@ export default class Director extends Vue {
     });
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setPixelRatio(1);
-    this.renderer.setSize(512, 512, true);
-    this.encoder = new Encoder(this.renderer.domElement);
+    this.renderer.setSize(Director.SIZE, Director.SIZE, true);
+    this.renderer.setClearColor(COLORS.BACKGROUND, 1);
+    this.gif = new GIF(Director.SIZE, Director.SIZE);
     let strips = window.localStorage.getItem("director.strips");
     if (strips != null) {
       this.strips = JSON.parse(strips);
@@ -135,27 +137,33 @@ export default class Director extends Vue {
     requestAnimationFrame(this.loop.bind(this));
     if (this.recording) {
       this.record();
-    } else {
-      this.cuber.render();
     }
+    this.cuber.render();
   }
 
   record() {
+    this.cuber.camera.aspect = 1;
+    this.cuber.camera.updateProjectionMatrix();
     this.renderer.clear();
     this.renderer.render(this.cuber.scene, this.cuber.camera);
-    this.encoder.add();
+    let content = this.renderer.getContext();
+    let pixels = new Uint8Array(Director.SIZE * Director.SIZE * 4);
+    content.readPixels(0, 0, Director.SIZE, Director.SIZE, content.RGBA, content.UNSIGNED_BYTE, pixels);
+    this.gif.add(pixels);
+    this.cuber.resize();
   }
 
   finish() {
     this.recording = false;
     this.cuber.controller.disable = false;
     this.cuber.resize();
-    let data = this.encoder.finish();
-    let blob = new Blob([new Uint8Array(data)], { type: "image/png" });
+    this.gif.finish();
+    let data = this.gif.out.getData();
+    let blob = new Blob([data], { type: "image/gif" });
     let link = document.createElement("a");
     let click = document.createEvent("MouseEvents");
     click.initEvent("click", false, false);
-    link.download = "cuber.png";
+    link.download = "cuber.gif";
     link.href = URL.createObjectURL(blob);
     link.dispatchEvent(click);
   }
@@ -166,18 +174,21 @@ export default class Director extends Vue {
     this.cuber.controller.disable = true;
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    this.renderer.setClearColor(COLORS.BACKGROUND);
+    this.renderer.setClearColor(COLORS.BACKGROUND, 1);
     this.renderer.clear();
     this.renderer.render(this.cuber.scene, this.cuber.camera);
-    this.encoder.start();
-    this.encoder.add();
+    this.gif.start();
+    let content = this.renderer.getContext();
+    let pixels = new Uint8Array(Director.SIZE * Director.SIZE * 4);
+    content.readPixels(0, 0, Director.SIZE, Director.SIZE, content.RGBA, content.UNSIGNED_BYTE, pixels);
+    this.gif.add(pixels);
     this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
   }
 
   snap() {
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    this.renderer.setClearColor(0, 0);
+    this.renderer.setClearColor(COLORS.BACKGROUND, 0);
     this.renderer.clear();
     this.renderer.render(this.cuber.scene, this.cuber.camera);
     this.cuber.resize();
