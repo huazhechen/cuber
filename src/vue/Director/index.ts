@@ -33,7 +33,7 @@ export default class Director extends Vue {
   strips: number[] = new Array(6 * 9).fill(0);
   sized: boolean = false;
   gif: GIF;
-  pixel:number = 9;
+  pixel: number = 9;
 
   constructor() {
     super();
@@ -165,12 +165,7 @@ export default class Director extends Vue {
     this.init();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
-    let link = document.createElement("a");
-    let click = document.createEvent("MouseEvents");
-    click.initEvent("click", false, false);
-    link.download = "cuber.gif";
-    link.href = URL.createObjectURL(blob);
-    link.dispatchEvent(click);
+    this.download("cuber.gif", blob);
   }
 
   film() {
@@ -183,6 +178,29 @@ export default class Director extends Vue {
     this.gif.start();
     this.record();
     this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
+  }
+
+  download(filename: string, blob: Blob) {
+    let link = document.createElement("a");
+    link.innerHTML = filename;    
+    link.setAttribute('download', filename);
+    link.download = filename;
+
+    document.body.appendChild(link);
+
+    let url = URL.createObjectURL(blob);
+    link.href = url;
+
+    if (document.createEvent) {
+        var event = document.createEvent("MouseEvents");
+        event.initEvent("click", true, true);
+        link.dispatchEvent(event);
+    }
+    else if (link.click) {
+        link.click();
+    }
+
+    document.body.removeChild(link);
   }
 
   snap() {
@@ -203,12 +221,7 @@ export default class Director extends Vue {
       data[i] = raw.charCodeAt(i);
     }
     let blob = new Blob([data], { type: type });
-    let link = document.createElement("a");
-    let evt = document.createEvent("MouseEvents");
-    evt.initEvent("click", false, false);
-    link.download = "cuber.png";
-    link.href = URL.createObjectURL(blob);
-    link.dispatchEvent(evt);
+    this.download("cuber.png", blob);
   }
 
   tap(index: number, face: number) {
