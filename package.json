@@ -19,7 +19,6 @@
     "fibers": "^4.0.2",
     "file-loader": "^5.0.2",
     "material-design-icons": "*",
-    "pako": "^1.0.10",
     "sass": "^1.24.4",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.2",

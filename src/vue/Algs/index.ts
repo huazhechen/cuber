@@ -2,6 +2,7 @@ import Vue from "vue";
 import { Component, Watch, Inject } from "vue-property-decorator";
 import Capture from "../../cuber/capture";
 import Option from "../../common/option";
+import Base64 from "../../common/base64";
 
 @Component({
   template: require("./index.html")
@@ -44,5 +45,15 @@ export default class Algs extends Vue {
       return;
     }
     requestAnimationFrame(this.loop.bind(this));
+  }
+
+  play(i: number, j: number) {
+    let group = this.algs[i];
+    let alg = this.algs[i].algs[j];
+    let init = { scene: "(" + alg.exp + ")'", action: alg.exp, strips: group.strip };
+
+    let json = JSON.stringify(init);
+    let string = Base64.encode(json);
+    window.location.href = window.location.origin + "/director.html" + "?" + string;
   }
 }

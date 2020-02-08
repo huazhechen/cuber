@@ -6,8 +6,9 @@ import Option from "../../common/option";
 import Tune from "../Tune";
 import { COLORS, FACE, download } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
-import * as THREE from "three";
 import GIF from "../../common/gif";
+import Base64 from "../../common/base64";
+import * as THREE from "three";
 
 @Component({
   template: require("./index.html"),
@@ -30,7 +31,6 @@ export default class Director extends Vue {
   playing: boolean = false;
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
-  strips: number[] = new Array(6 * 9).fill(0);
   sized: boolean = false;
   gif: GIF;
   pixel: number = 9;
@@ -49,18 +49,6 @@ export default class Director extends Vue {
     this.filmer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 1);
-    let strips = window.localStorage.getItem("director.strips");
-    if (strips != null) {
-      this.strips = JSON.parse(strips);
-      this.strips.forEach((value, identity) => {
-        if (value > 0) {
-          let face = Math.floor(identity / 9);
-          let index = this.cuber.cube.groups[FACE[face]].indices[identity % 9];
-          let cubelet = this.cuber.cube.initials[index];
-          cubelet.stick(face, COLORS.GRAY);
-        }
-      });
-    }
   }
 
   triger() {
@@ -88,12 +76,23 @@ export default class Director extends Vue {
   }
 
   mounted() {
+    let search = window.location.search.toString().substr(1);
+    if (search.length > 0) {
+      let string = Base64.decode(search);
+      let init = JSON.parse(string);
+      this.scene = init.scene || "";
+      this.action = init.action || "";
+      this.strips = init.strips || [];
+      history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
+    }
+
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.cuber.canvas);
       this.$nextTick(this.resize);
     }
     this.cuber.controller.taps.push(this.tap);
+    this.cuber.cube.strip(this.strips);
     this.init();
     this.loop();
   }
@@ -118,6 +117,19 @@ export default class Director extends Vue {
   onActionChange() {
     window.localStorage.setItem("director.action", this.action);
   }
+
+  strips: { [face: string]: number[] | undefined } = (() => {
+    let save = window.localStorage.getItem("director.strips");
+    if (save) {
+      let data = JSON.parse(save);
+      let strips: { [face: string]: number[] | undefined } = {};
+      for (let face = 0; face < 6; face++) {
+        strips[FACE[face]] = data[FACE[face]];
+      }
+      return strips;
+    }
+    return {};
+  })();
 
   play() {
     this.init();
@@ -209,9 +221,18 @@ export default class Director extends Vue {
     let cubelet: Cubelet = this.cuber.cube.cubelets[index];
     face = cubelet.getColor(face);
     index = this.cuber.cube.groups[FACE[face]].indices.indexOf(cubelet.initial);
-    let identity = face * 9 + index;
-    this.strips[identity] = this.strips[identity] ^ 1;
-    cubelet.stick(face, this.strips[identity] != 0 ? COLORS.GRAY : "");
+    let arr = this.strips[FACE[face]];
+    if (arr == undefined) {
+      this.strips[FACE[face]] = [index + 1];
+    } else {
+      let i = arr.indexOf(index + 1);
+      if (i > -1) {
+        arr.splice(i, 1);
+      } else {
+        arr.push(index + 1);
+      }
+    }
+    this.cuber.cube.strip(this.strips);
     window.localStorage.setItem("director.strips", JSON.stringify(this.strips));
   }
 }

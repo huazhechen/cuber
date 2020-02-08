@@ -5,7 +5,6 @@ module.exports = {
   entry: {
     vendor: [
       "three",
-      "pako",
       "vue",
       "vue-property-decorator",
       "vuetify",
