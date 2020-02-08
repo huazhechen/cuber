@@ -54,6 +54,7 @@ export default class Algs extends Vue {
 
     let json = JSON.stringify(init);
     let string = Base64.encode(json);
-    window.location.href = window.location.origin + "/director.html" + "?" + string;
+    let path = window.location.pathname;
+    window.location.href = window.location.origin + path.substring(0, path.lastIndexOf("/")) + "/director.html" + "?" + string;
   }
 }
