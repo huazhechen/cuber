@@ -4,7 +4,7 @@ import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
-import { COLORS, FACE } from "../../common/define";
+import { COLORS, FACE, download } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import * as THREE from "three";
 import GIF from "../../common/gif";
@@ -165,7 +165,7 @@ export default class Director extends Vue {
     this.init();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
-    this.download("cuber.gif", blob);
+    download("cuber.gif", blob);
   }
 
   film() {
@@ -178,29 +178,6 @@ export default class Director extends Vue {
     this.gif.start();
     this.record();
     this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
-  }
-
-  download(filename: string, blob: Blob) {
-    let link = document.createElement("a");
-    link.innerHTML = filename;    
-    link.setAttribute('download', filename);
-    link.download = filename;
-
-    document.body.appendChild(link);
-
-    let url = URL.createObjectURL(blob);
-    link.href = url;
-
-    if (document.createEvent) {
-        var event = document.createEvent("MouseEvents");
-        event.initEvent("click", true, true);
-        link.dispatchEvent(event);
-    }
-    else if (link.click) {
-        link.click();
-    }
-
-    document.body.removeChild(link);
   }
 
   snap() {
@@ -221,7 +198,7 @@ export default class Director extends Vue {
       data[i] = raw.charCodeAt(i);
     }
     let blob = new Blob([data], { type: type });
-    this.download("cuber.png", blob);
+    download("cuber.png", blob);
   }
 
   tap(index: number, face: number) {

@@ -20,3 +20,27 @@ export enum FACE {
 }
 
 export var DURATION = 30;
+
+
+export function download(filename: string, blob: Blob) {
+  let link = document.createElement("a");
+  link.innerHTML = filename;    
+  link.setAttribute('download', filename);
+  link.download = filename;
+
+  document.body.appendChild(link);
+
+  let url = URL.createObjectURL(blob);
+  link.href = url;
+
+  if (document.createEvent) {
+      var event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      link.dispatchEvent(event);
+  }
+  else if (link.click) {
+      link.click();
+  }
+
+  document.body.removeChild(link);
+}

@@ -74,7 +74,7 @@
       { "name": "OLL-16", "exp": "RBR'LUL'U'RB'R'" },
       { "name": "OLL-17", "exp": "(RUR'U)(R'FRF'U2)(R'FRF')" },
       { "name": "OLL-18", "exp": "F(RUR'd)(R'U2)(R'FRF')" },
-      { "name": "OLL-19", "exp": "R'U2FRUR'U'y'R2U'2RBy" },
+      { "name": "OLL-19", "exp": "MU(RUR'U')M'(R'FRF')" },
       { "name": "OLL-20", "exp": "r'(RU)(RUR'U'r2)(R2'U)(RU')r'" },
       { "name": "OLL-21", "exp": "(RU'2)(R'U'RUR'U')(RU'R')" },
       { "name": "OLL-22", "exp": "RU'2(R'2U')(R2U')R'2U'2R" },

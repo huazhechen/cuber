@@ -41,10 +41,30 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="snap"
+      @touchstart.native.stop.prevent="snap"
+    >
+      <v-icon :size="size * 0.55" color="primary">camera_alt</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="algs"
+      @touchstart.native.stop.prevent="algs"
+    >
+      <v-icon :size="size * 0.55" color="primary">school</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
-      <v-icon :size="size * 0.55" color="indigo">tune</v-icon>
+      <v-icon :size="size * 0.55" color="primary">tune</v-icon>
     </v-btn>
   </v-speed-dial>
   <div v-resize="resize" style="background-color: #C0C0C0;user-select: none;">
