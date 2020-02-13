@@ -28,8 +28,8 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="window.location.href = '/'"
-      @touchstart.native.stop.prevent="window.location.href = '/'"
+      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))"
+      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))"
     >
       <v-icon :size="size * 0.55" color="primary">games</v-icon>
     </v-btn>

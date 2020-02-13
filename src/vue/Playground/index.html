@@ -41,8 +41,8 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="window.location.href = 'algs.html'"
-      @touchstart.native.stop.prevent="window.location.href = 'algs.html'"
+      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
+      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
     >
       <v-icon :size="size * 0.55" color="primary">school</v-icon>
     </v-btn>
