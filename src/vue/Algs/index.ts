@@ -23,6 +23,7 @@ export default class Player extends Vue {
 
   tune: boolean = false;
   menu: boolean = false;
+  list: boolean = false;
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -69,7 +70,11 @@ export default class Player extends Vue {
       if (this.algs[idx].algs.length == group.length) {
         return false;
       }
-      group.push(this.capture.snap(this.algs[idx].strip, this.algs[idx].algs[group.length].exp));
+      let save = window.localStorage.getItem("algs.exp." + this.algs[idx].algs[group.length].name);
+      let origin = this.algs[idx].algs[group.length].default;
+      let exp = save ? save : origin;
+      this.algs[idx].algs[group.length].exp = exp;
+      group.push(this.capture.snap(this.algs[idx].strip, exp));
       return true;
     });
     this.cuber.render();
@@ -78,14 +83,14 @@ export default class Player extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = 43;
+    this.size = Math.min(this.width / 8, this.height / 14);
     this.cuber.width = this.width;
-    this.cuber.height = this.height - this.size * 4;
+    this.cuber.height = this.height - 240;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - this.size * 4 + "px";
+      cuber.style.height = this.height - 240 + "px";
     }
   }
 
@@ -101,7 +106,7 @@ export default class Player extends Vue {
     let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
     this.cuber.cube.strip(strip);
     this.name = this.algs[this.index.group].algs[this.index.index].name;
-    this.origin = this.algs[this.index.group].algs[this.index.index].exp;
+    this.origin = this.algs[this.index.group].algs[this.index.index].default;
     let exp = window.localStorage.getItem("algs.exp." + this.name);
     if (exp) {
       this.exp = exp;
@@ -118,6 +123,8 @@ export default class Player extends Vue {
   @Watch("exp")
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
+    this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.exp);
+    this.algs[this.index.group].algs[this.index.index].exp = this.exp;
     this.actions = new TwistNode(this.exp).parse();
     this.init();
   }
@@ -156,11 +163,17 @@ export default class Player extends Vue {
   toggle() {
     if (this.playing) {
       this.playing = false;
-    } else if (this.progress == this.actions.length) {
-      this.init();
     } else {
       this.playing = true;
       this.play();
+    }
+  }
+
+  tabs(tab: number) {
+    if (tab == this.index.group) {
+      this.init();
+    } else {
+      this.index = { group: tab, index: 0 };
     }
   }
 

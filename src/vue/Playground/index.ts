@@ -42,7 +42,6 @@ export default class Playground extends Vue {
     return time + "/" + this.cuber.cube.history.moves;
   }
 
-  snaper: THREE.WebGLRenderer;
   constructor() {
     super();
     let canvas = document.createElement("canvas");
@@ -53,10 +52,6 @@ export default class Playground extends Vue {
         this.option.lock = true;
       }
     });
-    this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    this.snaper.setPixelRatio(1);
-    this.snaper.setClearColor(COLORS.BACKGROUND, 0);
-    this.snaper.setSize(512, 512, true);
   }
 
   resize() {
@@ -108,33 +103,9 @@ export default class Playground extends Vue {
 
   shuffle() {
     this.cuber.cube.twister.twist("*");
-    this.menu = false;    
+    this.menu = false;
     this.option.lock = false;
     this.start = 0;
     this.now = 0;
-  }
-  
-
-  snap() {
-    this.cuber.camera.aspect = 1;
-    this.cuber.camera.updateProjectionMatrix();
-    this.snaper.clear();
-    this.snaper.render(this.cuber.scene, this.cuber.camera);
-    this.cuber.resize();
-    let content = this.snaper.domElement.toDataURL("image/png");
-    let parts = content.split(";base64,");
-    let type = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let length = raw.length;
-    let data = new Uint8Array(length);
-    for (let i = 0; i < length; ++i) {
-      data[i] = raw.charCodeAt(i);
-    }
-    let blob = new Blob([data], { type: type });
-    download("cuber.png", blob);
-  }
-
-  algs(){
-    window.location.href = "algs.html";
   }
 }
