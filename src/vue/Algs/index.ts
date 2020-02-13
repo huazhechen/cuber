@@ -66,6 +66,10 @@ export default class Player extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    let ret = this.cuber.render();
+    if (ret) {
+      return;
+    }
     this.pics.some((group, idx) => {
       if (this.algs[idx].algs.length == group.length) {
         return false;
@@ -77,7 +81,6 @@ export default class Player extends Vue {
       group.push(this.capture.snap(this.algs[idx].strip, exp));
       return true;
     });
-    this.cuber.render();
   }
 
   resize() {
@@ -123,7 +126,9 @@ export default class Player extends Vue {
   @Watch("exp")
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
-    this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.exp);
+    if (this.pics[this.index.group].length == this.algs[this.index.group].length) {
+      this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.exp);
+    }
     this.algs[this.index.group].algs[this.index.index].exp = this.exp;
     this.actions = new TwistNode(this.exp).parse();
     this.init();

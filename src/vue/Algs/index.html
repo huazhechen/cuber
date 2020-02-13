@@ -1,5 +1,5 @@
 <v-app>
-  <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
+  <v-speed-dial v-show="!list" v-model="menu" fixed top right direction="bottom" style="user-select: none;">
     <template v-slot:activator>
       <v-btn
         @click.native.stop.prevent="menu=!menu"
@@ -18,8 +18,8 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="list=!list;menu=false;"
-      @touchstart.native.stop.prevent="list=!list;menu=false;"
+      @click.native.stop.prevent="list=!list;menu=false;init();"
+      @touchstart.native.stop.prevent="list=!list;menu=false;init();"
     >
       <v-icon :size="size * 0.55" color="primary">apps</v-icon>
     </v-btn>

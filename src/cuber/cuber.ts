@@ -132,6 +132,8 @@ export default class Cuber {
       this.renderer.render(this.scene, this.camera);
       this.dirty = false;
       this.cube.dirty = false;
+      return true;
     }
+    return false;
   }
 }
