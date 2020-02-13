@@ -126,7 +126,7 @@ export default class Player extends Vue {
   @Watch("exp")
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
-    if (this.pics[this.index.group].length == this.algs[this.index.group].length) {
+    if (this.pics[this.index.group][this.index.index]) {
       this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.exp);
     }
     this.algs[this.index.group].algs[this.index.index].exp = this.exp;
