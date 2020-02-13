@@ -48,8 +48,8 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="window.open('https://gitee.com/huazhechen/cuber')"
-      @touchstart.native.stop.prevent="window.open('https://gitee.com/huazhechen/cuber')"
+      @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+      @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
     >
       <v-icon :size="size * 0.55" color="primary">code</v-icon>
     </v-btn>
