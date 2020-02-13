@@ -13,7 +13,6 @@ import * as THREE from "three";
 @Component({
   template: require("./index.html"),
   components: {
-    keyboard: Keyboard,
     tune: Tune
   }
 })

@@ -1,60 +1,174 @@
 import Vue from "vue";
-import { Component, Watch, Inject } from "vue-property-decorator";
-import Capture from "../../cuber/capture";
+import { Component, Provide, Watch } from "vue-property-decorator";
+import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
-import Base64 from "../../common/base64";
+import Tune from "../Tune";
+import { TwistAction, TwistNode } from "../../cuber/twister";
+import Capture from "../../cuber/capture";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    tune: Tune
+  }
 })
-export default class Algs extends Vue {
-  @Inject("option")
+export default class Player extends Vue {
+  @Provide("cuber")
+  cuber: Cuber;
+
+  @Provide("option")
   option: Option;
 
-  tab = null;
-
-  capture: Capture = new Capture();
-  pics: string[][] = [];
   algs = require("./algs.json");
+
+  tune: boolean = false;
+  menu: boolean = false;
   width: number = 0;
   height: number = 0;
+  size: number = 0;
 
-  resize() {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    this.width = Math.min(width, height) / 4;
+  progress: number = 0;
+
+  constructor() {
+    super();
+    let canvas = document.createElement("canvas");
+    this.cuber = new Cuber(canvas);
+    this.option = new Option(this.cuber);
+    this.cuber.cube.twister.callbacks.push(() => {
+      this.play();
+    });
+    this.cuber.controller.lock = true;
   }
 
+  tab = null;
+  capture: Capture = new Capture();
+  pics: string[][] = [];
+
   mounted() {
+    if (this.$refs.cuber instanceof Element) {
+      let cuber = this.$refs.cuber;
+      cuber.appendChild(this.cuber.canvas);
+      this.$nextTick(this.resize);
+    }
     for (let i = 0; i < this.algs.length; i++) {
       this.pics.push([]);
     }
-    this.resize();
+    let index = window.localStorage.getItem("algs.index");
+    if (index) {
+      let data = JSON.parse(index);
+      this.index = { group: data.group, index: data.index };
+    } else {
+      this.index = { group: 0, index: 0 };
+    }
     this.loop();
   }
 
   loop() {
-    let ret = this.pics.some((group, idx) => {
+    requestAnimationFrame(this.loop.bind(this));
+    this.pics.some((group, idx) => {
       if (this.algs[idx].algs.length == group.length) {
         return false;
       }
       group.push(this.capture.snap(this.algs[idx].strip, this.algs[idx].algs[group.length].exp));
       return true;
     });
-    if (!ret) {
-      return;
-    }
-    requestAnimationFrame(this.loop.bind(this));
+    this.cuber.render();
   }
 
-  play(i: number, j: number) {
-    let group = this.algs[i];
-    let alg = this.algs[i].algs[j];
-    let init = { scene: "(" + alg.exp + ")'", action: alg.exp, strips: group.strip };
+  resize() {
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.size = 43;
+    this.cuber.width = this.width;
+    this.cuber.height = this.height - this.size * 4;
+    this.cuber.resize();
+    let cuber = this.$refs.cuber;
+    if (cuber instanceof HTMLElement) {
+      cuber.style.width = this.width + "px";
+      cuber.style.height = this.height - this.size * 4 + "px";
+    }
+  }
 
-    let json = JSON.stringify(init);
-    let string = Base64.encode(json);
-    let path = window.location.pathname;
-    window.location.href = window.location.origin + path.substring(0, path.lastIndexOf("/")) + "/director.html" + "?" + string;
+  playing: boolean = false;
+  @Watch("playing")
+  onPlayingChange() {
+    this.cuber.controller.disable = this.playing;
+  }
+
+  index: { group: number; index: number } = { group: 0, index: 0 };
+  @Watch("index")
+  onIndexChange() {
+    let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
+    this.cuber.cube.strip(strip);
+    this.name = this.algs[this.index.group].algs[this.index.index].name;
+    this.origin = this.algs[this.index.group].algs[this.index.index].exp;
+    let exp = window.localStorage.getItem("algs.exp." + this.name);
+    if (exp) {
+      this.exp = exp;
+    } else {
+      this.exp = this.origin;
+    }
+    window.localStorage.setItem("algs.index", JSON.stringify(this.index));
+  }
+
+  actions: TwistAction[] = [];
+  name: string = "";
+  origin: string = "";
+  exp: string = "";
+  @Watch("exp")
+  onExpChange() {
+    window.localStorage.setItem("algs.exp." + this.name, this.exp);
+    this.actions = new TwistNode(this.exp).parse();
+    this.init();
+  }
+
+  play() {
+    if (this.progress == this.actions.length) {
+      this.playing = false;
+    }
+    if (this.playing) {
+      let action = this.actions[this.progress];
+      this.progress++;
+      this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+    }
+  }
+
+  forward() {
+    if (this.progress == this.actions.length) {
+      return;
+    }
+    this.playing = false;
+    let action = this.actions[this.progress];
+    this.progress++;
+    this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
+  }
+
+  backward() {
+    if (this.progress == 0) {
+      return;
+    }
+    this.playing = false;
+    this.progress--;
+    let action = this.actions[this.progress];
+    this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
+  }
+
+  toggle() {
+    if (this.playing) {
+      this.playing = false;
+    } else if (this.progress == this.actions.length) {
+      this.init();
+    } else {
+      this.playing = true;
+      this.play();
+    }
+  }
+
+  init() {
+    this.playing = false;
+    this.progress = 0;
+    this.cuber.cube.twister.finish();
+    this.cuber.cube.twister.twist("#");
+    this.cuber.cube.twister.twist(this.exp, true, 1, true);
   }
 }
