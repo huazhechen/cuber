@@ -9,6 +9,7 @@ import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
 import Base64 from "../../common/base64";
 import * as THREE from "three";
+import { TwistAction, TwistNode } from "../../cuber/twister";
 
 @Component({
   template: require("./index.html"),
@@ -23,6 +24,7 @@ export default class Director extends Vue {
   @Provide("option")
   option: Option;
 
+  menu: boolean = false;
   tune: boolean = false;
   width: number = 0;
   height: number = 0;
@@ -40,7 +42,7 @@ export default class Director extends Vue {
     this.cuber = new Cuber(canvas);
     this.option = new Option(this.cuber);
     this.cuber.cube.twister.callbacks.push(() => {
-      this.triger();
+      this.play();
     });
     this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.snaper.setPixelRatio(1);
@@ -50,31 +52,23 @@ export default class Director extends Vue {
     this.filmer.setClearColor(COLORS.BACKGROUND, 1);
   }
 
-  triger() {
-    if (this.cuber.cube.twister.length == 0) {
-      if (this.playing) {
-        this.init();
-      } else if (this.recording) {
-        this.finish();
-      }
-    }
-  }
-
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = 43;
+    this.size = Math.min(this.width / 8, this.height / 14);
     this.cuber.width = this.width;
-    this.cuber.height = this.height - this.size * 4;
+    this.cuber.height = this.height - 240;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - this.size * 4 + "px";
+      cuber.style.height = this.height - 240 + "px";
     }
   }
 
   mounted() {
+    let save = window.localStorage.getItem("director.action");
+    this.action = save ? save : "RUR'U'";
     let search = window.location.search.toString().substr(1);
     if (search.length > 0) {
       let string = Base64.decode(search);
@@ -97,6 +91,7 @@ export default class Director extends Vue {
   }
 
   init() {
+    this.progress = 0;
     this.cuber.controller.disable = false;
     this.playing = false;
     this.cuber.cube.twister.finish();
@@ -111,10 +106,13 @@ export default class Director extends Vue {
     this.init();
   }
 
-  action: string = window.localStorage.getItem("director.action") || "";
+  progress: number = 0;
+  actions: TwistAction[] = [];
+  action: string = "";
   @Watch("action")
   onActionChange() {
     window.localStorage.setItem("director.action", this.action);
+    this.actions = new TwistNode(this.action).parse();
   }
 
   strips: { [face: string]: number[] | undefined } = (() => {
@@ -131,14 +129,43 @@ export default class Director extends Vue {
   })();
 
   play() {
-    this.init();
-    this.cuber.controller.disable = true;
-    this.playing = true;
-    this.cuber.cube.twister.twist("-" + this.action + "--", false, 1);
+    if (this.progress == this.actions.length) {
+      this.playing = false;
+      if (this.recording) {
+        this.finish();
+      }
+    }
+    if (this.playing || this.recording) {
+      let action = this.actions[this.progress];
+      this.progress++;
+      this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+    }
+  }
+
+  forward() {
+    if (this.progress == this.actions.length) {
+      return;
+    }
+    this.playing = false;
+    let action = this.actions[this.progress];
+    this.progress++;
+    this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
+  }
+
+  backward() {
+    if (this.progress == 0) {
+      return;
+    }
+    this.playing = false;
+    this.progress--;
+    let action = this.actions[this.progress];
+    this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   toggle() {
     if (this.playing) {
+      this.playing = false;
+    } else if (this.progress == this.actions.length) {
       this.init();
     } else {
       this.playing = true;
@@ -180,6 +207,14 @@ export default class Director extends Vue {
   }
 
   film() {
+    if (this.recording) {
+      this.recording = false;
+      this.cuber.controller.disable = false;
+      this.cuber.resize();
+      this.gif.finish();
+      this.init();
+      return;
+    }
     this.init();
     this.recording = true;
     this.cuber.controller.disable = true;
@@ -188,7 +223,7 @@ export default class Director extends Vue {
     this.filmer.setSize(size, size, true);
     this.gif.start();
     this.record();
-    this.cuber.cube.twister.twist("-" + this.action + "-", false, 1);
+    this.play();
   }
 
   snap() {

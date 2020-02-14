@@ -1,26 +1,67 @@
 <v-app>
-  <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
+  <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
+    <template v-slot:activator>
+      <v-btn
+        @click.native.stop.prevent="menu=!menu"
+        @touchstart.native.stop.prevent="menu=!menu"
+        fab
+        depressed
+        color="primary"
+        :style="{width:size+'px', height:size+'px'}"
+      >
+        <v-icon v-if="menu" :size="size * 0.6">close</v-icon>
+        <v-icon v-else :size="size * 0.6">menu</v-icon>
+      </v-btn>
+    </template>
     <v-btn
-      fixed
-      left
-      top
-      @click.native.stop.prevent
-      @touchstart.native.stop.prevent
-      text
-      color="primary"
-      style="margin:0%;padding:0%;"
-      :style="{height:size+'px'}"
-      v-if="cuber.cube.twister.length != 0"
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="tune=true;menu=false;"
+      @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
-      <div :style="{'font-size':(size * 0.8)+'px'}">{{cuber.cube.twister.length}}</div>
+      <v-icon :size="size * 0.55" color="primary">tune</v-icon>
     </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="sized=true;menu=false;"
+      @touchstart.native.stop.prevent="sized=true;menu=false;"
+    >
+      <v-icon :size="size * 0.55" color="primary">crop</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      :color="cuber.mirror?'primary':'white'"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="cuber.mirror=!cuber.mirror;"
+      @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror;"
+    >
+      <v-icon :size="size * 0.55" :color="cuber.mirror?'white':'primary'">flip</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+      @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+    >
+      <v-icon :size="size * 0.55" color="primary">code</v-icon>
+    </v-btn>
+  </v-speed-dial>
+  <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:(size * 4) + 'px'}">
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              dense
+              class="title"
               single-line
               hide-details
               outlined
@@ -32,11 +73,9 @@
             >
             </v-text-field>
           </v-flex>
-        </v-layout>
-        <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              dense
+              class="title"
               single-line
               hide-details
               outlined
@@ -48,45 +87,10 @@
             >
             </v-text-field>
           </v-flex>
-        </v-layout>
-        <v-layout row wrap>
-          <v-flex xs2>
-            <v-btn block text large @click.native.stop.prevent="tune=!tune" @touchstart.native.stop.prevent="tune=!tune" style="margin: 0%; padding: 0%;">
-              <v-icon large>tune</v-icon>
-            </v-btn>
+          <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
+            <v-slider style="margin: 0%" readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
           </v-flex>
-          <v-flex xs2>
-            <v-btn block text large @click.native.stop.prevent="sized=!sized" @touchstart.native.stop.prevent="sized=!sized" style="margin: 0%; padding: 0%;">
-              <v-icon large>crop</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              @click.native.stop.prevent="cuber.mirror=!cuber.mirror"
-              @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror"
-              :color="cuber.mirror?'primary':''"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>flip</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="action == '' || recording"
-              @click.native.stop.prevent="toggle"
-              @touchstart.native.stop.prevent="toggle"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>{{playing?'stop':'play_arrow'}}</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
+          <v-flex xs2.4>
             <v-btn
               block
               text
@@ -99,17 +103,56 @@
               <v-icon large>camera_alt</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2>
+          <v-flex xs2.4>
             <v-btn
               block
               text
               large
-              :disabled="action == '' || recording || playing"
+              :disabled="progress==0 || recording"
+              @click.native.stop.prevent="backward"
+              @touchstart.native.stop.prevent="backward"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>fast_rewind</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="action == '' || recording"
+              @click.native.stop.prevent="toggle"
+              @touchstart.native.stop.prevent="toggle"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>{{progress == actions.length?'replay':(playing?'pause':'play_arrow')}}</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="progress == actions.length || recording"
+              @click.native.stop.prevent="forward"
+              @touchstart.native.stop.prevent="forward"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>fast_forward</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2.4>
+            <v-btn
+              block
+              text
+              large
+              :disabled="action == '' || playing"
               @click.native.stop.prevent="film"
               @touchstart.native.stop.prevent="film"
               style="margin: 0%; padding: 0%;"
             >
-              <v-icon large>videocam</v-icon>
+              <v-icon large>{{recording?'stop':'videocam'}}</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>
@@ -121,7 +164,7 @@
     <v-card flat style="margin: auto;touch-action: none;user-select: none;">
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap justify-center align-center>
-          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="像素">
+          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="分辨率">
             <template v-slot:thumb-label>{{Math.pow(2, pixel)}}</template>
           </v-slider>
         </v-layout>

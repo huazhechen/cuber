@@ -21,17 +21,7 @@
       @click.native.stop.prevent="list=!list;menu=false;init();"
       @touchstart.native.stop.prevent="list=!list;menu=false;init();"
     >
-      <v-icon :size="size * 0.55" color="primary">apps</v-icon>
-    </v-btn>
-    <v-btn
-      fab
-      depressed
-      color="white"
-      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))"
-      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))"
-    >
-      <v-icon :size="size * 0.55" color="primary">games</v-icon>
+      <v-icon :size="size * 0.55" color="primary">assignment</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -76,7 +66,7 @@
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              class="headline"
+              class="title"
               single-line
               hide-details
               outlined
