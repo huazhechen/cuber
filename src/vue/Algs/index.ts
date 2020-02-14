@@ -52,8 +52,13 @@ export default class Player extends Vue {
     }
     let index = window.localStorage.getItem("algs.index");
     if (index) {
-      let data = JSON.parse(index);
-      this.index = { group: data.group, index: data.index };
+      try {
+        let data = JSON.parse(index);
+        this.index = { group: data.group, index: data.index };
+      } catch (error) {
+        console.log(error);
+        this.index = { group: 0, index: 0 };
+      }
     } else {
       this.index = { group: 0, index: 0 };
     }

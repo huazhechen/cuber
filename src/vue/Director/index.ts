@@ -67,12 +67,16 @@ export default class Director extends Vue {
     this.scene = save != null ? save : "^";
     let search = window.location.search.toString().substr(1);
     if (search.length > 0) {
-      let string = Base64.decode(search);
-      let init = JSON.parse(string);
-      this.scene = init.scene || "";
-      this.action = init.action || "";
-      this.strips = init.strips || [];
-      history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
+      try {
+        let string = Base64.decode(search);
+        let init = JSON.parse(string);
+        this.scene = init.scene || "";
+        this.action = init.action || "";
+        this.strips = init.strips || [];
+        history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (this.$refs.cuber instanceof Element) {
@@ -116,12 +120,16 @@ export default class Director extends Vue {
   strips: { [face: string]: number[] | undefined } = (() => {
     let save = window.localStorage.getItem("director.strips");
     if (save) {
-      let data = JSON.parse(save);
-      let strips: { [face: string]: number[] | undefined } = {};
-      for (let face = 0; face < 6; face++) {
-        strips[FACE[face]] = data[FACE[face]];
+      try {
+        let data = JSON.parse(save);
+        let strips: { [face: string]: number[] | undefined } = {};
+        for (let face = 0; face < 6; face++) {
+          strips[FACE[face]] = data[FACE[face]];
+        }
+        return strips;
+      } catch (error) {
+        console.log(error);
       }
-      return strips;
     }
     return {};
   })();
