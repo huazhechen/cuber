@@ -9,8 +9,7 @@ module.exports = {
       "vue-property-decorator",
       "vuetify",
       "vuetify/dist/vuetify.css",
-      "typeface-roboto",
-      "material-design-icons/iconfont/material-icons.css"
+      "material-design-icons/iconfont/MaterialIcons-Regular.woff2"
     ]
   },
   output: {
@@ -20,7 +19,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js"
+      vue$: "vue/dist/vue.esm.js",
+      three$: "three/build/three.min.js",
+      vuetify$: "vuetify/dist/vuetify.min.js",
+      "vuetify/dist/vuetify.css$": "vuetify/dist/vuetify.min.css"
     },
     extensions: ["*", ".js", ".ts", ".json"]
   },

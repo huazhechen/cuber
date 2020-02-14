@@ -96,7 +96,7 @@
               style="margin: 0%"
               readonly
               hide-details
-              :thumb-label="(progress!=0 && progress!=actions.length)?'always':false"
+              :thumb-label="progress!=0?'always':false"
               ticks="always"
               v-model="progress"
               :max="actions.length"

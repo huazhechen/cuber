@@ -1,9 +1,8 @@
 import Vue from "vue";
-import Director from "./vue/Director";
-import "material-design-icons/iconfont/material-icons.css";
+import "./index.css";
 import "vuetify/dist/vuetify.css";
-import "typeface-roboto";
-import Vuetify from 'vuetify'
+import Vuetify from "vuetify";
+import Director from "./vue/Director";
 
 Vue.use(Vuetify);
 const opts = {};

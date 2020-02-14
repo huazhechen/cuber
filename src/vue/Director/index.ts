@@ -62,7 +62,7 @@ export default class Director extends Vue {
 
   mounted() {
     let save = window.localStorage.getItem("director.action");
-    this.action = save != null ? save : "RUR'U'";
+    this.action = save != null ? save : "RUR'U'-";
     save = window.localStorage.getItem("director.scene");
     this.scene = save != null ? save : "^";
     let search = window.location.search.toString().substr(1);
@@ -110,7 +110,6 @@ export default class Director extends Vue {
   onActionChange() {
     window.localStorage.setItem("director.action", this.action);
     this.actions = new TwistNode(this.action).parse();
-    this.actions.push(new TwistAction("-"));
     this.init();
   }
 
