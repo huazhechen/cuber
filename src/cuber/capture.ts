@@ -51,10 +51,12 @@ export default class Capture {
         angle = angle * action.times;
       }
       let part = this.cube.groups[action.exp];
-      part.angle = 0;
-      part.hold();
-      part.angle = angle;
-      part.drop();
+      if (part) {
+        part.angle = 0;
+        part.hold();
+        part.angle = angle;
+        part.drop();
+      }
     }
 
     this.camera.aspect = 1;
