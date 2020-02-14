@@ -69,6 +69,8 @@ export default class Director extends Vue {
   mounted() {
     let save = window.localStorage.getItem("director.action");
     this.action = save ? save : "RUR'U'";
+    save = window.localStorage.getItem("director.scene");
+    this.scene = save ? save : "^";
     let search = window.location.search.toString().substr(1);
     if (search.length > 0) {
       let string = Base64.decode(search);
@@ -96,10 +98,11 @@ export default class Director extends Vue {
     this.playing = false;
     this.cuber.cube.twister.finish();
     this.cuber.cube.twister.twist("#");
-    this.cuber.cube.twister.twist(this.scene, false, 1, true);
+    let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
+    this.cuber.cube.twister.twist(scene, false, 1, true);
   }
 
-  scene: string = window.localStorage.getItem("director.scene") || "";
+  scene: string = "";
   @Watch("scene")
   onSceneChange() {
     window.localStorage.setItem("director.scene", this.scene);
@@ -113,6 +116,7 @@ export default class Director extends Vue {
   onActionChange() {
     window.localStorage.setItem("director.action", this.action);
     this.actions = new TwistNode(this.action).parse();
+    this.init();
   }
 
   strips: { [face: string]: number[] | undefined } = (() => {

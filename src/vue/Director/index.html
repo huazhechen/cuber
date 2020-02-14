@@ -92,7 +92,17 @@
             </v-text-field>
           </v-flex>
           <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
-            <v-slider style="margin: 0%" readonly hide-details thumb-label="false" ticks="always" v-model="progress" :max="actions.length"></v-slider>
+            <v-slider
+              style="margin: 0%"
+              readonly
+              hide-details
+              :thumb-label="progress!=0?'always':false"
+              ticks="always"
+              v-model="progress"
+              :max="actions.length"
+            >
+              <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
+            </v-slider>
           </v-flex>
           <v-flex xs2.4>
             <v-btn
