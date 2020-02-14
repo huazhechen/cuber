@@ -56,11 +56,13 @@
   </v-speed-dial>
   <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
     <div ref="cuber"></div>
-    <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:(size * 4) + 'px'}">
+    <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:'240px'}">
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
+              style="text-transform:none;margin-top: 6px;margin-left: 8px;margin-right: 8px;"
+              dense
               class="title"
               single-line
               hide-details
@@ -75,6 +77,8 @@
           </v-flex>
           <v-flex xs12>
             <v-text-field
+              style="text-transform:none;margin-top: 6px;margin-left: 8px;margin-right: 8px;"
+              dense
               class="title"
               single-line
               hide-details
