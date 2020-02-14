@@ -2,15 +2,11 @@ import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
-import Tune from "../Tune";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
 
 @Component({
-  template: require("./index.html"),
-  components: {
-    tune: Tune
-  }
+  template: require("./index.html")
 })
 export default class Player extends Vue {
   @Provide("cuber")

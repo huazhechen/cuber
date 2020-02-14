@@ -71,5 +71,25 @@
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;"><keyboard ref="keyboard"></keyboard></div>
   </div>
-  <tune v-model="tune"></tune>
+  <v-bottom-sheet v-model="tune">
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-btn @click.native.stop.prevent="option.reset" @touchstart.native.stop.prevent="option.reset" outlined color="red">重置</v-btn>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
 </v-app>

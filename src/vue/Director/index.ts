@@ -1,9 +1,7 @@
 import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
-import Keyboard from "../Keyboard";
 import Option from "../../common/option";
-import Tune from "../Tune";
 import { COLORS, FACE, download } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
@@ -12,10 +10,7 @@ import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 
 @Component({
-  template: require("./index.html"),
-  components: {
-    tune: Tune
-  }
+  template: require("./index.html")
 })
 export default class Director extends Vue {
   @Provide("cuber")
@@ -32,7 +27,6 @@ export default class Director extends Vue {
   playing: boolean = false;
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
-  sized: boolean = false;
   gif: GIF;
   pixel: number = 9;
 
@@ -68,9 +62,9 @@ export default class Director extends Vue {
 
   mounted() {
     let save = window.localStorage.getItem("director.action");
-    this.action = save ? save : "RUR'U'";
+    this.action = save != null ? save : "RUR'U'";
     save = window.localStorage.getItem("director.scene");
-    this.scene = save ? save : "^";
+    this.scene = save != null ? save : "^";
     let search = window.location.search.toString().substr(1);
     if (search.length > 0) {
       let string = Base64.decode(search);
@@ -116,6 +110,7 @@ export default class Director extends Vue {
   onActionChange() {
     window.localStorage.setItem("director.action", this.action);
     this.actions = new TwistNode(this.action).parse();
+    this.actions.push(new TwistAction("-"));
     this.init();
   }
 
@@ -138,10 +133,14 @@ export default class Director extends Vue {
       if (this.recording) {
         this.finish();
       }
+      return;
     }
     if (this.playing || this.recording) {
       let action = this.actions[this.progress];
       this.progress++;
+      if (this.progress == this.actions.length) {
+        this.playing = false;
+      }
       this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }

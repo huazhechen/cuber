@@ -28,10 +28,30 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
+      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
+    >
+      <v-icon :size="size * 0.55" color="primary">games</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      color="white"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
       <v-icon :size="size * 0.55" color="primary">tune</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      depressed
+      :color="cuber.mirror?'primary':'white'"
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="cuber.mirror=!cuber.mirror;"
+      @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror;"
+    >
+      <v-icon :size="size * 0.55" :color="cuber.mirror?'white':'primary'">flip</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -79,7 +99,15 @@
             </v-text-field>
           </v-flex>
           <v-flex xs12 style="padding-left: 5%; padding-right: 5%">
-            <v-slider style="margin: 0%" readonly hide-details :thumb-label="progress!=0?'always':false" ticks="always" v-model="progress" :max="actions.length">
+            <v-slider
+              style="margin: 0%"
+              readonly
+              hide-details
+              :thumb-label="progress!=0?'always':false"
+              ticks="always"
+              v-model="progress"
+              :max="actions.length"
+            >
               <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
             </v-slider>
           </v-flex>
@@ -150,7 +178,27 @@
       </v-container>
     </div>
   </div>
-  <tune v-model="tune"></tune>
+  <v-bottom-sheet v-model="tune">
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-btn @click.native.stop.prevent="option.reset" @touchstart.native.stop.prevent="option.reset" outlined color="red">重置</v-btn>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
   <div v-show="list" style="margin:0;display: flex;flex-flow: column;height: 100%;background-color: #C0C0C0;">
     <div>
       <v-tabs v-model="tab" grow color="cyan">

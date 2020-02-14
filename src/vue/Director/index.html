@@ -18,20 +18,20 @@
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="tune=true;menu=false;"
-      @touchstart.native.stop.prevent="tune=true;menu=false;"
+      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
+      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
     >
-      <v-icon :size="size * 0.55" color="primary">tune</v-icon>
+      <v-icon :size="size * 0.55" color="primary">games</v-icon>
     </v-btn>
     <v-btn
       fab
       depressed
       color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="sized=true;menu=false;"
-      @touchstart.native.stop.prevent="sized=true;menu=false;"
+      @click.native.stop.prevent="tune=true;menu=false;"
+      @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
-      <v-icon :size="size * 0.55" color="primary">crop</v-icon>
+      <v-icon :size="size * 0.55" color="primary">tune</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -96,7 +96,7 @@
               style="margin: 0%"
               readonly
               hide-details
-              :thumb-label="progress!=0?'always':false"
+              :thumb-label="(progress!=0 && progress!=actions.length)?'always':false"
               ticks="always"
               v-model="progress"
               :max="actions.length"
@@ -173,14 +173,30 @@
       </v-container>
     </div>
   </div>
-  <tune v-model="tune"></tune>
-  <v-bottom-sheet v-model="sized">
+  <v-bottom-sheet v-model="tune">
     <v-card flat style="margin: auto;touch-action: none;user-select: none;">
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap justify-center align-center>
-          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="分辨率">
+          <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="输出">
             <template v-slot:thumb-label>{{Math.pow(2, pixel)}}</template>
           </v-slider>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
+          <v-btn @click.native.stop.prevent="option.reset();pixel=9;" @touchstart.native.stop.prevent="option.reset();pixel=9;" outlined color="red">
+            重置
+          </v-btn>
         </v-layout>
       </v-container>
     </v-card>
