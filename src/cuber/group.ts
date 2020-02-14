@@ -79,7 +79,7 @@ export default class Group extends THREE.Group {
     if (delta === 0) {
       this.drop();
     } else {
-      var duration = DURATION * Math.min(1, Math.abs(delta) / (Math.PI / 2));
+      var duration = DURATION * Math.min(1, Math.abs(delta) / (Math.PI / 4));
       tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (this.angle === angle || this.angle === 0) {
