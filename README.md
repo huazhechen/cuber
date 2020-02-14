@@ -6,22 +6,22 @@ Rubik's Cube using typescript for 100% client side single page application with 
 Try to solve the cube, refresh best time and steps.
 * 自定义大小、透视和角度
 
-    ![tune](https://gitee.com/huazhechen/cuber/raw/master/readme/tune.gif)
+    ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
 
 * 全功能键盘
 * 时间和步数
 * 镜像
 * Cross/F2L涂色
 
-    ![keyboard](https://gitee.com/huazhechen/cuber/raw/master/readme/keyboard.gif)
+    ![keyboard](https://gitee.com/huazhechen/cuber/raw/master/screenshot/keyboard.gif)
 
 * 双向模式
 
-    ![lr](https://gitee.com/huazhechen/cuber/raw/master/readme/lr.gif)
+    ![lr](https://gitee.com/huazhechen/cuber/raw/master/screenshot/lr.gif)
 
 * 无效动作抵消
 
-    ![x4](https://gitee.com/huazhechen/cuber/raw/master/readme/x4.gif)
+    ![x4](https://gitee.com/huazhechen/cuber/raw/master/screenshot/x4.gif)
 
 # [公式播放Algs](https://huazhechen.gitee.io/cuber/algs.html)
 Play default or customize algs of CFOP step by step.
@@ -29,17 +29,17 @@ Play default or customize algs of CFOP step by step.
 * 播放与暂停
 * 单步播放
 
-    ![player](https://gitee.com/huazhechen/cuber/raw/master/readme/player.gif)
+    ![player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/player.gif)
 
 * 公式清单
 * 点击直达
 
-    ![algs](https://gitee.com/huazhechen/cuber/raw/master/readme/algs.gif)
+    ![algs](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs.gif)
 
 * 公式修改
 * 实时生效
 
-    ![modify](https://gitee.com/huazhechen/cuber/raw/master/readme/modify.gif)
+    ![modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/modify.gif)
 
 
 # [导演模式Director](https://huazhechen.gitee.io/cuber/director.html)
@@ -47,11 +47,11 @@ Create movie and export to gif.
 * 场景配置
 * 截图
 
-    ![snap](https://gitee.com/huazhechen/cuber/raw/master/readme/snap.gif)
+    ![snap](https://gitee.com/huazhechen/cuber/raw/master/screenshot/snap.gif)
 
 * 动作配置
 * 动画播放
 * 导出gif
 
-    ![director](https://gitee.com/huazhechen/cuber/raw/master/readme/director.gif)
+    ![director](https://gitee.com/huazhechen/cuber/raw/master/screenshot/director.gif)
 
