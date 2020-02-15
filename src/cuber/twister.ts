@@ -87,7 +87,7 @@ export default class Twister {
         this.update();
         return;
       }
-      tweener.tween(0, 1, DURATION * action.times, (value: number) => {
+      tweener.tween(0, 1, (DURATION / 2) * action.times, (value: number) => {
         if (value === 1 || value === 0) {
           this.update();
           return;

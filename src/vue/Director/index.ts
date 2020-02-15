@@ -28,7 +28,7 @@ export default class Director extends Vue {
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
   gif: GIF;
-  pixel: number = 2;
+  pixel: number = 4;
 
   constructor() {
     super();

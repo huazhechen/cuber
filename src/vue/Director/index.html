@@ -5,7 +5,6 @@
         @click.native.stop.prevent="menu=!menu"
         @touchstart.native.stop.prevent="menu=!menu"
         fab
-        depressed
         color="primary"
         :style="{width:size+'px', height:size+'px'}"
       >
@@ -15,8 +14,6 @@
     </template>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
       @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/'"
@@ -25,8 +22,6 @@
     </v-btn>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
@@ -35,18 +30,15 @@
     </v-btn>
     <v-btn
       fab
-      depressed
-      :color="cuber.mirror?'primary':'white'"
+      :color="cuber.mirror?'primary':''"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="cuber.mirror=!cuber.mirror;"
       @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror;"
     >
-      <v-icon :size="size * 0.55" :color="cuber.mirror?'white':'primary'">flip</v-icon>
+      <v-icon :size="size * 0.55" :color="cuber.mirror?'':'primary'">flip</v-icon>
     </v-btn>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
       @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
@@ -54,7 +46,7 @@
       <v-icon :size="size * 0.55" color="primary">code</v-icon>
     </v-btn>
   </v-speed-dial>
-  <div v-resize="resize" style="padding:0%;background-color:#C0C0C0;user-select: none;touch-action: none;">
+  <div v-resize="resize" style="padding:0%;user-select: none;touch-action: none;">
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;background-color:#FFFFFF;" :style="{width:width + 'px', height:'240px'}">
       <v-container fluid grid-list-md text-xs-center>
@@ -194,7 +186,7 @@
           </v-slider>
         </v-layout>
         <v-layout row wrap justify-center align-center>
-          <v-btn @click.native.stop.prevent="option.reset();pixel=2;" @touchstart.native.stop.prevent="option.reset();pixel=2;" outlined color="red">
+          <v-btn @click.native.stop.prevent="option.reset();pixel=4;" @touchstart.native.stop.prevent="option.reset();pixel=4;" outlined color="red">
             重置
           </v-btn>
         </v-layout>

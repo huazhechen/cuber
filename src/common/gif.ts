@@ -241,7 +241,7 @@ export default class GIF {
   colors: Uint8Array;
   dispose: number;
   out: ByteArray;
-  transparent: boolean = false;
+  transparent: boolean = true;
   x0: number;
   x1: number;
   y0: number;
@@ -262,9 +262,9 @@ export default class GIF {
     this.colors[i++] = 0x00;
 
     // BACKGROUND
-    this.colors[i++] = 0xc0;
-    this.colors[i++] = 0xc0;
-    this.colors[i++] = 0xc0;
+    this.colors[i++] = 0xff;
+    this.colors[i++] = 0xff;
+    this.colors[i++] = 0xff;
 
     // YELLOW
     this.colors[i++] = 0xff;
@@ -292,9 +292,9 @@ export default class GIF {
     this.colors[i++] = 0x20;
 
     // WHITE
-    this.colors[i++] = 0xee;
-    this.colors[i++] = 0xee;
-    this.colors[i++] = 0xee;
+    this.colors[i++] = 0xe0;
+    this.colors[i++] = 0xe0;
+    this.colors[i++] = 0xe0;
 
     // GRAY
     this.colors[i++] = 0x44;
@@ -319,22 +319,15 @@ export default class GIF {
 
   getColor(r: number, g: number, b: number) {
     let index = 0;
-    let dmin = 256 * 256 * 256;
-    let best = 0;
     for (let i = 0; i < this.colors.length; index++) {
-      let dr = r - this.colors[i++];
-      let dg = g - this.colors[i++];
-      let db = b - this.colors[i++];
-      let d = dr * dr + dg * dg + db * db;
-      if (d == 0) {
+      let dr = this.colors[i++];
+      let dg = this.colors[i++];
+      let db = this.colors[i++];
+      if (r == dr && g == dg && b == db) {
         return index;
       }
-      if (d < dmin) {
-        dmin = d;
-        best = index;
-      }
     }
-    return best;
+    return 0;
   }
 
   getPixels() {
@@ -377,6 +370,12 @@ export default class GIF {
         }
       }
     }
+    if (this.x0 >= this.x1 || this.y0 >= this.y1) {
+      this.x0 = 0;
+      this.x1 = 1;
+      this.y0 = 0;
+      this.y1 = 1;
+    }
   }
 
   add(image: Uint8Array) {
@@ -404,18 +403,8 @@ export default class GIF {
     this.out.writeByte(0xf9); // GCE label
     this.out.writeByte(4); // data block size
 
-    var transp, disp;
-    if (this.transparent === null) {
-      transp = 0;
-      disp = 0; // dispose = no action
-    } else {
-      transp = 1;
-      disp = 2; // force clear if using transparent color
-    }
-
-    if (this.dispose >= 0) {
-      disp = this.dispose & 7; // user override
-    }
+    var transp = this.transparent ? 1 : 0;
+    let disp = this.dispose & 7;
     disp <<= 2;
 
     // packed fields

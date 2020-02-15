@@ -18,7 +18,6 @@
         @click.native.stop.prevent="menu=!menu"
         @touchstart.native.stop.prevent="menu=!menu"
         fab
-        depressed
         color="primary"
         :style="{width:size+'px', height:size+'px'}"
       >
@@ -28,8 +27,6 @@
     </template>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="shuffle"
       @touchstart.native.stop.prevent="shuffle"
@@ -38,8 +35,6 @@
     </v-btn>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
       @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
@@ -48,8 +43,6 @@
     </v-btn>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
@@ -58,8 +51,6 @@
     </v-btn>
     <v-btn
       fab
-      depressed
-      color="white"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
       @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
@@ -67,7 +58,7 @@
       <v-icon :size="size * 0.55" color="primary">code</v-icon>
     </v-btn>
   </v-speed-dial>
-  <div v-resize="resize" style="background-color: #C0C0C0;user-select: none;">
+  <div v-resize="resize" style="user-select: none;">
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;"><keyboard ref="keyboard"></keyboard></div>
   </div>

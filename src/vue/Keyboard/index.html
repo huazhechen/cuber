@@ -1,7 +1,7 @@
 <v-container fluid grid-list-md text-xs-center :style="{width:width + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
   <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
     <v-flex xs2 d-flex style="padding:0%; min-width: 0%; min-height: 0%;">
-      <v-btn @click.native.stop.prevent="layers=(layers+1)%3" @touchstart.native.stop.prevent="layers=(layers+1)%3" depressed :style="style">
+      <v-btn @click.native.stop.prevent="layers=(layers+1)%3" @touchstart.native.stop.prevent="layers=(layers+1)%3" :style="style">
         <v-icon :size="height/5">{{['filter_1', 'filter_2', 'filter_3'][layers]}}</v-icon>
       </v-btn>
     </v-flex>
@@ -10,25 +10,19 @@
         @click.native.stop.prevent="cuber.mirror=!cuber.mirror"
         @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror"
         :color="cuber.mirror?'primary':''"
-        depressed
         :style="style"
       >
         <v-icon :size="height/5">flip</v-icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :color="colors>0?'primary':''" depressed :style="style">
+      <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :color="colors>0?'primary':''" :style="style">
         <v-icon v-if="colors==0" :size="height/5">colorize</v-icon>
         <div v-if="colors!=0" :style="{'font-size':(height/8)+'px'}">{{['','Crs','F2L'][colors]}}</div>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn
-        @click.native.stop.prevent="twist('y')"
-        @touchstart.native.stop.prevent="twist('y')"
-        depressed
-        :style="style"
-      >
+      <v-btn @click.native.stop.prevent="twist('y')" @touchstart.native.stop.prevent="twist('y')" :style="style">
         <v-icon :size="height/5">rotate_90_degrees_ccw</v-icon>
       </v-btn>
     </v-flex>
@@ -37,7 +31,6 @@
         @click.native.stop.prevent="cuber.left=!cuber.left"
         @touchstart.native.stop.prevent="cuber.left=!cuber.left"
         :color="cuber.left?'primary':''"
-        depressed
         :style="style"
       >
         <v-icon :size="height/5">switch_camera</v-icon>
@@ -45,7 +38,6 @@
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
-        depressed
         :disabled="cuber.cube.history.length == 0 || option.lock"
         @click.native.stop.prevent="reverse()"
         @touchstart.native.stop.prevent="reverse()"
@@ -55,7 +47,7 @@
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" d-flex xs2 style="padding:0%">
-      <v-btn depressed @click.native.stop.prevent="twist(exp)" @touchstart.native.stop.prevent="twist(exp)" :disabled="option.lock" :style="style"
+      <v-btn @click.native.stop.prevent="twist(exp)" @touchstart.native.stop.prevent="twist(exp)" :disabled="option.lock" :style="style"
         ><div :style="{'font-size':(height/8)+'px'}">{{exp}}</div>
       </v-btn>
     </v-flex>
