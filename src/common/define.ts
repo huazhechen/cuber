@@ -19,8 +19,6 @@ export enum FACE {
   F
 }
 
-export var DURATION = 30;
-
 export function download(filename: string, blob: Blob) {
   let link = document.createElement("a");
   link.innerHTML = filename;

@@ -1,6 +1,5 @@
 import Cube from "./cube";
 import { tweener } from "./tweener";
-import { DURATION } from "../common/define";
 
 export default class Twister {
   cube: Cube;
@@ -87,7 +86,7 @@ export default class Twister {
         this.update();
         return;
       }
-      tweener.tween(0, 1, (DURATION / 2) * action.times, (value: number) => {
+      tweener.tween(0, 1, (this.cube.duration / 2) * action.times, (value: number) => {
         if (value === 1 || value === 0) {
           this.update();
           return;

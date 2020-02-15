@@ -247,10 +247,10 @@ export default class GIF {
   y0: number;
   y1: number;
 
-  constructor(width: number, height: number) {
+  constructor(width: number, height: number, delay: number) {
     this.width = ~~width;
     this.height = ~~height;
-    this.delay = 2;
+    this.delay = delay;
     this.data = new Uint8Array(this.width * this.height);
     this.last = new Uint8Array(this.width * this.height);
     this.real = new Uint8Array(this.width * this.height);

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Cuber from "./cuber";
 import Cubelet from "./cubelet";
 import Group from "./group";
-import { FACE, DURATION } from "../common/define";
+import { FACE } from "../common/define";
 import { tweener } from "./tweener";
 import { TwistAction } from "./twister";
 
@@ -76,7 +76,7 @@ export default class Controller {
     if (this.rotating) {
       if (this.group.angle != this.angle) {
         let delta = (this.angle - this.group.angle) / 2;
-        let max = (Math.PI / 2 / DURATION) * 4;
+        let max = (Math.PI / 2 / this.cuber.cube.duration) * 4;
         if (delta > max) {
           delta = max;
         }

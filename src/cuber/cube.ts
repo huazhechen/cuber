@@ -15,6 +15,7 @@ export default class Cube extends THREE.Group {
   public callbacks: Function[] = [];
   public groups: { [key: string]: Group };
   public complete: boolean = false;
+  public duration: number;
 
   constructor() {
     super();
@@ -60,6 +61,7 @@ export default class Cube extends THREE.Group {
     });
     this.matrixAutoUpdate = false;
     this.updateMatrix();
+    this.duration = 30;
   }
 
   index(value: number) {

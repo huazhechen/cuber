@@ -2,7 +2,6 @@ import * as THREE from "three";
 import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
-import { DURATION } from "../common/define";
 import { tweener } from "./tweener";
 
 export default class Group extends THREE.Group {
@@ -80,7 +79,7 @@ export default class Group extends THREE.Group {
       this.drop();
     } else {
       let d = Math.abs(delta) / (Math.PI / 2);
-      var duration = DURATION * (2 - 2 / (d + 1));
+      var duration = this.cube.duration * (2 - 2 / (d + 1));
       tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (this.angle === angle || this.angle === 0) {

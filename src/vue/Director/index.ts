@@ -25,6 +25,7 @@ export default class Director extends Vue {
 
   menu: boolean = false;
   tune: boolean = false;
+  quality: boolean = false;
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -32,7 +33,25 @@ export default class Director extends Vue {
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
   gif: GIF;
-  pixel: number = 4;
+  pixel: number = 512;
+  @Watch("pixel")
+  onPixelChange() {
+    window.localStorage.setItem("director.pixel", String(this.pixel));
+  }
+  delay: number = 3;
+  @Watch("delay")
+  onDelayChange() {
+    window.localStorage.setItem("director.delay", String(this.delay));
+  }
+
+  set duration(value: number) {
+    this.cuber.cube.duration = value;
+    window.localStorage.setItem("director.duration", String(value));
+  }
+
+  get duration() {
+    return this.cuber.cube.duration;
+  }
 
   constructor() {
     super();
@@ -82,6 +101,10 @@ export default class Director extends Vue {
         console.log(error);
       }
     }
+
+    this.delay = Number(window.localStorage.getItem("director.delay") || 3);
+    this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
+    this.duration = Number(window.localStorage.getItem("director.duration") || 30);
 
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
@@ -202,7 +225,7 @@ export default class Director extends Vue {
     this.filmer.clear();
     this.filmer.render(this.cuber.scene, this.cuber.camera);
     let content = this.filmer.getContext();
-    let size = this.pixel * 128;
+    let size = this.pixel;
     let pixels = new Uint8Array(size * size * 4);
     content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
@@ -232,8 +255,8 @@ export default class Director extends Vue {
     this.init();
     this.recording = true;
     this.cuber.controller.disable = true;
-    let size = this.pixel * 128;
-    this.gif = new GIF(size, size);
+    let size = this.pixel;
+    this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
     this.gif.start();
     this.record();
@@ -243,7 +266,7 @@ export default class Director extends Vue {
   snap() {
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    let size = this.pixel * 128;
+    let size = this.pixel;
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
     this.snaper.render(this.cuber.scene, this.cuber.camera);

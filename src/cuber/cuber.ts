@@ -4,7 +4,7 @@ import Cube from "./cube";
 import Controller from "./controller";
 import { tweener } from "./tweener";
 import Cubelet from "./cubelet";
-import { COLORS, DURATION } from "../common/define";
+import { COLORS } from "../common/define";
 
 export default class Cuber {
   public width: number;
@@ -59,7 +59,7 @@ export default class Cuber {
     let start = this.scene.rotation.y;
     let finish = -start;
     tweener.finish();
-    tweener.tween(start, finish, DURATION / 2, (v: number) => {
+    tweener.tween(start, finish, this.cube.duration / 2, (v: number) => {
       this.scene.rotation.y = v;
       this.dirty = true;
     });
