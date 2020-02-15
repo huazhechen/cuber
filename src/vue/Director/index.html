@@ -165,32 +165,5 @@
       </v-container>
     </div>
   </div>
-  <v-bottom-sheet v-model="tune">
-    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
-      <v-container fluid grid-list-md text-xs-center>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="option.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="option.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="pixel" always-dirty thumb-label="always" max="8" min="1" label="输出">
-            <template v-slot:thumb-label>{{pixel*128}}</template>
-          </v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-btn @click.native.stop.prevent="option.reset();pixel=4;" @touchstart.native.stop.prevent="option.reset();pixel=4;" outlined color="red">
-            重置
-          </v-btn>
-        </v-layout>
-      </v-container>
-    </v-card>
-  </v-bottom-sheet>
+  <tune v-model="tune"></tune>
 </v-app>

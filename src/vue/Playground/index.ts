@@ -3,11 +3,13 @@ import { Component, Provide } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
+import Tune from "../Tune";
 
 @Component({
   template: require("./index.html"),
   components: {
-    keyboard: Keyboard
+    keyboard: Keyboard,
+    tune: Tune
   }
 })
 export default class Playground extends Vue {

@@ -8,9 +8,13 @@ import GIF from "../../common/gif";
 import Base64 from "../../common/base64";
 import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
+import Tune from "../Tune";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    tune: Tune
+  }
 })
 export default class Director extends Vue {
   @Provide("cuber")

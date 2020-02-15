@@ -4,9 +4,13 @@ import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
+import Tune from "../Tune";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    tune: Tune
+  }
 })
 export default class Player extends Vue {
   @Provide("cuber")
