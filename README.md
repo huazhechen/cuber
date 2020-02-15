@@ -2,56 +2,80 @@
 
 Rubik's Cube using typescript for 100% client side single page application with Vue and Vuetify.
 
-# [虚拟魔方Playground](https://huazhechen.gitee.io/cuber)
-Try to solve the cube, refresh best time and steps.
-* 自定义大小、透视和角度
+# [虚拟魔方](https://huazhechen.gitee.io/cuber)
 
-    ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
+- 极致触摸操控体验
 
-* 全功能键盘
-* 时间和步数
-* 镜像
-* Cross/F2L涂色
+  ![touch](https://gitee.com/huazhechen/cuber/raw/master/screenshot/touch.gif)
 
-    ![keyboard](https://gitee.com/huazhechen/cuber/raw/master/screenshot/keyboard.gif)
+- 全功能键盘
 
-* 双向模式
+  ![keyboard](https://gitee.com/huazhechen/cuber/raw/master/screenshot/keyboard.gif)
 
-    ![lr](https://gitee.com/huazhechen/cuber/raw/master/screenshot/lr.gif)
+- 镜像助手
 
-* 无效动作抵消
+  ![mirror](https://gitee.com/huazhechen/cuber/raw/master/screenshot/mirror.gif)
 
-    ![x4](https://gitee.com/huazhechen/cuber/raw/master/screenshot/x4.gif)
+- 涂色助手
 
-# [公式播放Algs](https://huazhechen.gitee.io/cuber/algs.html)
-Play default or customize algs of CFOP step by step.
-* CFOP公式
-* 播放与暂停
-* 单步播放
+  ![cf](https://gitee.com/huazhechen/cuber/raw/master/screenshot/cf.gif)
 
-    ![player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/player.gif)
+- 左右模式
 
-* 公式清单
-* 点击直达
+  ![lr](https://gitee.com/huazhechen/cuber/raw/master/screenshot/lr.gif)
 
-    ![algs](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs.gif)
+- 撤销操作
 
-* 公式修改
-* 实时生效
+  ![backspace](https://gitee.com/huazhechen/cuber/raw/master/screenshot/backspace.gif)
 
-    ![modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/modify.gif)
+- 重新打乱
 
+  ![random](https://gitee.com/huazhechen/cuber/raw/master/screenshot/random.gif)
 
-# [导演模式Director](https://huazhechen.gitee.io/cuber/director.html)
-Create movie and export to gif.
-* 场景配置
-* 截图
+- 外观自定义
 
-    ![snap](https://gitee.com/huazhechen/cuber/raw/master/screenshot/snap.gif)
+  ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
 
-* 动作配置
-* 动画播放
-* 导出gif
+# [公式宝典](https://huazhechen.gitee.io/cuber/algs.html)
 
-    ![director](https://gitee.com/huazhechen/cuber/raw/master/screenshot/director.gif)
+- 查看与播放
 
+  ![player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/player.gif)
+
+- 单步播放与播放控制
+
+  ![play-control](https://gitee.com/huazhechen/cuber/raw/master/screenshot/play-control.gif)
+
+- 公式跳转
+
+  ![alg-choose](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-choose.gif)
+
+- 快捷公式跳转
+
+  ![alg-list](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-list.gif)
+
+- 公式修改
+
+  ![modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/modify.gif)
+
+# [导演模式](https://huazhechen.gitee.io/cuber/director.html)
+
+- 布置场景并截图
+
+  ![snap](https://gitee.com/huazhechen/cuber/raw/master/screenshot/snap.gif)
+
+- 动画编写/播放/导出
+
+  ![action](https://gitee.com/huazhechen/cuber/raw/master/screenshot/action.gif)
+
+- 自动布置场景
+
+  ![reverse](https://gitee.com/huazhechen/cuber/raw/master/screenshot/reverse.gif)
+
+- 节奏控制
+
+  ![movie-pause](https://gitee.com/huazhechen/cuber/raw/master/screenshot/movie-pause.gif)
+
+- 质量配置
+
+  ![movie-quality](https://gitee.com/huazhechen/cuber/raw/master/screenshot/movie-quality.gif)
