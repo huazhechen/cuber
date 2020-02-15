@@ -189,12 +189,12 @@
           <v-slider v-model="option.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
         </v-layout>
         <v-layout row wrap justify-center align-center>
-          <v-slider v-model="pixel" always-dirty thumb-label="always" max="10" min="6" label="输出">
-            <template v-slot:thumb-label>{{Math.pow(2, pixel)}}</template>
+          <v-slider v-model="pixel" always-dirty thumb-label="always" max="8" min="1" label="输出">
+            <template v-slot:thumb-label>{{pixel*128}}</template>
           </v-slider>
         </v-layout>
         <v-layout row wrap justify-center align-center>
-          <v-btn @click.native.stop.prevent="option.reset();pixel=9;" @touchstart.native.stop.prevent="option.reset();pixel=9;" outlined color="red">
+          <v-btn @click.native.stop.prevent="option.reset();pixel=2;" @touchstart.native.stop.prevent="option.reset();pixel=2;" outlined color="red">
             重置
           </v-btn>
         </v-layout>

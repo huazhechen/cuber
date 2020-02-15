@@ -236,18 +236,25 @@ export default class GIF {
   delay: number;
   image: Uint8Array;
   data: Uint8Array;
+  last: Uint8Array;
   colors: Uint8Array;
   dispose: number;
   out: ByteArray;
-  transparent: boolean = true;
+  transparent: boolean = false;
 
   constructor(width: number, height: number) {
     this.width = ~~width;
     this.height = ~~height;
     this.delay = 2;
     this.data = new Uint8Array(this.width * this.height);
+    this.last = new Uint8Array(this.width * this.height);
     this.colors = new Uint8Array(3 * 16);
     let i = 0;
+    // TRANSPARENT
+    this.colors[i++] = 0x00;
+    this.colors[i++] = 0x00;
+    this.colors[i++] = 0x00;
+
     // BACKGROUND
     this.colors[i++] = 0xc0;
     this.colors[i++] = 0xc0;
@@ -293,7 +300,7 @@ export default class GIF {
     this.colors[i++] = 0x22;
     this.colors[i++] = 0x22;
 
-    this.dispose = -1;
+    this.dispose = 0;
   }
 
   start() {
@@ -348,7 +355,12 @@ export default class GIF {
           lb = b;
           li = index;
         }
-        this.data[to] = index;
+        if (this.last[to] == index) {
+          this.data[to] = 0;
+        } else {
+          this.data[to] = index;
+          this.last[to] = index;
+        }
       }
     }
   }
@@ -413,6 +425,7 @@ export default class GIF {
     this.writeShort(this.height);
     this.out.writeByte(0);
   }
+
   writeLSD() {
     // logical screen size
     this.writeShort(this.width);
@@ -421,9 +434,9 @@ export default class GIF {
     // packed fields
     this.out.writeByte(
       0x80 | // 1 : global color table flag = 1 (gct used)
-      0x70 | // 2-4 : color resolution = 7
+      0x30 | // 2-4 : color resolution = 7
       0x00 | // 5 : gct sort flag = 0
-        7 // 6-8 : gct size
+        3 // 6-8 : gct size
     );
 
     this.out.writeByte(0); // background color index
@@ -443,7 +456,7 @@ export default class GIF {
 
   writePalette() {
     this.out.writeBytes(this.colors);
-    var n = 3 * 256 - this.colors.length;
+    var n = 3 * 16 - this.colors.length;
     for (var i = 0; i < n; i++) this.out.writeByte(0);
   }
 

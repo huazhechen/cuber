@@ -28,7 +28,7 @@ export default class Director extends Vue {
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
   gif: GIF;
-  pixel: number = 9;
+  pixel: number = 2;
 
   constructor() {
     super();
@@ -198,7 +198,7 @@ export default class Director extends Vue {
     this.filmer.clear();
     this.filmer.render(this.cuber.scene, this.cuber.camera);
     let content = this.filmer.getContext();
-    let size = Math.pow(2, this.pixel);
+    let size = this.pixel * 128;
     let pixels = new Uint8Array(size * size * 4);
     content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
@@ -228,7 +228,7 @@ export default class Director extends Vue {
     this.init();
     this.recording = true;
     this.cuber.controller.disable = true;
-    let size = Math.pow(2, this.pixel);
+    let size = this.pixel * 128;
     this.gif = new GIF(size, size);
     this.filmer.setSize(size, size, true);
     this.gif.start();
@@ -239,7 +239,7 @@ export default class Director extends Vue {
   snap() {
     this.cuber.camera.aspect = 1;
     this.cuber.camera.updateProjectionMatrix();
-    let size = Math.pow(2, this.pixel);
+    let size = this.pixel * 128;
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
     this.snaper.render(this.cuber.scene, this.cuber.camera);
