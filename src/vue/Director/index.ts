@@ -29,7 +29,6 @@ export default class Director extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  playing: boolean = false;
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
   gif: GIF;
@@ -59,7 +58,7 @@ export default class Director extends Vue {
     this.cuber = new Cuber(canvas);
     this.option = new Option(this.cuber);
     this.cuber.cube.twister.callbacks.push(() => {
-      this.play();
+      this.callback();
     });
     this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.snaper.setPixelRatio(1);
@@ -74,12 +73,12 @@ export default class Director extends Vue {
     this.height = window.innerHeight;
     this.size = Math.min(this.width / 8, this.height / 14);
     this.cuber.width = this.width;
-    this.cuber.height = this.height - 240;
+    this.cuber.height = this.height - 210;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - 240 + "px";
+      cuber.style.height = this.height - 210 + "px";
     }
   }
 
@@ -95,7 +94,7 @@ export default class Director extends Vue {
         let init = JSON.parse(string);
         this.scene = init.scene || "";
         this.action = init.action || "";
-        this.strips = init.strips || [];
+        this.stickers = init.stickers || [];
         history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
       } catch (error) {
         console.log(error);
@@ -112,7 +111,20 @@ export default class Director extends Vue {
       this.$nextTick(this.resize);
     }
     this.cuber.controller.taps.push(this.tap);
-    this.cuber.cube.strip(this.strips);
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      let stickers = this.stickers[FACE[face]];
+      if (!stickers) {
+        continue;
+      }
+      for (let index = 0; index < 9; index++) {
+        let sticker = stickers[index];
+        if (sticker) {
+          this.cuber.cube.stick(face, index + 1, this.colors[sticker]);
+        } else {
+          this.cuber.cube.stick(face, index + 1, "");
+        }
+      }
+    }
     this.init();
     this.loop();
   }
@@ -120,7 +132,6 @@ export default class Director extends Vue {
   init() {
     this.progress = 0;
     this.cuber.controller.disable = false;
-    this.playing = false;
     this.cuber.cube.twister.finish();
     this.cuber.cube.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
@@ -135,6 +146,10 @@ export default class Director extends Vue {
   }
 
   progress: number = 0;
+  @Watch("progress")
+  onProgressChange() {
+    this.cuber.controller.lock = this.progress > 0;
+  }
   actions: TwistAction[] = [];
   action: string = "";
   @Watch("action")
@@ -144,16 +159,16 @@ export default class Director extends Vue {
     this.init();
   }
 
-  strips: { [face: string]: number[] | undefined } = (() => {
-    let save = window.localStorage.getItem("director.strips");
+  stickers: { [face: string]: number[] | undefined } = (() => {
+    let save = window.localStorage.getItem("director.stickers");
     if (save) {
       try {
         let data = JSON.parse(save);
-        let strips: { [face: string]: number[] | undefined } = {};
+        let stickers: { [face: string]: number[] | undefined } = {};
         for (let face = 0; face < 6; face++) {
-          strips[FACE[face]] = data[FACE[face]];
+          stickers[FACE[face]] = data[FACE[face]];
         }
-        return strips;
+        return stickers;
       } catch (error) {
         console.log(error);
       }
@@ -161,20 +176,14 @@ export default class Director extends Vue {
     return {};
   })();
 
-  play() {
-    if (this.progress == this.actions.length) {
-      this.playing = false;
-      if (this.recording) {
+  callback() {
+    if (this.recording) {
+      if (this.progress == this.actions.length) {
         this.finish();
+        return;
       }
-      return;
-    }
-    if (this.playing || this.recording) {
       let action = this.actions[this.progress];
       this.progress++;
-      if (this.progress == this.actions.length) {
-        this.playing = false;
-      }
       this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
@@ -183,7 +192,9 @@ export default class Director extends Vue {
     if (this.progress == this.actions.length) {
       return;
     }
-    this.playing = false;
+    if (this.progress == 0) {
+      this.init();
+    }
     let action = this.actions[this.progress];
     this.progress++;
     this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
@@ -193,21 +204,9 @@ export default class Director extends Vue {
     if (this.progress == 0) {
       return;
     }
-    this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
     this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
-  }
-
-  toggle() {
-    if (this.playing) {
-      this.playing = false;
-    } else if (this.progress == this.actions.length) {
-      this.init();
-    } else {
-      this.playing = true;
-      this.play();
-    }
   }
 
   recording: boolean = false;
@@ -260,7 +259,7 @@ export default class Director extends Vue {
     this.filmer.setSize(size, size, true);
     this.gif.start();
     this.record();
-    this.play();
+    this.callback();
   }
 
   snap() {
@@ -284,26 +283,48 @@ export default class Director extends Vue {
     download("cuber.png", blob);
   }
 
+  colors = [
+    COLORS.YELLOW,
+    COLORS.WHITE,
+    COLORS.BLUE,
+    COLORS.GREEN,
+    COLORS.RED,
+    COLORS.ORANGE,
+    COLORS.BLACK,
+    COLORS.GRAY,
+    COLORS.CYAN,
+    COLORS.LIME,
+    COLORS.PURPLE
+  ];
+  color = 7;
+  colord = false;
+
   tap(index: number, face: number) {
     if (index < 0) {
       return;
     }
-    this.cuber.cube.cubelets[index];
     let cubelet: Cubelet = this.cuber.cube.cubelets[index];
     face = cubelet.getColor(face);
     index = this.cuber.cube.groups[FACE[face]].indices.indexOf(cubelet.initial);
-    let arr = this.strips[FACE[face]];
+    let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
-      this.strips[FACE[face]] = [index + 1];
-    } else {
-      let i = arr.indexOf(index + 1);
-      if (i > -1) {
-        arr.splice(i, 1);
-      } else {
-        arr.push(index + 1);
-      }
+      arr = [];
+      this.stickers[FACE[face]] = arr;
     }
-    this.cuber.cube.strip(this.strips);
-    window.localStorage.setItem("director.strips", JSON.stringify(this.strips));
+    if (arr[index] != this.color) {
+      arr[index] = this.color;
+      this.cuber.cube.stick(face, index + 1, this.colors[this.color]);
+    } else {
+      arr[index] = -1;
+      this.cuber.cube.stick(face, index + 1, "");
+    }
+    window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
+  }
+
+  clear() {
+    this.colord = false;
+    this.stickers = {};
+    window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
+    this.cuber.cube.strip({});
   }
 }

@@ -79,24 +79,23 @@ export default class Cube extends THREE.Group {
     });
   }
 
-  stick() {
-    for (let i = 0; i < 27; i++) {
-      for (let face = 0; face < 6; face++) {
-        this.initials[i].stick(face, "");
-      }
-    }
+  stick(face: number, index: number, color: string) {
+    let group = this.groups[FACE[face]];
+    this.initials[group.indices[index - 1]].stick(face, color);
     this.dirty = true;
   }
 
   strip(strip: { [face: string]: number[] | undefined }) {
-    this.stick();
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       let key = FACE[face];
+      let group = this.groups[FACE[face]];
+      for (let i = 0; i < 9; i++) {
+        this.initials[group.indices[i]].stick(face, "");
+      }
       let indexes = strip[key];
       if (indexes == undefined) {
         continue;
       }
-      let group = this.groups[FACE[face]];
       for (const index of indexes) {
         this.initials[group.indices[index - 1]].stick(face, COLORS.GRAY);
       }

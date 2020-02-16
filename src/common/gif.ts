@@ -1,3 +1,5 @@
+import { COLORS, RGB } from "./define";
+
 class ByteArray {
   static SIZE = 4096;
   static CHAR_MAP = (() => {
@@ -260,52 +262,14 @@ export default class GIF {
     this.colors[i++] = 0x00;
     this.colors[i++] = 0x00;
     this.colors[i++] = 0x00;
-
-    // BACKGROUND
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0xff;
-
-    // YELLOW
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0xd6;
-    this.colors[i++] = 0x00;
-
-    // BLUE
-    this.colors[i++] = 0x0d;
-    this.colors[i++] = 0x47;
-    this.colors[i++] = 0xa1;
-
-    // RED
-    this.colors[i++] = 0xb7;
-    this.colors[i++] = 0x1c;
-    this.colors[i++] = 0x1c;
-
-    // ORANGE
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0x6d;
-    this.colors[i++] = 0x00;
-
-    // GREEN
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0xa0;
-    this.colors[i++] = 0x20;
-
-    // WHITE
-    this.colors[i++] = 0xe0;
-    this.colors[i++] = 0xe0;
-    this.colors[i++] = 0xe0;
-
-    // GRAY
-    this.colors[i++] = 0x44;
-    this.colors[i++] = 0x44;
-    this.colors[i++] = 0x44;
-
-    // BLACK
-    this.colors[i++] = 0x22;
-    this.colors[i++] = 0x22;
-    this.colors[i++] = 0x22;
-
+    for (const key in COLORS) {
+      if (COLORS.hasOwnProperty(key)) {
+        let rgb = RGB((<any>COLORS)[key]);
+        this.colors[i++] = rgb[0];
+        this.colors[i++] = rgb[1];
+        this.colors[i++] = rgb[2];
+      }
+    }
     this.dispose = 0;
   }
 

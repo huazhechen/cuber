@@ -1,5 +1,5 @@
 <v-bottom-sheet v-model="value">
-  <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+  <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:Math.min(window.innerWidth, window.innerHeight * 0.6) + 'px'}">
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap justify-center align-center>
         <v-slider v-model="option.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>

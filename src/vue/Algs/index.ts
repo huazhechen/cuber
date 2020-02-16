@@ -93,12 +93,12 @@ export default class Player extends Vue {
     this.height = window.innerHeight;
     this.size = Math.min(this.width / 8, this.height / 14);
     this.cuber.width = this.width;
-    this.cuber.height = this.height - 240;
+    this.cuber.height = this.height - 210;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - 240 + "px";
+      cuber.style.height = this.height - 210 + "px";
     }
   }
 

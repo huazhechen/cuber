@@ -7,8 +7,20 @@ export var COLORS = {
   BLUE: "#0D47A1",
   YELLOW: "#FFD600",
   RED: "#B71C1C",
-  WHITE: "#E0E0E0"
+  WHITE: "#F0F0F0",
+  CYAN: "#18FFFF",
+  LIME: "#C6FF00",
+  PURPLE: "#FF4081"
 };
+
+export function RGB(value: string) {
+  value = value.toLowerCase();
+  var result = [];
+  for (var i = 1; i < 7; i += 2) {
+    result.push(parseInt("0x" + value.slice(i, i + 2)));
+  }
+  return result;
+}
 
 export enum FACE {
   L,

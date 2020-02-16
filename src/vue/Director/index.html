@@ -30,14 +30,6 @@
     </v-btn>
     <v-btn
       fab
-      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="quality=true;menu=false;"
-      @touchstart.native.stop.prevent="quality=true;menu=false;"
-    >
-      <v-icon :size="size * 0.55" color="primary">crop</v-icon>
-    </v-btn>
-    <v-btn
-      fab
       :color="cuber.mirror?'primary':''"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="cuber.mirror=!cuber.mirror;"
@@ -56,7 +48,7 @@
   </v-speed-dial>
   <div v-resize="resize" style="padding:0%;user-select: none;touch-action: none;">
     <div ref="cuber"></div>
-    <div style="margin:0%;padding:0%;background-color:white;" :style="{width:width + 'px', height:'240px'}">
+    <div style="margin:0%;padding:0%;background-color:white;" :style="{width:width + 'px', height:'210px'}">
       <v-container
         fluid
         grid-list-md
@@ -66,13 +58,13 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              style="text-transform:none;margin-top: 6px;margin-left: 8px;margin-right: 8px;"
+              style="text-transform:none;padding-left: 2%;padding-right: 2%;"
               dense
               class="title"
               single-line
               hide-details
               outlined
-              :disabled="recording || playing"
+              :disabled="recording"
               :append-icon="scene == ''?'':'clear'"
               @click:append="scene = ''"
               v-model="scene"
@@ -82,13 +74,13 @@
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              style="text-transform:none;margin-top: 6px;margin-left: 8px;margin-right: 8px;"
+              style="text-transform:none;padding-left: 2%;padding-right: 2%;"
               dense
               class="title"
               single-line
               hide-details
               outlined
-              :disabled="recording || playing"
+              :disabled="recording"
               :append-icon="action == ''?'':'clear'"
               @click:append="action = ''"
               v-model="action"
@@ -109,20 +101,34 @@
               <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
             </v-slider>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
               large
-              :disabled="recording || playing"
-              @click.native.stop.prevent="snap"
-              @touchstart.native.stop.prevent="snap"
+              :disabled="recording"
+              @click.native.stop.prevent="colord=true"
+              @touchstart.native.stop.prevent="colord=true"
               style="margin: 0%; padding: 0%;"
+              :color="colors[color]"
             >
-              <v-icon large>camera_alt</v-icon>
+              <v-icon large>colorize</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
+            <v-btn
+              block
+              text
+              large
+              :disabled="recording"
+              @click.native.stop.prevent="quality=true"
+              @touchstart.native.stop.prevent="quality=true"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>crop</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2>
             <v-btn
               block
               text
@@ -135,25 +141,12 @@
               <v-icon large>fast_rewind</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
               large
-              :disabled="action == '' || recording"
-              @click.native.stop.prevent="toggle"
-              @touchstart.native.stop.prevent="toggle"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>{{progress == actions.length?'replay':(playing?'pause':'play_arrow')}}</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress == actions.length || recording"
+              :disabled="progress==actions.length || recording"
               @click.native.stop.prevent="forward"
               @touchstart.native.stop.prevent="forward"
               style="margin: 0%; padding: 0%;"
@@ -161,12 +154,25 @@
               <v-icon large>fast_forward</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs2.4>
+          <v-flex xs2>
             <v-btn
               block
               text
               large
-              :disabled="action == '' || playing"
+              :disabled="recording"
+              @click.native.stop.prevent="snap"
+              @touchstart.native.stop.prevent="snap"
+              style="margin: 0%; padding: 0%;"
+            >
+              <v-icon large>camera_alt</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs2>
+            <v-btn
+              block
+              text
+              large
+              :disabled="action == ''"
               @click.native.stop.prevent="film"
               @touchstart.native.stop.prevent="film"
               style="margin: 0%; padding: 0%;"
@@ -180,7 +186,7 @@
   </div>
   <tune v-model="tune"></tune>
   <v-bottom-sheet v-model="quality">
-    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-container fluid grid-list-md text-xs-center>
         <v-layout row wrap justify-center align-center>
           <v-slider v-model="pixel" always-dirty thumb-label="always" max="1024" min="128" step="128" label="像素"></v-slider>
@@ -201,6 +207,38 @@
             color="red"
             >重置</v-btn
           >
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
+  <v-bottom-sheet v-model="colord">
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-container fluid grid-list-md text-xs-center>
+        <v-layout row wrap>
+          <v-flex v-for="(item, index) in colors" xs2>
+            <v-btn
+              @click.native.stop.prevent="colord = false; color = index;"
+              @touchstart.native.stop.prevent="colord = false; color = index;"
+              :color="item"
+              block
+              depressed
+              class="headline"
+              style="height:2em; min-width: 0%; min-height: 0%; margin: 0%;"
+            >
+            </v-btn>
+          </v-flex>
+          <v-flex xs2>
+            <v-btn
+              @click.native.stop.prevent="clear"
+              @touchstart.native.stop.prevent="clear"
+              block
+              text
+              class="headline"
+              style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+            >
+              <v-icon large color="red">replay</v-icon>
+            </v-btn>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-card>
