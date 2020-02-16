@@ -267,11 +267,19 @@ export default class GIF {
     this.colors[i++] = 0x00;
     this.colors[i++] = 0x00;
     this.colors[i++] = 0x00;
+    // ORIGIN COLOR
+    for (const key in COLORS) {
+      let rgb = RGB((<any>COLORS)[key]);
+      this.colors[i++] = rgb[0];
+      this.colors[i++] = rgb[1];
+      this.colors[i++] = rgb[2];
+    }
+    // ANTIALIAS
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
       if (hsv[2] >= 20) {
-        for (let d = 0; d < 8; d++) {
+        for (let d = 0; d < 7; d++) {
           let dhsv = [hsv[0], hsv[1], (hsv[2] / 8) * (d + 1)];
           let drgb = HSV2RGB(dhsv);
           this.colors[i++] = drgb[0];
