@@ -345,7 +345,7 @@ export default class Cubelet extends THREE.Group {
 
   stick(face: number, color: string) {
     let material;
-    if (color.length > 0) {
+    if (color && color.length > 0) {
       material = new THREE.MeshBasicMaterial({ color: color });
     } else {
       material = this.materials[face];

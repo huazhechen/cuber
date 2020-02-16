@@ -118,7 +118,7 @@ export default class Director extends Vue {
       }
       for (let index = 0; index < 9; index++) {
         let sticker = stickers[index];
-        if (sticker) {
+        if (sticker && sticker >= 0) {
           this.cuber.cube.stick(face, index + 1, this.colors[sticker]);
         } else {
           this.cuber.cube.stick(face, index + 1, "");
