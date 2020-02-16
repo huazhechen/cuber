@@ -63,7 +63,7 @@ export default class Director extends Vue {
     this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.snaper.setPixelRatio(1);
     this.snaper.setClearColor(COLORS.BACKGROUND, 0);
-    this.filmer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
+    this.filmer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 1);
   }
