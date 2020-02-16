@@ -72,6 +72,10 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
   ![reverse](https://gitee.com/huazhechen/cuber/raw/master/screenshot/reverse.gif)
 
+- 自由涂色
+
+  ![colorize](https://gitee.com/huazhechen/cuber/raw/master/screenshot/colorize.gif)
+
 - 节奏控制
 
   ![movie-pause](https://gitee.com/huazhechen/cuber/raw/master/screenshot/movie-pause.gif)

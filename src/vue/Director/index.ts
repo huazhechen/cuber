@@ -236,7 +236,6 @@ export default class Director extends Vue {
     this.cuber.controller.disable = false;
     this.cuber.resize();
     this.gif.finish();
-    this.init();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
     download("cuber.gif", blob);
@@ -248,7 +247,6 @@ export default class Director extends Vue {
       this.cuber.controller.disable = false;
       this.cuber.resize();
       this.gif.finish();
-      this.init();
       return;
     }
     this.init();
