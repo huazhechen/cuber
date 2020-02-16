@@ -39,6 +39,14 @@
     <v-btn
       fab
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/director.html'"
+      @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/director.html'"
+    >
+      <v-icon :size="size * 0.55" color="primary">movie</v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
