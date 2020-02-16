@@ -38,7 +38,7 @@ export default class Director extends Vue {
   onPixelChange() {
     window.localStorage.setItem("director.pixel", String(this.pixel));
   }
-  delay: number = 3;
+  delay: number = 2;
   @Watch("delay")
   onDelayChange() {
     window.localStorage.setItem("director.delay", String(this.delay));
@@ -102,7 +102,7 @@ export default class Director extends Vue {
       }
     }
 
-    this.delay = Number(window.localStorage.getItem("director.delay") || 3);
+    this.delay = Number(window.localStorage.getItem("director.delay") || 2);
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
     this.duration = Number(window.localStorage.getItem("director.duration") || 30);
 

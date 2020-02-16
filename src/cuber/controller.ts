@@ -4,7 +4,6 @@ import Cubelet from "./cubelet";
 import Group from "./group";
 import { FACE } from "../common/define";
 import { tweener } from "./tweener";
-import { TwistAction } from "./twister";
 
 export class Holder {
   public vector: THREE.Vector3;
