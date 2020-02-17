@@ -152,7 +152,7 @@ class Mirror extends THREE.ShapeGeometry {
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
   private static readonly _BORDER_WIDTH: number = 4;
-  private static readonly _STICKER_DEPTH: number = 2;
+  private static readonly _STICKER_DEPTH: number = 3;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
   private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH);
