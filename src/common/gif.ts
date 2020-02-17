@@ -249,6 +249,7 @@ export default class GIF {
   y0: number;
   y1: number;
   deep: number;
+  colorn: number;
   constructor(width: number, height: number, delay: number) {
     this.width = ~~width;
     this.height = ~~height;
@@ -256,7 +257,7 @@ export default class GIF {
     this.data = new Uint8Array(this.width * this.height);
     this.last = new Uint8Array(this.width * this.height);
     this.real = new Uint8Array(this.width * this.height);
-    this.deep = 7;
+    this.deep = 8;
     this.colors = new Uint8Array(3 * Math.pow(2, this.deep));
     let i = 0;
     // TRANSPARENT
@@ -270,7 +271,22 @@ export default class GIF {
       this.colors[i++] = rgb[1];
       this.colors[i++] = rgb[2];
     }
-    // ANTIALIAS
+    // LIGHT
+    for (const key in COLORS) {
+      let rgb = RGB((<any>COLORS)[key]);
+      let hsv = RGB2HSV(rgb);
+      if (hsv[2] >= 20) {
+        let delta = hsv[2] / 5 / 12;
+        for (let d = 0; d < 12; d++) {
+          let dhsv = [hsv[0], hsv[1], hsv[2] - delta * (d + 1)];
+          let drgb = HSV2RGB(dhsv);
+          this.colors[i++] = drgb[0];
+          this.colors[i++] = drgb[1];
+          this.colors[i++] = drgb[2];
+        }
+      }
+    }
+    // ANTIALIAS BLACK
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
@@ -283,6 +299,11 @@ export default class GIF {
           this.colors[i++] = drgb[2];
         }
       }
+    }
+    // ANTIALIAS WHITE
+    for (const key in COLORS) {
+      let rgb = RGB((<any>COLORS)[key]);
+      let hsv = RGB2HSV(rgb);
       if (hsv[1] >= 20) {
         for (let d = 0; d < 2; d++) {
           let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
@@ -292,15 +313,8 @@ export default class GIF {
           this.colors[i++] = drgb[2];
         }
       }
-      let dr = 255 - rgb[0];
-      let dg = 255 - rgb[1];
-      let db = 255 - rgb[2];
-      for (let d = 0; d < 5; d++) {
-        this.colors[i++] = rgb[0] + (d / 5) * dr;
-        this.colors[i++] = rgb[1] + (d / 5) * dg;
-        this.colors[i++] = rgb[2] + (d / 5) * db;
-      }
     }
+    this.colorn = i;
     this.dispose = 0;
   }
 
@@ -316,7 +330,7 @@ export default class GIF {
     let index = 0;
     let dmin = 256 * 256 * 256;
     let best = 0;
-    for (let i = 0; i < this.colors.length; index++) {
+    for (let i = 0; i < this.colorn; index++) {
       let dr = r - this.colors[i++];
       let dg = g - this.colors[i++];
       let db = b - this.colors[i++];

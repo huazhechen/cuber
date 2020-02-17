@@ -46,23 +46,8 @@ export default class Cuber {
   }
   set angle(value) {
     this._angle = value;
-    this.scene.rotation.y = value * (this.left ? -1 : 1);
+    this.scene.rotation.y = value;
     this.dirty = true;
-  }
-
-  private _left: boolean = false;
-  get left() {
-    return this._left;
-  }
-  set left(value) {
-    this._left = value;
-    let start = this.scene.rotation.y;
-    let finish = -start;
-    tweener.finish();
-    tweener.tween(start, finish, this.cube.duration / 2, (v: number) => {
-      this.scene.rotation.y = v;
-      this.dirty = true;
-    });
   }
 
   private _gradient: number = Math.PI / 6;
@@ -103,6 +88,16 @@ export default class Cuber {
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
     this.scene.add(this.cube);
+
+    let light;
+    light = new THREE.AmbientLight(0xffffff, 0.8);
+    this.scene.add(light);
+    light = new THREE.DirectionalLight(0xffffff, 0.2);
+    light.position.set(0, Cubelet.SIZE * 4, 0);
+    this.scene.add(light);
+    light = new THREE.DirectionalLight(0xffffff, 0.1);
+    light.position.set(0, 0, Cubelet.SIZE * 4);
+    this.scene.add(light);
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;

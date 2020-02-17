@@ -20,10 +20,6 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
   ![cf](https://gitee.com/huazhechen/cuber/raw/master/screenshot/cf.gif)
 
-- 左右模式
-
-  ![lr](https://gitee.com/huazhechen/cuber/raw/master/screenshot/lr.gif)
-
 - 撤销操作
 
   ![backspace](https://gitee.com/huazhechen/cuber/raw/master/screenshot/backspace.gif)

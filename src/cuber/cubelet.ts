@@ -157,16 +157,27 @@ export default class Cubelet extends THREE.Group {
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
   private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH);
 
-  private static _MATERIALS = {
-    green: new THREE.MeshBasicMaterial({ color: COLORS.GREEN }),
-    orange: new THREE.MeshBasicMaterial({ color: COLORS.ORANGE }),
-    blue: new THREE.MeshBasicMaterial({ color: COLORS.BLUE }),
-    yellow: new THREE.MeshBasicMaterial({ color: COLORS.YELLOW }),
-    white: new THREE.MeshBasicMaterial({ color: COLORS.WHITE }),
-    red: new THREE.MeshBasicMaterial({ color: COLORS.RED }),
-    gray: new THREE.MeshBasicMaterial({ color: COLORS.GRAY }),
-    black: new THREE.MeshBasicMaterial({ color: COLORS.BLACK })
-  };
+  private static LAMBERS = (() => {
+    let result: any = {};
+    for (const key in COLORS) {
+      let color = (<any>COLORS)[key];
+      if (key == "BLACK") {
+        result[key] = new THREE.MeshPhongMaterial({ color: color, specular: "#808080" });
+      } else {
+        result[key] = new THREE.MeshLambertMaterial({ color: color });
+      }
+    }
+    return result;
+  })();
+
+  private static BASICS = (() => {
+    let result: any = {};
+    for (const key in COLORS) {
+      let color = (<any>COLORS)[key];
+      result[key] = new THREE.MeshBasicMaterial({ color: color });
+    }
+    return result;
+  })();
 
   _vector: THREE.Vector3;
 
@@ -195,7 +206,8 @@ export default class Cubelet extends THREE.Group {
   }
 
   mirrors: THREE.Mesh[];
-  materials: THREE.MeshBasicMaterial[];
+  lambers: THREE.MeshLambertMaterial[];
+  basics: THREE.MeshBasicMaterial[];
   set mirror(value: boolean) {
     if (value) {
       for (let i = 0; i < 6; i++) {
@@ -276,20 +288,29 @@ export default class Cubelet extends THREE.Group {
     let _z = Math.floor(index / 9) - 1;
     this.vector = new THREE.Vector3(_x, _y, _z);
 
-    this.materials = [
-      this.vector.x < 0 ? Cubelet._MATERIALS.orange : Cubelet._MATERIALS.gray,
-      this.vector.x > 0 ? Cubelet._MATERIALS.red : Cubelet._MATERIALS.gray,
-      this.vector.y < 0 ? Cubelet._MATERIALS.white : Cubelet._MATERIALS.gray,
-      this.vector.y > 0 ? Cubelet._MATERIALS.yellow : Cubelet._MATERIALS.gray,
-      this.vector.z < 0 ? Cubelet._MATERIALS.green : Cubelet._MATERIALS.gray,
-      this.vector.z > 0 ? Cubelet._MATERIALS.blue : Cubelet._MATERIALS.gray
+    this.lambers = [
+      this.vector.x < 0 ? Cubelet.LAMBERS.ORANGE : Cubelet.LAMBERS.GRAY,
+      this.vector.x > 0 ? Cubelet.LAMBERS.RED : Cubelet.LAMBERS.GRAY,
+      this.vector.y < 0 ? Cubelet.LAMBERS.WHITE : Cubelet.LAMBERS.GRAY,
+      this.vector.y > 0 ? Cubelet.LAMBERS.YELLOW : Cubelet.LAMBERS.GRAY,
+      this.vector.z < 0 ? Cubelet.LAMBERS.GREEN : Cubelet.LAMBERS.GRAY,
+      this.vector.z > 0 ? Cubelet.LAMBERS.BLUE : Cubelet.LAMBERS.GRAY
     ];
 
-    this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet._MATERIALS.black);
+    this.basics = [
+      this.vector.x < 0 ? Cubelet.BASICS.ORANGE : Cubelet.BASICS.GRAY,
+      this.vector.x > 0 ? Cubelet.BASICS.RED : Cubelet.BASICS.GRAY,
+      this.vector.y < 0 ? Cubelet.BASICS.WHITE : Cubelet.BASICS.GRAY,
+      this.vector.y > 0 ? Cubelet.BASICS.YELLOW : Cubelet.BASICS.GRAY,
+      this.vector.z < 0 ? Cubelet.BASICS.GREEN : Cubelet.BASICS.GRAY,
+      this.vector.z > 0 ? Cubelet.BASICS.BLUE : Cubelet.BASICS.GRAY
+    ];
+
+    this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.LAMBERS.BLACK);
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
-      let _sticker = new THREE.Mesh(Cubelet._STICKER, this.materials[i]);
+      let _sticker = new THREE.Mesh(Cubelet._STICKER, this.lambers[i]);
       _sticker.name = FACE[i];
       switch (i) {
         case FACE.L:
@@ -320,11 +341,9 @@ export default class Cubelet extends THREE.Group {
           break;
       }
       this.stickers.push(_sticker);
-      if (_sticker.material != Cubelet._MATERIALS.gray) {
+      if (this.lambers[i] != Cubelet.LAMBERS.GRAY) {
         this.add(_sticker);
-      }
-      if (this.materials[i] != Cubelet._MATERIALS.gray) {
-        let _mirror = new THREE.Mesh(Cubelet._MIRROR, this.materials[i]);
+        let _mirror = new THREE.Mesh(Cubelet._MIRROR, this.basics[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
         _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
         _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
@@ -344,15 +363,28 @@ export default class Cubelet extends THREE.Group {
   }
 
   stick(face: number, color: string) {
-    let material;
+    let lamber;
+    let basic;
+    let index = null;
     if (color && color.length > 0) {
-      material = new THREE.MeshBasicMaterial({ color: color });
-    } else {
-      material = this.materials[face];
+      for (const key in COLORS) {
+        let c = (<any>COLORS)[key];
+        if (c == color) {
+          index = key;
+          break;
+        }
+      }
     }
-    this.stickers[face].material = material;
+    if (index) {
+      lamber = Cubelet.LAMBERS[index];
+      basic = Cubelet.LAMBERS[index];
+    } else {
+      lamber = this.lambers[face];
+      basic = this.basics[face];
+    }
+    this.stickers[face].material = lamber;
     if (this.mirrors[face] instanceof THREE.Mesh) {
-      this.mirrors[face].material = material;
+      this.mirrors[face].material = basic;
     }
   }
 }
