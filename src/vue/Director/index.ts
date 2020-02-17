@@ -9,6 +9,7 @@ import Base64 from "../../common/base64";
 import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Tune from "../Tune";
+import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
 
 @Component({
   template: require("./index.html"),
@@ -31,6 +32,7 @@ export default class Director extends Vue {
   size: number = 0;
   snaper: THREE.WebGLRenderer;
   filmer: THREE.WebGLRenderer;
+  svger: SVGRenderer;
   gif: GIF;
   pixel: number = 512;
   @Watch("pixel")
@@ -60,6 +62,7 @@ export default class Director extends Vue {
     this.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
+    this.svger = new SVGRenderer();
     this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.snaper.setPixelRatio(1);
     this.snaper.setClearColor(COLORS.BACKGROUND, 0);
@@ -312,6 +315,20 @@ export default class Director extends Vue {
     let blob = new Blob([data], { type: type });
     let url = URL.createObjectURL(blob);
     DOWNLOAD("cuber.png", url);
+  }
+
+  svg() {
+    this.cuber.camera.aspect = 1;
+    this.cuber.camera.updateProjectionMatrix();
+    let size = this.pixel;
+    this.svger.setSize(size, size);
+    this.svger.clear();
+    this.svger.render(this.cuber.scene, this.cuber.camera);
+    this.cuber.resize();
+    var serializer = new XMLSerializer();
+    var content = serializer.serializeToString(this.svger.domElement);
+    let url = "data:image/svg+xml;base64," + btoa(content);
+    DOWNLOAD("cuber.svg", url);
   }
 
   colors = [

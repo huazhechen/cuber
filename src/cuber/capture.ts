@@ -2,7 +2,6 @@ import * as THREE from "three";
 
 import Cube from "./cube";
 import Cubelet from "./cubelet";
-import { TwistNode } from "./twister";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;
