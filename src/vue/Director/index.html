@@ -48,7 +48,7 @@
   </v-speed-dial>
   <div v-resize="resize" style="padding:0%;user-select: none;touch-action: none;">
     <div ref="cuber"></div>
-    <div style="margin:0%;padding:0%;background-color:white;" :style="{width:width + 'px', height:'210px'}">
+    <div style="margin:0%;padding:0%;background-color:white;" :style="{width:width + 'px', height:'260px'}">
       <v-container
         fluid
         grid-list-md
@@ -101,84 +101,127 @@
               <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
             </v-slider>
           </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="recording"
-              @click.native.stop.prevent="colord=true"
-              @touchstart.native.stop.prevent="colord=true"
-              style="margin: 0%; padding: 0%;"
-              :color="colors[color]"
-            >
-              <v-icon large>colorize</v-icon>
-            </v-btn>
+          <v-flex xs12 style="display: flex; padding: 0%; margin: 0%;">
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="recording"
+                @click.native.stop.prevent="colord=true"
+                @touchstart.native.stop.prevent="colord=true"
+                style="margin: 0%; padding: 0%;"
+                :color="colors[color]"
+              >
+                <v-icon large>colorize</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="recording"
+                @click.native.stop.prevent="quality=true"
+                @touchstart.native.stop.prevent="quality=true"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>crop</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="recording"
+                @click.native.stop.prevent="snap"
+                @touchstart.native.stop.prevent="snap"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>camera_alt</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="action == ''"
+                @click.native.stop.prevent="film"
+                @touchstart.native.stop.prevent="film"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>{{recording?'stop':'videocam'}}</v-icon>
+              </v-btn>
+            </v-flex>
           </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="recording"
-              @click.native.stop.prevent="quality=true"
-              @touchstart.native.stop.prevent="quality=true"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>crop</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress==0 || recording"
-              @click.native.stop.prevent="backward"
-              @touchstart.native.stop.prevent="backward"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>fast_rewind</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress==actions.length || recording"
-              @click.native.stop.prevent="forward"
-              @touchstart.native.stop.prevent="forward"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>fast_forward</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="recording"
-              @click.native.stop.prevent="snap"
-              @touchstart.native.stop.prevent="snap"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>camera_alt</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn
-              block
-              text
-              large
-              :disabled="action == ''"
-              @click.native.stop.prevent="film"
-              @touchstart.native.stop.prevent="film"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>{{recording?'stop':'videocam'}}</v-icon>
-            </v-btn>
+          <v-flex xs12 style="display: flex; padding: 0%; margin: 0%;">
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="(progress==0 && cuber.cube.history.length == 0) || recording"
+                @click.native.stop.prevent="init"
+                @touchstart.native.stop.prevent="init"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>skip_previous</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress==0 || recording"
+                @click.native.stop.prevent="backward"
+                @touchstart.native.stop.prevent="backward"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>fast_rewind</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress == actions.length"
+                @click.native.stop.prevent="toggle"
+                @touchstart.native.stop.prevent="toggle"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress==actions.length || recording"
+                @click.native.stop.prevent="forward"
+                @touchstart.native.stop.prevent="forward"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>fast_forward</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="(progress==actions.length) || recording"
+                @click.native.stop.prevent="end"
+                @touchstart.native.stop.prevent="end"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>skip_next</v-icon>
+              </v-btn>
+            </v-flex>
           </v-flex>
         </v-layout>
       </v-container>

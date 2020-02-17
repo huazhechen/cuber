@@ -107,68 +107,70 @@
               <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
             </v-slider>
           </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              @click.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
-              @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>skip_previous</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress==0"
-              @click.native.stop.prevent="backward"
-              @touchstart.native.stop.prevent="backward"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>fast_rewind</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress == actions.length"
-              @click.native.stop.prevent="toggle"
-              @touchstart.native.stop.prevent="toggle"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              :disabled="progress == actions.length"
-              @click.native.stop.prevent="forward"
-              @touchstart.native.stop.prevent="forward"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>fast_forward</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2.4>
-            <v-btn
-              block
-              text
-              large
-              @click.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
-              @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
-              style="margin: 0%; padding: 0%;"
-            >
-              <v-icon large>skip_next</v-icon>
-            </v-btn>
+          <v-flex xs12 style="display: flex">
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                @click.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
+                @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>skip_previous</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress==0"
+                @click.native.stop.prevent="backward"
+                @touchstart.native.stop.prevent="backward"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>fast_rewind</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress == actions.length"
+                @click.native.stop.prevent="toggle"
+                @touchstart.native.stop.prevent="toggle"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="progress == actions.length"
+                @click.native.stop.prevent="forward"
+                @touchstart.native.stop.prevent="forward"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>fast_forward</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                @click.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
+                @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>skip_next</v-icon>
+              </v-btn>
+            </v-flex>
           </v-flex>
         </v-layout>
       </v-container>

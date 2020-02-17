@@ -73,12 +73,12 @@ export default class Director extends Vue {
     this.height = window.innerHeight;
     this.size = Math.min(this.width / 8, this.height / 14);
     this.cuber.width = this.width;
-    this.cuber.height = this.height - 210;
+    this.cuber.height = this.height - 260;
     this.cuber.resize();
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - 210 + "px";
+      cuber.style.height = this.height - 260 + "px";
     }
   }
 
@@ -130,12 +130,20 @@ export default class Director extends Vue {
   }
 
   init() {
+    this.playing = false;
     this.progress = 0;
     this.cuber.controller.disable = false;
     this.cuber.cube.twister.finish();
     this.cuber.cube.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
     this.cuber.cube.twister.twist(scene, false, 1, true);
+    this.cuber.cube.history.clear();
+  }
+
+  end() {
+    this.init();
+    this.cuber.cube.twister.twist(this.action, false, 1, true);
+    this.progress = this.actions.length;
   }
 
   scene: string = "";
@@ -177,14 +185,28 @@ export default class Director extends Vue {
   })();
 
   callback() {
-    if (this.recording) {
+    if (this.recording || this.playing) {
       if (this.progress == this.actions.length) {
-        this.finish();
+        if (this.playing) {
+          this.playing = false;
+        }
+        if (this.recording) {
+          this.finish();
+        }
         return;
       }
       let action = this.actions[this.progress];
       this.progress++;
       this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+    }
+  }
+
+  toggle() {
+    if (this.playing) {
+      this.playing = false;
+    } else {
+      this.forward();
+      this.playing = true;
     }
   }
 
@@ -195,6 +217,7 @@ export default class Director extends Vue {
     if (this.progress == 0) {
       this.init();
     }
+    this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
     this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
@@ -204,18 +227,20 @@ export default class Director extends Vue {
     if (this.progress == 0) {
       return;
     }
+    this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
     this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   recording: boolean = false;
+  playing: boolean = false;
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    this.cuber.render();
     if (this.recording) {
       this.record();
     }
-    this.cuber.render();
   }
 
   record() {
