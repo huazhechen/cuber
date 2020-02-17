@@ -344,7 +344,7 @@ export default class Director extends Vue {
     COLORS.LIME,
     COLORS.PURPLE
   ];
-  color = 7;
+  color = 6;
   colord = false;
 
   tap(index: number, face: number) {
