@@ -114,12 +114,15 @@ export default class Cuber {
   }
 
   resize() {
-    let min = this.height / Math.min(this.width, this.height / 1.2) / 4 / this.scale / this.perspective;
+    let min = this.height / Math.min(this.width, this.height / 1.2) / this.scale / this.perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
     this.camera.fov = fov;
-    this.camera.position.z = Cubelet.SIZE * 3 * 4 * this.perspective;
+    let distance = Cubelet.SIZE * 3 * this.perspective;
+    this.camera.position.z = distance;
+    this.camera.near = distance - Cubelet.SIZE * 3;
+    this.camera.far = distance + Cubelet.SIZE * 3;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.width, this.height, true);

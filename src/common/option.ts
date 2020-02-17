@@ -46,7 +46,7 @@ export default class Option {
   set perspective(value) {
     this._perspective = value;
     this._storage.setItem("setting.perspective", String(value));
-    this.cuber.perspective = Math.exp((1 - value / 50) / 1.2);
+    this.cuber.perspective = (100.1 / (value + 0.01)) * 4 - 3;
   }
 
   private _angle: number;
