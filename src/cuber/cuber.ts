@@ -109,7 +109,7 @@ export default class Cuber {
   }
 
   resize() {
-    let min = this.height / Math.min(this.width, this.height / 1.2) / this.scale / this.perspective;
+    let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
