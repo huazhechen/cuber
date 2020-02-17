@@ -120,7 +120,7 @@ export enum FACE {
   F
 }
 
-export function download(filename: string, blob: Blob) {
+export function DOWNLOAD(filename: string, url: string) {
   let link = document.createElement("a");
   link.innerHTML = filename;
   link.setAttribute("download", filename);
@@ -128,7 +128,6 @@ export function download(filename: string, blob: Blob) {
 
   document.body.appendChild(link);
 
-  let url = URL.createObjectURL(blob);
   link.href = url;
 
   if (document.createEvent) {

@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Option from "../../common/option";
-import { COLORS, FACE, download } from "../../common/define";
+import { COLORS, FACE, DOWNLOAD } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
 import Base64 from "../../common/base64";
@@ -238,7 +238,8 @@ export default class Director extends Vue {
     this.gif.finish();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
-    download("cuber.gif", blob);
+    let url = URL.createObjectURL(blob);
+    DOWNLOAD("cuber.gif", url);
   }
 
   film() {
@@ -278,7 +279,8 @@ export default class Director extends Vue {
       data[i] = raw.charCodeAt(i);
     }
     let blob = new Blob([data], { type: type });
-    download("cuber.png", blob);
+    let url = URL.createObjectURL(blob);
+    DOWNLOAD("cuber.png", url);
   }
 
   colors = [
