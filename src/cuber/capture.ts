@@ -38,25 +38,7 @@ export default class Capture {
   snap(strip: { [face: string]: number[] | undefined }, exp: string) {
     this.cube.strip(strip);
     this.cube.reset();
-
-    let node = new TwistNode(exp, true, 1);
-    let list = node.parse();
-    for (const action of list) {
-      let angle = -Math.PI / 2;
-      if (action.reverse) {
-        angle = -angle;
-      }
-      if (action.times) {
-        angle = angle * action.times;
-      }
-      let part = this.cube.groups[action.exp];
-      if (part) {
-        part.angle = 0;
-        part.hold();
-        part.angle = angle;
-        part.drop();
-      }
-    }
+    this.cube.twister.twist(exp, true, 1, true);
 
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();
