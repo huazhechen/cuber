@@ -237,6 +237,7 @@ export default class GIF {
   height: number;
   delay: number;
   image: Uint8Array;
+  pre: Uint8Array | null = null;
   data: Uint8Array;
   last: Uint8Array;
   real: Uint8Array;
@@ -368,7 +369,11 @@ export default class GIF {
         if (r == lr && g == lg && b == lb) {
           index = li;
         } else {
-          index = this.getColor(r, g, b);
+          if (this.pre && r == this.pre[from * 4 + 0] && g == this.pre[from * 4 + 1] && b == this.pre[from * 4 + 2]) {
+            index = this.last[to];
+          } else {
+            index = this.getColor(r, g, b);
+          }
           lr = r;
           lg = g;
           lb = b;
@@ -400,6 +405,7 @@ export default class GIF {
     this.writeGraphicCtrlExt();
     this.writeImageDesc();
     this.writePixels();
+    this.pre = image;
   }
 
   finish() {

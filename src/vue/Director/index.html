@@ -201,7 +201,7 @@
                 block
                 text
                 large
-                :disabled="progress == actions.length"
+                :disabled="progress == actions.length || recording"
                 @click.native.stop.prevent="toggle"
                 @touchstart.native.stop.prevent="toggle"
                 style="margin: 0%; padding: 0%;"
