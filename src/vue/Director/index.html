@@ -135,6 +135,19 @@
                 text
                 large
                 :disabled="recording"
+                @click.native.stop.prevent="share"
+                @touchstart.native.stop.prevent="share"
+                style="margin: 0%; padding: 0%;"
+              >
+                <v-icon large>share</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn
+                block
+                text
+                large
+                :disabled="recording"
                 @click.native.stop.prevent="snap"
                 @touchstart.native.stop.prevent="snap"
                 style="margin: 0%; padding: 0%;"
@@ -295,4 +308,9 @@
       </v-container>
     </v-card>
   </v-bottom-sheet>
+  <v-dialog v-model="shared">
+    <v-card flat style="margin: auto;">
+      <v-card-title style="word-break: break-all;"><a :herf="link">{{link}}</a></v-card-title>
+    </v-card>
+  </v-dialog>
 </v-app>

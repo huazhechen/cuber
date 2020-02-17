@@ -352,4 +352,17 @@ export default class Director extends Vue {
     window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
     this.cuber.cube.strip({});
   }
+
+  link: string = "";
+  shared: boolean = false;
+  share() {
+    let data: { [key: string]: any } = {};
+    data["scene"] = this.scene;
+    data["action"] = this.action;
+    data["stickers"] = this.stickers;
+    let string = JSON.stringify(data);
+    string = Base64.encode(string);
+    this.link = window.location.origin + window.location.pathname + "?" + string;
+    this.shared = true;
+  }
 }
