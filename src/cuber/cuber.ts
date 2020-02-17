@@ -93,10 +93,7 @@ export default class Cuber {
     light = new THREE.AmbientLight(0xffffff, 0.8);
     this.scene.add(light);
     light = new THREE.DirectionalLight(0xffffff, 0.2);
-    light.position.set(0, Cubelet.SIZE * 4, 0);
-    this.scene.add(light);
-    light = new THREE.DirectionalLight(0xffffff, 0.1);
-    light.position.set(0, 0, Cubelet.SIZE * 4);
+    light.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(light);
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);

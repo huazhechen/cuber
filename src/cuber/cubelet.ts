@@ -151,7 +151,7 @@ class Mirror extends THREE.ShapeGeometry {
 
 export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
-  private static readonly _BORDER_WIDTH: number = 4;
+  private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _STICKER_DEPTH: number = 3;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
@@ -162,7 +162,7 @@ export default class Cubelet extends THREE.Group {
     for (const key in COLORS) {
       let color = (<any>COLORS)[key];
       if (key == "BLACK") {
-        result[key] = new THREE.MeshPhongMaterial({ color: color, specular: COLORS.GRAY });
+        result[key] = new THREE.MeshPhongMaterial({ color: color, specular: "#444" });
       } else {
         result[key] = new THREE.MeshLambertMaterial({ color: color });
       }
@@ -381,6 +381,12 @@ export default class Cubelet extends THREE.Group {
     } else {
       lamber = this.lambers[face];
       basic = this.basics[face];
+    }
+    if (index == "BLACK") {
+      this.stickers[face].visible = false;
+    }
+    else{
+      this.stickers[face].visible = true;
     }
     this.stickers[face].material = lamber;
     if (this.mirrors[face] instanceof THREE.Mesh) {
