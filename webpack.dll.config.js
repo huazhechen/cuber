@@ -20,7 +20,6 @@ module.exports = {
   resolve: {
     alias: {
       vue$: "vue/dist/vue.esm.js",
-      three$: "three/build/three.min.js",
       vuetify$: "vuetify/dist/vuetify.min.js",
       "vuetify/dist/vuetify.css$": "vuetify/dist/vuetify.min.css"
     },
