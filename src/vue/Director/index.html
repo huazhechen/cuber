@@ -310,7 +310,7 @@
   </v-bottom-sheet>
   <v-dialog v-model="shared">
     <v-card flat style="margin: auto;">
-      <v-card-title style="word-break: break-all;"><a :herf="link">{{link}}</a></v-card-title>
+      <v-card-title style="word-break: break-all;"><v-textarea readonly solo flat v-model="link"></v-textarea></v-card-title>
     </v-card>
   </v-dialog>
 </v-app>

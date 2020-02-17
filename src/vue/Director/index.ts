@@ -95,6 +95,12 @@ export default class Director extends Vue {
         this.scene = init.scene || "";
         this.action = init.action || "";
         this.stickers = init.stickers || [];
+        if (init.option) {
+          this.option.scale = init.option[0];
+          this.option.perspective = init.option[1];
+          this.option.angle = init.option[2];
+          this.option.gradient = init.option[3];
+        }
         history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
       } catch (error) {
         console.log(error);
@@ -360,6 +366,7 @@ export default class Director extends Vue {
     data["scene"] = this.scene;
     data["action"] = this.action;
     data["stickers"] = this.stickers;
+    data["option"] = [this.option.scale, this.option.perspective, this.option.angle, this.option.gradient];
     let string = JSON.stringify(data);
     string = Base64.encode(string);
     this.link = window.location.origin + window.location.pathname + "?" + string;
