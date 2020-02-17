@@ -1,5 +1,3 @@
-import Cuber from "./cuber";
-
 export default class Tweener {
   tweens: Tween[];
 
