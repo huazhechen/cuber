@@ -259,10 +259,6 @@ export default class GIF {
     this.deep = 7;
     this.colors = new Uint8Array(3 * Math.pow(2, this.deep));
     let i = 0;
-    let rgb = RGB(COLORS.YELLOW);
-    console.log(rgb);
-    rgb = HSV2RGB(RGB2HSV(rgb));
-    console.log(rgb);
     // TRANSPARENT
     this.colors[i++] = 0x00;
     this.colors[i++] = 0x00;
