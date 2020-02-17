@@ -125,7 +125,7 @@ class Sticker extends THREE.ExtrudeGeometry {
 }
 
 class Mirror extends THREE.ShapeGeometry {
-  constructor(size: number, depth: number) {
+  constructor(size: number) {
     size = size / 2;
     let left = -size;
     let bottom = size;
@@ -155,7 +155,7 @@ export default class Cubelet extends THREE.Group {
   private static readonly _STICKER_DEPTH: number = 2;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
-  private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
+  private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH);
 
   private static _MATERIALS = {
     green: new THREE.MeshBasicMaterial({ color: COLORS.GREEN }),
