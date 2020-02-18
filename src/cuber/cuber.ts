@@ -2,7 +2,6 @@ import * as THREE from "three";
 
 import Cube from "./cube";
 import Controller from "./controller";
-import { tweener } from "./tweener";
 import Cubelet from "./cubelet";
 import { COLORS } from "../common/define";
 
@@ -69,6 +68,27 @@ export default class Cuber {
     this.resize();
   }
 
+  private ambient: THREE.AmbientLight;
+  private _brightness: number;
+  get brightness() {
+    return this._brightness;
+  }
+  set brightness(value) {
+    this._brightness = value;
+    this.ambient.intensity = value;
+    this.dirty = true;
+  }
+  private directional: THREE.DirectionalLight;
+  private _intensity: number;
+  get intensity() {
+    return this._intensity;
+  }
+  set intensity(value) {
+    this._intensity = value;
+    this.directional.intensity = value;
+    this.dirty = true;
+  }
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
 
@@ -89,12 +109,11 @@ export default class Cuber {
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
     this.scene.add(this.cube);
 
-    let light;
-    light = new THREE.AmbientLight(0xffffff, 0.8);
-    this.scene.add(light);
-    light = new THREE.DirectionalLight(0xffffff, 0.2);
-    light.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
-    this.scene.add(light);
+    this.ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    this.scene.add(this.ambient);
+    this.directional = new THREE.DirectionalLight(0xffffff, 0.2);
+    this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
+    this.scene.add(this.directional);
 
     this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;

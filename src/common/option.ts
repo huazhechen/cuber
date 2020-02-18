@@ -18,6 +18,8 @@ export default class Option {
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
     this.angle = Number(this._storage.getItem("setting.angle") || 25);
     this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
+    this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
+    this.intensity = Number(this._storage.getItem("setting.intensity") || 20);
     this.lock = false;
     this.mirror = false;
   }
@@ -27,6 +29,8 @@ export default class Option {
     this.perspective = 50;
     this.angle = 25;
     this.gradient = 67;
+    this.brightness = 80;
+    this.intensity = 20;
   }
 
   private _scale: number;
@@ -67,6 +71,26 @@ export default class Option {
     this._gradient = value;
     this._storage.setItem("setting.gradient", String(value));
     this.cuber.gradient = ((1 - value / 100) * Math.PI) / 2;
+  }
+
+  private _brightness: number;
+  get brightness() {
+    return this._brightness;
+  }
+  set brightness(value) {
+    this._brightness = value;
+    this._storage.setItem("setting.brightness", String(value));
+    this.cuber.brightness = value / 100;
+  }
+
+  private _intensity: number;
+  get intensity() {
+    return this._intensity;
+  }
+  set intensity(value) {
+    this._intensity = value;
+    this._storage.setItem("setting.intensity", String(value));
+    this.cuber.intensity = value / 100;
   }
 
   get mirror() {
