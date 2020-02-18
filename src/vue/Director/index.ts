@@ -301,12 +301,17 @@ export default class Director extends Vue {
   }
 
   snap() {
-    this.cuber.camera.aspect = 1;
-    this.cuber.camera.updateProjectionMatrix();
     let size = this.pixel;
+    let width = this.cuber.width;
+    let height = this.cuber.height;
+    this.cuber.width = size;
+    this.cuber.height = size;
+    this.cuber.resize();
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
     this.snaper.render(this.cuber.scene, this.cuber.camera);
+    this.cuber.width = width;
+    this.cuber.height = height;
     this.cuber.resize();
     let content = this.snaper.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
@@ -323,12 +328,17 @@ export default class Director extends Vue {
   }
 
   svg() {
-    this.cuber.camera.aspect = 1;
-    this.cuber.camera.updateProjectionMatrix();
     let size = this.pixel;
+    let width = this.cuber.width;
+    let height = this.cuber.height;
+    this.cuber.width = size;
+    this.cuber.height = size;
+    this.cuber.resize();
     this.svger.setSize(size, size);
     this.svger.clear();
     this.svger.render(this.cuber.scene, this.cuber.camera);
+    this.cuber.width = width;
+    this.cuber.height = height;
     this.cuber.resize();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);

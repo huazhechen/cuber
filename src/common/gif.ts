@@ -259,6 +259,9 @@ export default class GIF {
     colors[i++] = 0x00;
     colors[i++] = 0x00;
     // BLACK-WHITE
+    colors[i++] = 0xff;
+    colors[i++] = 0xff;
+    colors[i++] = 0xff;
     for (let v = 0; v < 255; v = v + 4) {
       colors[i++] = v;
       colors[i++] = v;
@@ -268,7 +271,7 @@ export default class GIF {
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
-      if (hsv[0] == 0 && hsv[1] == 0) {
+      if (hsv[1] == 0 || hsv[2] == 0) {
         continue;
       }
       let value = hsv[2];
@@ -294,7 +297,7 @@ export default class GIF {
       }
     }
     GIF.COLORN = i;
-    if (GIF.COLORN > 3 * Math.pow(2, GIF.DEEP)){
+    if (GIF.COLORN > 3 * Math.pow(2, GIF.DEEP)) {
       throw "too many colors";
     }
     return colors;
