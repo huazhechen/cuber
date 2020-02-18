@@ -1,7 +1,7 @@
 import Cuber from "../cuber/cuber";
 import { TouchAction } from "./define";
 
-export default class Option {
+export default class Context {
   private _storage = window.localStorage;
   private cuber: Cuber;
   constructor(cuber: Cuber) {

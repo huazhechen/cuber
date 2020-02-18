@@ -21,7 +21,8 @@ export var COLORS = {
   WHITE: "#F0F0F0",
   CYAN: "#18FFFF",
   LIME: "#C6FF00",
-  PINK: "#FF4081"
+  PINK: "#FF4081",
+  DISABLE: "#BDBDBD"
 };
 
 export function RGB(value: string) {

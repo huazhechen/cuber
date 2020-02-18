@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Provide } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
-import Option from "../../common/option";
+import Context from "../../common/context";
 import Tune from "../Tune";
 import * as THREE from "three";
 import { COLORS } from "../../common/define";
@@ -18,8 +18,8 @@ export default class Playground extends Vue {
   @Provide("cuber")
   cuber: Cuber;
 
-  @Provide("option")
-  option: Option;
+  @Provide("context")
+  context: Context;
 
   keyboard: Keyboard = new Keyboard();
 
@@ -56,11 +56,11 @@ export default class Playground extends Vue {
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.cuber = new Cuber();
-    this.option = new Option(this.cuber);
-    this.option.control(canvas, this.cuber.touch);
+    this.context = new Context(this.cuber);
+    this.context.control(canvas, this.cuber.touch);
     this.cuber.cube.callbacks.push(() => {
       if (this.cuber.cube.complete) {
-        this.option.lock = true;
+        this.context.lock = true;
       }
     });
   }
@@ -121,7 +121,7 @@ export default class Playground extends Vue {
   shuffle() {
     this.cuber.cube.twister.twist("*");
     this.menu = false;
-    this.option.lock = false;
+    this.context.lock = false;
     this.start = 0;
     this.now = 0;
   }

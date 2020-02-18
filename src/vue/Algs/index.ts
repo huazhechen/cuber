@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
-import Option from "../../common/option";
+import Context from "../../common/context";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
 import Tune from "../Tune";
@@ -18,8 +18,8 @@ export default class Player extends Vue {
   @Provide("cuber")
   cuber: Cuber;
 
-  @Provide("option")
-  option: Option;
+  @Provide("context")
+  context: Context;
 
   algs = require("./algs.json");
 
@@ -43,8 +43,8 @@ export default class Player extends Vue {
     this.renderer.setClearColor(COLORS.BACKGROUND);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.cuber = new Cuber();
-    this.option = new Option(this.cuber);
-    this.option.control(canvas, this.cuber.touch);
+    this.context = new Context(this.cuber);
+    this.context.control(canvas, this.cuber.touch);
     this.cuber.cube.twister.callbacks.push(() => {
       this.play();
     });

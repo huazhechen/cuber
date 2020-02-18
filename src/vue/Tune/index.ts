@@ -1,13 +1,13 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
-import Option from "../../common/option";
+import Context from "../../common/context";
 
 @Component({
   template: require("./index.html")
 })
 export default class Tune extends Vue {
-  @Inject("option")
-  option: Option;
+  @Inject("context")
+  context: Context;
 
   @Prop({ required: true })
   value: boolean;

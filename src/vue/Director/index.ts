@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
-import Option from "../../common/option";
+import Context from "../../common/context";
 import { COLORS, FACE, DOWNLOAD } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
@@ -21,8 +21,8 @@ export default class Director extends Vue {
   @Provide("cuber")
   cuber: Cuber;
 
-  @Provide("option")
-  option: Option;
+  @Provide("context")
+  context: Context;
 
   menu: boolean = false;
   tune: boolean = false;
@@ -67,8 +67,8 @@ export default class Director extends Vue {
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.cuber = new Cuber();
-    this.option = new Option(this.cuber);
-    this.option.control(canvas, this.cuber.touch);
+    this.context = new Context(this.cuber);
+    this.context.control(canvas, this.cuber.touch);
     this.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
@@ -110,10 +110,10 @@ export default class Director extends Vue {
         this.action = init.action || "";
         this.stickers = init.stickers || [];
         if (init.option) {
-          this.option.scale = init.option[0];
-          this.option.perspective = init.option[1];
-          this.option.angle = init.option[2];
-          this.option.gradient = init.option[3];
+          this.context.scale = init.option[0];
+          this.context.perspective = init.option[1];
+          this.context.angle = init.option[2];
+          this.context.gradient = init.option[3];
         }
         history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
       } catch (error) {
@@ -412,7 +412,7 @@ export default class Director extends Vue {
     data["scene"] = this.scene;
     data["action"] = this.action;
     data["stickers"] = this.stickers;
-    data["option"] = [this.option.scale, this.option.perspective, this.option.angle, this.option.gradient];
+    data["context"] = [this.context.scale, this.context.perspective, this.context.angle, this.context.gradient];
     let string = JSON.stringify(data);
     string = Base64.encode(string);
     this.link = window.location.origin + window.location.pathname + "?" + string;

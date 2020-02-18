@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Inject } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
-import Option from "../../common/option";
+import Context from "../../common/context";
 
 @Component({
   template: require("./index.html")
@@ -10,8 +10,8 @@ export default class Keyboard extends Vue {
   @Inject("cuber")
   cuber: Cuber;
 
-  @Inject("option")
-  option: Option;
+  @Inject("context")
+  context: Context;
 
   width: number = 0;
   height: number = 0;
