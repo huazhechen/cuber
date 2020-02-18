@@ -162,7 +162,7 @@ export default class Cubelet extends THREE.Group {
     for (const key in COLORS) {
       let color = (<any>COLORS)[key];
       if (key == "BLACK") {
-        result[key] = new THREE.MeshPhongMaterial({ color: color, specular: "#444" });
+        result[key] = new THREE.MeshPhongMaterial({ color: color, specular: COLORS.GRAY });
       } else {
         result[key] = new THREE.MeshLambertMaterial({ color: color });
       }

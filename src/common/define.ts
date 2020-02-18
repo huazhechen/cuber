@@ -1,6 +1,6 @@
 export var COLORS = {
   BACKGROUND: "#FFFFFF",
-  GRAY: "#808080",
+  GRAY: "#444444",
   BLACK: "#222222",
   GREEN: "#00A020",
   ORANGE: "#FF6D00",

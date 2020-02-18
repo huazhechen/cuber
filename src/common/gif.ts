@@ -276,8 +276,8 @@ export default class GIF {
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
-      if (hsv[2] >= 20) {
-        let delta = hsv[2] / 5 / 12;
+      if (hsv[2] >= 60) {
+        let delta = hsv[2] / 6 / 12;
         for (let d = 0; d < 12; d++) {
           let dhsv = [hsv[0], hsv[1], hsv[2] - delta * (d + 1)];
           let drgb = HSV2RGB(dhsv);
@@ -291,7 +291,7 @@ export default class GIF {
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
-      if (hsv[2] >= 20) {
+      if (hsv[2] >= 24) {
         for (let d = 0; d < 7; d++) {
           let dhsv = [hsv[0], hsv[1], (hsv[2] / 8) * (d + 1)];
           let drgb = HSV2RGB(dhsv);
@@ -305,7 +305,7 @@ export default class GIF {
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
-      if (hsv[1] >= 20) {
+      if (hsv[1] >= 9) {
         for (let d = 0; d < 2; d++) {
           let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
           let drgb = HSV2RGB(dhsv);
@@ -316,6 +316,7 @@ export default class GIF {
       }
     }
     this.colorn = i;
+    console.log(this.colorn)
     this.dispose = 0;
   }
 
