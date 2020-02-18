@@ -34,10 +34,6 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
 # [公式宝典](https://huazhechen.gitee.io/cuber/algs.html)
 
-- 查看与播放
-
-  ![player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/player.gif)
-
 - 单步播放与播放控制
 
   ![play-control](https://gitee.com/huazhechen/cuber/raw/master/screenshot/play-control.gif)
@@ -60,9 +56,13 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
   ![snap](https://gitee.com/huazhechen/cuber/raw/master/screenshot/snap.gif)
 
-- 动画编写/播放/导出
+- 动画编写/播放
 
   ![action](https://gitee.com/huazhechen/cuber/raw/master/screenshot/action.gif)
+
+- 导出gif
+
+  ![gif](https://gitee.com/huazhechen/cuber/raw/master/screenshot/gif.gif)
 
 - 自动布置场景
 
