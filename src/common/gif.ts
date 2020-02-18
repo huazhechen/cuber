@@ -1,4 +1,4 @@
-import { COLORS, RGB, RGB2HSV, HSV2RGB } from "./define";
+import { COLORS, RGB, RGB2HSV, HSV2RGB, RGBD } from "./define";
 
 class ByteArray {
   static SIZE = 4096;
@@ -255,49 +255,34 @@ export default class GIF {
     let colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
     let i = 0;
     // TRANSPARENT
-    colors[i++] = 0xFF;
+    colors[i++] = 0xff;
     colors[i++] = 0x00;
     colors[i++] = 0x00;
-    // ORIGIN COLOR
-    for (const key in COLORS) {
-      let rgb = RGB((<any>COLORS)[key]);
-      colors[i++] = rgb[0];
-      colors[i++] = rgb[1];
-      colors[i++] = rgb[2];
+    // BLACK-WHITE
+    for (let v = 0; v < 255; v = v + 4) {
+      colors[i++] = v;
+      colors[i++] = v;
+      colors[i++] = v;
     }
     // LIGHT
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
       let hsv = RGB2HSV(rgb);
-      if (hsv[2] >= 60) {
-        let delta = hsv[2] / 6 / 12;
-        for (let d = 0; d < 12; d++) {
-          let dhsv = [hsv[0], hsv[1], hsv[2] - delta * (d + 1)];
-          let drgb = HSV2RGB(dhsv);
-          colors[i++] = drgb[0];
-          colors[i++] = drgb[1];
-          colors[i++] = drgb[2];
-        }
+      if (hsv[0] == 0 && hsv[1] == 0) {
+        continue;
       }
-    }
-    // ANTIALIAS BLACK
-    for (const key in COLORS) {
-      let rgb = RGB((<any>COLORS)[key]);
-      let hsv = RGB2HSV(rgb);
-      if (hsv[2] >= 24) {
-        for (let d = 0; d < 7; d++) {
-          let dhsv = [hsv[0], hsv[1], (hsv[2] / 8) * (d + 1)];
-          let drgb = HSV2RGB(dhsv);
-          colors[i++] = drgb[0];
-          colors[i++] = drgb[1];
-          colors[i++] = drgb[2];
+      let value = hsv[2];
+      for (let d = 0; d < 24; d++) {
+        value = value - 2 ** Math.ceil(d / 8);
+        if (value < 0) {
+          break;
         }
+        let dhsv = [hsv[0], hsv[1], value];
+        let drgb = HSV2RGB(dhsv);
+        colors[i++] = drgb[0];
+        colors[i++] = drgb[1];
+        colors[i++] = drgb[2];
       }
-    }
-    // ANTIALIAS WHITE
-    for (const key in COLORS) {
-      let rgb = RGB((<any>COLORS)[key]);
-      let hsv = RGB2HSV(rgb);
       if (hsv[1] >= 9) {
         for (let d = 0; d < 2; d++) {
           let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
@@ -309,7 +294,9 @@ export default class GIF {
       }
     }
     GIF.COLORN = i;
-    console.log(GIF.COLORN);
+    if (GIF.COLORN > 3 * Math.pow(2, GIF.DEEP)){
+      throw "too many colors";
+    }
     return colors;
   })();
 
@@ -336,10 +323,10 @@ export default class GIF {
     let dmin = 256 * 256 * 256;
     let best = 0;
     for (let i = 0; i < GIF.COLORN; index++) {
-      let dr = r - GIF.COLORS[i++];
-      let dg = g - GIF.COLORS[i++];
-      let db = b - GIF.COLORS[i++];
-      let d = Math.abs(dr) * 0.297 + Math.abs(dg) * 0.593 + Math.abs(db) * 0.11;
+      let dr = GIF.COLORS[i++];
+      let dg = GIF.COLORS[i++];
+      let db = GIF.COLORS[i++];
+      let d = RGBD(r, g, b, dr, dg, db);
       if (d == 0) {
         return index;
       }

@@ -347,7 +347,7 @@ export default class Director extends Vue {
     COLORS.GRAY,
     COLORS.CYAN,
     COLORS.LIME,
-    COLORS.PINK
+    COLORS.PURPLE
   ];
   color = 6;
   colord = false;

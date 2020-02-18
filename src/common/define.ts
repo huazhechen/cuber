@@ -10,7 +10,7 @@ export var COLORS = {
   WHITE: "#F0F0F0",
   CYAN: "#18FFFF",
   LIME: "#C6FF00",
-  PINK: "#FF4081"
+  PURPLE: "#E040FB"
 };
 
 export function RGB(value: string) {
@@ -109,6 +109,29 @@ export function HSV2RGB(hsv: number[]) {
   g = Math.floor(g * 255.0);
   b = Math.floor(b * 255.0);
   return [r, g, b];
+}
+
+export function HSVD(hsv1: number[], hsv2: number[]) {
+  let r = 50;
+  let h = 90;
+  let x1 = r * hsv1[2] * hsv1[1] * Math.cos((hsv1[0] / 180) * Math.PI);
+  let y1 = r * hsv1[2] * hsv1[1] * Math.sin((hsv1[0] / 180) * Math.PI);
+  let z1 = h * (1 - hsv1[2]);
+  let x2 = r * hsv2[2] * hsv2[1] * Math.cos((hsv2[0] / 180) * Math.PI);
+  let y2 = r * hsv2[2] * hsv2[1] * Math.sin((hsv2[0] / 180) * Math.PI);
+  let z2 = h * (1 - hsv2[2]);
+  let dx = x1 - x2;
+  let dy = y1 - y2;
+  let dz = z1 - z2;
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+export function RGBD(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number) {
+  let rmean = (r1 + r2) / 2;
+  let r = r1 - r2;
+  let g = g1 - g2;
+  let b = b1 - b2;
+  return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
 }
 
 export enum FACE {
