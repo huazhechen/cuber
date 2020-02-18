@@ -258,7 +258,7 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.resize();
+    this.cuber.project();
     this.filmer.clear();
     this.filmer.render(this.cuber.scene, this.cuber.camera);
     let content = this.filmer.getContext();
@@ -267,13 +267,12 @@ export default class Director extends Vue {
     this.gif.add(pixels);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.resize();
+    this.cuber.project();
   }
 
   finish() {
     this.recording = false;
     this.cuber.controller.disable = false;
-    this.cuber.resize();
     this.gif.finish();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
@@ -285,7 +284,6 @@ export default class Director extends Vue {
     if (this.recording) {
       this.recording = false;
       this.cuber.controller.disable = false;
-      this.cuber.resize();
       this.gif.finish();
       return;
     }
@@ -306,13 +304,13 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.resize();
+    this.cuber.project();
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
     this.snaper.render(this.cuber.scene, this.cuber.camera);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.resize();
+    this.cuber.project();
     let content = this.snaper.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
@@ -333,13 +331,13 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.resize();
+    this.cuber.project();
     this.svger.setSize(size, size);
     this.svger.clear();
     this.svger.render(this.cuber.scene, this.cuber.camera);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.resize();
+    this.cuber.project();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);
     let url = "data:image/svg+xml;base64," + btoa(content);

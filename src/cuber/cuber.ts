@@ -124,7 +124,7 @@ export default class Cuber {
     this.angle = -Math.PI / 8;
   }
 
-  resize() {
+  project() {
     let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
@@ -136,6 +136,10 @@ export default class Cuber {
     this.camera.far = distance + Cubelet.SIZE * 3;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
+  }
+
+  resize() {
+    this.project();
     this.renderer.setSize(this.width, this.height, true);
     this.dirty = true;
   }
