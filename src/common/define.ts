@@ -126,11 +126,11 @@ export function HSVD(hsv1: number[], hsv2: number[]) {
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-export function RGBD(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number) {
-  let rmean = (r1 + r2) / 2;
-  let r = r1 - r2;
-  let g = g1 - g2;
-  let b = b1 - b2;
+export function RGBD(rgb1: number[], rgb2: number[]) {
+  let rmean = (rgb1[0] + rgb2[0]) / 2;
+  let r = rgb1[0] - rgb2[0];
+  let g = rgb1[1] - rgb2[1];
+  let b = rgb1[2] - rgb2[2];
   return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
 }
 
