@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Cuber from "./cuber";
 import Cubelet from "./cubelet";
 import Group from "./group";
-import { FACE } from "../common/define";
+import { FACE, TouchAction } from "../common/define";
 import { tweener } from "./tweener";
 
 export class Holder {
@@ -53,13 +53,6 @@ export default class Controller {
   constructor(cuber: Cuber) {
     this.cuber = cuber;
     this.taps = [];
-    this.cuber.canvas.addEventListener("mousedown", this._onMouseDown);
-    this.cuber.canvas.addEventListener("mousemove", this._onMouseMove);
-    this.cuber.canvas.addEventListener("mouseup", this._onMouseUp);
-    this.cuber.canvas.addEventListener("mouseout", this._onMouseOut);
-    this.cuber.canvas.addEventListener("touchstart", this._onTouch);
-    this.cuber.canvas.addEventListener("touchmove", this._onTouch);
-    this.cuber.canvas.addEventListener("touchend", this._onTouch);
     this.loop();
   }
 
@@ -355,55 +348,29 @@ export default class Controller {
     this.cuber.dirty = true;
   }
 
-  _onMouseDown = (event: MouseEvent) => {
-    this.down.x = event.offsetX;
-    this.down.y = event.offsetY;
-
-    this.handleDown();
-    event.returnValue = false;
-    return false;
-  };
-
-  _onMouseMove = (event: MouseEvent) => {
-    this.move.x = event.offsetX;
-    this.move.y = event.offsetY;
-    this.handleMove();
-    event.returnValue = false;
-    return false;
-  };
-  _onMouseUp = (event: MouseEvent) => {
-    this.handleUp();
-    event.returnValue = false;
-    return false;
-  };
-
-  _onMouseOut = (event: MouseEvent) => {
-    this.handleUp();
-    event.returnValue = false;
-    return false;
-  };
-
-  _onTouch = (event: TouchEvent) => {
-    let touches = event.changedTouches;
-    let first = touches[0];
-    switch (event.type) {
+  touch(action: TouchAction) {
+    switch (action.type) {
       case "touchstart":
-        this.down.x = first.clientX;
-        this.down.y = first.clientY;
+      case "mousedown":
+        this.down.x = action.x;
+        this.down.y = action.y;
         this.handleDown();
         break;
       case "touchmove":
-        this.move.x = first.clientX;
-        this.move.y = first.clientY;
+      case "mousemove":
+        this.move.x = action.x;
+        this.move.y = action.y;
         this.handleMove();
         break;
       case "touchend":
+      case "touchcancel":
+      case "mouseup":
+      case "mouseout":
         this.handleUp();
         break;
       default:
-        return;
+        return false;
     }
-    event.returnValue = false;
-    return false;
-  };
+    return true;
+  }
 }

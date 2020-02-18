@@ -3,15 +3,13 @@ import * as THREE from "three";
 import Cube from "./cube";
 import Controller from "./controller";
 import Cubelet from "./cubelet";
-import { COLORS } from "../common/define";
+import { TouchAction } from "../common/define";
 
 export default class Cuber {
   public width: number;
   public height: number;
   public dirty: boolean = false;
 
-  public canvas: HTMLCanvasElement;
-  public renderer: THREE.WebGLRenderer;
   public scene: THREE.Scene;
   public camera: THREE.PerspectiveCamera;
 
@@ -89,20 +87,9 @@ export default class Cuber {
     this.dirty = true;
   }
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-
+  constructor() {
     this.controller = new Controller(this);
     this.cube = new Cube();
-
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true
-    });
-    this.renderer.autoClear = false;
-    this.renderer.setClearColor(COLORS.BACKGROUND);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(this.width, this.height, true);
 
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 6;
@@ -124,7 +111,7 @@ export default class Cuber {
     this.angle = -Math.PI / 8;
   }
 
-  project() {
+  resize() {
     let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
@@ -136,22 +123,10 @@ export default class Cuber {
     this.camera.far = distance + Cubelet.SIZE * 3;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
-  }
-
-  resize() {
-    this.project();
-    this.renderer.setSize(this.width, this.height, true);
     this.dirty = true;
   }
 
-  render() {
-    if (this.dirty || this.cube.dirty) {
-      this.renderer.clear();
-      this.renderer.render(this.scene, this.camera);
-      this.dirty = false;
-      this.cube.dirty = false;
-      return true;
-    }
-    return false;
-  }
+  touch = (action: TouchAction) => {
+    return this.controller.touch(action);
+  };
 }

@@ -5,6 +5,8 @@ import Option from "../../common/option";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
 import Tune from "../Tune";
+import * as THREE from "three";
+import { COLORS } from "../../common/define";
 
 @Component({
   template: require("./index.html"),
@@ -29,12 +31,20 @@ export default class Player extends Vue {
   size: number = 0;
 
   progress: number = 0;
-
+  renderer: THREE.WebGLRenderer;
   constructor() {
     super();
     let canvas = document.createElement("canvas");
-    this.cuber = new Cuber(canvas);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true
+    });
+    this.renderer.autoClear = false;
+    this.renderer.setClearColor(COLORS.BACKGROUND);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.cuber = new Cuber();
     this.option = new Option(this.cuber);
+    this.option.control(canvas, this.cuber.touch);
     this.cuber.cube.twister.callbacks.push(() => {
       this.play();
     });
@@ -48,7 +58,7 @@ export default class Player extends Vue {
   mounted() {
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
-      cuber.appendChild(this.cuber.canvas);
+      cuber.appendChild(this.renderer.domElement);
       this.$nextTick(this.resize);
     }
     for (let i = 0; i < this.algs.length; i++) {
@@ -71,8 +81,11 @@ export default class Player extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    let ret = this.cuber.render();
-    if (ret) {
+    if (this.cuber.dirty || this.cuber.cube.dirty) {
+      this.renderer.clear();
+      this.renderer.render(this.cuber.scene, this.cuber.camera);
+      this.cuber.dirty = false;
+      this.cuber.cube.dirty = false;
       return;
     }
     this.pics.some((group, idx) => {
@@ -95,6 +108,7 @@ export default class Player extends Vue {
     this.cuber.width = this.width;
     this.cuber.height = this.height - 210;
     this.cuber.resize();
+    this.renderer.setSize(this.cuber.width, this.cuber.height, true);
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";

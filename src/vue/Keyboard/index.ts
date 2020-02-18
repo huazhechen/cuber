@@ -36,6 +36,7 @@ export default class Keyboard extends Vue {
 
   get style() {
     return {
+      "margin-top":"1px",
       "margin-left": this.height / 48 + "px",
       "margin-bottom": this.height / 36 + "px",
       width: (this.height / 32) * 9 + "px",

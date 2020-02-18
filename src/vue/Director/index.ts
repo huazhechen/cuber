@@ -54,11 +54,21 @@ export default class Director extends Vue {
     return this.cuber.cube.duration;
   }
 
+  renderer: THREE.WebGLRenderer;
   constructor() {
     super();
     let canvas = document.createElement("canvas");
-    this.cuber = new Cuber(canvas);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true
+    });
+    this.renderer.autoClear = false;
+    this.renderer.setClearColor(COLORS.BACKGROUND);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+
+    this.cuber = new Cuber();
     this.option = new Option(this.cuber);
+    this.option.control(canvas, this.cuber.touch);
     this.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
@@ -78,6 +88,7 @@ export default class Director extends Vue {
     this.cuber.width = this.width;
     this.cuber.height = this.height - 260;
     this.cuber.resize();
+    this.renderer.setSize(this.cuber.width, this.cuber.height, true);
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
@@ -116,7 +127,7 @@ export default class Director extends Vue {
 
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
-      cuber.appendChild(this.cuber.canvas);
+      cuber.appendChild(this.renderer.domElement);
       this.$nextTick(this.resize);
     }
     this.cuber.controller.taps.push(this.tap);
@@ -249,7 +260,12 @@ export default class Director extends Vue {
     if (this.recording) {
       this.record();
     }
-    this.cuber.render();
+    if (this.cuber.dirty || this.cuber.cube.dirty) {
+      this.renderer.clear();
+      this.renderer.render(this.cuber.scene, this.cuber.camera);
+      this.cuber.dirty = false;
+      this.cuber.cube.dirty = false;
+    }
   }
 
   record() {
@@ -258,7 +274,7 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.project();
+    this.cuber.resize();
     this.filmer.clear();
     this.filmer.render(this.cuber.scene, this.cuber.camera);
     let content = this.filmer.getContext();
@@ -267,7 +283,7 @@ export default class Director extends Vue {
     this.gif.add(pixels);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.project();
+    this.cuber.resize();
   }
 
   finish() {
@@ -304,13 +320,13 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.project();
+    this.cuber.resize();
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
     this.snaper.render(this.cuber.scene, this.cuber.camera);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.project();
+    this.cuber.resize();
     let content = this.snaper.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
@@ -331,13 +347,13 @@ export default class Director extends Vue {
     let height = this.cuber.height;
     this.cuber.width = size;
     this.cuber.height = size;
-    this.cuber.project();
+    this.cuber.resize();
     this.svger.setSize(size, size);
     this.svger.clear();
     this.svger.render(this.cuber.scene, this.cuber.camera);
     this.cuber.width = width;
     this.cuber.height = height;
-    this.cuber.project();
+    this.cuber.resize();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);
     let url = "data:image/svg+xml;base64," + btoa(content);

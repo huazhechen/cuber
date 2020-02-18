@@ -4,6 +4,8 @@ import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Option from "../../common/option";
 import Tune from "../Tune";
+import * as THREE from "three";
+import { COLORS } from "../../common/define";
 
 @Component({
   template: require("./index.html"),
@@ -40,11 +42,22 @@ export default class Playground extends Vue {
     return time + "/" + this.cuber.cube.history.moves;
   }
 
+  renderer: THREE.WebGLRenderer;
   constructor() {
     super();
     let canvas = document.createElement("canvas");
-    this.cuber = new Cuber(canvas);
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true
+    });
+    this.renderer.autoClear = false;
+    this.renderer.setClearColor(COLORS.BACKGROUND);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+
+    this.cuber = new Cuber();
     this.option = new Option(this.cuber);
+    this.option.control(canvas, this.cuber.touch);
     this.cuber.cube.callbacks.push(() => {
       if (this.cuber.cube.complete) {
         this.option.lock = true;
@@ -55,11 +68,12 @@ export default class Playground extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.min(this.width / 8, this.height / 14);
+    this.size = Math.ceil(Math.min(this.width / 8, this.height / 14));
 
     this.cuber.width = this.width;
     this.cuber.height = this.height - this.size * 4;
     this.cuber.resize();
+    this.renderer.setSize(this.cuber.width, this.cuber.height, true);
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
       cuber.style.width = this.width + "px";
@@ -77,7 +91,7 @@ export default class Playground extends Vue {
     this.shuffle();
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
-      cuber.appendChild(this.cuber.canvas);
+      cuber.appendChild(this.renderer.domElement);
       this.$nextTick(this.resize);
     }
     this.loop();
@@ -96,7 +110,12 @@ export default class Playground extends Vue {
         this.now = new Date().getTime();
       }
     }
-    this.cuber.render();
+    if (this.cuber.dirty || this.cuber.cube.dirty) {
+      this.renderer.clear();
+      this.renderer.render(this.cuber.scene, this.cuber.camera);
+      this.cuber.dirty = false;
+      this.cuber.cube.dirty = false;
+    }
   }
 
   shuffle() {
