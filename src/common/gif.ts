@@ -323,10 +323,10 @@ export default class GIF {
     let dmin = 256 * 256 * 256;
     let best = 0;
     for (let i = 0; i < GIF.COLORN; index++) {
-      let dr = GIF.COLORS[i++];
-      let dg = GIF.COLORS[i++];
-      let db = GIF.COLORS[i++];
-      let d = RGBD(r, g, b, dr, dg, db);
+      let dr = r - GIF.COLORS[i++];
+      let dg = g - GIF.COLORS[i++];
+      let db = b - GIF.COLORS[i++];
+      let d = Math.abs(dr) * 0.297 + Math.abs(dg) * 0.593 + Math.abs(db) * 0.11;
       if (d == 0) {
         return index;
       }
