@@ -237,7 +237,6 @@ export default class GIF {
   height: number;
   delay: number;
   image: Uint8Array;
-  pre: Uint8Array | null = null;
   data: Uint8Array;
   last: Uint8Array;
   real: Uint8Array;
@@ -248,7 +247,10 @@ export default class GIF {
   x1: number;
   y0: number;
   y1: number;
+
   private static DEEP = 8;
+  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.DEEP + 1));
+
   private static COLORN = 0;
 
   private static COLORS: Uint8Array = (() => {
@@ -344,10 +346,6 @@ export default class GIF {
   getPixels() {
     var w = this.width;
     var h = this.height;
-    let lr = -1;
-    let lg = -1;
-    let lb = -1;
-    let li = -1;
     this.x0 = w;
     this.x1 = 0;
     this.y0 = h;
@@ -359,19 +357,14 @@ export default class GIF {
         let r = this.image[from * 4 + 0];
         let g = this.image[from * 4 + 1];
         let b = this.image[from * 4 + 2];
+        let hash = (r * 31 + g) * 31 + b;
+        hash = hash & 0x1ff;
         let index;
-        if (r == lr && g == lg && b == lb) {
-          index = li;
+        if (GIF.HASH[hash] && GIF.HASH[hash].RGB[0] == r && GIF.HASH[hash].RGB[1] == g && GIF.HASH[hash].RGB[2] == b) {
+          index = GIF.HASH[hash].index;
         } else {
-          if (this.pre && r == this.pre[from * 4 + 0] && g == this.pre[from * 4 + 1] && b == this.pre[from * 4 + 2]) {
-            index = this.last[to];
-          } else {
-            index = this.getColor(r, g, b);
-          }
-          lr = r;
-          lg = g;
-          lb = b;
-          li = index;
+          index = this.getColor(r, g, b);
+          GIF.HASH[hash] = { RGB: [r, g, b], index: index };
         }
         if (this.last[to] == index) {
           this.data[to] = 0;
@@ -399,7 +392,6 @@ export default class GIF {
     this.writeGraphicCtrlExt();
     this.writeImageDesc();
     this.writePixels();
-    this.pre = image;
   }
 
   finish() {
