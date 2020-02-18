@@ -246,22 +246,27 @@ export default class Director extends Vue {
   playing: boolean = false;
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    this.cuber.render();
     if (this.recording) {
       this.record();
     }
+    this.cuber.render();
   }
 
   record() {
-    this.cuber.camera.aspect = 1;
-    this.cuber.camera.updateProjectionMatrix();
+    let size = this.pixel;
+    let width = this.cuber.width;
+    let height = this.cuber.height;
+    this.cuber.width = size;
+    this.cuber.height = size;
+    this.cuber.resize();
     this.filmer.clear();
     this.filmer.render(this.cuber.scene, this.cuber.camera);
     let content = this.filmer.getContext();
-    let size = this.pixel;
     let pixels = new Uint8Array(size * size * 4);
     content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
+    this.cuber.width = width;
+    this.cuber.height = height;
     this.cuber.resize();
   }
 
@@ -342,7 +347,7 @@ export default class Director extends Vue {
     COLORS.GRAY,
     COLORS.CYAN,
     COLORS.LIME,
-    COLORS.PURPLE
+    COLORS.PINK
   ];
   color = 6;
   colord = false;

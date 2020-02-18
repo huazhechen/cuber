@@ -241,7 +241,6 @@ export default class GIF {
   data: Uint8Array;
   last: Uint8Array;
   real: Uint8Array;
-  colors: Uint8Array;
   dispose: number;
   out: ByteArray;
   transparent: boolean = true;
@@ -249,28 +248,22 @@ export default class GIF {
   x1: number;
   y0: number;
   y1: number;
-  deep: number;
-  colorn: number;
-  constructor(width: number, height: number, delay: number) {
-    this.width = ~~width;
-    this.height = ~~height;
-    this.delay = delay;
-    this.data = new Uint8Array(this.width * this.height);
-    this.last = new Uint8Array(this.width * this.height);
-    this.real = new Uint8Array(this.width * this.height);
-    this.deep = 8;
-    this.colors = new Uint8Array(3 * Math.pow(2, this.deep));
+  private static DEEP = 8;
+  private static COLORN = 0;
+
+  private static COLORS: Uint8Array = (() => {
+    let colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
     let i = 0;
     // TRANSPARENT
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
+    colors[i++] = 0xFF;
+    colors[i++] = 0x00;
+    colors[i++] = 0x00;
     // ORIGIN COLOR
     for (const key in COLORS) {
       let rgb = RGB((<any>COLORS)[key]);
-      this.colors[i++] = rgb[0];
-      this.colors[i++] = rgb[1];
-      this.colors[i++] = rgb[2];
+      colors[i++] = rgb[0];
+      colors[i++] = rgb[1];
+      colors[i++] = rgb[2];
     }
     // LIGHT
     for (const key in COLORS) {
@@ -281,9 +274,9 @@ export default class GIF {
         for (let d = 0; d < 12; d++) {
           let dhsv = [hsv[0], hsv[1], hsv[2] - delta * (d + 1)];
           let drgb = HSV2RGB(dhsv);
-          this.colors[i++] = drgb[0];
-          this.colors[i++] = drgb[1];
-          this.colors[i++] = drgb[2];
+          colors[i++] = drgb[0];
+          colors[i++] = drgb[1];
+          colors[i++] = drgb[2];
         }
       }
     }
@@ -295,9 +288,9 @@ export default class GIF {
         for (let d = 0; d < 7; d++) {
           let dhsv = [hsv[0], hsv[1], (hsv[2] / 8) * (d + 1)];
           let drgb = HSV2RGB(dhsv);
-          this.colors[i++] = drgb[0];
-          this.colors[i++] = drgb[1];
-          this.colors[i++] = drgb[2];
+          colors[i++] = drgb[0];
+          colors[i++] = drgb[1];
+          colors[i++] = drgb[2];
         }
       }
     }
@@ -309,14 +302,24 @@ export default class GIF {
         for (let d = 0; d < 2; d++) {
           let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
           let drgb = HSV2RGB(dhsv);
-          this.colors[i++] = drgb[0];
-          this.colors[i++] = drgb[1];
-          this.colors[i++] = drgb[2];
+          colors[i++] = drgb[0];
+          colors[i++] = drgb[1];
+          colors[i++] = drgb[2];
         }
       }
     }
-    this.colorn = i;
-    console.log(this.colorn)
+    GIF.COLORN = i;
+    console.log(GIF.COLORN);
+    return colors;
+  })();
+
+  constructor(width: number, height: number, delay: number) {
+    this.width = ~~width;
+    this.height = ~~height;
+    this.delay = delay;
+    this.data = new Uint8Array(this.width * this.height);
+    this.last = new Uint8Array(this.width * this.height);
+    this.real = new Uint8Array(this.width * this.height);
     this.dispose = 0;
   }
 
@@ -332,10 +335,10 @@ export default class GIF {
     let index = 0;
     let dmin = 256 * 256 * 256;
     let best = 0;
-    for (let i = 0; i < this.colorn; index++) {
-      let dr = r - this.colors[i++];
-      let dg = g - this.colors[i++];
-      let db = b - this.colors[i++];
+    for (let i = 0; i < GIF.COLORN; index++) {
+      let dr = r - GIF.COLORS[i++];
+      let dg = g - GIF.COLORS[i++];
+      let db = b - GIF.COLORS[i++];
       let d = Math.abs(dr) * 0.297 + Math.abs(dg) * 0.593 + Math.abs(db) * 0.11;
       if (d == 0) {
         return index;
@@ -460,9 +463,9 @@ export default class GIF {
     // packed fields
     this.out.writeByte(
       0x80 | // 1 : global color table flag = 1 (gct used)
-      ((this.deep - 1) << 4) | // 2-4 : color resolution = 7
+      ((GIF.DEEP - 1) << 4) | // 2-4 : color resolution = 7
       0x00 | // 5 : gct sort flag = 0
-        (this.deep - 1) // 6-8 : gct size
+        (GIF.DEEP - 1) // 6-8 : gct size
     );
 
     this.out.writeByte(0); // background color index
@@ -481,13 +484,13 @@ export default class GIF {
   }
 
   writePalette() {
-    this.out.writeBytes(this.colors);
+    this.out.writeBytes(GIF.COLORS);
   }
 
   writePixels() {
     let width = this.x1 - this.x0;
     let height = this.y1 - this.y0;
-    var enc = new LZW(width, height, this.deep);
+    var enc = new LZW(width, height, GIF.DEEP);
     for (let j = 0; j < height; j++) {
       for (let i = 0; i < width; i++) {
         this.real[j * width + i] = this.data[(j + this.y0) * this.width + i + this.x0];
