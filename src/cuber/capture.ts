@@ -32,6 +32,12 @@ export default class Capture {
     this.camera.position.z = Cubelet.SIZE * 3 * 4;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
+
+    let ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    this.scene.add(ambient);
+    let directional = new THREE.DirectionalLight(0xffffff, 0.2);
+    directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
+    this.scene.add(directional);
   }
 
   snap(strip: { [face: string]: number[] | undefined }, exp: string) {
