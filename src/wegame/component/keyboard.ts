@@ -1,7 +1,13 @@
-import * as THREE from "three";
-import { Component } from "./component";
 import Main from "../main";
+import svg_mirror_on from "../resource/mirror_on.svg";
+import svg_mirror_off from "../resource/mirror_off.svg";
+import svg_lock_on from "../resource/lock_on.svg";
+import svg_lock_off from "../resource/lock_off.svg";
+import svg_backspace_on from "../resource/backspace_on.svg";
+import svg_backspace_off from "../resource/backspace_off.svg";
 import { COLORS, TouchAction } from "../../common/define";
+import { Component } from "./component";
+import * as THREE from "three";
 
 class KeyboardButton {
   x: number;
@@ -20,32 +26,17 @@ class KeyboardButton {
 
   get key() {
     let key = this.keys[0];
-    if (this.keys.length == 4) {
+    if (this.keys.length == 3) {
       key = this.keys[this.keyboard.layer];
-      if (this.keyboard.main.context.lock) {
-        key = key + " disable";
-      }
-      return key;
     }
-
     switch (key) {
       case "sole":
-        if (this.keyboard.layer == 0) {
-          key = key + " on";
-        }
-        break;
       case "dual":
-        if (this.keyboard.layer == 1) {
-          key = key + " on";
-        }
+      case "mix":
+        key = key + " on";
         break;
-      case "middle":
-        if (this.keyboard.layer == 2) {
-          key = key + " on";
-        }
-        break;
-      case "entire":
-        if (this.keyboard.layer == 3) {
+      case "mirror":
+        if (this.keyboard.main.context.mirror) {
           key = key + " on";
         }
         break;
@@ -59,103 +50,85 @@ class KeyboardButton {
           key = key + " disable";
         }
         break;
+      case "camera":
+        break;
+      default:
+        if (this.keyboard.main.context.lock) {
+          key = key + " disable";
+        }
+        break;
     }
     return key;
   }
+
   paint() {
     let context = this.keyboard.context;
     context.fillStyle = "#000000";
     context.strokeStyle = "#000000";
-    let font = Math.round(this.size * 0.5);
+
+    let padding = this.size / 16;
+    let size = this.size - 2 * padding;
+    let x = this.x + padding;
+    let y = this.y + padding;
+    let line = padding / 2;
+    line = line < 2 ? 2 : line;
+    context.lineWidth = line;
+
+    let font = Math.round(size * 0.5);
     context.font = font + "px Arial";
     context.textAlign = "center";
     context.textBaseline = "middle";
 
-    let dx = this.size / 24;
-    let dy = this.size / 30;
-    let line = this.size / 24 < 2 ? 2 : this.size / 24;
-    context.lineWidth = line;
-
     let keys = this.key.split(" ");
     if (keys[1] == "on") {
-      context.fillStyle = COLORS.CYAN;
-      context.strokeStyle = COLORS.CYAN;
+      context.fillStyle = COLORS.PINK;
+      context.strokeStyle = COLORS.PINK;
     }
     if (keys[1] == "disable") {
       context.fillStyle = COLORS.DISABLE;
       context.strokeStyle = COLORS.DISABLE;
     }
-    context.strokeRect(this.x, this.y, this.size, this.size);
+    let dx = size / 24;
+    let dy = size / 30;
     switch (keys[0]) {
       case "sole":
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
         context.fillStyle = COLORS.DISABLE;
         context.strokeStyle = COLORS.DISABLE;
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
         break;
       case "dual":
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
         context.fillStyle = COLORS.DISABLE;
         context.strokeStyle = COLORS.DISABLE;
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 4 * dx, y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
         break;
-      case "middle":
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillStyle = COLORS.DISABLE;
-        context.strokeStyle = COLORS.DISABLE;
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
+      case "mix":
+        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
+        context.fillRect(x + 6 * dx, y + 6 * dy + 0 * (7 * dy), 12 * dx, 4 * dy);
+        context.fillRect(x + 6 * dx, y + 6 * dy + 2 * (7 * dy), 12 * dx, 4 * dy);
         break;
-      case "entire":
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(this.x + 4 * dx, this.y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
-        break;
-      case "backspace":
-        context.beginPath();
-        context.moveTo(this.x + 6 * dx, this.y + 6 * dy);
-        context.lineTo(this.x + 20 * dx, this.y + 6 * dy);
-        context.lineTo(this.x + 20 * dx, this.y + 24 * dy);
-        context.lineTo(this.x + 6 * dx, this.y + 24 * dy);
-        context.lineTo(this.x + 2 * dx, this.y + 15 * dy);
-        context.closePath();
-        context.fill();
-        context.fillStyle = "#ffffff";
-        context.strokeStyle = "#ffffff";
-        context.lineWidth = this.size / 16;
-        context.beginPath();
-        context.moveTo(this.x + 9 * dx, this.y + 15 * dy - 3 * dx);
-        context.lineTo(this.x + 15 * dx, this.y + 15 * dy + 3 * dx);
-        context.moveTo(this.x + 15 * dx, this.y + 15 * dy - 3 * dx);
-        context.lineTo(this.x + 9 * dx, this.y + 15 * dy + 3 * dx);
-        context.stroke();
-        context.fillStyle = "#000000";
-        context.strokeStyle = "#000000";
-        context.lineWidth = line;
-        break;
+      case "mirror":
       case "lock":
-        context.beginPath();
-        context.lineWidth = this.size / 16;
-        context.moveTo(this.x + this.size / 2 + 3 * dx, this.y + 13 * dy);
-        context.lineTo(this.x + this.size / 2 + 3 * dx, this.y + 11 * dy);
-        context.arc(this.x + this.size / 2, this.y + 11 * dy, 3 * dx, 0, -Math.PI, true);
-        if (keys[1] == "on") {
-          context.lineTo(this.x + this.size / 2 - 3 * dx, this.y + 13 * dy);
-        }
-        context.stroke();
-        context.lineWidth = line;
-        context.fillRect(this.x + 7 * dx, this.y + 13 * dy, 10 * dx, 11 * dy);
-        context.fillStyle = "#ffffff";
-        context.beginPath();
-        context.arc(this.x + +12 * dx, this.y + 18 * dy, line, 0, 2 * Math.PI);
-        context.fill();
+      case "backspace":
+      case "camera":
+      case "casino":
+      case "complete":
+        context.drawImage(this.keyboard.images[this.key], x + 2 * padding, y + 2 * padding, size - 4 * padding, size - 4 * padding);
         break;
       default:
-        context.fillText(keys[0], this.x + this.size / 2, this.y + this.size / 2 + line);
+        context.fillText(keys[0], x + size / 2, y + size / 2 + line);
         break;
     }
+    if (keys[1] == "on") {
+      context.strokeStyle = COLORS.PINK;
+    }
+    if (keys[1] == "disable") {
+      context.strokeStyle = COLORS.DISABLE;
+    }
+    context.strokeRect(x, y, size, size);
   }
 
   resize(x: number, y: number, size: number) {
@@ -171,16 +144,9 @@ class KeyboardButton {
     }
     switch (keys[0]) {
       case "sole":
-        this.keyboard.layer = 0;
-        break;
       case "dual":
-        this.keyboard.layer = 1;
-        break;
-      case "middle":
-        this.keyboard.layer = 2;
-        break;
-      case "entire":
-        this.keyboard.layer = 3;
+      case "mix":
+        this.keyboard.layer = (this.keyboard.layer + 1) % 3;
         break;
       case "backspace":
         if (this.keyboard.main.cuber.cube.history.last == undefined) {
@@ -194,6 +160,11 @@ class KeyboardButton {
         break;
       case "lock":
         this.keyboard.main.context.lock = !this.keyboard.main.context.lock;
+        break;
+      case "mirror":
+        this.keyboard.main.context.mirror = !this.keyboard.main.context.mirror;
+        break;
+      case "XX":
         break;
       default:
         this.keyboard.main.cuber.cube.twister.twist(this.key);
@@ -217,7 +188,9 @@ export default class Keyboard implements Component {
   public context: CanvasRenderingContext2D;
   private texture: THREE.CanvasTexture;
   private buttons: KeyboardButton[];
-  public layer: number;
+  public layer: number = 0;
+  public images: { [idx: string]: HTMLImageElement };
+
   constructor(main: Main, x: number, y: number, width: number, height: number) {
     this.x = x;
     this.y = y;
@@ -251,24 +224,24 @@ export default class Keyboard implements Component {
     this.scene.add(mesh);
     this.buttons = [];
     let keys: string[][] = [
-      ["L", "l", "M", "x"],
-      ["D", "d", "E", "y"],
-      ["B", "b", "S", "z"],
-      ["F", "f", "S", "z"],
-      ["U", "u", "E", "y"],
-      ["R", "r", "M", "x"],
-      ["L'", "l'", "M'", "x'"],
-      ["D'", "d'", "E'", "y'"],
-      ["B'", "b'", "S'", "z'"],
-      ["F'", "f'", "S'", "z'"],
-      ["U'", "u'", "E'", "y'"],
-      ["R'", "r'", "M'", "x'"],
-      ["sole"],
-      ["dual"],
-      ["middle"],
-      ["entire"],
+      ["sole", "dual", "mix"],
+      ["mirror"],
+      [""],
+      [""],
       ["lock"],
-      ["backspace"]
+      ["backspace"],
+      ["L", "l", "M"],
+      ["D", "d", "E"],
+      ["B", "b", "S"],
+      ["F", "f", "z"],
+      ["U", "u", "y"],
+      ["R", "r", "x"],
+      ["L'", "l'", "M'"],
+      ["D'", "d'", "E'"],
+      ["B'", "b'", "S'"],
+      ["F'", "f'", "z'"],
+      ["U'", "u'", "y'"],
+      ["R'", "r'", "x'"]
     ];
     for (let c = 0; c < 3; c++) {
       for (let r = 0; r < 6; r++) {
@@ -276,19 +249,64 @@ export default class Keyboard implements Component {
         this.buttons.push(new KeyboardButton(0, 0, 0, key, this));
       }
     }
-    this.layer = 0;
-
+    this.images = {};
+    this.load();
     this.resize();
+  }
+
+  load() {
+    let image;
+
+    image = new Image();
+    image.src = svg_mirror_off;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["mirror"] = image;
+
+    image = new Image();
+    image.src = svg_mirror_on;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["mirror on"] = image;
+
+    image = new Image();
+    image.src = svg_lock_off;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["lock"] = image;
+
+    image = new Image();
+    image.src = svg_lock_on;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["lock on"] = image;
+
+    image = new Image();
+    image.src = svg_backspace_off;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["backspace disable"] = image;
+
+    image = new Image();
+    image.src = svg_backspace_on;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["backspace"] = image;
   }
 
   resize() {
     this.canvas.width = this.width * window.devicePixelRatio;
     this.canvas.height = this.height * window.devicePixelRatio;
 
-    let space = this.canvas.width / 4;
-    let size = (this.canvas.width - space) / 6;
+    let padding = Math.floor(this.canvas.width / 32);
+    let size = Math.floor((this.canvas.width - padding * 2) / 6);
     let font = Math.floor(size * 0.5);
-    space = space / 8;
 
     this.context.font = font + "px Arial";
     this.context.textAlign = "center";
@@ -296,8 +314,8 @@ export default class Keyboard implements Component {
 
     for (let c = 0; c < 3; c++) {
       for (let r = 0; r < 6; r++) {
-        let x = space * 1.5 + (space + size) * r;
-        let y = space / 2 + (space + size) * c;
+        let x = padding + size * r;
+        let y = size * c;
         this.buttons[r + c * 6].resize(x, y, size);
       }
     }
@@ -328,22 +346,12 @@ export default class Keyboard implements Component {
       case "mousedown":
         let x = action.x;
         let y = action.y;
-
-        let space = Math.floor(this.width / 32);
-        let size = Math.floor((this.width - space * 8) / 6);
-        let pandding = Math.floor(space * 1.5);
-
-        x -= pandding;
-        let r = Math.floor(x / (space + size));
-        y -= pandding;
-        let c = Math.floor(y / (space + size));
+        let padding = Math.floor(this.width / 32);
+        let size = Math.floor((this.width - padding * 2) / 6);
+        x -= padding;
+        let r = Math.floor(x / size);
+        let c = Math.floor(y / size);
         if (r < 0 || c < 0 || r > 5 || c > 2) {
-          return false;
-        }
-        if (r * (space + size) + size < x) {
-          return false;
-        }
-        if (c * (space + size) + size < y) {
           return false;
         }
         this.buttons[r + c * 6].tap();

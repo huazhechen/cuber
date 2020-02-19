@@ -55,53 +55,6 @@ class ConfirmButton implements Button {
   touch(x: number, y: number) {}
 }
 
-class BooleanButton implements Button {
-  public x: number;
-  public y: number;
-  public width: number;
-  public height: number;
-  private callback: Function;
-  private keys: string[];
-  private getter: Function;
-
-  constructor(getter: Function, callback: Function, keys: string[]) {
-    this.getter = getter;
-    this.callback = callback;
-    this.keys = keys;
-  }
-  get value() {
-    return this.getter();
-  }
-
-  paint(context: CanvasRenderingContext2D) {
-    let x = this.x * window.devicePixelRatio;
-    let y = this.y * window.devicePixelRatio;
-    let width = this.width * window.devicePixelRatio;
-    let height = this.height * window.devicePixelRatio;
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-    context.font = height / 2 + "px Arial";
-
-    let str = this.keys[0];
-    context.fillStyle = COLORS.GRAY;
-    if (this.value) {
-      context.fillStyle = COLORS.PINK;
-      str = this.keys[1];
-    }
-    context.fillRect(x, y, width, height);
-
-    context.fillStyle = COLORS.WHITE;
-    context.fillText(str, x + width / 2, y + height / 2);
-    return;
-  }
-
-  tap(x: number, y: number) {
-    this.callback();
-  }
-
-  touch(x: number, y: number) {}
-}
-
 class Slider implements Button {
   public x: number;
   public y: number;
@@ -199,16 +152,6 @@ export default class Setting implements Component {
 
     this.buttons = [];
     let button;
-    button = new BooleanButton(
-      () => {
-        return this.main.context.mirror;
-      },
-      () => {
-        this.main.context.mirror = !this.main.context.mirror;
-      },
-      ["镜像关闭", "镜像开启"]
-    );
-    this.buttons.push(button);
 
     button = new Slider(
       () => {

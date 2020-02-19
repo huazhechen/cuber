@@ -14,8 +14,20 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.tsx?$/,
         loader: "ts-loader"
+      },
+      {
+        test: /\.html?$/,
+        loader: "text-loader"
+      },
+      {
+        test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+        loader: "url-loader"
       }
     ]
   },
