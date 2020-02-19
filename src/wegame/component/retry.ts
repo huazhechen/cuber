@@ -141,20 +141,18 @@ export default class Retry implements Component {
     this.context.globalAlpha = 1;
 
     let diff = this.database.time;
-    console.log(diff);
-    let minute = Math.floor(diff / 1000 / 60);
-    diff = diff % (1000 * 60);
     let second = Math.floor(diff / 1000);
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
-    let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
+    let time = (Array(2).join("0") + second).slice(-2) + "." + ms;
 
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
     this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.WHITE;
+    this.context.fillStyle = COLORS.PINK;
     this.context.textAlign = "center";
     this.context.textBaseline = "middle";
-    this.context.fillText(time + "/" + this.database.step, this.canvas.width / 2, this.canvas.height / 4);
+    this.context.fillText(time + "秒", this.canvas.width / 2, this.canvas.height / 3);
+    this.context.fillText(this.database.step + "步", this.canvas.width / 2, this.canvas.height / 3 + font * 1.2);
 
     for (const button of this.buttons) {
       button.paint(this.context);

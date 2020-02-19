@@ -207,7 +207,7 @@ export default class Main {
   }
 
   random() {
-    if (this.database.mode != "cuber") {
+    if (this.database.mode == "starter") {
       let actions = ["U", "D", "R", "L", "F", "B"];
       let special = ["M", "x", "E", "y", "S", "z"];
       let index = Math.floor(Math.random() * 6);

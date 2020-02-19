@@ -17,6 +17,11 @@ export default class Database {
   }
 
   load() {
+    let version = "0.0.1";
+    if (this._storage.getItem("version") != version) {
+      this._storage.clear();
+      this._storage.setItem("version", version);
+    }
     this.times = JSON.parse(this._storage.getItem("score.times") || "[]");
     this.steps = JSON.parse(this._storage.getItem("score.steps") || "[]");
     this.time = Number(this._storage.getItem("score.time") || 0);
@@ -36,7 +41,7 @@ export default class Database {
     if (mode == "cuber") {
       this.main.context.lock = false;
       this.main.cuber.cube.twister.finish();
-      this.main.cuber.cube.twister.twist("#R", false, 1, true);
+      this.main.cuber.cube.twister.twist("#x2*", false, 1, true);
     }
     this._mode = mode;
   }

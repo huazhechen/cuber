@@ -281,12 +281,20 @@ export default class Setting implements Component {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.restore();
 
+    this.context.globalAlpha = 0.6;
+    if (this.down instanceof Slider){
+      this.context.globalAlpha = 0;
+    }
+    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
     this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillStyle = COLORS.WHITE;
     this.context.textAlign = "center";
     this.context.textBaseline = "middle";
     this.context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
+    this.context.globalAlpha = 1;
 
     for (const button of this.buttons) {
       button.paint(this.context);

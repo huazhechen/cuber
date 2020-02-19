@@ -3,6 +3,9 @@ import svg_mirror_on from "../resource/mirror_on.svg";
 import svg_mirror_off from "../resource/mirror_off.svg";
 import svg_lock_on from "../resource/lock_on.svg";
 import svg_lock_off from "../resource/lock_off.svg";
+import svg_visibility_on from "../resource/visibility_on.svg";
+import svg_visibility_off from "../resource/visibility_off.svg";
+import svg_help from "../resource/help.svg";
 import svg_backspace_on from "../resource/backspace_on.svg";
 import svg_backspace_off from "../resource/backspace_off.svg";
 import { COLORS, TouchAction } from "../../common/define";
@@ -24,19 +27,37 @@ class KeyboardButton {
     this.keyboard = keyboard;
   }
 
+  strips = [
+    {},
+    { U: [1, 2, 3, 4, 6, 7, 8, 9], F: [1, 2, 3, 4, 6, 7, 9], R: [1, 2, 3, 4, 6, 7, 9], B: [1, 2, 3, 4, 6, 7, 9], L: [1, 2, 3, 4, 6, 7, 9], D: [1, 3, 7, 9] },
+    { U: [1, 2, 3, 4, 5, 6, 7, 8, 9], F: [1, 2, 3], R: [1, 2, 3], B: [1, 2, 3], L: [1, 2, 3] }
+  ];
+  strip() {
+    this.keyboard.main.cuber.cube.strip(this.strips[this.keyboard.cf]);
+  }
+
   get key() {
     let key = this.keys[0];
-    if (this.keys.length == 3) {
+    if (key == "sole") {
       key = this.keys[this.keyboard.layer];
+    } else if (key == "help") {
+      key = this.keys[this.keyboard.cf];
     }
     switch (key) {
       case "sole":
       case "dual":
       case "mix":
+      case "Crs":
+      case "F2L":
         key = key + " on";
         break;
       case "mirror":
         if (this.keyboard.main.context.mirror) {
+          key = key + " on";
+        }
+        break;
+      case "visibility":
+        if (this.keyboard.main.context.visibility) {
           key = key + " on";
         }
         break;
@@ -50,7 +71,7 @@ class KeyboardButton {
           key = key + " disable";
         }
         break;
-      case "camera":
+      case "help":
         break;
       default:
         if (this.keyboard.main.context.lock) {
@@ -111,6 +132,8 @@ class KeyboardButton {
         context.fillRect(x + 6 * dx, y + 6 * dy + 2 * (7 * dy), 12 * dx, 4 * dy);
         break;
       case "mirror":
+      case "help":
+      case "visibility":
       case "lock":
       case "backspace":
       case "camera":
@@ -148,6 +171,12 @@ class KeyboardButton {
       case "mix":
         this.keyboard.layer = (this.keyboard.layer + 1) % 3;
         break;
+      case "help":
+      case "Crs":
+      case "F2L":
+        this.keyboard.cf = (this.keyboard.cf + 1) % 3;
+        this.strip();
+        break;
       case "backspace":
         if (this.keyboard.main.cuber.cube.history.last == undefined) {
           return;
@@ -164,7 +193,8 @@ class KeyboardButton {
       case "mirror":
         this.keyboard.main.context.mirror = !this.keyboard.main.context.mirror;
         break;
-      case "XX":
+      case "visibility":
+        this.keyboard.main.context.visibility = !this.keyboard.main.context.visibility;
         break;
       default:
         this.keyboard.main.cuber.cube.twister.twist(this.key);
@@ -189,6 +219,7 @@ export default class Keyboard implements Component {
   private texture: THREE.CanvasTexture;
   private buttons: KeyboardButton[];
   public layer: number = 0;
+  public cf: number = 0;
   public images: { [idx: string]: HTMLImageElement };
 
   constructor(main: Main, x: number, y: number, width: number, height: number) {
@@ -226,8 +257,8 @@ export default class Keyboard implements Component {
     let keys: string[][] = [
       ["sole", "dual", "mix"],
       ["mirror"],
-      [""],
-      [""],
+      ["help", "Crs", "F2L"],
+      ["visibility"],
       ["lock"],
       ["backspace"],
       ["L", "l", "M"],
@@ -284,6 +315,27 @@ export default class Keyboard implements Component {
       this.paint();
     }.bind(this);
     this.images["lock on"] = image;
+
+    image = new Image();
+    image.src = svg_help;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["help"] = image;
+
+    image = new Image();
+    image.src = svg_visibility_off;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["visibility"] = image;
+
+    image = new Image();
+    image.src = svg_visibility_on;
+    image.onload = function() {
+      this.paint();
+    }.bind(this);
+    this.images["visibility on"] = image;
 
     image = new Image();
     image.src = svg_backspace_off;
