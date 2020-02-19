@@ -28,6 +28,18 @@ export default class Cuber {
     this.dirty = true;
   }
 
+  private _visibility: boolean;
+  get visibility() {
+    return this._visibility;
+  }
+  set visibility(value: boolean) {
+    this._visibility = value;
+    for (let cubelet of this.cube.cubelets) {
+      cubelet.visibility = value;
+    }
+    this.dirty = true;
+  }
+
   private _scale: number;
   get scale() {
     return this._scale;

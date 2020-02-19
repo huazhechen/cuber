@@ -30,12 +30,11 @@
     </v-btn>
     <v-btn
       fab
-      :color="cuber.mirror?'primary':''"
       :style="{width:size*0.9+'px', height:size*0.9+'px'}"
-      @click.native.stop.prevent="cuber.mirror=!cuber.mirror;"
-      @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror;"
+      @click.native.stop.prevent="quality=true;menu=false;"
+      @touchstart.native.stop.prevent="quality=true;menu=false;"
     >
-      <v-icon :size="size * 0.55" :color="cuber.mirror?'':'primary'">flip</v-icon>
+      <v-icon :size="size * 0.55" color="primary">crop</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -122,11 +121,12 @@
                 text
                 large
                 :disabled="recording"
-                @click.native.stop.prevent="quality=true"
-                @touchstart.native.stop.prevent="quality=true"
+                @click.native.stop.prevent="context.mirror=!context.mirror"
+                @touchstart.native.stop.prevent="context.mirror=!context.mirror"
+                :color="context.mirror?'primary':''"
                 style="margin: 0%; padding: 0%;"
               >
-                <v-icon large>crop</v-icon>
+                <v-icon large>flip</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>
@@ -135,11 +135,12 @@
                 text
                 large
                 :disabled="recording"
-                @click.native.stop.prevent="share"
-                @touchstart.native.stop.prevent="share"
+                @click.native.stop.prevent="context.visibility=!context.visibility"
+                @touchstart.native.stop.prevent="context.visibility=!context.visibility"
+                :color="context.visibility?'primary':''"
                 style="margin: 0%; padding: 0%;"
               >
-                <v-icon large>share</v-icon>
+                <v-icon large>visibility</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>

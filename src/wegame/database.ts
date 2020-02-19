@@ -36,7 +36,7 @@ export default class Database {
     if (mode == "cuber") {
       this.main.context.lock = false;
       this.main.cuber.cube.twister.finish();
-      this.main.cuber.cube.twister.twist("#x2*", false, 1, true);
+      this.main.cuber.cube.twister.twist("#R", false, 1, true);
     }
     this._mode = mode;
   }

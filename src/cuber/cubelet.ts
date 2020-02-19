@@ -224,6 +224,18 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
+  set visibility(value: boolean) {
+    if (value) {
+      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) >= 0) {
+        this.remove(this.frame);
+      }
+    } else {
+      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) < 0) {
+        this.add(this.frame);
+      }
+    }
+  }
+
   getColor(face: FACE) {
     let position = new THREE.Vector3(0, 0, 0);
     switch (face) {
@@ -384,8 +396,7 @@ export default class Cubelet extends THREE.Group {
     }
     if (index == "BLACK") {
       this.stickers[face].visible = false;
-    }
-    else{
+    } else {
       this.stickers[face].visible = true;
     }
     this.stickers[face].material = lamber;

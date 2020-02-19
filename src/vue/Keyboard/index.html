@@ -7,9 +7,9 @@
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
-        @click.native.stop.prevent="cuber.mirror=!cuber.mirror"
-        @touchstart.native.stop.prevent="cuber.mirror=!cuber.mirror"
-        :color="cuber.mirror?'primary':''"
+        @click.native.stop.prevent="context.mirror=!context.mirror"
+        @touchstart.native.stop.prevent="context.mirror=!context.mirror"
+        :color="context.mirror?'primary':''"
         :style="style"
       >
         <v-icon :size="height/5">flip</v-icon>
@@ -17,13 +17,18 @@
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :color="colors>0?'primary':''" :style="style">
-        <v-icon v-if="colors==0" :size="height/5">colorize</v-icon>
-        <div v-if="colors!=0" :style="{'font-size':(height/8)+'px'}">{{['','Crs','F2L'][colors]}}</div>
+        <div v-show="colors!=0" :style="{'font-size':(height/8)+'px'}">{{['','Crs','F2L'][colors]}}</div>
+        <v-icon v-show="colors==0" :size="height/5">help</v-icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="twist('y')" @touchstart.native.stop.prevent="twist('y')" :style="style">
-        <v-icon :size="height/5">rotate_90_degrees_ccw</v-icon>
+      <v-btn
+        @click.native.stop.prevent="context.visibility=!context.visibility"
+        @touchstart.native.stop.prevent="context.visibility=!context.visibility"
+        :color="context.visibility?'primary':''"
+        :style="style"
+      >
+        <v-icon :size="height/5">visibility</v-icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
