@@ -30,6 +30,7 @@ export default class Database {
 
     this.main.dashboard.display = mode == "cuber";
     this.main.starter.display = mode == "starter";
+    this.main.retry.display = mode == "retry";
     this.main.setting.display = mode == "setting";
     this.main.score.display = mode == "score";
     if (mode == "cuber") {
@@ -66,4 +67,7 @@ export default class Database {
 
     this.main.score.paint();
   }
+    
+  public start: number;
+  public now: number;
 }

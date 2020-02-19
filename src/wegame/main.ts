@@ -9,6 +9,7 @@ import Database from "./database";
 import Wecuber from "./component/wecuber";
 import { COLORS, TouchAction } from "../common/define";
 import Context from "../common/context";
+import Retry from "./component/retry";
 /**
  * 游戏主函数
  */
@@ -22,6 +23,7 @@ export default class Main {
   cuber: Wecuber;
   keyboard: Keyboard;
   starter: Starter;
+  retry: Retry;
   dashboard: Dashboard;
   setting: Setting;
   score: Score;
@@ -52,11 +54,12 @@ export default class Main {
     this.dashboard = new Dashboard(this, 0, 0, this.width, this.height);
 
     this.starter = new Starter(this.database, 0, 0, this.width, this.height);
+    this.retry = new Retry(this.database, 0, 0, this.width, this.height);
     this.setting = new Setting(this, 0, 0, this.width, this.height);
     this.score = new Score(this.database, 0, 0, this.width, this.height);
 
-    this.views = [this.cuber, this.keyboard, this.dashboard, this.starter, this.setting, this.score];
-    this.handles = [this.score, this.setting, this.starter, this.dashboard, this.keyboard, this.cuber];
+    this.views = [this.cuber, this.keyboard, this.dashboard, this.starter, this.retry, this.setting, this.score];
+    this.handles = this.views.slice().reverse();
 
     this.cuber.cube.callbacks.push(this.check);
 
@@ -184,6 +187,12 @@ export default class Main {
     this.starter.height = this.height;
     this.starter.resize();
 
+    this.retry.x = 0;
+    this.retry.y = 0;
+    this.retry.width = this.width;
+    this.retry.height = this.height;
+    this.retry.resize();
+
     this.setting.x = 0;
     this.setting.y = 0;
     this.setting.width = this.width;
@@ -223,9 +232,13 @@ export default class Main {
     }
     let complete = this.cuber.cube.complete;
     if (complete) {
-      let time = new Date().getTime() - this.dashboard.start;
+      let time = this.database.now - this.database.start;
       this.database.record(time, this.cuber.cube.history.length);
-      this.database.mode = "score";
+      this.retry.paint();
+      this.context.lock = true;
+      this.keyboard.paint();
+      this.keyboard.disable = true;
+      this.database.mode = "retry";
     }
   };
 }

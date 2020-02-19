@@ -40,7 +40,6 @@ class ScoreBoard {
   paint(context: CanvasRenderingContext2D) {
     let x = this.x * window.devicePixelRatio;
     let y = this.y * window.devicePixelRatio;
-    let width = this.width * window.devicePixelRatio;
     let height = this.height * window.devicePixelRatio;
 
     context.strokeStyle = COLORS.GRAY;
@@ -48,7 +47,7 @@ class ScoreBoard {
     context.font = height * 0.8 + "px Arial";
     context.textBaseline = "middle";
     context.textAlign = "left";
-    let diff = this.dashboard.now - this.dashboard.start;
+    let diff = this.dashboard.main.database.now - this.dashboard.main.database.start;
     let minute = Math.floor(diff / 1000 / 60);
     diff = diff % (1000 * 60);
     let second = Math.floor(diff / 1000);
@@ -75,8 +74,6 @@ export default class Dashboard implements Component {
   private texture: THREE.CanvasTexture;
   private exit: ExitButton;
   private score: ScoreBoard;
-  public start: number;
-  public now: number;
   constructor(main: Main, x: number, y: number, width: number, height: number) {
     this.x = x;
     this.y = y;
@@ -169,14 +166,14 @@ export default class Dashboard implements Component {
       return;
     }
     if (this.main.cuber.cube.history.moves == 0) {
-      this.start = 0;
-      this.now = 0;
+      this.main.database.start = 0;
+      this.main.database.now = 0;
     } else {
-      if (this.start == 0) {
-        this.start = new Date().getTime();
+      if (this.main.database.start == 0) {
+        this.main.database.start = new Date().getTime();
       }
       if (!this.main.cuber.cube.complete) {
-        this.now = new Date().getTime();
+        this.main.database.now = new Date().getTime();
       }
     }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

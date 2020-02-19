@@ -1,6 +1,5 @@
 import { Component } from "./component";
 import * as THREE from "three";
-import Main from "../main";
 import { RoundButton } from "./button";
 import Database from "../database";
 import { COLORS, TouchAction } from "../../common/define";
