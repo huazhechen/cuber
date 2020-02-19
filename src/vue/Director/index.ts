@@ -58,6 +58,7 @@ export default class Director extends Vue {
   constructor() {
     super();
     let canvas = document.createElement("canvas");
+    canvas.style.outline = "none";
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true
