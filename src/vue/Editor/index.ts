@@ -335,24 +335,25 @@ export default class Editor extends Vue {
 
   @Watch("context.mode")
   onModeChange(to: string) {
-    if (to == "algs") {
-      this.duration = Number(window.localStorage.getItem("director.duration") || 30);
-      for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-        let stickers = this.stickers[FACE[face]];
-        if (!stickers) {
-          continue;
-        }
-        for (let index = 0; index < 9; index++) {
-          let sticker = stickers[index];
-          if (sticker && sticker >= 0) {
-            this.cuber.cube.stick(face, index + 1, this.colors[sticker]);
-          } else {
-            this.cuber.cube.stick(face, index + 1, "");
+    if (to == "director") {
+      this.$nextTick(() => {
+        this.duration = Number(window.localStorage.getItem("director.duration") || 30);
+        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+          let stickers = this.stickers[FACE[face]];
+          if (!stickers) {
+            continue;
+          }
+          for (let index = 0; index < 9; index++) {
+            let sticker = stickers[index];
+            if (sticker && sticker >= 0) {
+              this.cuber.cube.stick(face, index + 1, this.colors[sticker]);
+            } else {
+              this.cuber.cube.stick(face, index + 1, "");
+            }
           }
         }
-      }
-      this.init();
-      this.init();
+        this.init();
+      });
     } else {
       this.cuber.cube.strip({});
       this.duration = 30;

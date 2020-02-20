@@ -102,7 +102,9 @@ export default class Keyboard extends Vue implements Panel {
   @Watch("context.mode")
   onModeChange(to: string) {
     if (to == "playground") {
-      this.shuffle();
+      this.$nextTick(() => {
+        this.shuffle();
+      });
     }
   }
 

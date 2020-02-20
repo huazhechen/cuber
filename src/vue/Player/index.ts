@@ -171,8 +171,10 @@ export default class Player extends Vue {
   @Watch("context.mode")
   onModeChange(to: string) {
     if (to == "algs") {
-      this.onIndexChange();
-      this.init();
+      this.$nextTick(() => {
+        this.onIndexChange();
+        this.init();
+      });
     } else {
       this.cuber.cube.strip({});
     }

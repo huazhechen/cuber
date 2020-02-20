@@ -1,51 +1,40 @@
 <v-bottom-sheet v-model="value">
   <v-card text style="margin: auto">
-    <v-container fluid grid-list-md text-xs-center style="background: #FAFAFA">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(window.innerWidth, window.innerHeight * 0.6) + 'px'}">
       <v-layout row wrap>
-        <v-flex xs4>
+        <v-flex xs12 style="display: flex">
           <v-btn
             class="headline"
             :color="context.mode == 'playground'?'primary':''"
-            text
-            block
-            outlined
+            depressed
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
             @click.native.stop.prevent="$emit('input', false); mode('playground')"
             @touchstart.native.stop.prevent="$emit('input', false); mode('playground')"
-            style="height: 2em;margin: 0%; padding: 0%;"
           >
             <v-icon large>games</v-icon>
           </v-btn>
-        </v-flex>
-        <v-flex xs4>
           <v-btn
             class="headline"
             :color="context.mode == 'algs'?'primary':''"
-            text
-            block
-            outlined
+            depressed
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
             @click.native.stop.prevent="$emit('input', false); mode('algs')"
             @touchstart.native.stop.prevent="$emit('input', false); mode('algs')"
-            style="height: 2em;margin: 0%; padding: 0%;"
           >
             <v-icon large>school</v-icon>
           </v-btn>
-        </v-flex>
-        <v-flex xs4>
           <v-btn
             class="headline"
             :color="context.mode == 'director'?'primary':''"
-            text
-            block
-            outlined
+            depressed
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
             @click.native.stop.prevent="$emit('input', false); mode('director')"
             @touchstart.native.stop.prevent="$emit('input', false); mode('director')"
-            style="height: 2em;margin: 0%; padding: 0%;"
           >
             <v-icon large>movie</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
-      <v-divider></v-divider>
       <v-layout row wrap>
         <v-flex xs4>
           <v-btn
