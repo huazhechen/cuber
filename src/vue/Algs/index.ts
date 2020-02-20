@@ -7,10 +7,12 @@ import Capture from "../../cuber/capture";
 import Tune from "../Tune";
 import * as THREE from "three";
 import { COLORS } from "../../common/define";
+import Icon from "../Icon";
 
 @Component({
   template: require("./index.html"),
   components: {
+    icon: Icon,
     tune: Tune
   }
 })

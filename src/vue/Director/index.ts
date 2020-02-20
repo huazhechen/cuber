@@ -10,10 +10,12 @@ import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Tune from "../Tune";
 import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
+import Icon from "../Icon";
 
 @Component({
   template: require("./index.html"),
   components: {
+    icon: Icon,
     tune: Tune
   }
 })

@@ -9,6 +9,7 @@ export class TouchAction {
   }
 }
 export var colors = {
+  primary: "#1976D2",
   black: "#000000",
   white: "#FFFFFF",
   red: "#F44336",

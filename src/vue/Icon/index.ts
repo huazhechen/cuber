@@ -7,8 +7,8 @@ import { ICONS } from "../../common/icons";
   template: require("./index.html")
 })
 export default class Icon extends Vue {
-  @Prop({ required: false })
-  color: string = "#FFFFFF";
+  @Prop({ required: true })
+  color: string;
   get fill() {
     let color = (<any>colors)[this.color];
     if (color) {

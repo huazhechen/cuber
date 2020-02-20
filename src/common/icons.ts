@@ -10,5 +10,13 @@ export var ICONS = {
   hollow: require("../resource/hollow.svg"),
   lock: require("../resource/lock.svg"),
   menu: require("../resource/menu.svg"),
-  casino: require("../resource/casino.svg")
+  casino: require("../resource/casino.svg"),
+  close: require("../resource/close.svg"),
+  school: require("../resource/school.svg"),
+  movie: require("../resource/movie.svg"),
+  tune: require("../resource/tune.svg"),
+  code: require("../resource/code.svg"),
+  games: require("../resource/games.svg"),
+  crop: require("../resource/crop.svg"),
+  table: require("../resource/table.svg")
 };
