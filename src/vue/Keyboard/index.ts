@@ -2,9 +2,13 @@ import Vue from "vue";
 import { Component, Inject } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Context from "../../common/context";
+import Icon from "../Icon";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    icon: Icon,
+  }
 })
 export default class Keyboard extends Vue {
   @Inject("cuber")
@@ -28,10 +32,10 @@ export default class Keyboard extends Vue {
     { U: [1, 2, 3, 4, 6, 7, 8, 9], F: [1, 2, 3, 4, 6, 7, 9], R: [1, 2, 3, 4, 6, 7, 9], B: [1, 2, 3, 4, 6, 7, 9], L: [1, 2, 3, 4, 6, 7, 9], D: [1, 3, 7, 9] },
     { U: [1, 2, 3, 4, 5, 6, 7, 8, 9], F: [1, 2, 3], R: [1, 2, 3], B: [1, 2, 3], L: [1, 2, 3] }
   ];
-  colors: number = 0;
+  cfops: number = 0;
   strip() {
-    this.colors = (this.colors + 1) % this.strips.length;
-    this.cuber.cube.strip(this.strips[this.colors]);
+    this.cfops = (this.cfops + 1) % this.strips.length;
+    this.cuber.cube.strip(this.strips[this.cfops]);
   }
 
   get style() {

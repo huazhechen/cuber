@@ -224,7 +224,7 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  set visibility(value: boolean) {
+  set hollow(value: boolean) {
     if (value) {
       if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) >= 0) {
         this.remove(this.frame);

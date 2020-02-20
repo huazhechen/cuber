@@ -3,8 +3,8 @@ import svg_mirror_on from "../resource/mirror_on.svg";
 import svg_mirror_off from "../resource/mirror_off.svg";
 import svg_lock_on from "../resource/lock_on.svg";
 import svg_lock_off from "../resource/lock_off.svg";
-import svg_visibility_on from "../resource/visibility_on.svg";
-import svg_visibility_off from "../resource/visibility_off.svg";
+import svg_hollow_on from "../resource/hollow_on.svg";
+import svg_hollow_off from "../resource/hollow_off.svg";
 import svg_help from "../resource/help.svg";
 import svg_backspace_on from "../resource/backspace_on.svg";
 import svg_backspace_off from "../resource/backspace_off.svg";
@@ -56,8 +56,8 @@ class KeyboardButton {
           key = key + " on";
         }
         break;
-      case "visibility":
-        if (this.keyboard.main.context.visibility) {
+      case "hollow":
+        if (this.keyboard.main.context.hollow) {
           key = key + " on";
         }
         break;
@@ -133,7 +133,7 @@ class KeyboardButton {
         break;
       case "mirror":
       case "help":
-      case "visibility":
+      case "hollow":
       case "lock":
       case "backspace":
       case "camera":
@@ -193,8 +193,8 @@ class KeyboardButton {
       case "mirror":
         this.keyboard.main.context.mirror = !this.keyboard.main.context.mirror;
         break;
-      case "visibility":
-        this.keyboard.main.context.visibility = !this.keyboard.main.context.visibility;
+      case "hollow":
+        this.keyboard.main.context.hollow = !this.keyboard.main.context.hollow;
         break;
       default:
         this.keyboard.main.cuber.cube.twister.twist(this.key);
@@ -258,7 +258,7 @@ export default class Keyboard implements Component {
       ["sole", "dual", "mix"],
       ["mirror"],
       ["help", "Crs", "F2L"],
-      ["visibility"],
+      ["hollow"],
       ["lock"],
       ["backspace"],
       ["L", "l", "M"],
@@ -324,18 +324,18 @@ export default class Keyboard implements Component {
     this.images["help"] = image;
 
     image = new Image();
-    image.src = svg_visibility_off;
+    image.src = svg_hollow_off;
     image.onload = function() {
       this.paint();
     }.bind(this);
-    this.images["visibility"] = image;
+    this.images["hollow"] = image;
 
     image = new Image();
-    image.src = svg_visibility_on;
+    image.src = svg_hollow_on;
     image.onload = function() {
       this.paint();
     }.bind(this);
-    this.images["visibility on"] = image;
+    this.images["hollow on"] = image;
 
     image = new Image();
     image.src = svg_backspace_off;

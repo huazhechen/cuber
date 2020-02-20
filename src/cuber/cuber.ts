@@ -28,14 +28,14 @@ export default class Cuber {
     this.dirty = true;
   }
 
-  private _visibility: boolean;
-  get visibility() {
-    return this._visibility;
+  private _hollow: boolean;
+  get hollow() {
+    return this._hollow;
   }
-  set visibility(value: boolean) {
-    this._visibility = value;
+  set hollow(value: boolean) {
+    this._hollow = value;
     for (let cubelet of this.cube.cubelets) {
-      cubelet.visibility = value;
+      cubelet.hollow = value;
     }
     this.dirty = true;
   }

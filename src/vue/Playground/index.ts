@@ -6,10 +6,12 @@ import Context from "../../common/context";
 import Tune from "../Tune";
 import * as THREE from "three";
 import { COLORS } from "../../common/define";
+import Icon from "../Icon";
 
 @Component({
   template: require("./index.html"),
   components: {
+    icon: Icon,
     keyboard: Keyboard,
     tune: Tune
   }

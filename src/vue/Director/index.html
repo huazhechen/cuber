@@ -135,12 +135,12 @@
                 text
                 large
                 :disabled="recording"
-                @click.native.stop.prevent="context.visibility=!context.visibility"
-                @touchstart.native.stop.prevent="context.visibility=!context.visibility"
-                :color="context.visibility?'primary':''"
+                @click.native.stop.prevent="context.hollow=!context.hollow"
+                @touchstart.native.stop.prevent="context.hollow=!context.hollow"
+                :color="context.hollow?'primary':''"
                 style="margin: 0%; padding: 0%;"
               >
-                <v-icon large>visibility</v-icon>
+                <v-icon large>hollow</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>

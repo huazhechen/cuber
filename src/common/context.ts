@@ -22,7 +22,7 @@ export default class Context {
     this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
     this.lock = false;
     this.mirror = false;
-    this.visibility = false;
+    this.hollow = false;
   }
 
   reset() {
@@ -91,11 +91,11 @@ export default class Context {
     this.cuber.mirror = value;
   }
 
-  get visibility() {
-    return this.cuber.visibility;
+  get hollow() {
+    return this.cuber.hollow;
   }
-  set visibility(value) {
-    this.cuber.visibility = value;
+  set hollow(value) {
+    this.cuber.hollow = value;
   }
 
   get lock() {

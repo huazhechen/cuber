@@ -44,11 +44,11 @@ module.exports = (env, argv) => ({
         loader: "ts-loader"
       },
       {
-        test: /\.html?$/,
+        test: /\.(html|svg)?$/,
         loader: "text-loader"
       },
       {
-        test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+        test: /.(png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
         loader: "url-loader"
       }
     ]
