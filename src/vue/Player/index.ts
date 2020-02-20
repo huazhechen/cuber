@@ -1,69 +1,34 @@
 import Vue from "vue";
-import { Component, Provide, Watch } from "vue-property-decorator";
+import { Component, Inject, Watch } from "vue-property-decorator";
 import Cuber from "../../cuber/cuber";
 import Context from "../../common/context";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
-import Tune from "../Tune";
-import * as THREE from "three";
-import { COLORS } from "../../common/define";
-import Icon from "../Icon";
 
 @Component({
-  template: require("./index.html"),
-  components: {
-    icon: Icon,
-    tune: Tune
-  }
+  template: require("./index.html")
 })
-export default class Algs extends Vue {
-  @Provide("cuber")
+export default class Player extends Vue {
+  @Inject("cuber")
   cuber: Cuber;
 
-  @Provide("context")
+  @Inject("context")
   context: Context;
 
   algs = require("./algs.json");
 
-  tune: boolean = false;
-  menu: boolean = false;
   list: boolean = false;
   width: number = 0;
   height: number = 0;
   size: number = 0;
 
   progress: number = 0;
-  renderer: THREE.WebGLRenderer;
-  constructor() {
-    super();
-    let canvas = document.createElement("canvas");
-    canvas.style.outline = "none";
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true
-    });
-    this.renderer.autoClear = false;
-    this.renderer.setClearColor(COLORS.BACKGROUND);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.cuber = new Cuber();
-    this.context = new Context(this.cuber);
-    this.context.control(canvas, this.cuber.touch);
-    this.cuber.cube.twister.callbacks.push(() => {
-      this.play();
-    });
-    this.cuber.controller.lock = true;
-  }
 
   tab = null;
   capture: Capture = new Capture();
   pics: string[][] = [];
 
   mounted() {
-    if (this.$refs.cuber instanceof Element) {
-      let cuber = this.$refs.cuber;
-      cuber.appendChild(this.renderer.domElement);
-      this.$nextTick(this.resize);
-    }
     for (let i = 0; i < this.algs.length; i++) {
       this.pics.push([]);
     }
@@ -79,18 +44,12 @@ export default class Algs extends Vue {
     } else {
       this.index = { group: 0, index: 0 };
     }
-    this.loop();
+    this.cuber.cube.twister.callbacks.push(() => {
+      this.play();
+    });
   }
 
   loop() {
-    requestAnimationFrame(this.loop.bind(this));
-    if (this.cuber.dirty || this.cuber.cube.dirty) {
-      this.renderer.clear();
-      this.renderer.render(this.cuber.scene, this.cuber.camera);
-      this.cuber.dirty = false;
-      this.cuber.cube.dirty = false;
-      return;
-    }
     this.pics.some((group, idx) => {
       if (this.algs[idx].algs.length == group.length) {
         return false;
@@ -104,19 +63,10 @@ export default class Algs extends Vue {
     });
   }
 
-  resize() {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
-    this.size = Math.min(this.width / 8, this.height / 14);
-    this.cuber.width = this.width;
-    this.cuber.height = this.height - 210;
-    this.cuber.resize();
-    this.renderer.setSize(this.cuber.width, this.cuber.height, true);
-    let cuber = this.$refs.cuber;
-    if (cuber instanceof HTMLElement) {
-      cuber.style.width = this.width + "px";
-      cuber.style.height = this.height - 210 + "px";
-    }
+  resize(width: number, height: number) {
+    this.size = Math.min(width / 8, height / 14);
+    this.width = width;
+    this.height = 210;
   }
 
   playing: boolean = false;
@@ -128,6 +78,9 @@ export default class Algs extends Vue {
   index: { group: number; index: number } = { group: 0, index: 0 };
   @Watch("index")
   onIndexChange() {
+    if (this.context.mode != "algs") {
+      return;
+    }
     let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
     this.cuber.cube.strip(strip);
     this.name = this.algs[this.index.group].algs[this.index.index].name;
@@ -157,6 +110,9 @@ export default class Algs extends Vue {
   }
 
   play() {
+    if (this.context.mode != "algs") {
+      return;
+    }
     if (this.progress == this.actions.length) {
       this.playing = false;
     }
@@ -210,5 +166,15 @@ export default class Algs extends Vue {
     this.cuber.cube.twister.finish();
     this.cuber.cube.twister.twist("#");
     this.cuber.cube.twister.twist(this.exp, true, 1, true);
+  }
+
+  @Watch("context.mode")
+  onModeChange(to: string) {
+    if (to == "algs") {
+      this.onIndexChange();
+      this.init();
+    } else {
+      this.cuber.cube.strip({});
+    }
   }
 }

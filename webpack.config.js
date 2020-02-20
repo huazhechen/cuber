@@ -3,7 +3,7 @@ var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
   entry: {
-    playground: "./src/playground.ts",
+    playground: "./src/index.ts",
     algs: "./src/algs.ts",
     director: "./src/director.ts"
   },

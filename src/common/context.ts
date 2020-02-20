@@ -9,6 +9,8 @@ export default class Context {
     this.load();
   }
 
+  public mode: string;
+
   load() {
     let version = "0.0.1";
     if (this._storage.getItem("version") != version) {
@@ -23,6 +25,7 @@ export default class Context {
     this.lock = false;
     this.mirror = false;
     this.hollow = false;
+    this.mode = "";
   }
 
   reset() {

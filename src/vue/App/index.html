@@ -1,0 +1,23 @@
+<v-app>
+  <v-btn
+    fixed
+    right
+    top
+    fab
+    color="primary"
+    @click.native.stop.prevent="dash=!dash"
+    @touchstart.native.stop.prevent="dash=!dash"
+    :style="{width:size+'px', height:size+'px'}"
+  >
+    <v-icon :size="size * 0.6">menu</v-icon>
+  </v-btn>
+  <div v-resize="resize" style="user-select: none;background-color: white;">
+    <div ref="cuber"></div>
+    <div style="margin:0%;padding:0%;" ref="panel">
+      <keyboard v-show="context.mode=='playground'" ref="keyboard"></keyboard>
+      <player v-show="context.mode=='algs'" ref="player"></player>
+      <editor v-show="context.mode=='director'" ref="editor"></editor>
+    </div>
+  </div>
+  <dash v-model="dash"></dash>
+</v-app>

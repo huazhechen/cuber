@@ -1,17 +1,4 @@
 <v-app>
-  <v-btn
-    fixed
-    left
-    top
-    @click.native.stop.prevent
-    @touchstart.native.stop.prevent
-    text
-    color="primary"
-    style="margin:0%;padding:0%;"
-    :style="{height:size+'px'}"
-  >
-    <div :style="{'font-size':(size * 0.8)+'px'}">{{score}}</div>
-  </v-btn>
   <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
     <template v-slot:activator>
       <v-btn
