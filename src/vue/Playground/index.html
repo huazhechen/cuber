@@ -21,12 +21,12 @@
         color="primary"
         :style="{width:size+'px', height:size+'px'}"
       >
-        <icon v-if="menu" :size="size * 0.6" color="white" name="close"></icon>
-        <icon v-else :size="size * 0.6" color="white" name="menu"></icon>
+        <v-icon v-if="menu" :size="size * 0.6">close</v-icon>
+        <v-icon v-else :size="size * 0.6">menu</v-icon>
       </v-btn>
     </template>
     <v-btn fab :style="{width:size*0.9+'px', height:size*0.9+'px'}" @click.native.stop.prevent="shuffle" @touchstart.native.stop.prevent="shuffle">
-      <icon :size="size * 0.6" color="red" name="casino"></icon>
+      <v-icon :size="size * 0.55" color="red">casino</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -34,7 +34,7 @@
       @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
       @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/algs.html'"
     >
-      <icon :size="size * 0.6" color="primary" name="school"></icon>
+      <v-icon :size="size * 0.55" color="primary">school</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -42,7 +42,7 @@
       @click.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/director.html'"
       @touchstart.native.stop.prevent="window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/director.html'"
     >
-      <icon :size="size * 0.6" color="primary" name="movie"></icon>
+      <v-icon :size="size * 0.55" color="primary">movie</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -50,7 +50,7 @@
       @click.native.stop.prevent="tune=true;menu=false;"
       @touchstart.native.stop.prevent="tune=true;menu=false;"
     >
-      <icon :size="size * 0.6" color="primary" name="tune"></icon>
+      <v-icon :size="size * 0.55" color="primary">tune</v-icon>
     </v-btn>
     <v-btn
       fab
@@ -58,7 +58,7 @@
       @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
       @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
     >
-      <icon :size="size * 0.6" color="primary" name="code"></icon>
+      <v-icon :size="size * 0.55" color="primary">code</v-icon>
     </v-btn>
   </v-speed-dial>
   <div v-resize="resize" style="user-select: none;background-color: white;">
