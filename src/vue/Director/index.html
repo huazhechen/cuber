@@ -123,7 +123,7 @@
                 :disabled="recording"
                 @click.native.stop.prevent="context.mirror=!context.mirror"
                 @touchstart.native.stop.prevent="context.mirror=!context.mirror"
-                :color="context.mirror?'primary':''"
+                :color="context.mirror?'red':''"
                 style="margin: 0%; padding: 0%;"
               >
                 <v-icon large>flip</v-icon>
@@ -137,10 +137,10 @@
                 :disabled="recording"
                 @click.native.stop.prevent="context.hollow=!context.hollow"
                 @touchstart.native.stop.prevent="context.hollow=!context.hollow"
-                :color="context.hollow?'primary':''"
+                :color="context.hollow?'red':''"
                 style="margin: 0%; padding: 0%;"
               >
-                <v-icon large>hollow</v-icon>
+                <v-icon large>visibility</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>
