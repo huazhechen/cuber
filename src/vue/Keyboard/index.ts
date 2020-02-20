@@ -60,7 +60,7 @@ export default class Keyboard extends Vue {
   }
 
   reverse() {
-    if (this.cuber.cube.history.last == undefined) {
+    if (this.cuber.cube.history.length == 0) {
       return;
     }
     this.cuber.cube.twister.twist(this.cuber.cube.history.last.value, true, 1, false);
