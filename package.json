@@ -7,10 +7,7 @@
   "private": true,
   "scripts": {
     "watch": "webpack-dev-server --mode=development --hot --inline --host 0.0.0.0",
-    "build": "webpack --color --display --display-modules --mode=production --progress",
-    "build:dll": "webpack --color --display --display-modules --mode=production --config ./webpack.dll.config.js",
-    "build:wegame": "webpack --color --display --display-modules --mode=production --config ./webpack.wegame.config.js",
-    "watch:wegame": "webpack-dev-server --mode=development --hot --inline --host 0.0.0.0 --config ./webpack.wegame.config.js"
+    "build": "webpack --color --display --display-modules --mode=production --progress"
   },
   "dependencies": {},
   "devDependencies": {

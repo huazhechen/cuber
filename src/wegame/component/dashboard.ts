@@ -1,7 +1,9 @@
 import { Component } from "./component";
 import * as THREE from "three";
 import Main from "../main";
-import { COLORS, TouchAction } from "../../common/define";
+import { COLORS } from "../../cuber/cuber";
+import TouchAction from "../../common/touch";
+import Context from "../../vue/context";
 
 class ExitButton {
   public x: number;

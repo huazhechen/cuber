@@ -8,9 +8,10 @@ import svg_hollow_off from "../resource/hollow_off.svg";
 import svg_help from "../resource/help.svg";
 import svg_backspace_on from "../resource/backspace_on.svg";
 import svg_backspace_off from "../resource/backspace_off.svg";
-import { COLORS, TouchAction } from "../../common/define";
 import { Component } from "./component";
 import * as THREE from "three";
+import { COLORS } from "../../cuber/cuber";
+import TouchAction from "../../common/touch";
 
 class KeyboardButton {
   x: number;

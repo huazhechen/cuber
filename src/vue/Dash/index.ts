@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { Component, Inject, Watch, Prop } from "vue-property-decorator";
 import Tune from "../Tune";
-import Cuber from "../../cuber/cuber";
-import Context from "../../common/context";
+import Preferance from "../../cuber/preferance";
+import Context from "../context";
 
 @Component({
   template: require("./index.html"),
@@ -11,9 +11,6 @@ import Context from "../../common/context";
   }
 })
 export default class Dash extends Vue {
-  @Inject("cuber")
-  cuber: Cuber;
-
   @Inject("context")
   context: Context;
 
@@ -27,7 +24,7 @@ export default class Dash extends Vue {
 
   tune: boolean = false;
 
-  mode(value: string) {
+  mode(value: number) {
     this.context.mode = value;
     this.$emit("input", false);
   }

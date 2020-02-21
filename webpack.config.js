@@ -3,9 +3,7 @@ var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
   entry: {
-    playground: "./src/index.ts",
-    algs: "./src/algs.ts",
-    director: "./src/director.ts"
+    playground: "./src/index.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -70,11 +68,5 @@ module.exports = (env, argv) => ({
   performance: {
     hints: false
   },
-  devtool: argv.mode === 'production' ? "" : "#cheap-module-eval-source-map",
-  plugins: [
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require('./dist/manifest.json')
-    })
-  ]
+  devtool: argv.mode === 'production' ? "" : "#cheap-module-eval-source-map"
 });

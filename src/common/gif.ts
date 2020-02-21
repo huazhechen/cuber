@@ -1,4 +1,5 @@
-import { COLORS, RGB, RGB2HSV, HSV2RGB, RGBD } from "./define";
+import Color from "./color";
+import Cuber, { COLORS } from "../cuber/cuber";
 
 class ByteArray {
   static SIZE = 4096;
@@ -271,8 +272,8 @@ export default class GIF {
     }
     // LIGHT
     for (const key in COLORS) {
-      let rgb = RGB((<any>COLORS)[key]);
-      let hsv = RGB2HSV(rgb);
+      let rgb = Color.RGB((<any>COLORS)[key]);
+      let hsv = Color.RGB2HSV(rgb);
       if (hsv[1] == 0 || hsv[2] == 0) {
         continue;
       }
@@ -283,7 +284,7 @@ export default class GIF {
           break;
         }
         let dhsv = [hsv[0], hsv[1], value];
-        let drgb = HSV2RGB(dhsv);
+        let drgb = Color.HSV2RGB(dhsv);
         colors[i++] = drgb[0];
         colors[i++] = drgb[1];
         colors[i++] = drgb[2];
@@ -291,7 +292,7 @@ export default class GIF {
       if (hsv[1] >= 9) {
         for (let d = 0; d < 2; d++) {
           let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
-          let drgb = HSV2RGB(dhsv);
+          let drgb = Color.HSV2RGB(dhsv);
           colors[i++] = drgb[0];
           colors[i++] = drgb[1];
           colors[i++] = drgb[2];
@@ -331,7 +332,7 @@ export default class GIF {
       let cr = GIF.COLORS[i++];
       let cg = GIF.COLORS[i++];
       let cb = GIF.COLORS[i++];
-      let d = RGBD([r, g, b], [cr, cg, cb]);
+      let d = Color.RGBD([r, g, b], [cr, cg, cb]);
       if (d == 0) {
         return index;
       }

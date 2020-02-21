@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import Cuber from "./cuber";
+import Cuber, { FACE } from "./cuber";
 import Cubelet from "./cubelet";
 import Group from "./group";
-import { FACE, TouchAction } from "../common/define";
 import { tweener } from "./tweener";
+import TouchAction from "../common/touch";
 
 export class Holder {
   public vector: THREE.Vector3;

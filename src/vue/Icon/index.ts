@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { colors } from "../../common/define";
 import { ICONS } from "../../common/icons";
+import Color from "../../common/color";
 
 @Component({
   template: require("./index.html")
@@ -10,7 +10,7 @@ export default class Icon extends Vue {
   @Prop({ required: true })
   color: string;
   get fill() {
-    let color = (<any>colors)[this.color];
+    let color = (<any>Color.COLORS)[this.color];
     if (color) {
       return color;
     }

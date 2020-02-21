@@ -3,9 +3,35 @@ import * as THREE from "three";
 import Cube from "./cube";
 import Controller from "./controller";
 import Cubelet from "./cubelet";
-import { TouchAction } from "../common/define";
+import Preferance from "./preferance";
+
+export enum FACE {
+  L,
+  R,
+  D,
+  U,
+  B,
+  F
+}
+
+export var COLORS = {
+  BACKGROUND: "#FFFFFF",
+  GRAY: "#444444",
+  BLACK: "#222222",
+  GREEN: "#00A020",
+  ORANGE: "#FF6D00",
+  BLUE: "#0D47A1",
+  YELLOW: "#FFD600",
+  RED: "#B71C1C",
+  WHITE: "#F0F0F0",
+  CYAN: "#18FFFF",
+  LIME: "#C6FF00",
+  PINK: "#FF4081",
+  DISABLE: "#BDBDBD"
+};
 
 export default class Cuber {
+  public preferance: Preferance;
   public width: number;
   public height: number;
   public dirty: boolean = false;
@@ -16,92 +42,13 @@ export default class Cuber {
   public controller: Controller;
   public cube: Cube;
 
-  private _mirror: boolean;
-  get mirror() {
-    return this._mirror;
-  }
-  set mirror(value: boolean) {
-    this._mirror = value;
-    for (let cubelet of this.cube.cubelets) {
-      cubelet.mirror = value;
-    }
-    this.dirty = true;
-  }
-
-  private _hollow: boolean;
-  get hollow() {
-    return this._hollow;
-  }
-  set hollow(value: boolean) {
-    this._hollow = value;
-    for (let cubelet of this.cube.cubelets) {
-      cubelet.hollow = value;
-    }
-    this.dirty = true;
-  }
-
-  private _scale: number;
-  get scale() {
-    return this._scale;
-  }
-  set scale(value) {
-    this._scale = value;
-    this.resize();
-  }
-
-  private _angle: number;
-  get angle() {
-    return this._angle;
-  }
-  set angle(value) {
-    this._angle = value;
-    this.scene.rotation.y = value;
-    this.dirty = true;
-  }
-
-  private _gradient: number = Math.PI / 6;
-  get gradient() {
-    return this._gradient;
-  }
-  set gradient(value) {
-    this._gradient = value;
-    this.scene.rotation.x = value;
-    this.dirty = true;
-  }
-
-  private _perspective: number = 1;
-  get perspective() {
-    return this._perspective;
-  }
-  set perspective(value) {
-    this._perspective = value;
-    this.resize();
-  }
-
-  private ambient: THREE.AmbientLight;
-  private _brightness: number;
-  get brightness() {
-    return this._brightness;
-  }
-  set brightness(value) {
-    this._brightness = value;
-    this.ambient.intensity = value;
-    this.dirty = true;
-  }
-  private directional: THREE.DirectionalLight;
-  private _intensity: number;
-  get intensity() {
-    return this._intensity;
-  }
-  set intensity(value) {
-    this._intensity = value;
-    this.directional.intensity = value;
-    this.dirty = true;
-  }
+  public ambient: THREE.AmbientLight;
+  public directional: THREE.DirectionalLight;
 
   constructor() {
-    this.controller = new Controller(this);
     this.cube = new Cube();
+    this.preferance = new Preferance(this);
+    this.controller = new Controller(this);
 
     this.scene = new THREE.Scene();
     this.scene.rotation.x = Math.PI / 6;
@@ -118,18 +65,18 @@ export default class Cuber {
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;
-    this.mirror = false;
-    this.scale = 1;
-    this.angle = -Math.PI / 8;
+    this.preferance.load();
   }
 
   resize() {
-    let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
+    let scale = this.preferance.scale / 100 + 0.5;
+    let perspective = (100.1 / (this.preferance.perspective + 0.01)) * 4 - 3;
+    let min = this.height / Math.min(this.width, this.height) / scale / perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
     this.camera.fov = fov;
-    let distance = Cubelet.SIZE * 3 * this.perspective;
+    let distance = Cubelet.SIZE * 3 * perspective;
     this.camera.position.z = distance;
     this.camera.near = distance - Cubelet.SIZE * 3;
     this.camera.far = distance + Cubelet.SIZE * 3;
@@ -137,8 +84,4 @@ export default class Cuber {
     this.camera.updateProjectionMatrix();
     this.dirty = true;
   }
-
-  touch = (action: TouchAction) => {
-    return this.controller.touch(action);
-  };
 }

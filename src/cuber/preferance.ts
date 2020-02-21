@@ -1,12 +1,10 @@
-import Cuber from "../cuber/cuber";
-import { TouchAction } from "./define";
+import Cuber from "./cuber";
 
-export default class Context {
+export default class Preferance {
   private _storage = window.localStorage;
   private cuber: Cuber;
   constructor(cuber: Cuber) {
     this.cuber = cuber;
-    this.load();
   }
 
   public mode: string;
@@ -43,7 +41,7 @@ export default class Context {
   set scale(value) {
     this._scale = value;
     this._storage.setItem("setting.scale", String(value));
-    this.cuber.scale = value / 100 + 0.5;
+    this.cuber.resize();
   }
 
   private _perspective: number;
@@ -53,7 +51,7 @@ export default class Context {
   set perspective(value) {
     this._perspective = value;
     this._storage.setItem("setting.perspective", String(value));
-    this.cuber.perspective = (100.1 / (value + 0.01)) * 4 - 3;
+    this.cuber.resize();
   }
 
   private _angle: number;
@@ -63,7 +61,8 @@ export default class Context {
   set angle(value) {
     this._angle = value;
     this._storage.setItem("setting.angle", String(value));
-    this.cuber.angle = ((value / 100 - 1) * Math.PI) / 4;
+    this.cuber.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 4;
+    this.cuber.dirty = true;
   }
 
   private _gradient: number;
@@ -73,7 +72,8 @@ export default class Context {
   set gradient(value) {
     this._gradient = value;
     this._storage.setItem("setting.gradient", String(value));
-    this.cuber.gradient = ((1 - value / 100) * Math.PI) / 2;
+    this.cuber.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
+    this.cuber.dirty = true;
   }
 
   private _brightness: number;
@@ -83,22 +83,33 @@ export default class Context {
   set brightness(value) {
     this._brightness = value;
     this._storage.setItem("setting.brightness", String(value));
-    this.cuber.brightness = value / 100;
-    this.cuber.intensity = 1 - value / 100;
+    this.cuber.ambient.intensity = value / 100;
+    this.cuber.directional.intensity = 1 - value / 100;
+    this.cuber.dirty = true;
   }
 
+  private _mirror: boolean;
   get mirror() {
-    return this.cuber.mirror;
+    return this._mirror;
   }
   set mirror(value) {
-    this.cuber.mirror = value;
+    this._mirror = value;
+    for (let cubelet of this.cuber.cube.cubelets) {
+      cubelet.mirror = value;
+    }
+    this.cuber.dirty = true;
   }
 
+  private _hollow: boolean;
   get hollow() {
-    return this.cuber.hollow;
+    return this._hollow;
   }
-  set hollow(value) {
-    this.cuber.hollow = value;
+  set hollow(value: boolean) {
+    this._hollow = value;
+    for (let cubelet of this.cuber.cube.cubelets) {
+      cubelet.hollow = value;
+    }
+    this.cuber.dirty = true;
   }
 
   get lock() {
@@ -107,39 +118,4 @@ export default class Context {
   set lock(value) {
     this.cuber.controller.lock = value;
   }
-
-  control(canvas: HTMLCanvasElement, callback: Function) {
-    this.canvas = canvas;
-    this.callback = callback;
-    canvas.addEventListener("touchstart", this.touch);
-    canvas.addEventListener("touchmove", this.touch);
-    canvas.addEventListener("touchend", this.touch);
-    canvas.addEventListener("touchcancel", this.touch);
-
-    canvas.addEventListener("mousedown", this.mouse);
-    canvas.addEventListener("mousemove", this.mouse);
-    canvas.addEventListener("mouseup", this.mouse);
-    canvas.addEventListener("mouseout", this.mouse);
-  }
-  canvas: HTMLCanvasElement;
-  callback: Function;
-  mouse = (event: MouseEvent) => {
-    this.canvas.tabIndex = 1;
-    this.canvas.focus();
-    let action = new TouchAction(event.type, event.clientX, event.clientY);
-    this.callback(action);
-    event.returnValue = false;
-    return false;
-  };
-
-  touch = (event: TouchEvent) => {
-    this.canvas.tabIndex = 1;
-    this.canvas.focus();
-    let touches = event.changedTouches;
-    let first = touches[0];
-    let action = new TouchAction(event.type, first.clientX, first.clientY);
-    this.callback(action);
-    event.preventDefault();
-    return true;
-  };
 }

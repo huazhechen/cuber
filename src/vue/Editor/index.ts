@@ -1,21 +1,18 @@
 import Vue from "vue";
 import { Component, Watch, Inject } from "vue-property-decorator";
-import Cuber from "../../cuber/cuber";
-import Context from "../../common/context";
-import { COLORS, FACE, DOWNLOAD } from "../../common/define";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
 import Base64 from "../../common/base64";
 import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
+import Context from "../context";
+import { FACE, COLORS } from "../../cuber/cuber";
+import Util from "../../common/util";
 
 @Component({
   template: require("./index.html")
 })
 export default class Editor extends Vue {
-  @Inject("cuber")
-  cuber: Cuber;
-
   @Inject("context")
   context: Context;
 
@@ -40,7 +37,7 @@ export default class Editor extends Vue {
   frames: number = 30;
   set duration(value: number) {
     this.frames = value;
-    this.cuber.cube.duration = value;
+    this.context.cuber.cube.duration = value;
     window.localStorage.setItem("director.duration", String(value));
   }
 
@@ -78,10 +75,10 @@ export default class Editor extends Vue {
         this.action = init.action || "";
         this.stickers = init.stickers || [];
         if (init.option) {
-          this.context.scale = init.option[0];
-          this.context.perspective = init.option[1];
-          this.context.angle = init.option[2];
-          this.context.gradient = init.option[3];
+          this.context.cuber.preferance.scale = init.option[0];
+          this.context.cuber.preferance.perspective = init.option[1];
+          this.context.cuber.preferance.angle = init.option[2];
+          this.context.cuber.preferance.gradient = init.option[3];
         }
         history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
       } catch (error) {
@@ -89,10 +86,10 @@ export default class Editor extends Vue {
       }
     }
 
-    this.cuber.cube.twister.callbacks.push(() => {
+    this.context.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
-    this.cuber.controller.taps.push(this.tap);
+    this.context.cuber.controller.taps.push(this.tap);
     this.delay = Number(window.localStorage.getItem("director.delay") || 2);
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
   }
@@ -100,17 +97,17 @@ export default class Editor extends Vue {
   init() {
     this.playing = false;
     this.progress = 0;
-    this.cuber.controller.disable = false;
-    this.cuber.cube.twister.finish();
-    this.cuber.cube.twister.twist("#");
+    this.context.cuber.controller.disable = false;
+    this.context.cuber.cube.twister.finish();
+    this.context.cuber.cube.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
-    this.cuber.cube.twister.twist(scene, false, 1, true);
-    this.cuber.cube.history.clear();
+    this.context.cuber.cube.twister.twist(scene, false, 1, true);
+    this.context.cuber.cube.history.clear();
   }
 
   end() {
     this.init();
-    this.cuber.cube.twister.twist(this.action, false, 1, true);
+    this.context.cuber.cube.twister.twist(this.action, false, 1, true);
     this.progress = this.actions.length;
   }
 
@@ -124,7 +121,7 @@ export default class Editor extends Vue {
   progress: number = 0;
   @Watch("progress")
   onProgressChange() {
-    this.cuber.controller.lock = this.progress > 0;
+    this.context.cuber.controller.lock = this.progress > 0;
   }
   actions: TwistAction[] = [];
   action: string = "";
@@ -153,7 +150,7 @@ export default class Editor extends Vue {
   })();
 
   callback() {
-    if (this.context.mode != "director") {
+    if (this.context.mode != 2) {
       return;
     }
     if (this.recording || this.playing) {
@@ -168,7 +165,7 @@ export default class Editor extends Vue {
       }
       let action = this.actions[this.progress];
       this.progress++;
-      this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+      this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
 
@@ -191,7 +188,7 @@ export default class Editor extends Vue {
     this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
-    this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
+    this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
@@ -201,7 +198,7 @@ export default class Editor extends Vue {
     this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
-    this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
+    this.context.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   recording: boolean = false;
@@ -214,42 +211,42 @@ export default class Editor extends Vue {
 
   record() {
     let size = this.pixel;
-    let width = this.cuber.width;
-    let height = this.cuber.height;
-    this.cuber.width = size;
-    this.cuber.height = size;
-    this.cuber.resize();
+    let width = this.context.cuber.width;
+    let height = this.context.cuber.height;
+    this.context.cuber.width = size;
+    this.context.cuber.height = size;
+    this.context.cuber.resize();
     this.filmer.clear();
-    this.filmer.render(this.cuber.scene, this.cuber.camera);
+    this.filmer.render(this.context.cuber.scene, this.context.cuber.camera);
     let content = this.filmer.getContext();
     let pixels = new Uint8Array(size * size * 4);
     content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
     this.gif.add(pixels);
-    this.cuber.width = width;
-    this.cuber.height = height;
-    this.cuber.resize();
+    this.context.cuber.width = width;
+    this.context.cuber.height = height;
+    this.context.cuber.resize();
   }
 
   finish() {
     this.recording = false;
-    this.cuber.controller.disable = false;
+    this.context.cuber.controller.disable = false;
     this.gif.finish();
     let data = this.gif.out.getData();
     let blob = new Blob([data], { type: "image/gif" });
     let url = URL.createObjectURL(blob);
-    DOWNLOAD("cuber.gif", url);
+    Util.DOWNLOAD("cuber.gif", url);
   }
 
   film() {
     if (this.recording) {
       this.recording = false;
-      this.cuber.controller.disable = false;
+      this.context.cuber.controller.disable = false;
       this.gif.finish();
       return;
     }
     this.init();
     this.recording = true;
-    this.cuber.controller.disable = true;
+    this.context.cuber.controller.disable = true;
     let size = this.pixel;
     this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
@@ -260,17 +257,17 @@ export default class Editor extends Vue {
 
   snap() {
     let size = this.pixel;
-    let width = this.cuber.width;
-    let height = this.cuber.height;
-    this.cuber.width = size;
-    this.cuber.height = size;
-    this.cuber.resize();
+    let width = this.context.cuber.width;
+    let height = this.context.cuber.height;
+    this.context.cuber.width = size;
+    this.context.cuber.height = size;
+    this.context.cuber.resize();
     this.snaper.setSize(size, size, true);
     this.snaper.clear();
-    this.snaper.render(this.cuber.scene, this.cuber.camera);
-    this.cuber.width = width;
-    this.cuber.height = height;
-    this.cuber.resize();
+    this.snaper.render(this.context.cuber.scene, this.context.cuber.camera);
+    this.context.cuber.width = width;
+    this.context.cuber.height = height;
+    this.context.cuber.resize();
     let content = this.snaper.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
@@ -282,7 +279,7 @@ export default class Editor extends Vue {
     }
     let blob = new Blob([data], { type: type });
     let url = URL.createObjectURL(blob);
-    DOWNLOAD("cuber.png", url);
+    Util.DOWNLOAD("cuber.png", url);
   }
 
   colors = [
@@ -302,15 +299,15 @@ export default class Editor extends Vue {
   colord = false;
 
   tap = (index: number, face: number) => {
-    if (this.context.mode != "director") {
+    if (this.context.mode != 2) {
       return;
     }
     if (index < 0) {
       return;
     }
-    let cubelet: Cubelet = this.cuber.cube.cubelets[index];
+    let cubelet: Cubelet = this.context.cuber.cube.cubelets[index];
     face = cubelet.getColor(face);
-    index = this.cuber.cube.groups[FACE[face]].indices.indexOf(cubelet.initial);
+    index = this.context.cuber.cube.groups[FACE[face]].indices.indexOf(cubelet.initial);
     let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
       arr = [];
@@ -318,10 +315,10 @@ export default class Editor extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.cuber.cube.stick(face, index + 1, this.colors[this.color]);
+      this.context.cuber.cube.stick(face, index + 1, this.colors[this.color]);
     } else {
       arr[index] = -1;
-      this.cuber.cube.stick(face, index + 1, "");
+      this.context.cuber.cube.stick(face, index + 1, "");
     }
     window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
   };
@@ -330,7 +327,7 @@ export default class Editor extends Vue {
     this.colord = false;
     this.stickers = {};
     window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
-    this.cuber.cube.strip({});
+    this.context.cuber.cube.strip({});
   }
 
   @Watch("context.mode")
@@ -346,16 +343,16 @@ export default class Editor extends Vue {
           for (let index = 0; index < 9; index++) {
             let sticker = stickers[index];
             if (sticker && sticker >= 0) {
-              this.cuber.cube.stick(face, index + 1, this.colors[sticker]);
+              this.context.cuber.cube.stick(face, index + 1, this.colors[sticker]);
             } else {
-              this.cuber.cube.stick(face, index + 1, "");
+              this.context.cuber.cube.stick(face, index + 1, "");
             }
           }
         }
         this.init();
       });
     } else {
-      this.cuber.cube.strip({});
+      this.context.cuber.cube.strip({});
       this.duration = 30;
     }
   }

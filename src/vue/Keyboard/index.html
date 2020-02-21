@@ -55,13 +55,13 @@
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
       <v-btn
-        :disabled="cuber.cube.history.length == 0 || context.lock"
+        :disabled="context.cuber.cube.history.length == 0 || context.lock"
         @click.native.stop.prevent="reverse()"
         @touchstart.native.stop.prevent="reverse()"
         :style="style"
         :ripple="false"
       >
-        <icon :size="height/5" :color="(cuber.cube.history.length == 0 || context.lock)?'gray':''" name="backspace"></icon>
+        <icon :size="height/5" :color="(context.cuber.cube.history.length == 0 || context.lock)?'gray':''" name="backspace"></icon>
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" d-flex xs2 style="padding:0%">

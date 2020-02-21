@@ -36,7 +36,7 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex xs4>
+        <v-flex>
           <v-btn
             class="headline"
             text
@@ -48,7 +48,19 @@
             <v-icon large>tune</v-icon>
           </v-btn>
         </v-flex>
-        <v-flex xs4>
+        <v-flex>
+          <v-btn
+            class="headline"
+            text
+            block
+            @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+            style="height: 2em; margin: 0%; padding: 0%;"
+            @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+          >
+            <v-icon large>code</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex>
           <v-btn
             class="headline"
             color="error"

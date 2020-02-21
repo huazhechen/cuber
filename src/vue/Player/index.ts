@@ -1,17 +1,14 @@
 import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
-import Cuber from "../../cuber/cuber";
-import Context from "../../common/context";
+import Preferance from "../../cuber/preferance";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
+import Context from "../context";
 
 @Component({
   template: require("./index.html")
 })
 export default class Player extends Vue {
-  @Inject("cuber")
-  cuber: Cuber;
-
   @Inject("context")
   context: Context;
 
@@ -44,7 +41,7 @@ export default class Player extends Vue {
     } else {
       this.index = { group: 0, index: 0 };
     }
-    this.cuber.cube.twister.callbacks.push(() => {
+    this.context.cuber.cube.twister.callbacks.push(() => {
       this.play();
     });
   }
@@ -72,17 +69,17 @@ export default class Player extends Vue {
   playing: boolean = false;
   @Watch("playing")
   onPlayingChange() {
-    this.cuber.controller.disable = this.playing;
+    this.context.cuber.controller.disable = this.playing;
   }
 
   index: { group: number; index: number } = { group: 0, index: 0 };
   @Watch("index")
   onIndexChange() {
-    if (this.context.mode != "algs") {
+    if (this.context.mode != 1) {
       return;
     }
     let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
-    this.cuber.cube.strip(strip);
+    this.context.cuber.cube.strip(strip);
     this.name = this.algs[this.index.group].algs[this.index.index].name;
     this.origin = this.algs[this.index.group].algs[this.index.index].default;
     let exp = window.localStorage.getItem("algs.exp." + this.name);
@@ -110,7 +107,7 @@ export default class Player extends Vue {
   }
 
   play() {
-    if (this.context.mode != "algs") {
+    if (this.context.mode != 1) {
       return;
     }
     if (this.progress == this.actions.length) {
@@ -119,7 +116,7 @@ export default class Player extends Vue {
     if (this.playing) {
       let action = this.actions[this.progress];
       this.progress++;
-      this.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+      this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
 
@@ -130,7 +127,7 @@ export default class Player extends Vue {
     this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
-    this.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
+    this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
@@ -140,7 +137,7 @@ export default class Player extends Vue {
     this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
-    this.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
+    this.context.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   toggle() {
@@ -163,9 +160,9 @@ export default class Player extends Vue {
   init() {
     this.playing = false;
     this.progress = 0;
-    this.cuber.cube.twister.finish();
-    this.cuber.cube.twister.twist("#");
-    this.cuber.cube.twister.twist(this.exp, true, 1, true);
+    this.context.cuber.cube.twister.finish();
+    this.context.cuber.cube.twister.twist("#");
+    this.context.cuber.cube.twister.twist(this.exp, true, 1, true);
   }
 
   @Watch("context.mode")
@@ -176,7 +173,7 @@ export default class Player extends Vue {
         this.init();
       });
     } else {
-      this.cuber.cube.strip({});
+      this.context.cuber.cube.strip({});
     }
   }
 }

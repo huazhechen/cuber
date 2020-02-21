@@ -7,9 +7,11 @@ import Setting from "./component/setting";
 import Score from "./component/score";
 import Database from "./database";
 import Wecuber from "./component/wecuber";
-import { COLORS, TouchAction } from "../common/define";
-import Context from "../common/context";
+import Preferance from "../cuber/preferance";
 import Retry from "./component/retry";
+import { COLORS } from "../cuber/cuber";
+import TouchAction from "../common/touch";
+import Controller from "../common/controllor";
 /**
  * 游戏主函数
  */
@@ -30,7 +32,7 @@ export default class Main {
   focus: Component;
   timer: number;
   database: Database;
-  context: Context;
+  context: Preferance;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -48,8 +50,8 @@ export default class Main {
     this.renderer.setSize(this.width, this.height, true);
 
     this.cuber = new Wecuber(0, 0, this.width, this.height);
-    this.context = new Context(this.cuber);
-    this.context.control(canvas, this.dispatch);
+    this.context = new Controller();
+    this.context.controller.control(canvas, this.dispatch);
     this.keyboard = new Keyboard(this, 0, 0, this.width, this.height);
     this.dashboard = new Dashboard(this, 0, 0, this.width, this.height);
 

@@ -1,9 +1,8 @@
 import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
-import Cuber from "../../cuber/cuber";
-import Context from "../../common/context";
 import Icon from "../Icon";
 import { Panel } from "../panel";
+import Context from "../context";
 
 @Component({
   template: require("./index.html"),
@@ -12,9 +11,6 @@ import { Panel } from "../panel";
   }
 })
 export default class Keyboard extends Vue implements Panel {
-  @Inject("cuber")
-  cuber: Cuber;
-
   @Inject("context")
   context: Context;
 
@@ -28,14 +24,14 @@ export default class Keyboard extends Vue implements Panel {
   }
 
   loop() {
-    if (this.cuber.cube.history.moves == 0) {
+    if (this.context.cuber.cube.history.moves == 0) {
       this.start = 0;
       this.now = 0;
     } else {
       if (this.start == 0) {
         this.start = new Date().getTime();
       }
-      if (!this.cuber.cube.complete) {
+      if (!this.context.cuber.cube.complete) {
         this.now = new Date().getTime();
       }
     }
@@ -56,7 +52,7 @@ export default class Keyboard extends Vue implements Panel {
   cfops: number = 0;
   strip() {
     this.cfops = (this.cfops + 1) % this.strips.length;
-    this.cuber.cube.strip(this.strips[this.cfops]);
+    this.context.cuber.cube.strip(this.strips[this.cfops]);
   }
 
   get style() {
@@ -76,14 +72,14 @@ export default class Keyboard extends Vue implements Panel {
   }
 
   twist(exp: string) {
-    this.cuber.cube.twister.twist(exp);
+    this.context.cuber.cube.twister.twist(exp);
   }
 
   reverse() {
-    if (this.cuber.cube.history.length == 0) {
+    if (this.context.cuber.cube.history.length == 0) {
       return;
     }
-    this.cuber.cube.twister.twist(this.cuber.cube.history.last.value, true, 1, false);
+    this.context.cuber.cube.twister.twist(this.context.cuber.cube.history.last.value, true, 1, false);
   }
 
   start: number = 0;
@@ -96,7 +92,7 @@ export default class Keyboard extends Vue implements Panel {
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
     let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
-    return time + "/" + this.cuber.cube.history.moves;
+    return time + "/" + this.context.cuber.cube.history.moves;
   }
 
   @Watch("context.mode")
@@ -109,8 +105,8 @@ export default class Keyboard extends Vue implements Panel {
   }
 
   shuffle() {
-    this.cuber.cube.twister.twist("*");
-    this.context.lock = false;
+    this.context.cuber.cube.twister.twist("*");
+    this.context.cuber.preferance.lock = false;
     this.start = 0;
     this.now = 0;
   }

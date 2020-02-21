@@ -2,7 +2,7 @@ import { Component } from "./component";
 import * as THREE from "three";
 import { RoundButton } from "./button";
 import Database from "../database";
-import { COLORS, TouchAction } from "../../common/define";
+import { COLORS, TouchAction } from "../../common/util";
 
 export default class Starter implements Component {
   public x: number;
@@ -133,25 +133,25 @@ export default class Starter implements Component {
   }
 
   paint() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.restore();
-    this.context.fillStyle = COLORS.BLACK;
-    this.context.globalAlpha = 0.8;
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.globalAlpha = 1;
+    Context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    Context.restore();
+    Context.fillStyle = COLORS.BLACK;
+    Context.globalAlpha = 0.8;
+    Context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    Context.globalAlpha = 1;
 
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
-    this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.WHITE;
-    this.context.textAlign = "center";
-    this.context.textBaseline = "middle";
-    this.context.fillText("魔方竞技场", this.canvas.width / 2, this.canvas.height / 4);
+    Context.font = font + "px Arial";
+    Context.fillStyle = COLORS.WHITE;
+    Context.textAlign = "center";
+    Context.textBaseline = "middle";
+    Context.fillText("魔方竞技场", this.canvas.width / 2, this.canvas.height / 4);
 
     for (const button of this.buttons) {
       button.paint(this.context);
     }
 
-    this.context.save();
+    Context.save();
 
     this.dirty = true;
     this.texture.needsUpdate = true;

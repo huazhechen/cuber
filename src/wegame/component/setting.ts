@@ -1,7 +1,7 @@
 import { Component } from "./component";
 import * as THREE from "three";
 import { Button } from "./button";
-import { COLORS, TouchAction } from "../../common/define";
+import { COLORS, TouchAction } from "../../common/util";
 import Main from "../main";
 
 class ConfirmButton implements Button {
@@ -278,30 +278,30 @@ export default class Setting implements Component {
   }
 
   paint() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.restore();
+    Context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    Context.restore();
 
-    this.context.globalAlpha = 0.6;
+    Context.globalAlpha = 0.6;
     if (this.down instanceof Slider){
-      this.context.globalAlpha = 0;
+      Context.globalAlpha = 0;
     }
-    this.context.fillStyle = COLORS.BLACK;
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    Context.fillStyle = COLORS.BLACK;
+    Context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
-    this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.WHITE;
-    this.context.textAlign = "center";
-    this.context.textBaseline = "middle";
-    this.context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
-    this.context.globalAlpha = 1;
+    Context.font = font + "px Arial";
+    Context.fillStyle = COLORS.WHITE;
+    Context.textAlign = "center";
+    Context.textBaseline = "middle";
+    Context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
+    Context.globalAlpha = 1;
 
     for (const button of this.buttons) {
       button.paint(this.context);
     }
 
-    this.context.globalAlpha = 1;
-    this.context.save();
+    Context.globalAlpha = 1;
+    Context.save();
 
     this.dirty = true;
     this.texture.needsUpdate = true;

@@ -2,8 +2,8 @@ import * as THREE from "three";
 import Group from "./group";
 import Cubelet from "./cubelet";
 import History from "./history";
-import { FACE, COLORS } from "../common/define";
 import Twister from "./twister";
+import Cuber, { FACE, COLORS } from "./cuber";
 
 export default class Cube extends THREE.Group {
   public dirty: boolean = true;

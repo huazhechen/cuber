@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { COLORS, FACE } from "../common/define";
+import Cuber, { FACE, COLORS } from "./cuber";
 
 class Frame extends THREE.Geometry {
   private static readonly _INDICES = [

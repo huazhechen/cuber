@@ -1,14 +1,12 @@
 import Vue from "vue";
 import { Component, Provide, Watch } from "vue-property-decorator";
-import Cuber from "../../cuber/cuber";
 import Keyboard from "../Keyboard";
 import Player from "../Player";
 import Editor from "../Editor";
-import Context from "../../common/context";
 import * as THREE from "three";
-import { COLORS } from "../../common/define";
-import { Panel } from "../panel";
 import Dash from "../Dash";
+import Context from "../context";
+import { COLORS } from "../../cuber/cuber";
 
 @Component({
   template: require("./index.html"),
@@ -20,9 +18,6 @@ import Dash from "../Dash";
   }
 })
 export default class App extends Vue {
-  @Provide("cuber")
-  cuber: Cuber;
-
   @Provide("context")
   context: Context;
 
@@ -32,7 +27,6 @@ export default class App extends Vue {
   size: number = 0;
 
   renderer: THREE.WebGLRenderer;
-  panels: { [key: string]: Panel } = {};
   constructor() {
     super();
     let canvas = document.createElement("canvas");
@@ -45,9 +39,8 @@ export default class App extends Vue {
     this.renderer.setClearColor(COLORS.BACKGROUND);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
-    this.cuber = new Cuber();
-    this.context = new Context(this.cuber);
-    this.context.control(canvas, this.cuber.touch);
+    this.context = new Context();
+    this.context.controller.control(canvas, this.context.cuber.controller.touch);
   }
 
   resize() {
@@ -55,50 +48,49 @@ export default class App extends Vue {
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 8, this.height / 14));
 
-    let panel = this.panels[this.context.mode];
+    let panel = this.context.panels[this.context.mode];
     if (!panel) {
       return;
     }
     panel.resize(this.width, this.height);
-    this.cuber.width = this.width;
-    this.cuber.height = this.height - panel.height;
-    this.cuber.resize();
-    this.renderer.setSize(this.cuber.width, this.cuber.height, true);
+    this.context.cuber.width = this.width;
+    this.context.cuber.height = this.height - panel.height;
+    this.context.cuber.resize();
+    this.renderer.setSize(this.context.cuber.width, this.context.cuber.height, true);
     let cuber = this.$refs.cuber;
     if (cuber instanceof HTMLElement) {
-      cuber.style.width = this.cuber.width + "px";
-      cuber.style.height = this.cuber.height + "px";
+      cuber.style.width = this.context.cuber.width + "px";
+      cuber.style.height = this.context.cuber.height + "px";
     }
   }
 
   mounted() {
     if (this.$refs.keyboard instanceof Keyboard) {
-      this.panels["playground"] = this.$refs.keyboard;
+      this.context.panels[0] = this.$refs.keyboard;
     }
     if (this.$refs.player instanceof Player) {
-      this.panels["algs"] = this.$refs.player;
+      this.context.panels[1] = this.$refs.player;
     }
     if (this.$refs.editor instanceof Editor) {
-      this.panels["director"] = this.$refs.editor;
+      this.context.panels[2] = this.$refs.editor;
     }
 
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.renderer.domElement);
     }
-    this.context.mode = "playground";
     this.loop();
   }
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    if (this.cuber.dirty || this.cuber.cube.dirty) {
+    if (this.context.cuber.dirty || this.context.cuber.cube.dirty) {
       this.renderer.clear();
-      this.renderer.render(this.cuber.scene, this.cuber.camera);
-      this.cuber.dirty = false;
-      this.cuber.cube.dirty = false;
+      this.renderer.render(this.context.cuber.scene, this.context.cuber.camera);
+      this.context.cuber.dirty = false;
+      this.context.cuber.cube.dirty = false;
     }
-    let panel = this.panels["playground"];
+    let panel = this.context.panels[this.context.mode];
     if (panel) {
       panel.loop();
     }
