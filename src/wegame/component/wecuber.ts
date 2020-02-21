@@ -1,5 +1,6 @@
 import Cuber from "../../cuber/cuber";
 import { Component } from "./component";
+import { TouchAction } from "../../common/toucher";
 
 export default class Wecuber extends Cuber implements Component {
   x: number;
@@ -12,5 +13,8 @@ export default class Wecuber extends Cuber implements Component {
     this.y = y;
     this.width = width;
     this.height = height;
+  }
+  touch(action: TouchAction) {
+    this.controller.touch(action);
   }
 }

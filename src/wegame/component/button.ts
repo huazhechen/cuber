@@ -1,4 +1,4 @@
-import { COLORS } from "../../cuber/cuber";
+import { COLORS } from "../../cuber/define";
 
 export interface Button {
   x: number;

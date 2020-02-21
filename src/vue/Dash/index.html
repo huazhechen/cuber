@@ -1,35 +1,35 @@
-<v-bottom-sheet v-model="value">
+<v-bottom-sheet v-model="show">
   <v-card text style="margin: auto">
-    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(window.innerWidth, window.innerHeight * 0.6) + 'px'}">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap>
         <v-flex xs12 style="display: flex">
           <v-btn
             class="headline"
-            :color="context.mode == 'playground'?'primary':''"
+            :color="context.mode == 0?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
-            @click.native.stop.prevent="$emit('input', false); mode('playground')"
-            @touchstart.native.stop.prevent="$emit('input', false); mode('playground')"
+            @click.native.stop.prevent="tap('playground')"
+            @touchstart.native.stop.prevent="tap('playground')"
           >
             <v-icon large>games</v-icon>
           </v-btn>
           <v-btn
             class="headline"
-            :color="context.mode == 'algs'?'primary':''"
+            :color="context.mode == 1?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
-            @click.native.stop.prevent="$emit('input', false); mode('algs')"
-            @touchstart.native.stop.prevent="$emit('input', false); mode('algs')"
+            @click.native.stop.prevent="tap('algs')"
+            @touchstart.native.stop.prevent="tap('algs')"
           >
             <v-icon large>school</v-icon>
           </v-btn>
           <v-btn
             class="headline"
-            :color="context.mode == 'director'?'primary':''"
+            :color="context.mode == 2?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
-            @click.native.stop.prevent="$emit('input', false); mode('director')"
-            @touchstart.native.stop.prevent="$emit('input', false); mode('director')"
+            @click.native.stop.prevent="tap('director')"
+            @touchstart.native.stop.prevent="tap('director')"
           >
             <v-icon large>movie</v-icon>
           </v-btn>
@@ -41,8 +41,8 @@
             class="headline"
             text
             block
-            @click.native.stop.prevent="$emit('input', false); tune=true"
-            @touchstart.native.stop.prevent="$emit('input', false); tune=true"
+            @click.native.stop.prevent="tap('tune')"
+            @touchstart.native.stop.prevent="tap('tune')"
             style="height: 2em; margin: 0%; padding: 0%;"
           >
             <v-icon large>tune</v-icon>
@@ -53,9 +53,9 @@
             class="headline"
             text
             block
-            @click.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
+            @click.native.stop.prevent="tap('code')"
+            @touchstart.native.stop.prevent="tap('code')"
             style="height: 2em; margin: 0%; padding: 0%;"
-            @touchstart.native.stop.prevent="window.location = 'https://gitee.com/huazhechen/cuber'"
           >
             <v-icon large>code</v-icon>
           </v-btn>
@@ -66,8 +66,8 @@
             color="error"
             text
             block
-            @click.native.stop.prevent="$emit('input', false); reset()"
-            @touchstart.native.stop.prevent="$emit('input', false); reset()"
+            @click.native.stop.prevent="reset()"
+            @touchstart.native.stop.prevent="reset()"
             style="height: 2em; margin: 0%; padding: 0%;"
           >
             <v-icon large>delete</v-icon>

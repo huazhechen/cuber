@@ -6,7 +6,7 @@ import Editor from "../Editor";
 import * as THREE from "three";
 import Dash from "../Dash";
 import Context from "../context";
-import { COLORS } from "../../cuber/cuber";
+import { COLORS } from "../../cuber/define";
 
 @Component({
   template: require("./index.html"),
@@ -30,6 +30,8 @@ export default class App extends Vue {
   constructor() {
     super();
     let canvas = document.createElement("canvas");
+    this.context = new Context();
+    this.context.controller.init(canvas, this.context.cuber.controller.touch);
     canvas.style.outline = "none";
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -38,9 +40,6 @@ export default class App extends Vue {
     this.renderer.autoClear = false;
     this.renderer.setClearColor(COLORS.BACKGROUND);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-
-    this.context = new Context();
-    this.context.controller.control(canvas, this.context.cuber.controller.touch);
   }
 
   resize() {
@@ -79,6 +78,8 @@ export default class App extends Vue {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.renderer.domElement);
     }
+    this.context.mode = 0;
+    this.resize();
     this.loop();
   }
 

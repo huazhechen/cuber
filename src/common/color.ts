@@ -1,24 +1,24 @@
-export default class Color {
-  static COLORS = {
-    primary: "#1976D2",
-    black: "#000000",
-    white: "#FFFFFF",
-    red: "#F44336",
-    pink: "#E91E63",
-    purple: "#9C27B0",
-    indigo: "#3F51B5",
-    blue: "#2196F3",
-    cyan: "#00BCD4",
-    teal: "#009688",
-    green: "#4CAF50",
-    lime: "#CDDC39",
-    yellow: "#FFEB3B",
-    amber: "#FFC107",
-    orange: "#FF9800",
-    brown: "#795548",
-    gray: "#9E9E9E"
-  };
+export var COLORS = {
+  primary: "#1976D2",
+  black: "#000000",
+  white: "#FFFFFF",
+  red: "#F44336",
+  pink: "#E91E63",
+  purple: "#9C27B0",
+  indigo: "#3F51B5",
+  blue: "#2196F3",
+  cyan: "#00BCD4",
+  teal: "#009688",
+  green: "#4CAF50",
+  lime: "#CDDC39",
+  yellow: "#FFEB3B",
+  amber: "#FFC107",
+  orange: "#FF9800",
+  brown: "#795548",
+  gray: "#9E9E9E"
+};
 
+export default class Color {
   static RGB(value: string) {
     value = value.toLowerCase();
     var result = [];

@@ -10,8 +10,8 @@ import svg_backspace_on from "../resource/backspace_on.svg";
 import svg_backspace_off from "../resource/backspace_off.svg";
 import { Component } from "./component";
 import * as THREE from "three";
-import { COLORS } from "../../cuber/cuber";
-import TouchAction from "../../common/touch";
+import { COLORS } from "../../cuber/define";
+import { TouchAction } from "../../common/toucher";
 
 class KeyboardButton {
   x: number;
@@ -53,29 +53,29 @@ class KeyboardButton {
         key = key + " on";
         break;
       case "mirror":
-        if (this.keyboard.main.context.mirror) {
+        if (this.keyboard.main.cuber.preferance.mirror) {
           key = key + " on";
         }
         break;
       case "hollow":
-        if (this.keyboard.main.context.hollow) {
+        if (this.keyboard.main.cuber.preferance.hollow) {
           key = key + " on";
         }
         break;
       case "lock":
-        if (this.keyboard.main.context.lock) {
+        if (this.keyboard.main.cuber.preferance.lock) {
           key = key + " on";
         }
         break;
       case "backspace":
-        if (this.keyboard.main.cuber.cube.history.length == 0 || this.keyboard.main.context.lock) {
+        if (this.keyboard.main.cuber.cube.history.length == 0 || this.keyboard.main.cuber.preferance.lock) {
           key = key + " disable";
         }
         break;
       case "help":
         break;
       default:
-        if (this.keyboard.main.context.lock) {
+        if (this.keyboard.main.cuber.preferance.lock) {
           key = key + " disable";
         }
         break;
@@ -189,13 +189,13 @@ class KeyboardButton {
         this.keyboard.main.cuber.cube.twister.twist(this.keyboard.main.cuber.cube.history.last.value, true, 1, false);
         break;
       case "lock":
-        this.keyboard.main.context.lock = !this.keyboard.main.context.lock;
+        this.keyboard.main.cuber.preferance.lock = !this.keyboard.main.cuber.preferance.lock;
         break;
       case "mirror":
-        this.keyboard.main.context.mirror = !this.keyboard.main.context.mirror;
+        this.keyboard.main.cuber.preferance.mirror = !this.keyboard.main.cuber.preferance.mirror;
         break;
       case "hollow":
-        this.keyboard.main.context.hollow = !this.keyboard.main.context.hollow;
+        this.keyboard.main.cuber.preferance.hollow = !this.keyboard.main.cuber.preferance.hollow;
         break;
       default:
         this.keyboard.main.cuber.cube.twister.twist(this.key);

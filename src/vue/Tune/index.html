@@ -1,29 +1,29 @@
-<v-bottom-sheet v-model="value" overlay-opacity="0">
-  <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:Math.min(window.innerWidth, window.innerHeight * 0.6) + 'px'}">
+<v-bottom-sheet v-model="show" overlay-opacity="0">
+  <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:Math.min(width, height * 0.6) + 'px'}">
     <v-container fluid grid-list-md text-xs-center>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="context.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
+        <v-slider dense v-model="preferance.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="context.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+        <v-slider dense v-model="preferance.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="context.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
+        <v-slider dense v-model="preferance.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="context.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
+        <v-slider dense v-model="preferance.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="context.brightness" always-dirty thumb-label="always" max="100" min="0" label="亮度"></v-slider>
+        <v-slider dense v-model="preferance.brightness" always-dirty thumb-label="always" max="100" min="0" label="亮度"></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
         <v-flex xs6>
-          <v-btn block @click.native.stop.prevent="value=false;" @touchstart.native.stop.prevent="value=false;" outlined color="primary">
+          <v-btn block @click.native.stop.prevent="show=false;" @touchstart.native.stop.prevent="show=false;" outlined color="primary">
             确定
           </v-btn>
         </v-flex>
         <v-flex xs6>
-          <v-btn block @click.native.stop.prevent="context.reset" @touchstart.native.stop.prevent="context.reset" outlined color="error">
+          <v-btn block @click.native.stop.prevent="preferance.reset" @touchstart.native.stop.prevent="preferance.reset" outlined color="error">
             重置
           </v-btn>
         </v-flex>

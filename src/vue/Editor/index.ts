@@ -6,7 +6,7 @@ import Base64 from "../../common/base64";
 import * as THREE from "three";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Context from "../context";
-import { FACE, COLORS } from "../../cuber/cuber";
+import { FACE, COLORS } from "../../cuber/define";
 import Util from "../../common/util";
 
 @Component({
@@ -331,8 +331,8 @@ export default class Editor extends Vue {
   }
 
   @Watch("context.mode")
-  onModeChange(to: string) {
-    if (to == "director") {
+  onModeChange(to: number) {
+    if (to == 2) {
       this.$nextTick(() => {
         this.duration = Number(window.localStorage.getItem("director.duration") || 30);
         for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {

@@ -2,7 +2,8 @@ import { Component } from "./component";
 import * as THREE from "three";
 import { RoundButton } from "./button";
 import Database from "../database";
-import { COLORS, TouchAction } from "../../common/util";
+import { COLORS } from "../../cuber/define";
+import { TouchAction } from "../../common/toucher";
 
 export default class Retry implements Component {
   public x: number;
@@ -133,12 +134,12 @@ export default class Retry implements Component {
   }
 
   paint() {
-    Context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    Context.restore();
-    Context.fillStyle = COLORS.BLACK;
-    Context.globalAlpha = 0.8;
-    Context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    Context.globalAlpha = 1;
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.restore();
+    this.context.fillStyle = COLORS.BLACK;
+    this.context.globalAlpha = 0.8;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.globalAlpha = 1;
 
     let diff = this.database.time;
     let second = Math.floor(diff / 1000);
@@ -147,18 +148,18 @@ export default class Retry implements Component {
     let time = (Array(2).join("0") + second).slice(-2) + "." + ms;
 
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
-    Context.font = font + "px Arial";
-    Context.fillStyle = COLORS.PINK;
-    Context.textAlign = "center";
-    Context.textBaseline = "middle";
-    Context.fillText(time + "秒", this.canvas.width / 2, this.canvas.height / 3);
-    Context.fillText(this.database.step + "步", this.canvas.width / 2, this.canvas.height / 3 + font * 1.2);
+    this.context.font = font + "px Arial";
+    this.context.fillStyle = COLORS.PINK;
+    this.context.textAlign = "center";
+    this.context.textBaseline = "middle";
+    this.context.fillText(time + "秒", this.canvas.width / 2, this.canvas.height / 3);
+    this.context.fillText(this.database.step + "步", this.canvas.width / 2, this.canvas.height / 3 + font * 1.2);
 
     for (const button of this.buttons) {
       button.paint(this.context);
     }
 
-    Context.save();
+    this.context.save();
 
     this.dirty = true;
     this.texture.needsUpdate = true;

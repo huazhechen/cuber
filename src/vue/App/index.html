@@ -14,9 +14,9 @@
   <div v-resize="resize" style="user-select: none;background-color: white;">
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;" ref="panel">
-      <keyboard v-show="context.mode=='playground'" ref="keyboard"></keyboard>
-      <player v-show="context.mode=='algs'" ref="player"></player>
-      <editor v-show="context.mode=='director'" ref="editor"></editor>
+      <keyboard v-show="context.mode==0" ref="keyboard"></keyboard>
+      <player v-show="context.mode==1" ref="player"></player>
+      <editor v-show="context.mode==2" ref="editor"></editor>
     </div>
   </div>
   <dash v-model="dash"></dash>

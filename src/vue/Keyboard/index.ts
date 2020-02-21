@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
-import Icon from "../Icon";
 import { Panel } from "../panel";
 import Context from "../context";
+import Icon from "../Icon";
 
 @Component({
   template: require("./index.html"),
@@ -71,8 +71,24 @@ export default class Keyboard extends Vue implements Panel {
     return this.operations[this.layers];
   }
 
-  twist(exp: string) {
-    this.context.cuber.cube.twister.twist(exp);
+  tap(key: string) {
+    switch (key) {
+      case "layer":
+        this.layers = (this.layers + 1) % 3;
+        break;
+      case "mirror":
+        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        break;
+      case "hollow":
+        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        break;
+      case "lock":
+        this.context.cuber.preferance.lock = !this.context.cuber.preferance.lock;
+        break;
+      default:
+        this.context.cuber.cube.twister.twist(key);
+        break;
+    }
   }
 
   reverse() {
@@ -96,8 +112,8 @@ export default class Keyboard extends Vue implements Panel {
   }
 
   @Watch("context.mode")
-  onModeChange(to: string) {
-    if (to == "playground") {
+  onModeChange(to: number) {
+    if (to == 0) {
       this.$nextTick(() => {
         this.shuffle();
       });

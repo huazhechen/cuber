@@ -2,7 +2,8 @@ import { Component } from "./component";
 import * as THREE from "three";
 import Database from "../database";
 import { Button, RoundButton } from "./button";
-import { COLORS, TouchAction } from "../../common/util";
+import { COLORS } from "../../cuber/define";
+import { TouchAction } from "../../common/toucher";
 
 class CatagoryButton implements Button {
   public x: number;
@@ -291,20 +292,20 @@ export default class Score implements Component {
   }
 
   paint() {
-    Context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    Context.restore();
-    Context.fillStyle = COLORS.BLACK;
-    Context.globalAlpha = 0.8;
-    Context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.restore();
+    this.context.fillStyle = COLORS.BLACK;
+    this.context.globalAlpha = 0.8;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (const button of this.buttons) {
       button.paint(this.context);
     }
-    Context.globalAlpha = 1;
+    this.context.globalAlpha = 1;
     this.ok.paint(this.context);
 
-    Context.globalAlpha = 1;
-    Context.save();
+    this.context.globalAlpha = 1;
+    this.context.save();
 
     this.texture.needsUpdate = true;
     this.dirty = true;

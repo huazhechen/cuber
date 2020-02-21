@@ -7,11 +7,9 @@ import Setting from "./component/setting";
 import Score from "./component/score";
 import Database from "./database";
 import Wecuber from "./component/wecuber";
-import Preferance from "../cuber/preferance";
 import Retry from "./component/retry";
-import { COLORS } from "../cuber/cuber";
-import TouchAction from "../common/touch";
-import Controller from "../common/controllor";
+import { COLORS } from "../cuber/define";
+import Toucher, { TouchAction } from "../common/toucher";
 /**
  * 游戏主函数
  */
@@ -32,7 +30,7 @@ export default class Main {
   focus: Component;
   timer: number;
   database: Database;
-  context: Preferance;
+  toucher: Toucher;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -50,8 +48,8 @@ export default class Main {
     this.renderer.setSize(this.width, this.height, true);
 
     this.cuber = new Wecuber(0, 0, this.width, this.height);
-    this.context = new Controller();
-    this.context.controller.control(canvas, this.dispatch);
+    this.toucher = new Toucher();
+    this.toucher.init(canvas, this.dispatch);
     this.keyboard = new Keyboard(this, 0, 0, this.width, this.height);
     this.dashboard = new Dashboard(this, 0, 0, this.width, this.height);
 
@@ -237,7 +235,7 @@ export default class Main {
       let time = this.database.now - this.database.start;
       this.database.record(time, this.cuber.cube.history.length);
       this.retry.paint();
-      this.context.lock = true;
+      this.cuber.preferance.lock = true;
       this.keyboard.paint();
       this.keyboard.disable = true;
       this.database.mode = "retry";

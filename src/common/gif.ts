@@ -1,5 +1,5 @@
 import Color from "./color";
-import Cuber, { COLORS } from "../cuber/cuber";
+import { COLORS } from "../cuber/define";
 
 class ByteArray {
   static SIZE = 4096;

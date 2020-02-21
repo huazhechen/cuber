@@ -1,9 +1,10 @@
 import * as THREE from "three";
-import Cuber, { FACE } from "./cuber";
+import { FACE } from "./define";
 import Cubelet from "./cubelet";
 import Group from "./group";
 import { tweener } from "./tweener";
-import TouchAction from "../common/touch";
+import { TouchAction } from "../common/toucher";
+import Cuber from "./cuber";
 
 export class Holder {
   public vector: THREE.Vector3;
@@ -348,7 +349,7 @@ export default class Controller {
     this.cuber.dirty = true;
   }
 
-  touch(action: TouchAction) {
+  touch = (action: TouchAction) => {
     switch (action.type) {
       case "touchstart":
       case "mousedown":
@@ -372,5 +373,5 @@ export default class Controller {
         return false;
     }
     return true;
-  }
+  };
 }

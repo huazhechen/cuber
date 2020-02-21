@@ -105,7 +105,7 @@
           block
           text
           large
-          :disabled="(progress==0 && cuber.cube.history.length == 0) || recording"
+          :disabled="(progress==0 && context.cuber.cube.history.length == 0) || recording"
           @click.native.stop.prevent="init"
           @touchstart.native.stop.prevent="init"
           style="margin: 0%; padding: 0%;"

@@ -3,7 +3,7 @@ import Group from "./group";
 import Cubelet from "./cubelet";
 import History from "./history";
 import Twister from "./twister";
-import Cuber, { FACE, COLORS } from "./cuber";
+import { FACE, COLORS } from "./define";
 
 export default class Cube extends THREE.Group {
   public dirty: boolean = true;

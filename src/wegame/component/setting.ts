@@ -1,8 +1,9 @@
 import { Component } from "./component";
 import * as THREE from "three";
 import { Button } from "./button";
-import { COLORS, TouchAction } from "../../common/util";
 import Main from "../main";
+import { COLORS } from "../../cuber/define";
+import { TouchAction } from "../../common/toucher";
 
 class ConfirmButton implements Button {
   public x: number;
@@ -48,7 +49,7 @@ class ConfirmButton implements Button {
       this.main.database.mode = "starter";
     }
     if (x > padding + size + padding && x < padding + size + padding + size) {
-      this.main.context.reset();
+      this.main.cuber.preferance.reset();
     }
   }
 
@@ -155,10 +156,10 @@ export default class Setting implements Component {
 
     button = new Slider(
       () => {
-        return this.main.context.scale;
+        return this.main.cuber.preferance.scale;
       },
       (value: number) => {
-        this.main.context.scale = value;
+        this.main.cuber.preferance.scale = value;
       },
       "缩放"
     );
@@ -166,10 +167,10 @@ export default class Setting implements Component {
 
     button = new Slider(
       () => {
-        return this.main.context.perspective;
+        return this.main.cuber.preferance.perspective;
       },
       (value: number) => {
-        this.main.context.perspective = value;
+        this.main.cuber.preferance.perspective = value;
       },
       "透视"
     );
@@ -177,10 +178,10 @@ export default class Setting implements Component {
 
     button = new Slider(
       () => {
-        return this.main.context.angle;
+        return this.main.cuber.preferance.angle;
       },
       (value: number) => {
-        this.main.context.angle = value;
+        this.main.cuber.preferance.angle = value;
       },
       "左右"
     );
@@ -188,10 +189,10 @@ export default class Setting implements Component {
 
     button = new Slider(
       () => {
-        return this.main.context.gradient;
+        return this.main.cuber.preferance.gradient;
       },
       (value: number) => {
-        this.main.context.gradient = value;
+        this.main.cuber.preferance.gradient = value;
       },
       "上下"
     );
@@ -199,10 +200,10 @@ export default class Setting implements Component {
 
     button = new Slider(
       () => {
-        return this.main.context.brightness;
+        return this.main.cuber.preferance.brightness;
       },
       (value: number) => {
-        this.main.context.brightness = value;
+        this.main.cuber.preferance.brightness = value;
       },
       "亮度"
     );
@@ -278,30 +279,30 @@ export default class Setting implements Component {
   }
 
   paint() {
-    Context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    Context.restore();
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.restore();
 
-    Context.globalAlpha = 0.6;
+    this.context.globalAlpha = 0.6;
     if (this.down instanceof Slider){
-      Context.globalAlpha = 0;
+      this.context.globalAlpha = 0;
     }
-    Context.fillStyle = COLORS.BLACK;
-    Context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
-    Context.font = font + "px Arial";
-    Context.fillStyle = COLORS.WHITE;
-    Context.textAlign = "center";
-    Context.textBaseline = "middle";
-    Context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
-    Context.globalAlpha = 1;
+    this.context.font = font + "px Arial";
+    this.context.fillStyle = COLORS.WHITE;
+    this.context.textAlign = "center";
+    this.context.textBaseline = "middle";
+    this.context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
+    this.context.globalAlpha = 1;
 
     for (const button of this.buttons) {
       button.paint(this.context);
     }
 
-    Context.globalAlpha = 1;
-    Context.save();
+    this.context.globalAlpha = 1;
+    this.context.save();
 
     this.dirty = true;
     this.texture.needsUpdate = true;

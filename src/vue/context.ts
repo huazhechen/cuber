@@ -1,11 +1,10 @@
-import Controller from "../common/controllor";
+import Toucher from "../common/toucher";
 import { Panel } from "./panel";
 import Cuber from "../cuber/cuber";
 
 export default class Context {
   cuber: Cuber = new Cuber();
-  controller: Controller = new Controller();
-  mode: number = 0;
+  controller: Toucher = new Toucher();
+  mode: number = -1;
   panels: Panel[] = [];
-  dialogs: boolean[] = [];
 }
