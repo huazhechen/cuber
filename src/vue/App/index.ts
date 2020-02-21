@@ -7,6 +7,7 @@ import * as THREE from "three";
 import Dash from "../Dash";
 import Context from "../context";
 import { COLORS } from "../../cuber/define";
+import Algs from "../Algs";
 
 @Component({
   template: require("./index.html"),
@@ -14,7 +15,8 @@ import { COLORS } from "../../cuber/define";
     keyboard: Keyboard,
     player: Player,
     editor: Editor,
-    dash: Dash
+    dash: Dash,
+    algs: Algs
   }
 })
 export default class App extends Vue {
@@ -85,15 +87,17 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    let draw = false;
     if (this.context.cuber.dirty || this.context.cuber.cube.dirty) {
       this.renderer.clear();
       this.renderer.render(this.context.cuber.scene, this.context.cuber.camera);
       this.context.cuber.dirty = false;
       this.context.cuber.cube.dirty = false;
+      draw = true;
     }
     let panel = this.context.panels[this.context.mode];
     if (panel) {
-      panel.loop();
+      panel.loop(draw);
     }
   }
 

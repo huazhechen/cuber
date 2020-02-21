@@ -14,6 +14,10 @@ export default class Keyboard extends Vue implements Panel {
   @Inject("context")
   context: Context;
 
+  constructor() {
+    super();
+  }
+
   width: number = 0;
   height: number = 0;
   size: number = 0;

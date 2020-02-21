@@ -1,7 +1,7 @@
 <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
   <v-layout row wrap>
     <v-flex xs12 style="display: flex">
-      <template v-for="(group, i) in algs">
+      <template v-for="(group, i) in context.algs">
         <v-btn
           class="title"
           :color="index.group == i?'primary':''"

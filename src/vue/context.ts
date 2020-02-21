@@ -7,4 +7,7 @@ export default class Context {
   controller: Toucher = new Toucher();
   mode: number = -1;
   panels: Panel[] = [];
+  pics: string[][] = [];
+
+  algs = require("./Algs/algs.json");
 }

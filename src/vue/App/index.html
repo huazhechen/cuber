@@ -1,17 +1,18 @@
 <v-app>
-  <v-btn
-    fixed
-    right
-    top
-    fab
-    color="primary"
-    @click.native.stop.prevent="dash=!dash"
-    @touchstart.native.stop.prevent="dash=!dash"
-    :style="{width:size+'px', height:size+'px'}"
-  >
-    <v-icon :size="size * 0.6">menu</v-icon>
-  </v-btn>
-  <div v-resize="resize" style="user-select: none;background-color: white;">
+  <algs v-model="context.mode == 3"></algs>
+  <div v-show="context.mode != 3" v-resize="resize" style="user-select: none;background-color: white;">
+    <v-btn
+      fixed
+      right
+      top
+      fab
+      color="primary"
+      @click.native.stop.prevent="dash=!dash"
+      @touchstart.native.stop.prevent="dash=!dash"
+      :style="{width:size+'px', height:size+'px'}"
+    >
+      <v-icon :size="size * 0.6">menu</v-icon>
+    </v-btn>
     <div ref="cuber"></div>
     <div style="margin:0%;padding:0%;" ref="panel">
       <keyboard v-show="context.mode==0" ref="keyboard"></keyboard>

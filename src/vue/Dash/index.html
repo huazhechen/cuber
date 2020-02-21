@@ -36,6 +36,30 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
+        <v-flex v-if="context.mode==0">
+          <v-btn
+            class="headline"
+            text
+            block
+            @click.native.stop.prevent="tap('casino')"
+            @touchstart.native.stop.prevent="tap('casino')"
+            style="height: 2em; margin: 0%; padding: 0%;"
+          >
+            <v-icon color="red" large>casino</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex v-if="context.mode==1">
+          <v-btn
+            class="headline"
+            text
+            block
+            @click.native.stop.prevent="tap('list')"
+            @touchstart.native.stop.prevent="tap('list')"
+            style="height: 2em; margin: 0%; padding: 0%;"
+          >
+            <v-icon large>assignment</v-icon>
+          </v-btn>
+        </v-flex>
         <v-flex>
           <v-btn
             class="headline"

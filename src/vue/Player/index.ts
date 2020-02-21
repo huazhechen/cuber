@@ -1,9 +1,9 @@
 import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
-import Preferance from "../../cuber/preferance";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Capture from "../../cuber/capture";
 import Context from "../context";
+import Algs from "../Algs";
 
 @Component({
   template: require("./index.html")
@@ -12,9 +12,6 @@ export default class Player extends Vue {
   @Inject("context")
   context: Context;
 
-  algs = require("./algs.json");
-
-  list: boolean = false;
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -23,11 +20,10 @@ export default class Player extends Vue {
 
   tab = null;
   capture: Capture = new Capture();
-  pics: string[][] = [];
 
   mounted() {
-    for (let i = 0; i < this.algs.length; i++) {
-      this.pics.push([]);
+    for (let i = 0; i < this.context.algs.length; i++) {
+      this.context.pics.push([]);
     }
     let index = window.localStorage.getItem("algs.index");
     if (index) {
@@ -46,16 +42,19 @@ export default class Player extends Vue {
     });
   }
 
-  loop() {
-    this.pics.some((group, idx) => {
-      if (this.algs[idx].algs.length == group.length) {
+  loop(draw: boolean) {
+    if (draw) {
+      return;
+    }
+    this.context.pics.some((group, idx) => {
+      if (this.context.algs[idx].algs.length == group.length) {
         return false;
       }
-      let save = window.localStorage.getItem("algs.exp." + this.algs[idx].algs[group.length].name);
-      let origin = this.algs[idx].algs[group.length].default;
+      let save = window.localStorage.getItem("algs.exp." + this.context.algs[idx].algs[group.length].name);
+      let origin = this.context.algs[idx].algs[group.length].default;
       let exp = save ? save : origin;
-      this.algs[idx].algs[group.length].exp = exp;
-      group.push(this.capture.snap(this.algs[idx].strip, exp));
+      this.context.algs[idx].algs[group.length].exp = exp;
+      group.push(this.capture.snap(this.context.algs[idx].strip, exp));
       return true;
     });
   }
@@ -78,10 +77,10 @@ export default class Player extends Vue {
     if (this.context.mode != 1) {
       return;
     }
-    let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
+    let strip: { [face: string]: number[] | undefined } = this.context.algs[this.index.group].strip;
     this.context.cuber.cube.strip(strip);
-    this.name = this.algs[this.index.group].algs[this.index.index].name;
-    this.origin = this.algs[this.index.group].algs[this.index.index].default;
+    this.name = this.context.algs[this.index.group].algs[this.index.index].name;
+    this.origin = this.context.algs[this.index.group].algs[this.index.index].default;
     let exp = window.localStorage.getItem("algs.exp." + this.name);
     if (exp) {
       this.exp = exp;
@@ -98,10 +97,10 @@ export default class Player extends Vue {
   @Watch("exp")
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
-    if (this.pics[this.index.group][this.index.index]) {
-      this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.exp);
+    if (this.context.pics[this.index.group][this.index.index]) {
+      this.context.pics[this.index.group][this.index.index] = this.capture.snap(this.context.algs[this.index.group].strip, this.exp);
     }
-    this.algs[this.index.group].algs[this.index.index].exp = this.exp;
+    this.context.algs[this.index.group].algs[this.index.index].exp = this.exp;
     this.actions = new TwistNode(this.exp).parse();
     this.init();
   }
