@@ -233,7 +233,9 @@ export default class Main {
     let complete = this.cuber.cube.complete;
     if (complete) {
       let time = this.database.now - this.database.start;
-      this.database.record(time, this.cuber.cube.history.length);
+      if (time != 0 && this.cuber.cube.history.length != 0) {
+        this.database.record(time, this.cuber.cube.history.length);
+      }
       this.retry.paint();
       this.cuber.preferance.lock = true;
       this.keyboard.paint();

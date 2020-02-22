@@ -2,7 +2,7 @@ import { Component } from "./component";
 
 import { RoundButton } from "./button";
 import Database from "../database";
-import { COLORS } from "../../cuber/define";
+import { COLORS } from "../../common/color";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
 
@@ -59,8 +59,8 @@ export default class Starter implements Component {
         () => {
           this.database.mode = "cuber";
         },
-        COLORS.RED,
-        COLORS.WHITE
+        COLORS.red,
+        COLORS.white
       )
     );
     this.buttons.push(
@@ -137,14 +137,14 @@ export default class Starter implements Component {
   paint() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.restore();
-    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillStyle = COLORS.black;
     this.context.globalAlpha = 0.8;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.globalAlpha = 1;
 
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
     this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.WHITE;
+    this.context.fillStyle = COLORS.white;
     this.context.textAlign = "center";
     this.context.textBaseline = "middle";
     this.context.fillText("魔方竞技场", this.canvas.width / 2, this.canvas.height / 4);

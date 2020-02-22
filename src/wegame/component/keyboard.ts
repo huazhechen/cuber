@@ -1,18 +1,9 @@
 import Main from "../main";
-import svg_mirror_on from "../resource/mirror_on.svg";
-import svg_mirror_off from "../resource/mirror_off.svg";
-import svg_lock_on from "../resource/lock_on.svg";
-import svg_lock_off from "../resource/lock_off.svg";
-import svg_hollow_on from "../resource/hollow_on.svg";
-import svg_hollow_off from "../resource/hollow_off.svg";
-import svg_help from "../resource/help.svg";
-import svg_backspace_on from "../resource/backspace_on.svg";
-import svg_backspace_off from "../resource/backspace_off.svg";
 import { Component } from "./component";
-
-import { COLORS } from "../../cuber/define";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
+import { ICONS } from "../../common/icons";
+import { COLORS } from "../../common/color";
 
 class KeyboardButton {
   x: number;
@@ -40,17 +31,17 @@ class KeyboardButton {
 
   get key() {
     let key = this.keys[0];
-    if (key == "sole") {
-      key = this.keys[this.keyboard.layer];
-    } else if (key == "help") {
+    if (key == "colorize") {
       key = this.keys[this.keyboard.cf];
+    } else if (this.keys.length == 3) {
+      key = this.keys[this.keyboard.layer];
     }
     switch (key) {
-      case "sole":
-      case "dual":
-      case "mix":
-      case "Crs":
-      case "F2L":
+      case "layer1":
+      case "layer2":
+      case "layer3":
+      case "cfop1":
+      case "cfop2":
         key = key + " on";
         break;
       case "mirror":
@@ -73,7 +64,7 @@ class KeyboardButton {
           key = key + " disable";
         }
         break;
-      case "help":
+      case "colorize":
         break;
       default:
         if (this.keyboard.main.cuber.preferance.lock) {
@@ -86,8 +77,8 @@ class KeyboardButton {
 
   paint() {
     let context = this.keyboard.context;
-    context.fillStyle = "#000000";
-    context.strokeStyle = "#000000";
+    context.fillStyle = COLORS.black;
+    context.strokeStyle = COLORS.black;
 
     let padding = this.size / 16;
     let size = this.size - 2 * padding;
@@ -104,54 +95,17 @@ class KeyboardButton {
 
     let keys = this.key.split(" ");
     if (keys[1] == "on") {
-      context.fillStyle = COLORS.PINK;
-      context.strokeStyle = COLORS.PINK;
+      context.fillStyle = COLORS.red;
+      context.strokeStyle = COLORS.red;
     }
     if (keys[1] == "disable") {
-      context.fillStyle = COLORS.DISABLE;
-      context.strokeStyle = COLORS.DISABLE;
+      context.fillStyle = COLORS.gray;
+      context.strokeStyle = COLORS.gray;
     }
-    let dx = size / 24;
-    let dy = size / 30;
-    switch (keys[0]) {
-      case "sole":
-        context.fillRect(x + 4 * dx, y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillStyle = COLORS.DISABLE;
-        context.strokeStyle = COLORS.DISABLE;
-        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(x + 4 * dx, y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
-        break;
-      case "dual":
-        context.fillRect(x + 4 * dx, y + 6 * dy + 0 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillStyle = COLORS.DISABLE;
-        context.strokeStyle = COLORS.DISABLE;
-        context.fillRect(x + 4 * dx, y + 6 * dy + 2 * (7 * dy), 16 * dx, 4 * dy);
-        break;
-      case "mix":
-        context.fillRect(x + 4 * dx, y + 6 * dy + 1 * (7 * dy), 16 * dx, 4 * dy);
-        context.fillRect(x + 6 * dx, y + 6 * dy + 0 * (7 * dy), 12 * dx, 4 * dy);
-        context.fillRect(x + 6 * dx, y + 6 * dy + 2 * (7 * dy), 12 * dx, 4 * dy);
-        break;
-      case "mirror":
-      case "help":
-      case "hollow":
-      case "lock":
-      case "backspace":
-      case "camera":
-      case "casino":
-      case "complete":
-        context.drawImage(this.keyboard.images[this.key], x + 2 * padding, y + 2 * padding, size - 4 * padding, size - 4 * padding);
-        break;
-      default:
-        context.fillText(keys[0], x + size / 2, y + size / 2 + line);
-        break;
-    }
-    if (keys[1] == "on") {
-      context.strokeStyle = COLORS.PINK;
-    }
-    if (keys[1] == "disable") {
-      context.strokeStyle = COLORS.DISABLE;
+    if (keys[0].length > 2) {
+      context.drawImage(this.keyboard.images[this.key], x + 2 * padding, y + 2 * padding, size - 4 * padding, size - 4 * padding);
+    } else {
+      context.fillText(keys[0], x + size / 2, y + size / 2 + line);
     }
     context.strokeRect(x, y, size, size);
   }
@@ -168,14 +122,14 @@ class KeyboardButton {
       return;
     }
     switch (keys[0]) {
-      case "sole":
-      case "dual":
-      case "mix":
+      case "layer1":
+      case "layer2":
+      case "layer3":
         this.keyboard.layer = (this.keyboard.layer + 1) % 3;
         break;
-      case "help":
-      case "Crs":
-      case "F2L":
+      case "colorize":
+      case "cfop1":
+      case "cfop2":
         this.keyboard.cf = (this.keyboard.cf + 1) % 3;
         this.strip();
         break;
@@ -238,6 +192,8 @@ export default class Keyboard implements Component {
       throw new Error();
     }
     this.context = context;
+    this.images = {};
+    this.load();
 
     this.scene = new Scene();
     this.camera = new OrthographicCamera(this.width / -2, this.width / 2, this.height / 2, this.height / -2, -10, 10);
@@ -257,9 +213,9 @@ export default class Keyboard implements Component {
     this.scene.add(mesh);
     this.buttons = [];
     let keys: string[][] = [
-      ["sole", "dual", "mix"],
+      ["layer1", "layer2", "layer3"],
       ["mirror"],
-      ["help", "Crs", "F2L"],
+      ["colorize", "cfop1", "cfop2"],
       ["hollow"],
       ["lock"],
       ["backspace"],
@@ -282,76 +238,34 @@ export default class Keyboard implements Component {
         this.buttons.push(new KeyboardButton(0, 0, 0, key, this));
       }
     }
-    this.images = {};
-    this.load();
     this.resize();
   }
 
   load() {
+    let pre =
+      "<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' role='presentation' style='display: inline-block;vertical-align: baseline;'><g fill='fill' v-html='svg'>";
+    let post = "</g></svg>";
     let image;
-
-    image = new Image();
-    image.src = svg_mirror_off;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["mirror"] = image;
-
-    image = new Image();
-    image.src = svg_mirror_on;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["mirror on"] = image;
-
-    image = new Image();
-    image.src = svg_lock_off;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["lock"] = image;
-
-    image = new Image();
-    image.src = svg_lock_on;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["lock on"] = image;
-
-    image = new Image();
-    image.src = svg_help;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["help"] = image;
-
-    image = new Image();
-    image.src = svg_hollow_off;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["hollow"] = image;
-
-    image = new Image();
-    image.src = svg_hollow_on;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["hollow on"] = image;
-
-    image = new Image();
-    image.src = svg_backspace_off;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["backspace disable"] = image;
-
-    image = new Image();
-    image.src = svg_backspace_on;
-    image.onload = function() {
-      this.paint();
-    }.bind(this);
-    this.images["backspace"] = image;
+    let svg;
+    let blob;
+    let url;
+    let colors = { "": COLORS.black, on: COLORS.red, disable: COLORS.gray };
+    for (const key in ICONS) {
+      let content = (<any>ICONS)[key];
+      for (const type in colors) {
+        let color = (<any>colors)[type];
+        svg = pre.replace("fill='fill'", "fill='" + color + "'") + content + post;
+        blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+        url = URL.createObjectURL(blob);
+        image = new Image();
+        image.onload = function() {
+          this.paint();
+        }.bind(this);
+        image.src = url;
+        let name = key + (type.length == 0 ? "" : " ") + type;
+        this.images[name] = image;
+      }
+    }
   }
 
   resize() {
@@ -379,7 +293,7 @@ export default class Keyboard implements Component {
   paint() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.restore();
-    this.context.fillStyle = COLORS.BACKGROUND;
+    this.context.fillStyle = COLORS.white;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.context.fillStyle = "#000000";

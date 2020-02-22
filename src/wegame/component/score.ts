@@ -2,7 +2,7 @@ import { Component } from "./component";
 
 import Database from "../database";
 import { Button, RoundButton } from "./button";
-import { COLORS } from "../../cuber/define";
+import { COLORS } from "../../common/color";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
 
@@ -29,16 +29,16 @@ class CatagoryButton implements Button {
     let size = height;
     let w = (width - size) / 2;
 
-    context.fillStyle = COLORS.BLUE;
+    context.fillStyle = COLORS.teal;
     context.fillRect(x, y, w, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillText("时间", x + w / 2, y + height / 2);
 
-    context.fillStyle = COLORS.GREEN;
+    context.fillStyle = COLORS.red;
     context.fillRect(x + size + w, y, w, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillText("步数", x + size + w + w / 2, y + height / 2);
     return;
   }
@@ -81,28 +81,28 @@ class ScoreButton implements Button {
     let size = height;
     let w = (width - size) / 2;
 
-    context.fillStyle = COLORS.CYAN;
+    context.fillStyle = COLORS.cyan;
     context.fillRect(x, y, w, height);
 
-    context.fillStyle = COLORS.BLACK;
+    context.fillStyle = COLORS.white;
     if (this.score.database.times[this.index] == this.score.database.time) {
-      context.fillStyle = COLORS.PINK;
+      context.fillStyle = COLORS.yellow;
     }
     let time = this.score.database.times[this.index] ? String((this.score.database.times[this.index] / 1000).toFixed(1)) : "";
     context.fillText(time, x + w / 2, y + height / 2);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillRect(x + w, y, size, height);
 
-    context.fillStyle = COLORS.BLACK;
+    context.fillStyle = COLORS.black;
     context.fillText(String(this.index + 1), x + w + size / 2, y + height / 2);
 
-    context.fillStyle = COLORS.LIME;
+    context.fillStyle = COLORS.pink;
     context.fillRect(x + size + w, y, w, height);
 
-    context.fillStyle = COLORS.BLACK;
+    context.fillStyle = COLORS.white;
     if (this.score.database.steps[this.index] == this.score.database.step) {
-      context.fillStyle = COLORS.PINK;
+      context.fillStyle = COLORS.yellow;
     }
     let step = this.score.database.steps[this.index] ? String(this.score.database.steps[this.index] || 0) : "";
     context.fillText(step, x + size + w + w / 2, y + height / 2);
@@ -145,20 +145,20 @@ class LastButton implements Button {
     let size = height;
     let w = (width - size) / 2;
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillRect(x, y, w, height);
 
-    context.fillStyle = COLORS.BLACK;
+    context.fillStyle = COLORS.black;
     let time = this.score.database.time ? String((this.score.database.time / 1000).toFixed(1)) : "";
     context.fillText(time, x + w / 2, y + height / 2);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillRect(x + w, y, size, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillRect(x + size + w, y, w, height);
 
-    context.fillStyle = COLORS.BLACK;
+    context.fillStyle = COLORS.black;
     let step = this.score.database.step ? String(this.score.database.step || 0) : "";
     context.fillText(step, x + size + w + w / 2, y + height / 2);
     return;
@@ -295,7 +295,7 @@ export default class Score implements Component {
   paint() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.restore();
-    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillStyle = COLORS.black;
     this.context.globalAlpha = 0.8;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 

@@ -1,7 +1,9 @@
 # [魔方栈](https://huazhechen.gitee.io/cuber)
 
-- 魔方栈是一个在线魔方工具箱
-- 虚拟魔方/公式播放/动画制作
+- 一个在线魔方工具箱
+- 虚拟魔方
+- 公式播放
+- 动画制作
 
 ## 基于以下项目
 
@@ -56,16 +58,15 @@
 
   ![alg-step](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-step.gif)
 
-
-- 公式跳转
+* 公式跳转
 
   ![alg-choose](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-choose.gif)
 
-- 快捷公式跳转
+* 快捷公式跳转
 
   ![alg-list](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-list.gif)
 
-- 公式修改
+* 公式修改
 
   ![alg-modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-modify.gif)
 

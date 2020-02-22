@@ -15,6 +15,6 @@ export default class Wecuber extends Cuber implements Component {
     this.height = height;
   }
   touch(action: TouchAction) {
-    this.controller.touch(action);
+    return this.controller.touch(action);
   }
 }

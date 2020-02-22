@@ -1,9 +1,8 @@
 import { Component } from "./component";
-
 import Main from "../main";
-import { COLORS } from "../../cuber/define";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
+import { COLORS } from "../../common/color";
 
 class ExitButton {
   public x: number;
@@ -18,7 +17,7 @@ class ExitButton {
     x = x + padding;
     y = y + padding;
     size = size - 2 * padding;
-    context.strokeStyle = COLORS.PINK;
+    context.strokeStyle = COLORS.red;
     context.lineWidth = size / 8;
     context.beginPath();
     context.moveTo(x, y);
@@ -44,8 +43,8 @@ class ScoreBoard {
     let y = this.y * window.devicePixelRatio;
     let height = this.height * window.devicePixelRatio;
 
-    context.strokeStyle = COLORS.GRAY;
-    context.fillStyle = COLORS.GRAY;
+    context.strokeStyle = COLORS.gray;
+    context.fillStyle = COLORS.gray;
     context.font = height * 0.8 + "px Arial";
     context.textBaseline = "middle";
     context.textAlign = "left";

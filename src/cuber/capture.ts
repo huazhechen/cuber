@@ -17,7 +17,7 @@ export default class Capture {
     this.renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
-    this.renderer.setSize(512, 512, true);
+    this.renderer.setSize(256, 256, true);
 
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;

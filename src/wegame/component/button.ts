@@ -1,4 +1,4 @@
-import { COLORS } from "../../cuber/define";
+import { COLORS } from "../../common/color";
 
 export interface Button {
   x: number;
@@ -19,7 +19,7 @@ export class RoundButton implements Button {
   private callback: Function;
   private bg: string;
   private fg: string;
-  constructor(value: string, callback: Function, bg: string = COLORS.WHITE, fg: string = COLORS.BLACK) {
+  constructor(value: string, callback: Function, bg: string = COLORS.white, fg: string = COLORS.black) {
     this.value = value;
     this.callback = callback;
     this.bg = bg;

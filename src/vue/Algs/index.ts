@@ -16,7 +16,8 @@ export default class Algs extends Vue implements Panel {
   context: Context;
 
   resize() {}
-  loop() {
+
+  capture() {
     this.context.pics.some((group, idx) => {
       if (this.context.algs[idx].algs.length == group.length) {
         return false;
@@ -28,6 +29,11 @@ export default class Algs extends Vue implements Panel {
       group.push(this.context.capture.snap(this.context.algs[idx].strip, exp));
       return true;
     });
+  }
+  loop() {
+    for (let i = 0; i < 4; i++) {
+      this.capture();
+    }
   }
 
   tab = null;

@@ -2,7 +2,7 @@ import { Component } from "./component";
 
 import { Button } from "./button";
 import Main from "../main";
-import { COLORS } from "../../cuber/define";
+import { COLORS } from "../../common/color";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
 
@@ -29,16 +29,16 @@ class ConfirmButton implements Button {
     let padding = height;
     let size = (width - 3 * padding) / 2;
 
-    context.fillStyle = COLORS.GREEN;
+    context.fillStyle = COLORS.blue;
     context.fillRect(x + padding, y, size, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillText("确认", x + padding + size / 2, y + height / 2);
 
-    context.fillStyle = COLORS.PINK;
+    context.fillStyle = COLORS.red;
     context.fillRect(x + padding + size + padding, y, size, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillText("重置", x + padding + size + padding + size / 2, y + height / 2);
     return;
   }
@@ -86,12 +86,12 @@ class Slider implements Button {
 
     let split = (this.value / 100) * width;
     let str = this.key;
-    context.fillStyle = COLORS.PINK;
+    context.fillStyle = COLORS.pink;
     context.fillRect(x, y, split, height);
-    context.fillStyle = COLORS.GRAY;
+    context.fillStyle = COLORS.gray;
     context.fillRect(x + split, y, width - split, height);
 
-    context.fillStyle = COLORS.WHITE;
+    context.fillStyle = COLORS.white;
     context.fillText(str, x + width / 2, y + height / 2);
     return;
   }
@@ -287,12 +287,12 @@ export default class Setting implements Component {
     if (this.down instanceof Slider) {
       this.context.globalAlpha = 0;
     }
-    this.context.fillStyle = COLORS.BLACK;
+    this.context.fillStyle = COLORS.black;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     let font = Math.min(this.canvas.width / 8, this.canvas.height / 12);
     this.context.font = font + "px Arial";
-    this.context.fillStyle = COLORS.WHITE;
+    this.context.fillStyle = COLORS.white;
     this.context.textAlign = "center";
     this.context.textBaseline = "middle";
     this.context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
