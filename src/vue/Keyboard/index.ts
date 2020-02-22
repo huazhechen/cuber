@@ -99,6 +99,7 @@ export default class Keyboard extends Vue implements Panel {
     if (this.context.cuber.cube.history.length == 0) {
       return;
     }
+    this.context.cuber.cube.twister.finish();
     this.context.cuber.cube.twister.twist(this.context.cuber.cube.history.last.value, true, 1, false);
   }
 

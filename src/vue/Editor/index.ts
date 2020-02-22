@@ -368,6 +368,13 @@ export default class Editor extends Vue {
       case "hollow":
         this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
         break;
+      case "film":
+        if (this.actions.length == 0) {
+          this.snap();
+        } else {
+          this.film();
+        }
+        break;
       default:
         break;
     }

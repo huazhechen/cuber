@@ -84,7 +84,7 @@ export default class App extends Vue {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.renderer.domElement);
     }
-    this.context.mode = 0;
+    this.context.mode = Number(window.localStorage.getItem("context.mode") || 0);
     this.resize();
     this.loop();
   }
@@ -104,7 +104,8 @@ export default class App extends Vue {
   }
 
   @Watch("context.mode")
-  onModeChange() {
+  onModeChange(mode: number) {
+    window.localStorage.setItem("context.mode", String(mode));
     this.$nextTick(this.resize);
   }
 }

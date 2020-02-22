@@ -1,8 +1,22 @@
-# Cuber
+# [魔方栈](https://huazhechen.gitee.io/cuber)
 
-Rubik's Cube using typescript for 100% client side single page application with Vue and Vuetify.
+- 魔方栈是一个在线魔方工具箱
+- 虚拟魔方/公式播放/动画制作
 
-# [虚拟魔方](https://huazhechen.gitee.io/cuber)
+## 基于以下项目
+
+- threejs
+- vue
+- vuetify
+
+## 联系方式
+
+- QQ: 37705123
+- email: 37705123@qq.com
+
+# 功能介绍
+
+## 虚拟魔方
 
 - 极致触摸操控体验
 
@@ -32,11 +46,16 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
   ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
 
-# [公式宝典](https://huazhechen.gitee.io/cuber/algs.html)
+## 公式播放
 
-- 单步播放与播放控制
+- 播放控制
 
-  ![play-control](https://gitee.com/huazhechen/cuber/raw/master/screenshot/play-control.gif)
+  ![alg-player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-player.gif)
+
+- 单步播放
+
+  ![alg-step](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-step.gif)
+
 
 - 公式跳转
 
@@ -48,19 +67,19 @@ Rubik's Cube using typescript for 100% client side single page application with 
 
 - 公式修改
 
-  ![modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/modify.gif)
+  ![alg-modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-modify.gif)
 
-# [导演模式](https://huazhechen.gitee.io/cuber/director.html)
+## 动画制作
 
-- 布置场景并截图
+- 场景布置与截图
 
   ![snap](https://gitee.com/huazhechen/cuber/raw/master/screenshot/snap.gif)
 
-- 动画编写/播放
+- 动画编写与播放
 
   ![action](https://gitee.com/huazhechen/cuber/raw/master/screenshot/action.gif)
 
-- 导出gif
+- 导出 gif
 
   ![gif](https://gitee.com/huazhechen/cuber/raw/master/screenshot/gif.gif)
 
