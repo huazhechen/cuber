@@ -5,11 +5,11 @@ import Capture from "../cuber/capture";
 
 export default class Context {
   cuber: Cuber = new Cuber();
-  controller: Toucher = new Toucher();
+  toucher: Toucher = new Toucher();
   mode: number = -1;
   panels: Panel[] = [];
-  pics: string[][] = [];
 
   algs = require("./Algs/algs.json");
+  pics: string[][] = [];
   capture: Capture = new Capture();
 }

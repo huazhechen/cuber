@@ -3,12 +3,12 @@ import { Component, Provide, Watch } from "vue-property-decorator";
 import Keyboard from "../Keyboard";
 import Player from "../Player";
 import Editor from "../Editor";
-import * as THREE from "three";
+
 import Dash from "../Dash";
 import Context from "../context";
 import { COLORS } from "../../cuber/define";
 import Algs from "../Algs";
-import Capture from "../../cuber/capture";
+import { WebGLRenderer } from "three";
 
 @Component({
   template: require("./index.html"),
@@ -29,14 +29,14 @@ export default class App extends Vue {
   height: number = 0;
   size: number = 0;
 
-  renderer: THREE.WebGLRenderer;
+  renderer: WebGLRenderer;
   constructor() {
     super();
     let canvas = document.createElement("canvas");
     this.context = new Context();
-    this.context.controller.init(canvas, this.context.cuber.controller.touch);
+    this.context.toucher.init(canvas, this.context.cuber.controller.touch);
     canvas.style.outline = "none";
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       canvas: canvas,
       antialias: true
     });

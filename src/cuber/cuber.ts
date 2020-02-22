@@ -1,9 +1,8 @@
-import * as THREE from "three";
-
 import Cube from "./cube";
 import Controller from "./controller";
 import Cubelet from "./cubelet";
 import Preferance from "./preferance";
+import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
 
 export default class Cuber {
   public preferance: Preferance;
@@ -11,32 +10,32 @@ export default class Cuber {
   public height: number;
   public dirty: boolean = false;
 
-  public scene: THREE.Scene;
-  public camera: THREE.PerspectiveCamera;
+  public scene: Scene;
+  public camera: PerspectiveCamera;
 
   public controller: Controller;
   public cube: Cube;
 
-  public ambient: THREE.AmbientLight;
-  public directional: THREE.DirectionalLight;
+  public ambient: AmbientLight;
+  public directional: DirectionalLight;
 
   constructor() {
     this.cube = new Cube();
     this.preferance = new Preferance(this);
     this.controller = new Controller(this);
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
     this.scene.add(this.cube);
 
-    this.ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);
-    this.directional = new THREE.DirectionalLight(0xffffff, 0.2);
+    this.directional = new DirectionalLight(0xffffff, 0.2);
     this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
 
-    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
+    this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;

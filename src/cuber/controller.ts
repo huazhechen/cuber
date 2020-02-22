@@ -1,17 +1,17 @@
-import * as THREE from "three";
 import { FACE } from "./define";
 import Cubelet from "./cubelet";
-import Group from "./group";
+import CubeGroup from "./group";
 import { tweener } from "./tweener";
 import { TouchAction } from "../common/toucher";
 import Cuber from "./cuber";
+import { Vector3, Plane, Ray, Vector2, Matrix4 } from "three";
 
 export class Holder {
-  public vector: THREE.Vector3;
+  public vector: Vector3;
   public index: number;
-  public plane: THREE.Plane;
+  public plane: Plane;
   constructor() {
-    this.vector = new THREE.Vector3();
+    this.vector = new Vector3();
   }
 }
 
@@ -21,17 +21,17 @@ export default class Controller {
   public rotating = false;
   public angle = 0;
   public taps: Function[];
-  public ray = new THREE.Ray();
-  public down = new THREE.Vector2(0, 0);
-  public move = new THREE.Vector2(0, 0);
-  public matrix = new THREE.Matrix4();
+  public ray = new Ray();
+  public down = new Vector2(0, 0);
+  public move = new Vector2(0, 0);
+  public matrix = new Matrix4();
   public holder = new Holder();
-  public vector = new THREE.Vector3();
-  public group: Group;
+  public vector = new Vector3();
+  public group: CubeGroup;
   public planes = [
-    new THREE.Plane(new THREE.Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
-    new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
-    new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Cubelet.SIZE * 3) / 2)
+    new Plane(new Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
+    new Plane(new Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
+    new Plane(new Vector3(0, 0, 1), (-Cubelet.SIZE * 3) / 2)
   ];
   public _lock: boolean = false;
   get lock() {
@@ -174,7 +174,7 @@ export default class Controller {
     return result;
   }
 
-  intersect(point: THREE.Vector2, plane: THREE.Plane) {
+  intersect(point: Vector2, plane: Plane) {
     var x = (point.x / this.cuber.width) * 2 - 1;
     var y = -(point.y / this.cuber.height) * 2 + 1;
     this.ray.origin.setFromMatrixPosition(this.cuber.camera.matrixWorld);
@@ -184,7 +184,7 @@ export default class Controller {
       .sub(this.ray.origin)
       .normalize();
     this.ray.applyMatrix4(this.matrix.identity().getInverse(this.cuber.scene.matrix));
-    var result = new THREE.Vector3();
+    var result = new Vector3();
     this.ray.intersectPlane(plane, result);
     return result;
   }
@@ -251,7 +251,7 @@ export default class Controller {
         if (dx * dx > dy * dy) {
           this.group = this.cuber.cube.groups.y;
         } else {
-          let vector = new THREE.Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
+          let vector = new Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
           vector.applyMatrix4(this.cuber.scene.matrix).project(this.cuber.camera);
           let half = this.cuber.width / 2;
           let x = Math.round(vector.x * half + half);

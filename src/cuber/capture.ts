@@ -1,13 +1,12 @@
-import * as THREE from "three";
-
 import Cube from "./cube";
 import Cubelet from "./cubelet";
+import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;
-  public renderer: THREE.WebGLRenderer;
-  public scene: THREE.Scene;
-  public camera: THREE.PerspectiveCamera;
+  public renderer: WebGLRenderer;
+  public scene: Scene;
+  public camera: PerspectiveCamera;
   public cube: Cube;
 
   constructor() {
@@ -15,17 +14,17 @@ export default class Capture {
     for (let cubelet of this.cube.cubelets) {
       cubelet.mirror = false;
     }
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(512, 512, true);
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = Math.PI / 16 - Math.PI / 4;
     this.scene.add(this.cube);
 
-    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
+    this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     let fov = (2 * Math.atan(1 / 4) * 180) / Math.PI;
     this.camera.aspect = 1;
     this.camera.fov = fov;
@@ -33,9 +32,9 @@ export default class Capture {
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
 
-    let ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    let ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(ambient);
-    let directional = new THREE.DirectionalLight(0xffffff, 0.2);
+    let directional = new DirectionalLight(0xffffff, 0.2);
     directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(directional);
   }

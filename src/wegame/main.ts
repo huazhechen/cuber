@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import Keyboard from "./component/keyboard";
 import { Component } from "./component/component";
 import Starter from "./component/starter";
@@ -10,6 +9,7 @@ import Wecuber from "./component/wecuber";
 import Retry from "./component/retry";
 import { COLORS } from "../cuber/define";
 import Toucher, { TouchAction } from "../common/toucher";
+import { WebGLRenderer } from "three";
 /**
  * 游戏主函数
  */
@@ -17,7 +17,7 @@ export default class Main {
   canvas: HTMLCanvasElement;
   width: number;
   height: number;
-  renderer: THREE.WebGLRenderer;
+  renderer: WebGLRenderer;
   views: Component[];
   handles: Component[];
   cuber: Wecuber;
@@ -38,7 +38,7 @@ export default class Main {
     this.height = window.innerHeight;
     this.database = new Database(this);
 
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       canvas: canvas,
       antialias: true
     });

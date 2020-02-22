@@ -3,11 +3,12 @@ import { Component, Watch, Inject } from "vue-property-decorator";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
 import Base64 from "../../common/base64";
-import * as THREE from "three";
+
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Context from "../context";
 import { FACE, COLORS } from "../../cuber/define";
 import Util from "../../common/util";
+import { WebGLRenderer } from "three";
 
 @Component({
   template: require("./index.html")
@@ -20,8 +21,8 @@ export default class Editor extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  snaper: THREE.WebGLRenderer;
-  filmer: THREE.WebGLRenderer;
+  snaper: WebGLRenderer;
+  filmer: WebGLRenderer;
   gif: GIF;
   pixel: number = 512;
   @Watch("pixel")
@@ -47,10 +48,10 @@ export default class Editor extends Vue {
 
   constructor() {
     super();
-    this.snaper = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.snaper = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.snaper.setPixelRatio(1);
     this.snaper.setClearColor(COLORS.BACKGROUND, 0);
-    this.filmer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 1);
   }
@@ -369,5 +370,4 @@ export default class Editor extends Vue {
         break;
     }
   }
-
 }

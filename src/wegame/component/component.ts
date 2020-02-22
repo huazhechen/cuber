@@ -1,3 +1,5 @@
+import { Camera, Scene } from "three";
+
 export interface Component {
   x: number;
   y: number;
@@ -6,8 +8,8 @@ export interface Component {
   dirty: boolean;
   display: boolean;
   disable: boolean;
-  camera: THREE.Camera;
-  scene: THREE.Scene;
+  camera: Camera;
+  scene: Scene;
   touch: Function;
   resize: Function;
 }

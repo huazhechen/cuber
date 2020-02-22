@@ -34,36 +34,17 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex>
-          <v-btn
-            class="headline"
-            text
-            block
-            @click="tap('tune')"
-            style="height: 2em; margin: 0%; padding: 0%;"
-          >
+          <v-btn class="headline" text block @click="tap('tune')" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>tune</v-icon>
           </v-btn>
         </v-flex>
         <v-flex>
-          <v-btn
-            class="headline"
-            text
-            block
-            @click="tap('code')"
-            style="height: 2em; margin: 0%; padding: 0%;"
-          >
+          <v-btn class="headline" text block @click="tap('code')" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>code</v-icon>
           </v-btn>
         </v-flex>
         <v-flex>
-          <v-btn
-            class="headline"
-            color="error"
-            text
-            block
-            @click="reset()"
-            style="height: 2em; margin: 0%; padding: 0%;"
-          >
+          <v-btn class="headline" color="error" text block @click="resetd=true" style="height: 2em; margin: 0%; padding: 0%;">
             <v-icon large>delete</v-icon>
           </v-btn>
         </v-flex>
@@ -71,4 +52,18 @@
     </v-container>
   </v-card>
   <tune v-model="tune"></tune>
+  <v-dialog v-model="resetd">
+    <v-card>
+      <v-card-title style="text-transform:none;" class="headline">重置数据?</v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" text @click="resetd=false;reset()">
+          确定
+        </v-btn>
+        <v-btn color="black" text @click="resetd=false">
+          取消
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </v-bottom-sheet>

@@ -3,7 +3,9 @@ var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
   entry: {
-    playground: "./src/index.ts"
+    index: "./src/index.ts",
+    "wegame.js": "./src/wegame/index.ts",
+    "wegame/game.js": "./src/wegame/game.js",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -53,9 +55,7 @@ module.exports = (env, argv) => ({
   },
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js",
-      vuetify$: "vuetify/dist/vuetify.min.js",
-      "vuetify/dist/vuetify.css$": "vuetify/dist/vuetify.min.css"
+      vue$: "vue/dist/vue.esm.js"
     },
     extensions: ["*", ".js", ".ts", ".json"]
   },

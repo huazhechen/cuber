@@ -35,6 +35,7 @@ export default class Dash extends Vue {
   }
 
   tune: boolean = false;
+  resetd: boolean = false;
 
   reset() {
     let storage = window.localStorage;

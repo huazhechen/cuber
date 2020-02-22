@@ -1,11 +1,11 @@
-import * as THREE from "three";
-import Group from "./group";
+import CubeGroup from "./group";
 import Cubelet from "./cubelet";
 import History from "./history";
 import Twister from "./twister";
 import { FACE, COLORS } from "./define";
+import { Vector3, Group, Euler } from "three";
 
-export default class Cube extends THREE.Group {
+export default class Cube extends Group {
   public dirty: boolean = true;
   public lock: boolean = false;
   public history: History = new History();
@@ -13,7 +13,7 @@ export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
   public callbacks: Function[] = [];
-  public groups: { [key: string]: Group };
+  public groups: { [key: string]: CubeGroup };
   public complete: boolean = false;
   public duration: number;
 
@@ -27,24 +27,24 @@ export default class Cube extends THREE.Group {
       this.add(cubelet);
     }
     this.groups = {
-      L: new Group(this, "L", [6, 15, 24, 3, 12, 21, 0, 9, 18], new THREE.Vector3(-1, 0, 0)),
-      D: new Group(this, "D", [18, 19, 20, 9, 10, 11, 0, 1, 2], new THREE.Vector3(0, -1, 0)),
-      B: new Group(this, "B", [8, 7, 6, 5, 4, 3, 2, 1, 0], new THREE.Vector3(0, 0, -1)),
-      R: new Group(this, "R", [26, 17, 8, 23, 14, 5, 20, 11, 2], new THREE.Vector3(+1, 0, 0)),
-      U: new Group(this, "U", [6, 7, 8, 15, 16, 17, 24, 25, 26], new THREE.Vector3(0, +1, 0)),
-      F: new Group(this, "F", [24, 25, 26, 21, 22, 23, 18, 19, 20], new THREE.Vector3(0, 0, +1)),
-      l: new Group(this, "l", [0, 3, 6, 9, 12, 15, 18, 21, 24, 1, 4, 7, 10, 13, 16, 19, 22, 25], new THREE.Vector3(-1, 0, 0)),
-      d: new Group(this, "d", [0, 1, 2, 9, 10, 11, 18, 19, 20, 3, 4, 5, 12, 13, 14, 21, 22, 23], new THREE.Vector3(0, -1, 0)),
-      b: new Group(this, "b", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], new THREE.Vector3(0, 0, -1)),
-      r: new Group(this, "r", [2, 5, 8, 11, 14, 17, 20, 23, 26, 1, 4, 7, 10, 13, 16, 19, 22, 25], new THREE.Vector3(+1, 0, 0)),
-      u: new Group(this, "u", [6, 7, 8, 15, 16, 17, 24, 25, 26, 3, 4, 5, 12, 13, 14, 21, 22, 23], new THREE.Vector3(0, +1, 0)),
-      f: new Group(this, "f", [18, 19, 20, 21, 22, 23, 24, 25, 26, 9, 10, 11, 12, 13, 14, 15, 16, 17], new THREE.Vector3(0, 0, +1)),
-      M: new Group(this, "M", [1, 4, 7, 10, 13, 16, 19, 22, 25], new THREE.Vector3(-1, 0, 0)),
-      E: new Group(this, "E", [3, 4, 5, 12, 13, 14, 21, 22, 23], new THREE.Vector3(0, -1, 0)),
-      S: new Group(this, "S", [9, 10, 11, 12, 13, 14, 15, 16, 17], new THREE.Vector3(0, 0, +1)),
-      x: new Group(this, "x", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new THREE.Vector3(+1, 0, 0)),
-      y: new Group(this, "y", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new THREE.Vector3(0, +1, 0)),
-      z: new Group(this, "z", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new THREE.Vector3(0, 0, +1))
+      L: new CubeGroup(this, "L", [6, 15, 24, 3, 12, 21, 0, 9, 18], new Vector3(-1, 0, 0)),
+      D: new CubeGroup(this, "D", [18, 19, 20, 9, 10, 11, 0, 1, 2], new Vector3(0, -1, 0)),
+      B: new CubeGroup(this, "B", [8, 7, 6, 5, 4, 3, 2, 1, 0], new Vector3(0, 0, -1)),
+      R: new CubeGroup(this, "R", [26, 17, 8, 23, 14, 5, 20, 11, 2], new Vector3(+1, 0, 0)),
+      U: new CubeGroup(this, "U", [6, 7, 8, 15, 16, 17, 24, 25, 26], new Vector3(0, +1, 0)),
+      F: new CubeGroup(this, "F", [24, 25, 26, 21, 22, 23, 18, 19, 20], new Vector3(0, 0, +1)),
+      l: new CubeGroup(this, "l", [0, 3, 6, 9, 12, 15, 18, 21, 24, 1, 4, 7, 10, 13, 16, 19, 22, 25], new Vector3(-1, 0, 0)),
+      d: new CubeGroup(this, "d", [0, 1, 2, 9, 10, 11, 18, 19, 20, 3, 4, 5, 12, 13, 14, 21, 22, 23], new Vector3(0, -1, 0)),
+      b: new CubeGroup(this, "b", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], new Vector3(0, 0, -1)),
+      r: new CubeGroup(this, "r", [2, 5, 8, 11, 14, 17, 20, 23, 26, 1, 4, 7, 10, 13, 16, 19, 22, 25], new Vector3(+1, 0, 0)),
+      u: new CubeGroup(this, "u", [6, 7, 8, 15, 16, 17, 24, 25, 26, 3, 4, 5, 12, 13, 14, 21, 22, 23], new Vector3(0, +1, 0)),
+      f: new CubeGroup(this, "f", [18, 19, 20, 21, 22, 23, 24, 25, 26, 9, 10, 11, 12, 13, 14, 15, 16, 17], new Vector3(0, 0, +1)),
+      M: new CubeGroup(this, "M", [1, 4, 7, 10, 13, 16, 19, 22, 25], new Vector3(-1, 0, 0)),
+      E: new CubeGroup(this, "E", [3, 4, 5, 12, 13, 14, 21, 22, 23], new Vector3(0, -1, 0)),
+      S: new CubeGroup(this, "S", [9, 10, 11, 12, 13, 14, 15, 16, 17], new Vector3(0, 0, +1)),
+      x: new CubeGroup(this, "x", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new Vector3(+1, 0, 0)),
+      y: new CubeGroup(this, "y", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new Vector3(0, +1, 0)),
+      z: new CubeGroup(this, "z", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26], new Vector3(0, 0, +1))
     };
     for (let key in this.groups) {
       this.add(this.groups[key]);
@@ -70,7 +70,7 @@ export default class Cube extends THREE.Group {
 
   reset() {
     for (let cubelet of this.cubelets) {
-      cubelet.setRotationFromEuler(new THREE.Euler(0, 0, 0));
+      cubelet.setRotationFromEuler(new Euler(0, 0, 0));
       cubelet.index = cubelet.initial;
       cubelet.updateMatrix();
     }

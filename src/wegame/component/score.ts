@@ -1,9 +1,10 @@
 import { Component } from "./component";
-import * as THREE from "three";
+
 import Database from "../database";
 import { Button, RoundButton } from "./button";
 import { COLORS } from "../../cuber/define";
 import { TouchAction } from "../../common/toucher";
+import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
 
 class CatagoryButton implements Button {
   public x: number;
@@ -181,14 +182,14 @@ export default class Score implements Component {
   public width: number;
   public height: number;
   public dirty: boolean;
-  public scene: THREE.Scene;
-  public camera: THREE.OrthographicCamera;
+  public scene: Scene;
+  public camera: OrthographicCamera;
   public display: boolean = true;
   public disable: boolean = false;
   public database: Database;
   private canvas: HTMLCanvasElement;
   public context: CanvasRenderingContext2D;
-  private texture: THREE.CanvasTexture;
+  private texture: CanvasTexture;
   private buttons: Button[];
   private ok: Button;
   public mode: string;
@@ -206,21 +207,21 @@ export default class Score implements Component {
     }
     this.context = context;
 
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.OrthographicCamera(this.width / -2, this.width / 2, this.height / 2, this.height / -2, -10, 10);
+    this.scene = new Scene();
+    this.camera = new OrthographicCamera(this.width / -2, this.width / 2, this.height / 2, this.height / -2, -10, 10);
     this.camera.updateProjectionMatrix();
-    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.lookAt(new Vector3(0, 0, 0));
 
-    this.texture = new THREE.CanvasTexture(this.canvas);
-    this.texture.minFilter = this.texture.magFilter = THREE.LinearFilter;
+    this.texture = new CanvasTexture(this.canvas);
+    this.texture.minFilter = this.texture.magFilter = LinearFilter;
     this.texture.needsUpdate = true;
-    let geometry = new THREE.PlaneGeometry(this.width, this.height);
-    let material = new THREE.MeshBasicMaterial({
+    let geometry = new PlaneGeometry(this.width, this.height);
+    let material = new MeshBasicMaterial({
       map: this.texture,
       transparent: true,
       opacity: 1
     });
-    let mesh = new THREE.Mesh(geometry, material);
+    let mesh = new Mesh(geometry, material);
     this.scene.add(mesh);
 
     this.buttons = [];

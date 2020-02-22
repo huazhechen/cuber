@@ -1,15 +1,15 @@
-import * as THREE from "three";
 import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
 import { tweener } from "./tweener";
+import { Group, Vector3 } from "three";
 
-export default class Group extends THREE.Group {
+export default class CubeGroup extends Group {
   cube: Cube;
   cubelets: Cubelet[];
   name: string;
   indices: number[];
-  axis: THREE.Vector3;
+  axis: Vector3;
 
   _angle: number;
   set angle(angle) {
@@ -22,7 +22,7 @@ export default class Group extends THREE.Group {
     return this._angle;
   }
 
-  constructor(cube: Cube, name: string, indices: number[], axis: THREE.Vector3) {
+  constructor(cube: Cube, name: string, indices: number[], axis: Vector3) {
     super();
     this.cube = cube;
     this._angle = 0;
