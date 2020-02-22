@@ -1,6 +1,7 @@
 import Toucher from "../common/toucher";
 import { Panel } from "./panel";
 import Cuber from "../cuber/cuber";
+import Capture from "../cuber/capture";
 
 export default class Context {
   cuber: Cuber = new Cuber();
@@ -10,4 +11,5 @@ export default class Context {
   pics: string[][] = [];
 
   algs = require("./Algs/algs.json");
+  capture: Capture = new Capture();
 }

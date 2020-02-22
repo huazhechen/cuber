@@ -89,7 +89,7 @@ export default class Editor extends Vue {
     this.context.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
-    this.context.cuber.controller.taps.push(this.tap);
+    this.context.cuber.controller.taps.push(this.stick);
     this.delay = Number(window.localStorage.getItem("director.delay") || 2);
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
   }
@@ -298,7 +298,7 @@ export default class Editor extends Vue {
   color = 6;
   colord = false;
 
-  tap = (index: number, face: number) => {
+  stick = (index: number, face: number) => {
     if (this.context.mode != 2) {
       return;
     }
@@ -356,4 +356,18 @@ export default class Editor extends Vue {
       this.duration = 30;
     }
   }
+
+  tap(key: string) {
+    switch (key) {
+      case "mirror":
+        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        break;
+      case "hollow":
+        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        break;
+      default:
+        break;
+    }
+  }
+
 }

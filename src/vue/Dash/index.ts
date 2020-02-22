@@ -2,8 +2,6 @@ import Vue from "vue";
 import { Component, Inject, Prop } from "vue-property-decorator";
 import Tune from "../Tune";
 import Context from "../context";
-import Keyboard from "../Keyboard";
-import Player from "../Player";
 
 @Component({
   template: require("./index.html"),
@@ -60,12 +58,6 @@ export default class Dash extends Vue {
         break;
       case "code":
         window.location.href = "https://gitee.com/huazhechen/cuber";
-        break;
-      case "casino":
-        (<Keyboard>this.context.panels[0]).shuffle();
-        break;
-      case "list":
-        this.context.mode = 3;
         break;
       default:
         break;

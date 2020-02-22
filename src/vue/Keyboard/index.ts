@@ -124,6 +124,8 @@ export default class Keyboard extends Vue implements Panel {
     }
   }
 
+  shuffled: boolean = false;
+
   shuffle() {
     this.context.cuber.cube.twister.twist("*");
     this.context.cuber.preferance.lock = false;

@@ -1,4 +1,7 @@
 <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
+  <v-btn fixed left top fab outlined color="primary" @click="context.mode=3" :style="{width:size+'px', height:size+'px'}">
+    <v-icon :size="size * 0.6">assignment</v-icon>
+  </v-btn>
   <v-layout row wrap>
     <v-flex xs12 style="display: flex">
       <template v-for="(group, i) in context.algs">
@@ -7,8 +10,7 @@
           :color="index.group == i?'primary':''"
           depressed
           style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
-          @click.native.stop.prevent="tabs(i);"
-          @touchstart.native.stop.prevent="tabs(i);"
+          @click="tabs(i);"
         >
           {{index.group==i?(progress != 0?'':name):group.name}}
           <v-icon large v-show="index.group == i && (progress != 0)">replay</v-icon>
@@ -41,61 +43,29 @@
           block
           text
           large
-          @click.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
-          @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + algs[index.group].algs.length - 1)%algs[index.group].algs.length};"
+          @click="move(-1)"
           style="margin: 0%; padding: 0%;"
         >
           <v-icon large>skip_previous</v-icon>
         </v-btn>
       </v-flex>
       <v-flex>
-        <v-btn
-          block
-          text
-          large
-          :disabled="progress==0"
-          @click.native.stop.prevent="backward"
-          @touchstart.native.stop.prevent="backward"
-          style="margin: 0%; padding: 0%;"
-        >
+        <v-btn block text large :disabled="progress==0" @click="backward" style="margin: 0%; padding: 0%;">
           <v-icon large>fast_rewind</v-icon>
         </v-btn>
       </v-flex>
       <v-flex>
-        <v-btn
-          block
-          text
-          large
-          :disabled="progress == actions.length"
-          @click.native.stop.prevent="toggle"
-          @touchstart.native.stop.prevent="toggle"
-          style="margin: 0%; padding: 0%;"
-        >
+        <v-btn block text large :disabled="progress == actions.length" @click="toggle" style="margin: 0%; padding: 0%;">
           <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
         </v-btn>
       </v-flex>
       <v-flex>
-        <v-btn
-          block
-          text
-          large
-          :disabled="progress == actions.length"
-          @click.native.stop.prevent="forward"
-          @touchstart.native.stop.prevent="forward"
-          style="margin: 0%; padding: 0%;"
-        >
+        <v-btn block text large :disabled="progress == actions.length" @click="forward" style="margin: 0%; padding: 0%;">
           <v-icon large>fast_forward</v-icon>
         </v-btn>
       </v-flex>
       <v-flex>
-        <v-btn
-          block
-          text
-          large
-          @click.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
-          @touchstart.native.stop.prevent="index={group:index.group, index:(index.index + 1)%algs[index.group].algs.length};"
-          style="margin: 0%; padding: 0%;"
-        >
+        <v-btn block text large @click="move(1)" style="margin: 0%; padding: 0%;">
           <v-icon large>skip_next</v-icon>
         </v-btn>
       </v-flex>

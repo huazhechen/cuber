@@ -1,9 +1,7 @@
 import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cuber/twister";
-import Capture from "../../cuber/capture";
 import Context from "../context";
-import Algs from "../Algs";
 
 @Component({
   template: require("./index.html")
@@ -19,8 +17,6 @@ export default class Player extends Vue {
   progress: number = 0;
 
   tab = null;
-  capture: Capture = new Capture();
-
   mounted() {
     for (let i = 0; i < this.context.algs.length; i++) {
       this.context.pics.push([]);
@@ -42,22 +38,7 @@ export default class Player extends Vue {
     });
   }
 
-  loop(draw: boolean) {
-    if (draw) {
-      return;
-    }
-    this.context.pics.some((group, idx) => {
-      if (this.context.algs[idx].algs.length == group.length) {
-        return false;
-      }
-      let save = window.localStorage.getItem("algs.exp." + this.context.algs[idx].algs[group.length].name);
-      let origin = this.context.algs[idx].algs[group.length].default;
-      let exp = save ? save : origin;
-      this.context.algs[idx].algs[group.length].exp = exp;
-      group.push(this.capture.snap(this.context.algs[idx].strip, exp));
-      return true;
-    });
-  }
+  loop() {}
 
   resize(width: number, height: number) {
     this.size = Math.min(width / 8, height / 14);
@@ -98,7 +79,7 @@ export default class Player extends Vue {
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
     if (this.context.pics[this.index.group][this.index.index]) {
-      this.context.pics[this.index.group][this.index.index] = this.capture.snap(this.context.algs[this.index.group].strip, this.exp);
+      this.context.pics[this.index.group][this.index.index] = this.context.capture.snap(this.context.algs[this.index.group].strip, this.exp);
     }
     this.context.algs[this.index.group].algs[this.index.index].exp = this.exp;
     this.actions = new TwistNode(this.exp).parse();
@@ -174,5 +155,12 @@ export default class Player extends Vue {
     } else {
       this.context.cuber.cube.strip({});
     }
+  }
+
+  move(step: number) {
+    let group = this.index.group;
+    let index = this.index.index + this.context.algs[group].algs.length + step;
+    index = index % this.context.algs[group].algs.length;
+    this.index = { group: group, index: index };
   }
 }

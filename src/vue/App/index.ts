@@ -8,6 +8,7 @@ import Dash from "../Dash";
 import Context from "../context";
 import { COLORS } from "../../cuber/define";
 import Algs from "../Algs";
+import Capture from "../../cuber/capture";
 
 @Component({
   template: require("./index.html"),
@@ -75,6 +76,9 @@ export default class App extends Vue {
     if (this.$refs.editor instanceof Editor) {
       this.context.panels[2] = this.$refs.editor;
     }
+    if (this.$refs.algs instanceof Algs) {
+      this.context.panels[3] = this.$refs.algs;
+    }
 
     if (this.$refs.cuber instanceof Element) {
       let cuber = this.$refs.cuber;
@@ -87,17 +91,15 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
-    let draw = false;
     if (this.context.cuber.dirty || this.context.cuber.cube.dirty) {
       this.renderer.clear();
       this.renderer.render(this.context.cuber.scene, this.context.cuber.camera);
       this.context.cuber.dirty = false;
       this.context.cuber.cube.dirty = false;
-      draw = true;
     }
     let panel = this.context.panels[this.context.mode];
     if (panel) {
-      panel.loop(draw);
+      panel.loop();
     }
   }
 

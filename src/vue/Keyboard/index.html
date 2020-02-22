@@ -1,63 +1,59 @@
 <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
-  <v-btn
-    fixed
-    left
-    top
-    @click.native.stop.prevent
-    @touchstart.native.stop.prevent
-    text
-    color="primary"
-    style="margin:0%;padding:0%;"
-    :style="{height:size+'px'}"
-  >
+  <v-btn fixed left top @click.stop="shuffled=true" text color="primary" style="margin:0%;padding:0%;" :style="{height:size+'px'}">
     <div :style="{'font-size':(size * 0.8)+'px'}">{{score}}</div>
   </v-btn>
   <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
     <v-flex xs2 d-flex style="padding:0%; min-width: 0%; min-height: 0%;">
-      <v-btn @click.native.stop.prevent="tap('layer')" @touchstart.native.stop.prevent="tap('layer')" :style="style" :ripple="false">
+      <v-btn @click="tap('layer')" :style="style" :ripple="false">
         <icon :size="height/5" color="red" :name="['layer1', 'layer2', 'layer3'][layers]"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="tap('mirror')" @touchstart.native.stop.prevent="tap('mirror')" :style="style" :ripple="false">
+      <v-btn @click="tap('mirror')" :style="style" :ripple="false">
         <icon :size="height/5" :color="context.cuber.preferance.mirror?'red':''" name="mirror"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="strip" @touchstart.native.stop.prevent="strip" :style="style" :ripple="false">
+      <v-btn @click="strip" :style="style" :ripple="false">
         <icon :size="height/5" :name="['colorize', 'cfop1', 'cfop2'][cfops]"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="tap('hollow')" @touchstart.native.stop.prevent="tap('hollow')" :style="style" :ripple="false">
+      <v-btn @click="tap('hollow')" :style="style" :ripple="false">
         <icon :size="height/5" :color="context.cuber.preferance.hollow?'red':''" name="hollow"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click.native.stop.prevent="tap('lock')" @touchstart.native.stop.prevent="tap('lock')" :style="style" :ripple="false">
+      <v-btn @click="tap('lock')" :style="style" :ripple="false">
         <icon :size="height/5" :color="context.cuber.preferance.lock?'red':''" name="lock"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn
-        :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock"
-        @click.native.stop.prevent="reverse()"
-        @touchstart.native.stop.prevent="reverse()"
-        :style="style"
-        :ripple="false"
-      >
+      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="reverse()" :style="style" :ripple="false">
         <icon :size="height/5" :color="(context.cuber.cube.history.length == 0 || context.cuber.preferance.lock)?'gray':''" name="backspace"></icon>
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" :key="exp" d-flex xs2 style="padding:0%">
-      <v-btn
-        @click.native.stop.prevent="twist(exp)"
-        @touchstart.native.stop.prevent="tap(exp)"
-        :disabled="context.cuber.preferance.lock"
-        :style="style"
-        :ripple="false"
+      <v-btn @click="tap(exp)" :disabled="context.cuber.preferance.lock" :style="style" :ripple="false"
         ><div :style="{'font-size':(height/8)+'px'}">{{exp}}</div>
       </v-btn>
     </v-flex>
   </v-layout>
+
+  <v-dialog v-model="shuffled">
+    <v-card>
+      <v-card-title style="text-transform:none;" class="headline"
+        >重新打乱?</v-card-title
+      >
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" text @click="shuffled = false;shuffle();">
+          确定
+        </v-btn>
+        <v-btn color="black" text @click="shuffled = false">
+          取消
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </v-container>

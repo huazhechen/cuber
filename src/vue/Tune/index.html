@@ -18,12 +18,12 @@
       </v-layout>
       <v-layout row wrap justify-center align-center>
         <v-flex xs6>
-          <v-btn block @click.native.stop.prevent="show=false;" @touchstart.native.stop.prevent="show=false;" outlined color="primary">
+          <v-btn block @click="show=false;" outlined color="primary">
             确定
           </v-btn>
         </v-flex>
         <v-flex xs6>
-          <v-btn block @click.native.stop.prevent="preferance.reset" @touchstart.native.stop.prevent="preferance.reset" outlined color="error">
+          <v-btn block @click="preferance.reset" outlined color="error">
             重置
           </v-btn>
         </v-flex>
