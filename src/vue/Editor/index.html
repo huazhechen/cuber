@@ -108,18 +108,12 @@
         </v-layout>
         <v-layout row wrap justify-center align-center>
           <v-flex xs6>
-            <v-btn block @click.native.stop.prevent="quality=false;" @touchstart.native.stop.prevent="quality=false;" outlined color="primary">
+            <v-btn block @click="quality=false;" outlined color="primary">
               确定
             </v-btn>
           </v-flex>
           <v-flex xs6>
-            <v-btn
-              block
-              @click.native.stop.prevent="pixel=512;duration=30;delay=2;"
-              @touchstart.native.stop.prevent="pixel=512;duration=30;delay=2;"
-              outlined
-              color="error"
-            >
+            <v-btn block @click="pixel=512;duration=30;delay=2;" outlined color="error">
               重置
             </v-btn>
           </v-flex>
@@ -133,8 +127,7 @@
         <v-layout row wrap>
           <v-flex v-for="(item, index) in colors" :key="index" xs2>
             <v-btn
-              @click.native.stop.prevent="colord = false; color = index;"
-              @touchstart.native.stop.prevent="colord = false; color = index;"
+              @click="colord = false; color = index;"
               :color="item"
               block
               depressed
@@ -144,14 +137,7 @@
             </v-btn>
           </v-flex>
           <v-flex xs2>
-            <v-btn
-              @click.native.stop.prevent="clear"
-              @touchstart.native.stop.prevent="clear"
-              block
-              text
-              class="headline"
-              style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-            >
+            <v-btn @click="clear" block text class="headline" style="height: 2em; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;">
               <v-icon large color="red">replay</v-icon>
             </v-btn>
           </v-flex>

@@ -3,14 +3,14 @@ var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
   entry: {
-    index: "./src/index.ts",
+    "index.js": "./src/index.ts",
     "wegame.js": "./src/wegame/index.ts",
     "wegame/game.js": "./src/wegame/game.js",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "[name].js",
+    filename: "[name]",
     globalObject: "this"
   },
   module: {

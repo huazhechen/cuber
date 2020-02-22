@@ -26,13 +26,13 @@ export default class Preferance {
     this.mode = "";
   }
 
-  reset() {
+  reset = () => {
     this.scale = 50;
     this.perspective = 50;
     this.angle = 25;
     this.gradient = 67;
     this.brightness = 80;
-  }
+  };
 
   private _scale: number;
   get scale() {

@@ -1,12 +1,53 @@
 import Vue from "vue";
 import "./index.css";
-import "vuetify/dist/vuetify.css";
-import Vuetify from "vuetify";
+import Vuetify, {
+  VApp,
+  VCard,
+  VTabs,
+  VTab,
+  VBtn,
+  VTabItem,
+  VIcon,
+  VDialog,
+  VSlider,
+  Resize,
+  VCardTitle,
+  VFlex,
+  VLayout,
+  VContainer,
+  VTextField,
+  VBottomSheet,
+  VTabsItems,
+  VCardActions,
+  VSpacer
+} from "vuetify/lib";
 import App from "./vue/App";
-import Context from "./vue/context";
 
-Vue.use(Vuetify);
-Vue.prototype.context = new Context();
+Vue.use(Vuetify, {
+  components: {
+    VApp,
+    VBtn,
+    VIcon,
+    VDialog,
+    VBottomSheet,
+    VContainer,
+    VLayout,
+    VFlex,
+    VTextField,
+    VCard,
+    VCardTitle,
+    VCardActions,
+    VSpacer,
+    VTabs,
+    VTab,
+    VTabItem,
+    VTabsItems,
+    VSlider
+  },
+  directives: {
+    Resize
+  }
+});
 const opts = {};
 const vuetify = new Vuetify(opts);
 
