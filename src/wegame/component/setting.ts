@@ -92,16 +92,17 @@ class Slider implements Button {
     context.fillRect(x + split, y, width - split, height);
 
     context.fillStyle = COLORS.white;
-    context.fillText(str, x + width / 2, y + height / 2);
+    let value = (this.value < 10 ? "0" : "") + this.value;
+    context.fillText(str + ":" + value, x + width / 2, y + height / 2);
     return;
   }
 
   tap(x: number, y: number) {
-    this.callback((x / this.width) * 100);
+    this.callback(~~((x / this.width) * 100));
   }
 
   touch(x: number, y: number) {
-    this.callback((x / this.width) * 100);
+    this.callback(~~((x / this.width) * 100));
   }
 }
 
@@ -262,7 +263,7 @@ export default class Setting implements Component {
 
     let size = Math.min(this.width / 10, (this.height * 0.6) / (1.5 * this.buttons.length + 1));
     let width = Math.min(this.width - size, size * 9);
-    let height = 1.2 * this.buttons.length * size;
+    let height = 1.2 * size * (this.buttons.length + 1);
 
     let top = this.height - height;
 

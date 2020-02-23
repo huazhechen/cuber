@@ -43,8 +43,8 @@ class ScoreBoard {
     let y = this.y * window.devicePixelRatio;
     let height = this.height * window.devicePixelRatio;
 
-    context.strokeStyle = COLORS.gray;
-    context.fillStyle = COLORS.gray;
+    context.strokeStyle = COLORS.blue;
+    context.fillStyle = COLORS.blue;
     context.font = height * 0.8 + "px Arial";
     context.textBaseline = "middle";
     context.textAlign = "left";

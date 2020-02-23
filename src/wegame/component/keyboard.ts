@@ -2,7 +2,6 @@ import Main from "../main";
 import { Component } from "./component";
 import { TouchAction } from "../../common/toucher";
 import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
-import { ICONS } from "../../common/icons";
 import { COLORS } from "../../common/color";
 
 class KeyboardButton {
@@ -31,7 +30,7 @@ class KeyboardButton {
 
   get key() {
     let key = this.keys[0];
-    if (key == "colorize") {
+    if (key == "cfop0") {
       key = this.keys[this.keyboard.cf];
     } else if (this.keys.length == 3) {
       key = this.keys[this.keyboard.layer];
@@ -88,11 +87,6 @@ class KeyboardButton {
     line = line < 2 ? 2 : line;
     context.lineWidth = line;
 
-    let font = Math.round(size * 0.5);
-    context.font = font + "px Arial";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-
     let keys = this.key.split(" ");
     if (keys[1] == "on") {
       context.fillStyle = COLORS.red;
@@ -102,12 +96,129 @@ class KeyboardButton {
       context.fillStyle = COLORS.gray;
       context.strokeStyle = COLORS.gray;
     }
-    if (keys[0].length > 2) {
-      context.drawImage(this.keyboard.images[this.key], x + 2 * padding, y + 2 * padding, size - 4 * padding, size - 4 * padding);
-    } else {
-      context.fillText(keys[0], x + size / 2, y + size / 2 + line);
-    }
     context.strokeRect(x, y, size, size);
+    size = size - 4 * padding;
+    x = x + 2 * padding;
+    y = y + 2 * padding;
+    let d = size / 48;
+    let font = Math.round(size * 0.6);
+    context.font = font + "px Arial";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+
+    switch (keys[0]) {
+      case "layer1":
+        context.fillRect(x + 5 * d, y + 6 * d, 38 * d, 8 * d);
+        context.fillStyle = COLORS.black;
+        context.fillRect(x + 5 * d, y + 20 * d, 38 * d, 8 * d);
+        context.fillRect(x + 5 * d, y + 34 * d, 38 * d, 8 * d);
+        break;
+      case "layer2":
+        context.fillRect(x + 5 * d, y + 6 * d, 38 * d, 8 * d);
+        context.fillRect(x + 5 * d, y + 20 * d, 38 * d, 8 * d);
+        context.fillStyle = COLORS.black;
+        context.fillRect(x + 5 * d, y + 34 * d, 38 * d, 8 * d);
+        break;
+      case "layer3":
+        context.fillRect(x + 10 * d, y + 6 * d, 28 * d, 8 * d);
+        context.fillRect(x + 5 * d, y + 20 * d, 38 * d, 8 * d);
+        context.fillRect(x + 10 * d, y + 34 * d, 28 * d, 8 * d);
+        break;
+      case "cfop0":
+        context.fillStyle = COLORS.black;
+        context.fillRect(x + 6 * d, y + 6 * d, 12 * d, 12 * d);
+        context.fillRect(x + 6 * d, y + 30 * d, 12 * d, 12 * d);
+        context.fillRect(x + 30 * d, y + 6 * d, 12 * d, 12 * d);
+        context.fillRect(x + 30 * d, y + 30 * d, 12 * d, 12 * d);
+        context.fillRect(x + 18 * d, y + 18 * d, 12 * d, 12 * d);
+        break;
+      case "cfop1":
+        context.fillRect(x + 6 * d, y + 18 * d, 12 * d, 12 * d);
+        context.fillRect(x + 18 * d, y + 6 * d, 12 * d, 12 * d);
+        context.fillRect(x + 18 * d, y + 18 * d, 12 * d, 12 * d);
+        context.fillRect(x + 18 * d, y + 30 * d, 12 * d, 12 * d);
+        context.fillRect(x + 30 * d, y + 18 * d, 12 * d, 12 * d);
+        break;
+      case "cfop2":
+        context.fillRect(x + 6 * d, y + 6 * d, 12 * d, 12 * d);
+        context.fillRect(x + 6 * d, y + 30 * d, 12 * d, 12 * d);
+        context.fillRect(x + 30 * d, y + 6 * d, 12 * d, 12 * d);
+        context.fillRect(x + 30 * d, y + 30 * d, 12 * d, 12 * d);
+        break;
+      case "mirror":
+        context.fillRect(x + 4 * d, y + 12 * d, 4 * d, 24 * d);
+        context.fillRect(x + 40 * d, y + 12 * d, 4 * d, 24 * d);
+        context.fillRect(x + 12 * d, y + 4 * d, 24 * d, 4 * d);
+        context.fillRect(x + 12 * d, y + 40 * d, 24 * d, 4 * d);
+        context.fillStyle = COLORS.black;
+        context.fillRect(x + 12 * d, y + 12 * d, 24 * d, 24 * d);
+        break;
+      case "hollow":
+        context.fillRect(x + 12 * d, y + 12 * d, 24 * d, 24 * d);
+        context.fillStyle = COLORS.black;
+        context.beginPath();
+        context.moveTo(x + 4 * d, y + 4 * d);
+        context.lineTo(x + 44 * d, y + 4 * d);
+        context.lineTo(x + 44 * d, y + 44 * d);
+        context.lineTo(x + 4 * d, y + 44 * d);
+        context.moveTo(x + 8 * d, y + 8 * d);
+        context.lineTo(x + 8 * d, y + 40 * d);
+        context.lineTo(x + 40 * d, y + 40 * d);
+        context.lineTo(x + 40 * d, y + 8 * d);
+        context.closePath();
+        context.fill();
+        break;
+      case "lock":
+        context.beginPath();
+        context.moveTo(x + 14 * d, y + 18 * d);
+        context.lineTo(x + 14 * d, y + 15 * d);
+        context.arc(x + 24 * d, y + 15 * d, 10 * d, -Math.PI, 0, false);
+        context.lineTo(x + 34 * d, y + 18 * d);
+        context.lineTo(x + 39 * d, y + 18 * d);
+        context.lineTo(x + 39 * d, y + 43 * d);
+        context.lineTo(x + 9 * d, y + 43 * d);
+        context.lineTo(x + 9 * d, y + 18 * d);
+        context.lineTo(x + 14 * d, y + 18 * d);
+
+        context.moveTo(x + 18 * d, y + 18 * d);
+        context.lineTo(x + 30 * d, y + 18 * d);
+        context.lineTo(x + 30 * d, y + 15 * d);
+        context.arc(x + 24 * d, y + 15 * d, 6 * d, 0, -Math.PI, true);
+        context.lineTo(x + 18 * d, y + 18 * d);
+
+        context.arc(x + 24 * d, y + 30 * d, 3 * d, 0, 2 * Math.PI, true);
+        context.fill();
+        break;
+      case "backspace":
+        context.beginPath();
+        context.moveTo(x + 46 * d, y + 6 * d);
+        context.lineTo(x + 14 * d, y + 6 * d);
+        context.lineTo(x + 2 * d, y + 24 * d);
+        context.lineTo(x + 14 * d, y + 42 * d);
+        context.lineTo(x + 46 * d, y + 42 * d);
+        context.lineTo(x + 46 * d, y + 6 * d);
+
+        context.moveTo(x + 38 * d, y + 31.17 * d);
+        context.lineTo(x + 35.17 * d, y + 34 * d);
+        context.lineTo(x + 28 * d, y + 26 * d);
+        context.lineTo(x + 28 * d, y + 26.83 * d);
+        context.lineTo(x + 20.83 * d, y + 34 * d);
+        context.lineTo(x + 18 * d, y + 31.17 * d);
+        context.lineTo(x + 25.17 * d, y + 24 * d);
+        context.lineTo(x + 18 * d, y + 16.83 * d);
+        context.lineTo(x + 20.83 * d, y + 14 * d);
+        context.lineTo(x + 28 * d, y + 21.17 * d);
+        context.lineTo(x + 35.17 * d, y + 14 * d);
+        context.lineTo(x + 38 * d, y + 16.83 * d);
+        context.lineTo(x + 30.83 * d, y + 24 * d);
+        context.lineTo(x + 38 * d, y + 31.17 * d);
+        context.closePath();
+        context.fill();
+        break;
+      default:
+        context.fillText(keys[0], x + size / 2, y + size / 2 + line);
+        break;
+    }
   }
 
   resize(x: number, y: number, size: number) {
@@ -127,7 +238,7 @@ class KeyboardButton {
       case "layer3":
         this.keyboard.layer = (this.keyboard.layer + 1) % 3;
         break;
-      case "colorize":
+      case "cfop0":
       case "cfop1":
       case "cfop2":
         this.keyboard.cf = (this.keyboard.cf + 1) % 3;
@@ -176,7 +287,6 @@ export default class Keyboard implements Component {
   private buttons: KeyboardButton[];
   public layer: number = 0;
   public cf: number = 0;
-  public images: { [idx: string]: HTMLImageElement };
 
   constructor(main: Main, x: number, y: number, width: number, height: number) {
     this.x = x;
@@ -192,8 +302,6 @@ export default class Keyboard implements Component {
       throw new Error();
     }
     this.context = context;
-    this.images = {};
-    this.load();
 
     this.scene = new Scene();
     this.camera = new OrthographicCamera(this.width / -2, this.width / 2, this.height / 2, this.height / -2, -10, 10);
@@ -214,8 +322,8 @@ export default class Keyboard implements Component {
     this.buttons = [];
     let keys: string[][] = [
       ["layer1", "layer2", "layer3"],
+      ["cfop0", "cfop1", "cfop2"],
       ["mirror"],
-      ["colorize", "cfop1", "cfop2"],
       ["hollow"],
       ["lock"],
       ["backspace"],
@@ -239,33 +347,6 @@ export default class Keyboard implements Component {
       }
     }
     this.resize();
-  }
-
-  load() {
-    let pre =
-      "<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' role='presentation' style='display: inline-block;vertical-align: baseline;'><g fill='fill' v-html='svg'>";
-    let post = "</g></svg>";
-    let image;
-    let svg;
-    let blob;
-    let url;
-    let colors = { "": COLORS.black, on: COLORS.red, disable: COLORS.gray };
-    for (const key in ICONS) {
-      let content = (<any>ICONS)[key];
-      for (const type in colors) {
-        let color = (<any>colors)[type];
-        svg = pre.replace("fill='fill'", "fill='" + color + "'") + content + post;
-        blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-        url = URL.createObjectURL(blob);
-        image = new Image();
-        image.onload = function() {
-          this.paint();
-        }.bind(this);
-        image.src = url;
-        let name = key + (type.length == 0 ? "" : " ") + type;
-        this.images[name] = image;
-      }
-    }
   }
 
   resize() {

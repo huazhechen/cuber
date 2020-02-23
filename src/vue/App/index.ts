@@ -84,7 +84,16 @@ export default class App extends Vue {
       let cuber = this.$refs.cuber;
       cuber.appendChild(this.renderer.domElement);
     }
-    this.context.mode = Number(window.localStorage.getItem("context.mode") || 0);
+    let hashs = location.hash.substr(1).split(";");
+    for (const hash of hashs) {
+      let kv = hash.split("=");
+      if (kv[0] == "mode" && kv[1]) {
+        this.context.mode = Number(kv[1] || 0);
+      }
+    }
+    if (!(this.context.mode >= 0 && this.context.mode < 4)) {
+      this.context.mode = Number(window.localStorage.getItem("context.mode") || 0);
+    }
     this.resize();
     this.loop();
   }
@@ -106,6 +115,7 @@ export default class App extends Vue {
   @Watch("context.mode")
   onModeChange(mode: number) {
     window.localStorage.setItem("context.mode", String(mode));
+    window.location.hash = mode == 0 ? "" : "mode=" + mode + ";";
     this.$nextTick(this.resize);
   }
 }

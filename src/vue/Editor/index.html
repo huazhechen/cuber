@@ -93,8 +93,8 @@
     </v-flex>
   </v-layout>
   <v-bottom-sheet v-model="quality">
-    <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:size * 8 + 'px'}">
-      <v-container fluid grid-list-md text-xs-center>
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+      <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
         <v-layout row wrap justify-center align-center>
           <v-slider v-model="pixel" always-dirty thumb-label="always" max="1024" min="128" step="128" label="像素"></v-slider>
         </v-layout>
@@ -122,8 +122,8 @@
     </v-card>
   </v-bottom-sheet>
   <v-bottom-sheet v-model="colord">
-    <v-card flat style="margin: auto;touch-action: none;user-select: none;" :style="{width:size * 8 + 'px'}">
-      <v-container fluid grid-list-md text-xs-center>
+    <v-card flat style="margin: auto;touch-action: none;user-select: none;">
+      <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
         <v-layout row wrap>
           <v-flex v-for="(item, index) in colors" :key="index" xs2>
             <v-btn

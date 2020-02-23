@@ -1,4 +1,4 @@
-<rect height="12" width="12" x="6" y="6" stroke-width="0"  fill="#F44336"/>
-<rect height="12" width="12" x="6" y="30" stroke-width="0" fill="#F44336"/>
-<rect height="12" width="12" x="30" y="6" stroke-width="0"  fill="#F44336"/>
-<rect height="12" width="12" x="30" y="30" stroke-width="0" fill="#F44336"/>
+<rect x="6"  y="6"  width="12" height="12" stroke-width="0"  fill="#F44336"/>
+<rect x="6"  y="30" width="12" height="12" stroke-width="0" fill="#F44336"/>
+<rect x="30" y="6"  width="12" height="12" stroke-width="0"  fill="#F44336"/>
+<rect x="30" y="30" width="12" height="12" stroke-width="0" fill="#F44336"/>

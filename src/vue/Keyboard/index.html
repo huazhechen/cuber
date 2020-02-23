@@ -9,13 +9,13 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click="tap('mirror')" :style="style" :ripple="false">
-        <icon :size="height/5" :color="context.cuber.preferance.mirror?'red':''" name="mirror"></icon>
+      <v-btn @click="strip" :style="style" :ripple="false">
+        <icon :size="height/5" :name="['cfop0', 'cfop1', 'cfop2'][cfops]"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
-      <v-btn @click="strip" :style="style" :ripple="false">
-        <icon :size="height/5" :name="['colorize', 'cfop1', 'cfop2'][cfops]"></icon>
+      <v-btn @click="tap('mirror')" :style="style" :ripple="false">
+        <icon :size="height/5" :color="context.cuber.preferance.mirror?'red':''" name="mirror"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex style="padding:0%">
