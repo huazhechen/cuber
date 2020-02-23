@@ -1,12 +1,15 @@
 # [魔方栈](https://huazhechen.gitee.io/cuber)
 
-- 一个在线魔方工具箱
+- 在线魔方工具箱
+
+## 主要特性
 - 虚拟魔方
 - 公式播放
 - 动画制作
 
-## 基于以下项目
-
+## 技术栈
+- typescript
+- webpack
 - threejs
 - vue
 - vuetify
@@ -18,7 +21,7 @@
 
 # 功能介绍
 
-## 虚拟魔方
+## [虚拟魔方](https://huazhechen.gitee.io/cuber#mode=0)
 
 - 极致触摸操控体验
 
@@ -28,13 +31,21 @@
 
   ![keyboard](https://gitee.com/huazhechen/cuber/raw/master/screenshot/keyboard.gif)
 
+- 涂色助手
+
+  ![cf](https://gitee.com/huazhechen/cuber/raw/master/screenshot/cf.gif)
+
 - 镜像助手
 
   ![mirror](https://gitee.com/huazhechen/cuber/raw/master/screenshot/mirror.gif)
 
-- 涂色助手
+- 空心魔方
 
-  ![cf](https://gitee.com/huazhechen/cuber/raw/master/screenshot/cf.gif)
+  ![hollow](https://gitee.com/huazhechen/cuber/raw/master/screenshot/hollow.gif)
+
+- 锁定观察
+
+  ![lock](https://gitee.com/huazhechen/cuber/raw/master/screenshot/lock.gif)
 
 - 撤销操作
 
@@ -48,9 +59,9 @@
 
   ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
 
-## 公式播放
+## [公式播放](https://huazhechen.gitee.io/cuber#mode=1)
 
-- 播放控制
+- 公式播放
 
   ![alg-player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-player.gif)
 
@@ -70,7 +81,7 @@
 
   ![alg-modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/alg-modify.gif)
 
-## 动画制作
+## [动画制作](https://huazhechen.gitee.io/cuber#mode=2)
 
 - 场景布置与截图
 
@@ -99,3 +110,5 @@
 - 质量配置
 
   ![movie-quality](https://gitee.com/huazhechen/cuber/raw/master/screenshot/movie-quality.gif)
+
+## [微信小游戏(未正式上线)]](https://huazhechen.gitee.io/cuber/wegame.html)
