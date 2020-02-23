@@ -111,4 +111,7 @@
 
   ![movie-quality](https://gitee.com/huazhechen/cuber/raw/master/screenshot/movie-quality.gif)
 
-## [微信小游戏(未正式上线)]](https://huazhechen.gitee.io/cuber/wegame.html)
+## [微信小游戏](https://huazhechen.gitee.io/cuber/wegame.html)
+  > 本功能尚未正式上线仅有网页预览
+  
+  ![wegame](https://gitee.com/huazhechen/cuber/raw/master/screenshot/wegame.gif)
