@@ -263,7 +263,7 @@ export default class Setting implements Component {
 
     let size = Math.min(this.width / 10, (this.height * 0.6) / (1.5 * this.buttons.length + 1));
     let width = Math.min(this.width - size, size * 9);
-    let height = 1.2 * size * (this.buttons.length + 1);
+    let height = 1.4 * size * (this.buttons.length + 1);
 
     let top = this.height - height;
 
@@ -275,7 +275,7 @@ export default class Setting implements Component {
       button.y = y;
       button.width = width;
       button.height = size;
-      y = y + 1.2 * size;
+      y = y + 1.4 * size;
     }
     this.paint();
   }
@@ -299,8 +299,13 @@ export default class Setting implements Component {
     this.context.fillText("设置", this.canvas.width / 2, this.canvas.height / 6);
     this.context.globalAlpha = 1;
 
+    if (this.down instanceof Slider) {
+      this.context.globalAlpha = 0.9;
+    }
     for (const button of this.buttons) {
-      button.paint(this.context);
+      if (!(this.down instanceof Slider) || this.down == button) {
+        button.paint(this.context);
+      }
     }
 
     this.context.globalAlpha = 1;
