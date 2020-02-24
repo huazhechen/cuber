@@ -61,10 +61,10 @@ export default class Keyboard extends Vue implements Panel {
 
   get style() {
     return {
-      "margin-left": this.height / 48 + "px",
-      "margin-bottom": this.height / 32 + "px",
-      width: (this.height / 32) * 9 + "px",
-      height: (this.height / 32) * 9 + "px",
+      "margin-left": ((this.size * 8) / 6) * 0.05 + "px",
+      "margin-bottom": ((this.size * 8) / 6) * 0.08 + "px",
+      width: ((this.size * 8) / 6) * 0.9 + "px",
+      height: ((this.size * 8) / 6) * 0.9 + "px",
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none"

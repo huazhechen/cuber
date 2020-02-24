@@ -23,3 +23,11 @@
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "liga";
 }
+.container.grid-list-md .layout:not(:only-child) {
+  margin: 0%;
+  padding: 0%;
+}
+.container.grid-list-md .layout .flex {
+  margin: 0%;
+  padding: 0%;
+}

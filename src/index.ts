@@ -1,5 +1,4 @@
 import Vue from "vue";
-import "./index.css";
 import Vuetify, {
   VApp,
   VCard,
@@ -22,6 +21,7 @@ import Vuetify, {
   VSpacer
 } from "vuetify/lib";
 import App from "./vue/App";
+import "./index.css";
 
 Vue.use(Vuetify, {
   components: {
