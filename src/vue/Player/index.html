@@ -12,8 +12,7 @@
           style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
           @click="tabs(i);"
         >
-          {{index.group==i?(progress != 0?'':name):group.name}}
-          <v-icon large v-show="index.group == i && (progress != 0)">replay</v-icon>
+          {{index.group==i?name:group.name}}
         </v-btn>
       </template>
     </v-flex>
@@ -37,35 +36,56 @@
         <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
       </v-slider>
     </v-flex>
+    <v-flex xs12 style="display: flex;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="move(-1)">
+          <v-icon large>first_page</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="tap('colorize')" :color="colorize?'red':''">
+          <v-icon large>colorize</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="tap('mirror')" :color="context.cuber.preferance.mirror?'red':''">
+          <v-icon large>flip</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="tap('hollow')" :color="context.cuber.preferance.hollow?'red':''">
+          <v-icon large>visibility</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="move(1)">
+          <v-icon large>last_page</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-flex>
     <v-flex xs12 style="display: flex">
-      <v-flex>
-        <v-btn
-          block
-          text
-          large
-          @click="move(-1)"
-          style="margin: 0%; padding: 0%;"
-        >
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress==0" @click="init">
           <v-icon large>skip_previous</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress==0" @click="backward" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress==0" @click="backward">
           <v-icon large>fast_rewind</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress == actions.length" @click="toggle" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress == actions.length" @click="toggle">
           <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress == actions.length" @click="forward" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress == actions.length" @click="forward">
           <v-icon large>fast_forward</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large @click="move(1)" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="(progress==actions.length)" @click="end">
           <v-icon large>skip_next</v-icon>
         </v-btn>
       </v-flex>

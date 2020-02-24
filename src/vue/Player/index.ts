@@ -43,7 +43,7 @@ export default class Player extends Vue {
   resize(width: number, height: number) {
     this.size = Math.min(width / 8, height / 14);
     this.width = width;
-    this.height = 210;
+    this.height = 250;
   }
 
   playing: boolean = false;
@@ -58,8 +58,7 @@ export default class Player extends Vue {
     if (this.context.mode != 1) {
       return;
     }
-    let strip: { [face: string]: number[] | undefined } = this.context.algs[this.index.group].strip;
-    this.context.cuber.cube.strip(strip);
+    this.strip();
     this.name = this.context.algs[this.index.group].algs[this.index.index].name;
     this.origin = this.context.algs[this.index.group].algs[this.index.index].default;
     let exp = window.localStorage.getItem("algs.exp." + this.name);
@@ -137,12 +136,29 @@ export default class Player extends Vue {
     }
   }
 
+  strip() {
+    if (this.colorize) {
+      this.context.cuber.cube.strip({});
+    } else {
+      let strip: { [face: string]: number[] | undefined } = this.context.algs[this.index.group].strip;
+      this.context.cuber.cube.strip(strip);
+    }
+  }
+
+  colorize: boolean = false;
   init() {
+    this.context.cuber.controller.lock = true;
     this.playing = false;
     this.progress = 0;
     this.context.cuber.cube.twister.finish();
     this.context.cuber.cube.twister.twist("#");
     this.context.cuber.cube.twister.twist(this.exp, true, 1, true);
+  }
+
+  end() {
+    this.init();
+    this.context.cuber.cube.twister.twist(this.exp, false, 1, true);
+    this.progress = this.actions.length;
   }
 
   @Watch("context.mode")
@@ -162,5 +178,22 @@ export default class Player extends Vue {
     let index = this.index.index + this.context.algs[group].algs.length + step;
     index = index % this.context.algs[group].algs.length;
     this.index = { group: group, index: index };
+  }
+
+  tap(key: string) {
+    switch (key) {
+      case "mirror":
+        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        break;
+      case "hollow":
+        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        break;
+      case "colorize":
+        this.colorize = !this.colorize;
+        this.strip();
+        break;
+      default:
+        break;
+    }
   }
 }

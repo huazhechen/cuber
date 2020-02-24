@@ -9,9 +9,13 @@ import Context from "../context";
 import { FACE, COLORS } from "../../cuber/define";
 import Util from "../../common/util";
 import { WebGLRenderer } from "three";
+import Icon from "../Icon";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    icon: Icon
+  }
 })
 export default class Editor extends Vue {
   @Inject("context")
@@ -59,7 +63,7 @@ export default class Editor extends Vue {
   resize(width: number, height: number) {
     this.size = Math.min(width / 8, height / 14);
     this.width = width;
-    this.height = 260;
+    this.height = 250;
   }
 
   mounted() {

@@ -37,56 +37,56 @@
         <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
       </v-slider>
     </v-flex>
-    <v-flex xs12 style="display: flex">
-      <v-flex>
-        <v-btn block text large :disabled="recording" @click="colord=true" style="margin: 0%; padding: 0%;" :color="colors[color]">
+    <v-flex xs12 style="display: flex;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="recording" @click="colord=true" :color="colors[color]">
           <v-icon large>colorize</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="recording" @click="tap('mirror')" :color="context.cuber.preferance.mirror?'red':''" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="recording" @click="tap('mirror')" :color="context.cuber.preferance.mirror?'red':''">
           <v-icon large>flip</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="recording" @click="tap('hollow')" :color="context.cuber.preferance.hollow?'red':''" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="recording" @click="tap('hollow')" :color="context.cuber.preferance.hollow?'red':''">
           <v-icon large>visibility</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="recording" @click="quality=true" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="recording" @click="quality=true">
           <v-icon large>crop</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large @click="tap('film')" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large @click="tap('film')">
           <v-icon large>{{actions.length==0?'camera_alt':(recording?'stop':'videocam')}}</v-icon>
         </v-btn>
       </v-flex>
     </v-flex>
-    <v-flex xs12 style="display: flex">
-      <v-flex>
-        <v-btn block text large :disabled="(progress==0 && context.cuber.cube.history.length == 0) || recording" @click="init" style="margin: 0%; padding: 0%;">
+    <v-flex xs12 style="display: flex;margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="(progress==0 && context.cuber.cube.history.length == 0) || recording" @click="init">
           <v-icon large>skip_previous</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress==0 || recording" @click="backward" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress==0 || recording" @click="backward">
           <v-icon large>fast_rewind</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress == actions.length || recording" @click="toggle" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress == actions.length || recording" @click="toggle">
           <v-icon large>{{playing?'pause':'play_arrow'}}</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="progress==actions.length || recording" @click="forward" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="progress==actions.length || recording" @click="forward">
           <v-icon large>fast_forward</v-icon>
         </v-btn>
       </v-flex>
-      <v-flex>
-        <v-btn block text large :disabled="(progress==actions.length) || recording" @click="end" style="margin: 0%; padding: 0%;">
+      <v-flex style="margin: 0%; padding: 0%;">
+        <v-btn block text large :disabled="(progress==actions.length) || recording" @click="end">
           <v-icon large>skip_next</v-icon>
         </v-btn>
       </v-flex>
