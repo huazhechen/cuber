@@ -4,37 +4,37 @@
   </v-btn>
   <v-layout row wrap>
     <v-flex xs2 d-flex>
-      <v-btn @click="tap('layer')" :style="style" :ripple="false">
+      <v-btn @click="tap('layer')" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" color="red" :name="['layer1', 'layer2', 'layer3'][layers]"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn @click="strip" :style="style" :ripple="false">
+      <v-btn @click="strip" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" :name="['cfop0', 'cfop1', 'cfop2'][cfops]"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn @click="tap('mirror')" :style="style" :ripple="false">
+      <v-btn @click="tap('mirror')" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" :color="context.cuber.preferance.mirror?'red':''" name="mirror"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn @click="tap('hollow')" :style="style" :ripple="false">
+      <v-btn @click="tap('hollow')" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" :color="context.cuber.preferance.hollow?'red':''" name="hollow"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn @click="tap('lock')" :style="style" :ripple="false">
+      <v-btn @click="tap('lock')" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" :color="context.cuber.preferance.lock?'red':''" name="lock"></icon>
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="reverse()" :style="style" :ripple="false">
+      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="reverse()" :style="style" outlined :ripple="false">
         <icon :size="size * 0.85" :color="(context.cuber.cube.history.length == 0 || context.cuber.preferance.lock)?'gray':''" name="backspace"></icon>
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" :key="exp" d-flex xs2>
-      <v-btn @click="tap(exp)" :disabled="context.cuber.preferance.lock" :style="style" :ripple="false"
+      <v-btn @click="tap(exp)" :disabled="context.cuber.preferance.lock" :style="style" outlined :ripple="false"
         ><div :style="{'font-size':(height/8)+'px'}">{{exp}}</div>
       </v-btn>
     </v-flex>
