@@ -1,5 +1,18 @@
 import { FACE, COLORS } from "./define";
-import { Vector3, Group, Geometry, Face3, ExtrudeGeometry, Shape, ShapeGeometry, MeshPhongMaterial, MeshLambertMaterial, MeshBasicMaterial, Mesh, Quaternion } from "three";
+import {
+  Vector3,
+  Group,
+  Geometry,
+  Face3,
+  ExtrudeGeometry,
+  Shape,
+  ShapeGeometry,
+  MeshPhongMaterial,
+  MeshLambertMaterial,
+  MeshBasicMaterial,
+  Mesh,
+  Quaternion
+} from "three";
 
 class Frame extends Geometry {
   private static readonly _INDICES = [
@@ -162,7 +175,7 @@ export default class Cubelet extends Group {
     for (const key in COLORS) {
       let color = (<any>COLORS)[key];
       if (key == "BLACK") {
-        result[key] = new MeshPhongMaterial({ color: color, specular: COLORS.GRAY });
+        result[key] = new MeshPhongMaterial({ color: color, specular: COLORS.GRAY, shininess: 8 });
       } else {
         result[key] = new MeshLambertMaterial({ color: color });
       }

@@ -9,8 +9,8 @@ export enum FACE {
 
 export var COLORS = {
   BACKGROUND: "#FFFFFF",
-  GRAY: "#444444",
-  BLACK: "#222222",
+  GRAY: "#808080",
+  BLACK: "#202020",
   GREEN: "#00A020",
   ORANGE: "#FF6D00",
   BLUE: "#0D47A1",
@@ -20,5 +20,4 @@ export var COLORS = {
   CYAN: "#18FFFF",
   LIME: "#C6FF00",
   PINK: "#FF4081",
-  DISABLE: "#BDBDBD"
 };
