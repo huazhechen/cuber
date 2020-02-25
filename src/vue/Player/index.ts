@@ -42,13 +42,13 @@ export default class Player extends Vue {
   resize(width: number, height: number) {
     this.size = Math.ceil(Math.min(width / 8.6, height / 14));
     this.width = width;
-    this.height = this.size * 2.2 + 112;
+    this.height = this.size * 2.6 + 112;
   }
 
   get style() {
     return {
       width: ((this.size * 8) / 5) * 1 + "px",
-      height: this.size * 0.9 + "px",
+      height: this.size * 1.1 + "px",
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none"
