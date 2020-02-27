@@ -1,51 +1,51 @@
 <v-bottom-sheet v-model="show">
   <v-card text style="margin: auto">
-    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
-      <v-layout row wrap>
-        <v-flex xs12 style="display: flex">
+    <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
+      <v-layout row wrap style="padding-bottom: 5%;">
+        <v-flex xs12 style="display: flex;">
           <v-btn
-            class="headline"
             :color="context.mode == 0?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('playground')"
+            :style="{height: size * 0.9 + 'px'}"
           >
-            <v-icon large>games</v-icon>
+            <v-icon :size="size * 0.8">games</v-icon>
           </v-btn>
           <v-btn
-            class="headline"
             :color="context.mode == 1?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('algs')"
+            :style="{height: size * 0.9 + 'px'}"
           >
-            <v-icon large>school</v-icon>
+            <v-icon :size="size * 0.8">school</v-icon>
           </v-btn>
           <v-btn
-            class="headline"
             :color="context.mode == 2?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; height: 2em; flex: 1"
+            style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('director')"
+            :style="{height: size * 0.9 + 'px'}"
           >
-            <v-icon large>movie</v-icon>
+            <v-icon :size="size * 0.8">movie</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
       <v-layout row wrap>
         <v-flex>
-          <v-btn class="headline" text block @click="tap('tune')" style="height: 2em; margin: 0%; padding: 0%;">
-            <v-icon large>tune</v-icon>
+          <v-btn class="headline" text block @click="tap('tune')" style="margin: 0%; padding: 0%;">
+            <v-icon :size="size * 0.6">tune</v-icon>
           </v-btn>
         </v-flex>
         <v-flex>
-          <v-btn class="headline" text block @click="tap('code')" style="height: 2em; margin: 0%; padding: 0%;">
-            <v-icon large>code</v-icon>
+          <v-btn class="headline" text block @click="tap('code')" style="margin: 0%; padding: 0%;">
+            <v-icon :size="size * 0.6">code</v-icon>
           </v-btn>
         </v-flex>
         <v-flex>
-          <v-btn class="headline" color="error" text block @click="resetd=true" style="height: 2em; margin: 0%; padding: 0%;">
-            <v-icon large>delete</v-icon>
+          <v-btn class="headline" color="error" text block @click="resetd=true" style="margin: 0%; padding: 0%;">
+            <v-icon :size="size * 0.6">delete</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>

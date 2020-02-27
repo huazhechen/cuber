@@ -83,8 +83,13 @@ export default class Preferance {
   set brightness(value) {
     this._brightness = value;
     this._storage.setItem("setting.brightness", String(value));
-    this.cuber.ambient.intensity = value / 100;
-    this.cuber.directional.intensity = 1 - value / 100;
+    let light = value / 100;
+    this.cuber.ambient.intensity = light;
+    let d = light / 2;
+    if (d > 1 - light){
+      d = 1 - light;
+    }
+    this.cuber.directional.intensity = d;
     this.cuber.dirty = true;
   }
 

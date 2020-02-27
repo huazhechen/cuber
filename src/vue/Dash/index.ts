@@ -24,14 +24,19 @@ export default class Dash extends Vue {
     this.$emit("input", value);
   }
 
-  width: number = 0;
-  height: number = 0;
   constructor() {
     super();
   }
-  mounted() {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+  mounted() {}
+
+  width: number = 0;
+  height: number = 0;
+  size: number = 0;
+  
+  resize(width: number, height: number) {
+    this.size = Math.ceil(Math.min(width / 8.6, height / 14));
+    this.width = width;
+    this.height = height;
   }
 
   tune: boolean = false;

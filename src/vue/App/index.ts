@@ -50,6 +50,10 @@ export default class App extends Vue {
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 8, this.height / 14));
 
+    if (this.$refs.dash instanceof Dash) {
+      this.$refs.dash.resize(this.width, this.height);
+    }
+
     let panel = this.context.panels[this.context.mode];
     if (!panel) {
       return;
