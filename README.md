@@ -16,6 +16,7 @@
 
 ## 联系方式
 
+- 微信: huazhechen
 - QQ: 37705123
 - email: 37705123@qq.com
 
