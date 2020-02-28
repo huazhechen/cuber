@@ -63,9 +63,6 @@ export default class Controller {
   }
 
   update() {
-    if (!this.lock) {
-      return;
-    }
     if (this.rotating) {
       if (this.group.angle != this.angle) {
         let delta = (this.angle - this.group.angle) / 2;
@@ -236,7 +233,7 @@ export default class Controller {
       var dx = this.move.x - this.down.x;
       var dy = this.move.y - this.down.y;
       var d = Math.sqrt(dx * dx + dy * dy);
-      if (Math.min(this.cuber.width, this.cuber.height) / d > 32) {
+      if (Math.min(this.cuber.width, this.cuber.height) / d > 128) {
         return true;
       }
       tweener.finish();
@@ -308,11 +305,6 @@ export default class Controller {
         this.angle =
           (((-(this.vector.x + this.vector.y + this.vector.z) * (this.group.axis.x + this.group.axis.y + this.group.axis.z)) / Cubelet.SIZE) * Math.PI) / 4;
       }
-      if (!this.lock) {
-        this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
-        this.handleUp();
-        return;
-      }
     }
   }
 
@@ -337,6 +329,13 @@ export default class Controller {
     if (this.rotating) {
       if (this.group && this.group !== null) {
         if (!this.lock) {
+          if (Math.abs(this.angle) < Math.PI / 4) {
+            let tick = new Date().getTime();
+            let speed = Math.abs(this.angle) / (tick - this.tick);
+            if (speed > 0.001) {
+              this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
+            }
+          }
           this.group.twist(this.angle);
         } else {
           this.group.twist(0);
@@ -349,12 +348,14 @@ export default class Controller {
     this.cuber.dirty = true;
   }
 
+  tick: number = new Date().getTime();
   touch = (action: TouchAction) => {
     switch (action.type) {
       case "touchstart":
       case "mousedown":
         this.down.x = action.x;
         this.down.y = action.y;
+        this.tick = new Date().getTime();
         this.handleDown();
         break;
       case "touchmove":
