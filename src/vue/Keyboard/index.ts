@@ -27,6 +27,8 @@ export default class Keyboard extends Vue implements Panel {
     this.height = this.size * 4.2;
   }
 
+  completed: boolean = false;
+  complete: boolean = false;
   loop() {
     if (this.context.cuber.cube.history.moves == 0) {
       this.start = 0;
@@ -37,6 +39,12 @@ export default class Keyboard extends Vue implements Panel {
       }
       if (!this.context.cuber.cube.complete) {
         this.now = new Date().getTime();
+      } else {
+        if (!this.complete){
+          this.context.cuber.preferance.lock = true;
+          this.completed = true;
+          this.complete = true;
+        }
       }
     }
   }
@@ -131,6 +139,7 @@ export default class Keyboard extends Vue implements Panel {
   shuffled: boolean = false;
 
   shuffle() {
+    this.complete = false;
     this.context.cuber.cube.twister.twist("*");
     this.context.cuber.preferance.lock = false;
     this.start = 0;

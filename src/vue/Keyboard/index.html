@@ -33,7 +33,7 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn @click="tap('lock')" :style="style" :ripple="false">
+      <v-btn @click="tap('lock')" :style="style" :ripple="false" :disabled="complete">
         <icon :size="size * 0.85" :color="context.cuber.preferance.lock?'red':''" name="lock"></icon>
       </v-btn>
     </v-flex>
@@ -44,22 +44,45 @@
     </v-flex>
     <v-flex v-for="exp in exps" :key="exp" d-flex xs2>
       <v-btn @click="tap(exp)" :disabled="context.cuber.preferance.lock" :style="style" :ripple="false"
-        ><div :style="{'font-size':(height/8)+'px'}">{{exp}}</div>
+        ><div :style="{'font-size':size/2+'px'}">{{exp}}</div>
       </v-btn>
     </v-flex>
   </v-layout>
-
-  <v-dialog v-model="shuffled">
+  <v-dialog v-model="shuffled" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline">重新打乱?</v-card-title>
+      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px'}">重新打乱?</div></v-card-title>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red" text @click="shuffled = false;shuffle();">
-          确定
-        </v-btn>
-        <v-btn color="black" text @click="shuffled = false">
-          取消
-        </v-btn>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs6 d-flex>
+            <v-btn block color="red" text @click="shuffled = false;shuffle();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">确定</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block color="black" text @click="shuffled = false" :height="size">
+              <div :style="{'font-size':size/3+'px'}">取消</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-model="completed" :width="size * 8">
+    <v-card>
+      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px'}">复原成功</div></v-card-title>
+      <v-card-actions>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs6 d-flex>
+            <v-btn block color="black" text @click="completed = false;" :height="size">
+              <div :style="{'font-size':size/3+'px'}">确定</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block color="red" text @click="completed = false;shuffle();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">重试</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
       </v-card-actions>
     </v-card>
   </v-dialog>

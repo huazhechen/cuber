@@ -17,8 +17,7 @@ import Vuetify, {
   VTextField,
   VBottomSheet,
   VTabsItems,
-  VCardActions,
-  VSpacer
+  VCardActions
 } from "vuetify/lib";
 import App from "./vue/App";
 import "./index.css";
@@ -37,7 +36,6 @@ Vue.use(Vuetify, {
     VCard,
     VCardTitle,
     VCardActions,
-    VSpacer,
     VTabs,
     VTab,
     VTabItem,
