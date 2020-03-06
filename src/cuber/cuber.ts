@@ -2,12 +2,12 @@ import Cube from "./cube";
 import Controller from "./controller";
 import Cubelet from "./cubelet";
 import Preferance from "./preferance";
-import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
+import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Vector2 } from "three";
 
 export default class Cuber {
   public preferance: Preferance;
-  public width: number;
-  public height: number;
+  public width: number = 1;
+  public height: number = 1;
   public dirty: boolean = false;
 
   public scene: Scene;
@@ -22,12 +22,12 @@ export default class Cuber {
   constructor() {
     this.cube = new Cube();
     this.preferance = new Preferance(this);
-    this.controller = new Controller(this);
-
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
     this.scene.add(this.cube);
+
+    this.controller = new Controller(this);
 
     this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);

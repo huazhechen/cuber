@@ -349,6 +349,20 @@ export default class Controller {
   }
 
   tick: number = new Date().getTime();
+  _follow: boolean = true;
+  set follow(value: boolean) {
+    this._follow = value;
+    if (!value) {
+      this.cuber.cube.rotation.x = 0;
+      this.cuber.cube.rotation.y = 0;
+      this.cuber.cube.updateMatrix();
+      this.cuber.dirty = true;
+    }
+  }
+  get follow() {
+    return this._follow;
+  }
+
   touch = (action: TouchAction) => {
     switch (action.type) {
       case "touchstart":
@@ -359,10 +373,42 @@ export default class Controller {
         this.handleDown();
         break;
       case "touchmove":
-      case "mousemove":
         this.move.x = action.x;
         this.move.y = action.y;
         this.handleMove();
+        break;
+      case "mousemove":
+        if (this.follow) {
+          let x = (action.x / this.cuber.width) * 2 - 1;
+          let y = -(action.y / this.cuber.height) * 2 + 1;
+          let ax = (-y * Math.PI) / 16 / +2;
+          let ay = (-x * Math.PI) / 16 / -1;
+          let dx = (ax - this.cuber.cube.rotation.x) / 8;
+          let dy = (ay - this.cuber.cube.rotation.y) / 8;
+          if (dx != 0 || dy != 0) {
+            this.cuber.cube.rotation.x += dx;
+            this.cuber.cube.rotation.y += dy;
+            this.cuber.cube.updateMatrix();
+            this.cuber.dirty = true;
+          }
+        }
+        this.move.x = action.x;
+        this.move.y = action.y;
+        this.handleMove();
+        break;
+      case "deviceorientation":
+        if (this.follow) {
+          let x = action.x / 180 * Math.PI / 16;
+          let y = action.y / 180 * Math.PI / 16;
+          let dx = (x - this.cuber.cube.rotation.x) / 8;
+          let dy = (y - this.cuber.cube.rotation.y) / 8;
+          if (dx != 0 || dy != 0) {
+            this.cuber.cube.rotation.x += dx;
+            this.cuber.cube.rotation.y += dy;
+            this.cuber.cube.updateMatrix();
+            this.cuber.dirty = true;
+          }
+        }
         break;
       case "touchend":
       case "touchcancel":

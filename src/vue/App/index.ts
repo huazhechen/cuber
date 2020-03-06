@@ -118,6 +118,7 @@ export default class App extends Vue {
 
   @Watch("context.mode")
   onModeChange(mode: number) {
+    this.context.cuber.controller.follow = (mode == 0);
     window.localStorage.setItem("context.mode", String(mode));
     window.location.hash = mode == 0 ? "" : "mode=" + mode + ";";
     this.$nextTick(this.resize);

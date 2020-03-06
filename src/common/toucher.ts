@@ -22,9 +22,31 @@ export default class Toucher {
     canvas.addEventListener("mousemove", this.mouse);
     canvas.addEventListener("mouseup", this.mouse);
     canvas.addEventListener("mouseout", this.mouse);
+    window.addEventListener("deviceorientation", this.ori, false);
   }
   canvas: HTMLCanvasElement;
   callback: Function;
+
+  ori = (event: DeviceOrientationEvent) => {
+    let alpha = event.alpha || 0;
+    let beta = event.beta || 0;
+    let gamma = event.gamma || 0;
+
+    let lat = beta;
+    let lon = alpha + gamma;
+    if (beta > 0) {
+      lat = beta - 90;
+    }
+    lon = lon < 180 ? lon : lon - 360;
+    lat = lat;
+
+
+    let action = new TouchAction(event.type, lat, lon);
+    this.callback(action);
+    event.returnValue = false;
+    return false;
+  };
+
   mouse = (event: MouseEvent) => {
     this.canvas.tabIndex = 1;
     this.canvas.focus();
