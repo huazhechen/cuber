@@ -371,6 +371,8 @@ export default class Editor extends Vue {
     } else {
       this.context.cuber.cube.strip({});
       this.duration = 30;
+      this.playing = false;
+      this.recording = false;
     }
   }
 

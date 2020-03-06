@@ -9,6 +9,7 @@ import Context from "../context";
 import { COLORS } from "../../cuber/define";
 import Algs from "../Algs";
 import { WebGLRenderer } from "three";
+import Cubelet from "../../cuber/cubelet";
 
 @Component({
   template: require("./index.html"),
@@ -104,6 +105,15 @@ export default class App extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    if (this.context.mode == 0) {
+      let tick = new Date().getTime();
+      tick = (tick / 1600) * Math.PI;
+      tick = Math.sin(tick) / 32;
+      this.context.cuber.cube.position.y = tick * Cubelet.SIZE;
+      this.context.cuber.cube.rotation.y = (tick / 10) * Math.PI;
+      this.context.cuber.cube.updateMatrix();
+      this.context.cuber.cube.dirty = true;
+    }
     if (this.context.cuber.dirty || this.context.cuber.cube.dirty) {
       this.renderer.clear();
       this.renderer.render(this.context.cuber.scene, this.context.cuber.camera);
@@ -118,9 +128,13 @@ export default class App extends Vue {
 
   @Watch("context.mode")
   onModeChange(mode: number) {
-    this.context.cuber.controller.follow = (mode == 0);
     window.localStorage.setItem("context.mode", String(mode));
     window.location.hash = mode == 0 ? "" : "mode=" + mode + ";";
     this.$nextTick(this.resize);
+    if (mode != 0) {
+      this.context.cuber.cube.position.z = 0;
+      this.context.cuber.cube.updateMatrix();
+      this.context.cuber.cube.dirty = true;
+    }
   }
 }

@@ -178,6 +178,7 @@ export default class Player extends Vue {
         this.init();
       });
     } else {
+      this.playing = false;
       this.context.cuber.cube.strip({});
     }
   }
