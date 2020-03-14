@@ -132,7 +132,8 @@ export default class App extends Vue {
     window.location.hash = mode == 0 ? "" : "mode=" + mode + ";";
     this.$nextTick(this.resize);
     if (mode != 0) {
-      this.context.cuber.cube.position.z = 0;
+      this.context.cuber.cube.position.y = 0;
+      this.context.cuber.cube.rotation.y = 0;
       this.context.cuber.cube.updateMatrix();
       this.context.cuber.cube.dirty = true;
     }

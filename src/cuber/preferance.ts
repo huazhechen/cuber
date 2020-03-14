@@ -20,6 +20,7 @@ export default class Preferance {
     this.angle = Number(this._storage.getItem("setting.angle") || 25);
     this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
     this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
+    this.frames = Number(this._storage.getItem("setting.frames") || 30);
     this.lock = false;
     this.mirror = false;
     this.hollow = false;
@@ -32,7 +33,18 @@ export default class Preferance {
     this.angle = 25;
     this.gradient = 67;
     this.brightness = 80;
+    this.frames = 30;
   };
+
+  private _frames: number;
+  get frames() {
+    return this._frames;
+  }
+  set frames(value) {
+    this._frames = value;
+    this._storage.setItem("setting.frames", String(value));
+    this.cuber.cube.duration = value;
+  }
 
   private _scale: number;
   get scale() {
@@ -86,7 +98,7 @@ export default class Preferance {
     let light = value / 100;
     this.cuber.ambient.intensity = light;
     let d = light / 2;
-    if (d > 1 - light){
+    if (d > 1 - light) {
       d = 1 - light;
     }
     this.cuber.directional.intensity = d;

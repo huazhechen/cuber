@@ -1,49 +1,23 @@
-<v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
+<v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}"
+  style="padding:0%;touch-action: none;">
   <v-layout row wrap>
     <v-flex xs12>
-      <v-text-field
-        style="text-transform:none;"
-        :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px'}"
-        dense
-        class="title"
-        single-line
-        hide-details
-        outlined
-        :disabled="recording"
-        :append-icon="scene == ''?'':'clear'"
-        @click:append="scene = ''"
-        v-model="scene"
-        label="scene"
-      >
+      <v-text-field style="text-transform:none;"
+        :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px'}" dense class="title" single-line
+        hide-details outlined :disabled="recording" :append-icon="scene == ''?'':'clear'" @click:append="scene = ''"
+        v-model="scene" label="scene">
       </v-text-field>
     </v-flex>
     <v-flex xs12>
-      <v-text-field
-        style="text-transform:none;"
-        :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'margin-top':size/8 + 'px'}"
-        dense
-        class="title"
-        single-line
-        hide-details
-        outlined
-        :disabled="recording"
-        :append-icon="action == ''?'':'clear'"
-        @click:append="action = ''"
-        v-model="action"
-        label="action"
-      >
+      <v-text-field style="text-transform:none;"
+        :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'margin-top':size/8 + 'px'}" dense
+        class="title" single-line hide-details outlined :disabled="recording" :append-icon="action == ''?'':'clear'"
+        @click:append="action = ''" v-model="action" label="action">
       </v-text-field>
     </v-flex>
     <v-flex xs12 :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px'}">
-      <v-slider
-        style="margin: 0%;padding: 0%;"
-        readonly
-        hide-details
-        :thumb-label="progress!=0?'always':false"
-        ticks="always"
-        v-model="progress"
-        :max="actions.length"
-      >
+      <v-slider style="margin: 0%;padding: 0%;" readonly hide-details :thumb-label="progress!=0?'always':false"
+        ticks="always" v-model="progress" :max="actions.length">
         <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
       </v-slider>
     </v-flex>
@@ -54,12 +28,14 @@
         </v-btn>
       </v-flex>
       <v-flex d-flex>
-        <v-btn :style="style" text :disabled="recording" @click="tap('mirror')" :color="context.cuber.preferance.mirror?'red':''">
+        <v-btn :style="style" text :disabled="recording" @click="tap('mirror')"
+          :color="context.cuber.preferance.mirror?'red':''">
           <v-icon :size="size * 0.8">flip</v-icon>
         </v-btn>
       </v-flex>
       <v-flex d-flex>
-        <v-btn :style="style" text :disabled="recording" @click="tap('hollow')" :color="context.cuber.preferance.hollow?'red':''">
+        <v-btn :style="style" text :disabled="recording" @click="tap('hollow')"
+          :color="context.cuber.preferance.hollow?'red':''">
           <v-icon :size="size * 0.8">visibility</v-icon>
         </v-btn>
       </v-flex>
@@ -76,7 +52,8 @@
     </v-flex>
     <v-flex xs12 style="display: flex;">
       <v-flex d-flex>
-        <v-btn :style="style" text :disabled="(progress==0 && context.cuber.cube.history.length == 0) || recording" @click="init">
+        <v-btn :style="style" text :disabled="(progress==0 && context.cuber.cube.history.length == 0) || recording"
+          @click="init">
           <v-icon :size="size * 0.8">skip_previous</v-icon>
         </v-btn>
       </v-flex>
@@ -106,10 +83,8 @@
     <v-card flat style="margin: auto;touch-action: none;user-select: none;">
       <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
         <v-layout row wrap justify-center align-center>
-          <v-slider v-model="pixel" always-dirty thumb-label="always" max="1024" min="128" step="128" label="像素"></v-slider>
-        </v-layout>
-        <v-layout row wrap justify-center align-center>
-          <v-slider v-model="duration" always-dirty thumb-label="always" max="60" min="10" step="10" label="帧数"></v-slider>
+          <v-slider v-model="pixel" always-dirty thumb-label="always" max="1024" min="128" step="128" label="像素">
+          </v-slider>
         </v-layout>
         <v-layout row wrap justify-center align-center>
           <v-slider v-model="delay" always-dirty thumb-label="always" max="10" min="2" step="1" label="帧率">
@@ -123,7 +98,7 @@
             </v-btn>
           </v-flex>
           <v-flex xs6>
-            <v-btn block @click="pixel=512;duration=30;delay=2;" text color="error">
+            <v-btn block @click="pixel=512;delay=2;" text color="error">
               重置
             </v-btn>
           </v-flex>
@@ -136,19 +111,13 @@
       <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
         <v-layout row wrap>
           <v-flex v-for="(item, index) in colors" :key="index" xs2 style="padding: 1%;">
-            <v-btn
-              @click="colord = false; color = index;"
-              :color="item"
-              block
-              depressed
-              class="headline"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-              :height="size"
-            >
+            <v-btn @click="colord = false; color = index;" :color="item" block depressed class="headline"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
             </v-btn>
           </v-flex>
           <v-flex xs2 style="padding: 1%;">
-            <v-btn @click="clear" block text class="headline" style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
+            <v-btn @click="clear" block text class="headline"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <v-icon :size="size * 0.8" color="red">replay</v-icon>
             </v-btn>
           </v-flex>

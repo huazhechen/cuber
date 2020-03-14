@@ -2,11 +2,14 @@ import { TwistAction } from "./twister";
 
 export default class list {
   list: TwistAction[] = [];
-  constructor() {}
+  constructor() { }
 
   record(action: TwistAction) {
     if (this.list.length == 0) {
-      this.list.push(action);
+      action.times = action.times % 4;
+      if (action.times != 0) {
+        this.list.push(action);
+      }
     } else {
       let last = this.list[this.list.length - 1];
       if (last.exp == action.exp) {

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Inject, Prop } from "vue-property-decorator";
+import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Tune from "../Tune";
 import Context from "../context";
 import Preferance from "../../cuber/preferance";
@@ -31,7 +31,26 @@ export default class Dash extends Vue {
   constructor() {
     super();
     this.preferance = this.context.cuber.preferance;
+    this.context.cuber.cube.twister.callbacks.push(this.demo);
   }
+
+  @Watch("value")
+  onValueChange(value: boolean) {
+    if (value) {
+      this.demo();
+    }
+    else {
+      this.context.cuber.cube.twister.finish();
+    }
+  }
+
+
+  demo = () => {
+    if (this.value) {
+      this.context.cuber.cube.twister.twist("RR'-UU'-FF'-");
+    }
+  }
+
   mounted() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;

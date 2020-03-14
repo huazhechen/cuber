@@ -36,17 +36,6 @@ export default class Editor extends Vue {
     window.localStorage.setItem("director.delay", String(this.delay));
   }
 
-  frames: number = 30;
-  set duration(value: number) {
-    this.frames = value;
-    this.context.cuber.cube.duration = value;
-    window.localStorage.setItem("director.duration", String(value));
-  }
-
-  get duration() {
-    return this.frames;
-  }
-
   constructor() {
     super();
     this.snaper = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
@@ -351,7 +340,6 @@ export default class Editor extends Vue {
   onModeChange(to: number) {
     if (to == 2) {
       this.$nextTick(() => {
-        this.duration = Number(window.localStorage.getItem("director.duration") || 30);
         for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
           let stickers = this.stickers[FACE[face]];
           if (!stickers) {
@@ -370,7 +358,6 @@ export default class Editor extends Vue {
       });
     } else {
       this.context.cuber.cube.strip({});
-      this.duration = 30;
       this.playing = false;
       this.recording = false;
     }
