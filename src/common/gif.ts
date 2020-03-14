@@ -140,7 +140,7 @@ export class LZW {
     ent = this.nextPixel();
 
     hshift = 0;
-    for (fcode = LZW.HSIZE; fcode < 65536; fcode *= 2) ++hshift;
+    for (fcode = LZW.HSIZE; fcode < 65536; fcode *= 2)++hshift;
     hshift = 8 - hshift;
     hsize_reg = LZW.HSIZE;
     this.cl_hash(hsize_reg);
@@ -355,9 +355,15 @@ export default class GIF {
       for (var j = 0; j < w; j++) {
         let from = i * w + j;
         let to = (h - i - 1) * w + j;
+        let a = this.image[from * 4 + 3];
         let r = this.image[from * 4 + 0];
         let g = this.image[from * 4 + 1];
         let b = this.image[from * 4 + 2];
+        if (a == 0) {
+          r = 0xFF;
+          g = 0xFF;
+          b = 0xFF;
+        }
         let hash = (r * 31 + g) * 31 + b;
         hash = hash & 0x1ff;
         let index;
@@ -421,7 +427,7 @@ export default class GIF {
       0 | // 1:3 reserved
       disp | // 4:6 disposal
       0 | // 7 user input - 0 = none
-        transp // 8 transparency flag
+      transp // 8 transparency flag
     );
 
     this.writeShort(this.delay); // delay x 1/100 sec
@@ -448,7 +454,7 @@ export default class GIF {
       0x80 | // 1 : global color table flag = 1 (gct used)
       ((GIF.DEEP - 1) << 4) | // 2-4 : color resolution = 7
       0x00 | // 5 : gct sort flag = 0
-        (GIF.DEEP - 1) // 6-8 : gct size
+      (GIF.DEEP - 1) // 6-8 : gct size
     );
 
     this.out.writeByte(0); // background color index

@@ -10,6 +10,7 @@ import { FACE, COLORS } from "../../cuber/define";
 import Util from "../../common/util";
 import { WebGLRenderer } from "three";
 import Icon from "../Icon";
+import { APNG } from "../../common/apng";
 
 @Component({
   template: require("./index.html"),
@@ -22,9 +23,9 @@ export default class Editor extends Vue {
   context: Context;
 
   quality: boolean = false;
-  snaper: WebGLRenderer;
   filmer: WebGLRenderer;
   gif: GIF;
+  apng: APNG;
   pixel: number = 512;
   @Watch("pixel")
   onPixelChange() {
@@ -34,16 +35,17 @@ export default class Editor extends Vue {
   @Watch("delay")
   onDelayChange() {
     window.localStorage.setItem("director.delay", String(this.delay));
+    this.apng.delay_num = this.delay;
   }
+
+  output: string = "gif";
 
   constructor() {
     super();
-    this.snaper = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    this.snaper.setPixelRatio(1);
-    this.snaper.setClearColor(COLORS.BACKGROUND, 0);
     this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
-    this.filmer.setClearColor(COLORS.BACKGROUND, 1);
+    this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+    this.apng = new APNG(this.filmer.domElement);
   }
 
   width: number = 0;
@@ -224,10 +226,14 @@ export default class Editor extends Vue {
     this.context.cuber.resize();
     this.filmer.clear();
     this.filmer.render(this.context.cuber.scene, this.context.cuber.camera);
-    let content = this.filmer.getContext();
-    let pixels = new Uint8Array(size * size * 4);
-    content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
-    this.gif.add(pixels);
+    if (this.output == "gif") {
+      let content = this.filmer.getContext();
+      let pixels = new Uint8Array(size * size * 4);
+      content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
+      this.gif.add(pixels);
+    } else if (this.output == "apng") {
+      this.apng.addFrame();
+    }
     this.context.cuber.width = width;
     this.context.cuber.height = height;
     this.context.cuber.resize();
@@ -236,18 +242,32 @@ export default class Editor extends Vue {
   finish() {
     this.recording = false;
     this.context.cuber.controller.disable = false;
-    this.gif.finish();
-    let data = this.gif.out.getData();
-    let blob = new Blob([data], { type: "image/gif" });
-    let url = URL.createObjectURL(blob);
-    Util.DOWNLOAD("cuber.gif", url);
+    let data;
+    let blob;
+    let url;
+    if (this.output == "gif") {
+      this.gif.finish();
+      data = this.gif.out.getData();
+      blob = new Blob([data], { type: "image/gif" });
+      url = URL.createObjectURL(blob);
+      Util.DOWNLOAD("cuber.gif", url);
+    } else if (this.output == "apng") {
+      data = this.apng.finish();
+      blob = new Blob([data], { type: "image/png" });
+      url = URL.createObjectURL(blob);
+      Util.DOWNLOAD("cuber.png", url);
+    }
   }
 
   film() {
     if (this.recording) {
       this.recording = false;
       this.context.cuber.controller.disable = false;
-      this.gif.finish();
+      if (this.output == "gif") {
+        this.gif.finish();
+      } else if (this.output == "apng") {
+        this.apng.finish();
+      }
       return;
     }
     this.init();
@@ -256,7 +276,11 @@ export default class Editor extends Vue {
     let size = this.pixel;
     this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
-    this.gif.start();
+    if (this.output == "gif") {
+      this.gif.start();
+    } else if (this.output == "apng") {
+      this.apng.start();
+    }
     this.record();
     this.callback();
   }
@@ -268,13 +292,13 @@ export default class Editor extends Vue {
     this.context.cuber.width = size;
     this.context.cuber.height = size;
     this.context.cuber.resize();
-    this.snaper.setSize(size, size, true);
-    this.snaper.clear();
-    this.snaper.render(this.context.cuber.scene, this.context.cuber.camera);
+    this.filmer.setSize(size, size, true);
+    this.filmer.clear();
+    this.filmer.render(this.context.cuber.scene, this.context.cuber.camera);
     this.context.cuber.width = width;
     this.context.cuber.height = height;
     this.context.cuber.resize();
-    let content = this.snaper.domElement.toDataURL("image/png");
+    let content = this.filmer.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
     let raw = window.atob(parts[1]);
