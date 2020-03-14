@@ -11,6 +11,7 @@ import Util from "../../common/util";
 import { WebGLRenderer } from "three";
 import Icon from "../Icon";
 import { APNG } from "../../common/apng";
+import ZIP from "../../common/zip";
 
 @Component({
   template: require("./index.html"),
@@ -26,6 +27,7 @@ export default class Editor extends Vue {
   filmer: WebGLRenderer;
   gif: GIF;
   apng: APNG;
+  zip: ZIP;
   pixel: number = 512;
   @Watch("pixel")
   onPixelChange() {
@@ -46,6 +48,7 @@ export default class Editor extends Vue {
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     this.apng = new APNG(this.filmer.domElement);
+    this.zip = new ZIP();
   }
 
   width: number = 0;
@@ -233,6 +236,16 @@ export default class Editor extends Vue {
       this.gif.add(pixels);
     } else if (this.output == "apng") {
       this.apng.addFrame();
+    } else if (this.output == "pngs") {
+      let content = this.filmer.domElement.toDataURL("image/png");
+      let parts = content.split(";base64,");
+      let raw = window.atob(parts[1]);
+      let length = raw.length;
+      let data = new Uint8Array(length);
+      for (let i = 0; i < length; ++i) {
+        data[i] = raw.charCodeAt(i);
+      }
+      this.zip.add("cuber" + this.zip.num + ".png", data);
     }
     this.context.cuber.width = width;
     this.context.cuber.height = height;
@@ -256,6 +269,12 @@ export default class Editor extends Vue {
       blob = new Blob([data], { type: "image/png" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber.png", url);
+    } else if (this.output == "pngs") {
+      this.zip.finish();
+      data = this.zip.out.getData();
+      let b = new Blob([data], { type: "application/zip" });
+      let u = URL.createObjectURL(b);
+      Util.DOWNLOAD("cuber.zip", u);
     }
   }
 
@@ -263,11 +282,6 @@ export default class Editor extends Vue {
     if (this.recording) {
       this.recording = false;
       this.context.cuber.controller.disable = false;
-      if (this.output == "gif") {
-        this.gif.finish();
-      } else if (this.output == "apng") {
-        this.apng.finish();
-      }
       return;
     }
     this.init();
@@ -280,6 +294,8 @@ export default class Editor extends Vue {
       this.gif.start();
     } else if (this.output == "apng") {
       this.apng.start();
+    } else if (this.output == "pngs") {
+      this.zip.init();
     }
     this.record();
     this.callback();

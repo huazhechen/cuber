@@ -1,61 +1,6 @@
 import Color from "./color";
 import { COLORS } from "../cuber/define";
-
-class ByteArray {
-  static SIZE = 4096;
-  static CHAR_MAP = (() => {
-    let map = [];
-    for (var i = 0; i < 256; i++) {
-      map[i] = String.fromCharCode(i);
-    }
-    return map;
-  })();
-
-  pages: Uint8Array[] = [];
-  cursor: number = 0;
-  constructor() {
-    this.newPage();
-  }
-
-  newPage() {
-    this.pages.push(new Uint8Array(ByteArray.SIZE));
-    this.cursor = 0;
-  }
-
-  getData() {
-    let length = (this.pages.length - 1) * ByteArray.SIZE + this.cursor;
-    let data = new Uint8Array(length);
-    let index = 0;
-    for (var p = 0; p < this.pages.length; p++) {
-      for (var i = 0; i < ByteArray.SIZE; i++) {
-        data[index++] = this.pages[p][i];
-        if (index == data.length) {
-          break;
-        }
-      }
-    }
-    return data;
-  }
-
-  writeByte(value: number) {
-    if (this.cursor >= ByteArray.SIZE) {
-      this.newPage();
-    }
-    this.pages[this.pages.length - 1][this.cursor++] = value;
-  }
-
-  writeBytes(array: Uint8Array, length: number | null = null) {
-    for (var i = 0; i < (length == null ? array.length : length); i++) {
-      this.writeByte(array[i]);
-    }
-  }
-
-  writeString(value: string) {
-    for (var l = value.length, i = 0; i < l; i++) {
-      this.writeByte(value.charCodeAt(i));
-    }
-  }
-}
+import ByteArray from "./bytes";
 
 export class LZW {
   static MAXCODE(bits: number) {
@@ -404,10 +349,6 @@ export default class GIF {
   finish() {
     this.out.writeByte(0x3b);
   }
-  writeShort(value: number) {
-    this.out.writeByte(value & 0xff);
-    this.out.writeByte((value >> 8) & 0xff);
-  }
 
   writeHeader() {
     this.out.writeString("GIF89a");
@@ -430,24 +371,24 @@ export default class GIF {
       transp // 8 transparency flag
     );
 
-    this.writeShort(this.delay); // delay x 1/100 sec
+    this.out.writeShort(this.delay); // delay x 1/100 sec
     this.out.writeByte(0); // transparent color index
     this.out.writeByte(0); // block terminator
   }
 
   writeImageDesc() {
     this.out.writeByte(0x2c); // image separator
-    this.writeShort(this.x0); // image position x,y = 0,0
-    this.writeShort(this.y0);
-    this.writeShort(this.x1 - this.x0); // image size
-    this.writeShort(this.y1 - this.y0);
+    this.out.writeShort(this.x0); // image position x,y = 0,0
+    this.out.writeShort(this.y0);
+    this.out.writeShort(this.x1 - this.x0); // image size
+    this.out.writeShort(this.y1 - this.y0);
     this.out.writeByte(0);
   }
 
   writeLSD() {
     // logical screen size
-    this.writeShort(this.width);
-    this.writeShort(this.height);
+    this.out.writeShort(this.width);
+    this.out.writeShort(this.height);
 
     // packed fields
     this.out.writeByte(
@@ -468,7 +409,7 @@ export default class GIF {
     this.out.writeString("NETSCAPE2.0"); // app id + auth code
     this.out.writeByte(3); // sub-block size
     this.out.writeByte(1); // loop sub-block id
-    this.writeShort(0); // loop count (extra iterations, 0=repeat forever)
+    this.out.writeShort(0); // loop count (extra iterations, 0=repeat forever)
     this.out.writeByte(0); // block terminator
   }
 

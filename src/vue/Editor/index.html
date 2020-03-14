@@ -92,13 +92,29 @@
           </v-slider>
         </v-layout>
         <v-layout row wrap justify-center align-center>
+          <v-flex xs12 style="display: flex;">
+            <v-btn :color="output=='gif'?'primary':''" depressed style="text-transform:none; min-width: 0%;flex: 1"
+              @click="output='gif'">
+              GIF
+            </v-btn>
+            <v-btn :color="output=='apng'?'primary':''" depressed style="text-transform:none; min-width: 0%;flex: 1"
+              @click="output='apng'">
+              APNG
+            </v-btn>
+            <v-btn :color="output=='pngs'?'primary':''" depressed style="text-transform:none; min-width: 0%;flex: 1"
+              @click="output='pngs'">
+              PNGS
+            </v-btn>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap justify-center align-center>
           <v-flex xs6>
             <v-btn block @click="quality=false;" text color="primary">
               确定
             </v-btn>
           </v-flex>
           <v-flex xs6>
-            <v-btn block @click="pixel=512;delay=2;" text color="error">
+            <v-btn block @click="pixel=512;delay=2;output=='gif';" text color="error">
               重置
             </v-btn>
           </v-flex>
