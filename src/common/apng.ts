@@ -1,4 +1,5 @@
 import Util from "./util"
+import ByteArray from "./bytes";
 export class APNG {
 
   private _canvas: HTMLCanvasElement;
@@ -14,12 +15,12 @@ export class APNG {
 
   private _frames = -1;
   private _seq = -1
-  data: Uint8Array;
+  data: ByteArray;
   encoding = false;
 
   start() {
     this.encoding = true;
-    this.data = new Uint8Array(0);
+    this.data = new ByteArray();
     this._frames = -1;
     this._seq = -1;
     return 0;
@@ -36,14 +37,14 @@ export class APNG {
 
     if (this._frames == 0) {
       let signature = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
-      this.data = concat(this.data, signature);
+      this.data.writeBytes(signature);
 
       let chunk = findChunk(bytes, "IHDR");
       if (chunk == null) {
         throw new Error();
       }
       let slice = bytes.slice(chunk.idx, chunk.idx + 12 + chunk.len);
-      this.data = concat(this.data, slice)
+      this.data.writeBytes(slice);
 
       let acTL = new Uint8Array(0);
       acTL = concat(acTL, new Uint8Array([0, 0, 0, 8]));
@@ -52,7 +53,8 @@ export class APNG {
       acTL = concat(acTL, int32ToBytes4(this.repeat));
       let crc = Util.CRC32(acTL.slice(4, 4 + 4 + 8));
       acTL = concat(acTL, int32ToBytes4(crc));
-      this.data = concat(this.data, acTL);
+
+      this.data.writeBytes(acTL);
 
       let chunks = findChunkAll(bytes, "IDAT");
       for (let i = 0; i < chunks.length; i++) {
@@ -73,12 +75,12 @@ export class APNG {
 
           let crc = Util.CRC32(fcTL.slice(4, 4 + 4 + 26));
           fcTL = concat(fcTL, int32ToBytes4(crc))
-          this.data = concat(this.data, fcTL)
+          this.data.writeBytes(fcTL);
         }
 
         chunk = chunks[i];  // copy complete IDAT chunk
         let slice = bytes.slice(chunk.idx, chunk.idx + 12 + chunk.len);
-        this.data = concat(this.data, slice)  // push to main stream
+        this.data.writeBytes(slice);
       }  // for
 
     }  // first frame
@@ -103,7 +105,7 @@ export class APNG {
 
           let crc = Util.CRC32(fcTL.slice(4, 4 + 4 + 26));
           fcTL = concat(fcTL, int32ToBytes4(crc))
-          this.data = concat(this.data, fcTL)
+          this.data.writeBytes(fcTL);
         }
 
         chunk = chunks[i];
@@ -119,7 +121,7 @@ export class APNG {
         let crc = Util.CRC32(fdAT.slice(4, 4 + 4 + len_fdAT));
         fdAT = concat(fdAT, int32ToBytes4(crc))
 
-        this.data = concat(this.data, fdAT)
+        this.data.writeBytes(fdAT);
       }
 
     }
@@ -132,28 +134,29 @@ export class APNG {
       throw new Error();
     };
     let suffix = new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82]);
-    this.data = concat(this.data, suffix)
+    this.data.writeBytes(suffix);
+    let output = this.data.getData();
 
-    let chunk = findChunk(this.data, "acTL");
+    let chunk = findChunk(output, "acTL");
     if (chunk == null) {
       throw new Error();
     }
     let frames = int32ToBytes4(this._frames + 1);
-    this.data[chunk.idx + 8] = frames[0];
-    this.data[chunk.idx + 8 + 1] = frames[1];
-    this.data[chunk.idx + 8 + 2] = frames[2];
-    this.data[chunk.idx + 8 + 3] = frames[3];
+    output[chunk.idx + 8] = frames[0];
+    output[chunk.idx + 8 + 1] = frames[1];
+    output[chunk.idx + 8 + 2] = frames[2];
+    output[chunk.idx + 8 + 3] = frames[3];
 
-    let actl = this.data.slice(chunk.idx + 4, chunk.idx + 4 + 4 + 8);
+    let actl = output.slice(chunk.idx + 4, chunk.idx + 4 + 4 + 8);
     let crc = Util.CRC32(actl);
     let bytes = int32ToBytes4(crc);
-    this.data[chunk.idx + 4 + 4 + 8] = bytes[0];
-    this.data[chunk.idx + 4 + 4 + 8 + 1] = bytes[1];
-    this.data[chunk.idx + 4 + 4 + 8 + 2] = bytes[2];
-    this.data[chunk.idx + 4 + 4 + 8 + 3] = bytes[3];
+    output[chunk.idx + 4 + 4 + 8] = bytes[0];
+    output[chunk.idx + 4 + 4 + 8 + 1] = bytes[1];
+    output[chunk.idx + 4 + 4 + 8 + 2] = bytes[2];
+    output[chunk.idx + 4 + 4 + 8 + 3] = bytes[3];
 
     this.encoding = false;
-    return this.data;
+    return output;
   }
 }
 class Chunk {
