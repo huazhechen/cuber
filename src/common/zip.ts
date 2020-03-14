@@ -1,6 +1,7 @@
 import ByteArray from "./bytes";
 import Util from "./util";
 
+// 根据zip格式定义实现: https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.2.0.txt
 export default class ZIP {
     out: ByteArray;
     files: { name: string, length: number, crc: number, offset: number }[] = [];
