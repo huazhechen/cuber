@@ -97,7 +97,7 @@ export default class Cube extends Group {
         continue;
       }
       for (const index of indexes) {
-        this.initials[group.indices[index - 1]].stick(face, COLORS.GRAY);
+        this.initials[group.indices[index - 1]].stick(face, COLORS.BLACK);
       }
     }
     this.dirty = true;

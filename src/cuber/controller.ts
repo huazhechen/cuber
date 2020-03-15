@@ -230,8 +230,11 @@ export default class Controller {
   }
 
   handleDown() {
-    if (this.disable || this.dragging || this.rotating) {
+    if (this.disable) {
       return;
+    }
+    if (this.dragging || this.rotating) {
+      this.handleUp();
     }
     this.dragging = true;
     this.holder.index = -1;
@@ -378,6 +381,7 @@ export default class Controller {
   }
 
   tick: number = new Date().getTime();
+  hover: number = -1;
   touch = (action: TouchAction) => {
     switch (action.type) {
       case "touchstart":
@@ -388,6 +392,19 @@ export default class Controller {
         this.handleDown();
         break;
       case "mousemove":
+        let hover = this.touchIndex(new Vector2(action.x, action.y));
+        if (hover != this.hover) {
+          if (this.hover != -1) {
+            this.cuber.cube.cubelets[this.hover].highlight = false;
+            this.cuber.cube.dirty = true;
+          }
+          this.hover = hover;
+        }
+        if (this.hover != -1) {
+          let highlight = !this.cuber.cube.lock;
+          this.cuber.cube.cubelets[this.hover].highlight = highlight;
+          this.cuber.cube.dirty = true;
+        }
       case "touchmove":
         this.move.x = action.x;
         this.move.y = action.y;
