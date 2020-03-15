@@ -8,6 +8,7 @@ import {
   Shape,
   ShapeGeometry,
   MeshPhongMaterial,
+  MeshNormalMaterial,
   MeshLambertMaterial,
   MeshBasicMaterial,
   Mesh,
@@ -447,18 +448,5 @@ export default class Cubelet extends Group {
     if (this.mirrors[face] instanceof Mesh) {
       this.mirrors[face].material = basic;
     }
-  }
-
-  _highlight: boolean = false;
-  set highlight(value: boolean) {
-    this._highlight = value;
-    if (value) {
-      this.frame.material = Cubelet.LAMBERS["PINK"];
-    } else {
-      this.frame.material = Cubelet.LAMBERS["BLACK"];
-    }
-  }
-  get highlight() {
-    return this._highlight;
   }
 }

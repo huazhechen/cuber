@@ -95,6 +95,7 @@ export default class Editor extends Vue {
   }
 
   init() {
+    this.context.cuber.preferance.lock = false;
     this.playing = false;
     this.progress = 0;
     this.context.cuber.controller.disable = false;

@@ -188,11 +188,19 @@ export default class Controller {
     return result;
   }
 
-  touchIndex(touch: Vector2) {
-    let index = -1;
+  handleDown() {
+    if (this.disable) {
+      return;
+    }
+    if (this.dragging || this.rotating) {
+      this.handleUp();
+    }
+    this.dragging = true;
+    this.holder.index = -1;
+    tweener.speedup();
     let distance = 0;
     this.planes.forEach(plane => {
-      var point = this.intersect(touch, plane);
+      var point = this.intersect(this.down, plane);
       if (point !== null) {
         if (
           Math.abs(point.x) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
@@ -209,12 +217,12 @@ export default class Controller {
             var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
             var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
             if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
-              index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
-              if (index == 13) {
-                index = -1;
+              this.holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
+              if (this.holder.index == 13) {
+                this.holder.index = -1;
               }
             } else {
-              index = -1;
+              this.holder.index = -1;
             }
             distance = d;
             return;
@@ -223,20 +231,6 @@ export default class Controller {
       }
       return;
     }, this);
-    return index;
-  }
-
-  handleDown() {
-    if (this.disable) {
-      return;
-    }
-    if (this.dragging || this.rotating) {
-      this.handleUp();
-    }
-    this.dragging = true;
-    this.holder.index = -1;
-    tweener.speedup();
-    this.holder.index = this.touchIndex(this.down);
   }
 
   handleMove() {
@@ -389,19 +383,6 @@ export default class Controller {
         this.handleDown();
         break;
       case "mousemove":
-        let hover = this.touchIndex(new Vector2(action.x, action.y));
-        if (hover != this.hover) {
-          if (this.hover != -1) {
-            this.cuber.cube.cubelets[this.hover].highlight = false;
-            this.cuber.cube.dirty = true;
-          }
-          this.hover = hover;
-        }
-        if (this.hover != -1) {
-          let highlight = !this.cuber.cube.lock;
-          this.cuber.cube.cubelets[this.hover].highlight = highlight;
-          this.cuber.cube.dirty = true;
-        }
       case "touchmove":
         this.move.x = action.x;
         this.move.y = action.y;
