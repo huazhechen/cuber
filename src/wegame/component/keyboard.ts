@@ -63,6 +63,7 @@ class KeyboardButton {
           key = key + " disable";
         }
         break;
+      case "cfop0":
       case "colorize":
         break;
       default:
@@ -400,12 +401,10 @@ export default class Keyboard implements Component {
         break;
       case "touchmove":
       case "mousemove":
-        break;
       case "touchend":
       case "touchcancel":
       case "mouseup":
       case "mouseout":
-        break;
       default:
         return false;
     }

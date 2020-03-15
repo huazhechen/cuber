@@ -95,15 +95,24 @@ export default class Main {
       }
     } else {
       let component = this.focus;
-      if (!this.focus) {
-        return;
+      if (this.focus) {
+        action.x = x - component.x;
+        action.y = y - component.y;
+        let stop = component.touch(action);
+        if (stop) {
+          return;
+        }
       }
-      if (!(x > component.x && x < component.x + component.width && y > component.y && y < component.y + component.height)) {
-        action.type = "touchcancel";
+      for (let component of this.handles) {
+        if (component.disable || !component.display || component == this.focus) {
+          continue;
+        }
+        if (x > component.x && x < component.x + component.width && y > component.y && y < component.y + component.height) {
+          action.x = x - component.x;
+          action.y = y - component.y;
+          component.touch(action);
+        }
       }
-      action.x = x - component.x;
-      action.y = y - component.y;
-      component.touch(action);
     }
   };
 
