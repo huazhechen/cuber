@@ -55,9 +55,9 @@ export default class Controller {
     this.cuber = cuber;
     this.taps = [];
     this.loop();
-    document.addEventListener('keypress', this.keyPress, false);
-    document.addEventListener('keydown', this.keyDown, false);
-    document.addEventListener('keyup', this.keyUp, false);
+    document.addEventListener("keypress", this.keyPress, false);
+    document.addEventListener("keydown", this.keyDown, false);
+    document.addEventListener("keyup", this.keyUp, false);
   }
 
   loop() {
@@ -183,10 +183,50 @@ export default class Controller {
       .unproject(this.cuber.camera)
       .sub(this.ray.origin)
       .normalize();
-    this.ray.applyMatrix4(this.matrix.identity().getInverse(this.cuber.scene.matrix));
+    this.ray.applyMatrix4(
+      this.matrix.identity().getInverse(this.cuber.scene.matrix)
+    );
     var result = new Vector3();
     this.ray.intersectPlane(plane, result);
     return result;
+  }
+
+  touchIndex(touch: Vector2) {
+    let index = -1;
+    let distance = 0;
+    this.planes.forEach(plane => {
+      var point = this.intersect(touch, plane);
+      if (point !== null) {
+        if (
+          Math.abs(point.x) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
+          Math.abs(point.y) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
+          Math.abs(point.z) <= (Cubelet.SIZE * 3) / 2 + 0.01
+        ) {
+          let d =
+            Math.pow(point.x - this.ray.origin.x, 2) +
+            Math.pow(point.y - this.ray.origin.y, 2) +
+            Math.pow(point.z - this.ray.origin.z, 2);
+          if (distance == 0 || d < distance) {
+            this.holder.plane = plane;
+            var x = Math.ceil(Math.round(point.x) / Cubelet.SIZE - 0.5);
+            var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
+            var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
+            if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
+              index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
+              if (index == 13) {
+                index = -1;
+              }
+            } else {
+              index = -1;
+            }
+            distance = d;
+            return;
+          }
+        }
+      }
+      return;
+    }, this);
+    return index;
   }
 
   handleDown() {
@@ -196,36 +236,7 @@ export default class Controller {
     this.dragging = true;
     this.holder.index = -1;
     tweener.speedup();
-    let distance = 0;
-    this.planes.forEach(plane => {
-      var point = this.intersect(this.down, plane);
-      if (point !== null) {
-        if (
-          Math.abs(point.x) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
-          Math.abs(point.y) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
-          Math.abs(point.z) <= (Cubelet.SIZE * 3) / 2 + 0.01
-        ) {
-          let d = Math.pow(point.x - this.ray.origin.x, 2) + Math.pow(point.y - this.ray.origin.y, 2) + Math.pow(point.z - this.ray.origin.z, 2);
-          if (distance == 0 || d < distance) {
-            this.holder.plane = plane;
-            var x = Math.ceil(Math.round(point.x) / Cubelet.SIZE - 0.5);
-            var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
-            var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
-            if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
-              this.holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
-              if (this.holder.index == 13) {
-                this.holder.index = -1;
-              }
-            } else {
-              this.holder.index = -1;
-            }
-            distance = d;
-            return;
-          }
-        }
-      }
-      return;
-    }, this);
+    this.holder.index = this.touchIndex(this.down);
   }
 
   handleMove() {
@@ -251,8 +262,14 @@ export default class Controller {
         if (dx * dx > dy * dy) {
           this.group = this.cuber.cube.groups.y;
         } else {
-          let vector = new Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
-          vector.applyMatrix4(this.cuber.scene.matrix).project(this.cuber.camera);
+          let vector = new Vector3(
+            (Cubelet.SIZE * 3) / 2,
+            0,
+            (Cubelet.SIZE * 3) / 2
+          );
+          vector
+            .applyMatrix4(this.cuber.scene.matrix)
+            .project(this.cuber.camera);
           let half = this.cuber.width / 2;
           let x = Math.round(vector.x * half + half);
           if (this.down.x < x) {
@@ -284,7 +301,9 @@ export default class Controller {
           return false;
         }, this);
         this.vector.crossVectors(this.holder.vector, this.holder.plane.normal);
-        this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
+        this.holder.vector.multiplyScalar(
+          this.vector.x + this.vector.y + this.vector.z
+        );
       }
       this.group.hold();
     }
@@ -306,7 +325,11 @@ export default class Controller {
         var end = this.intersect(this.move, this.holder.plane);
         this.vector.subVectors(end, start).multiply(this.holder.vector);
         this.angle =
-          (((-(this.vector.x + this.vector.y + this.vector.z) * (this.group.axis.x + this.group.axis.y + this.group.axis.z)) / Cubelet.SIZE) * Math.PI) / 4;
+          (((-(this.vector.x + this.vector.y + this.vector.z) *
+            (this.group.axis.x + this.group.axis.y + this.group.axis.z)) /
+            Cubelet.SIZE) *
+            Math.PI) /
+          4;
       }
     }
   }
@@ -336,7 +359,10 @@ export default class Controller {
             let tick = new Date().getTime();
             let speed = Math.abs(this.angle) / (tick - this.tick);
             if (speed > 0.001) {
-              this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
+              this.angle =
+                this.angle == 0
+                  ? 0
+                  : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
             }
           }
           this.group.twist(this.angle);
@@ -383,12 +409,12 @@ export default class Controller {
 
   keyPress = (event: KeyboardEvent) => {
     var key = String.fromCharCode(event.which);
-    if ('XxRrMmLlYyUuEeDdZzFfSsBb'.indexOf(key) >= 0) {
+    if ("XxRrMmLlYyUuEeDdZzFfSsBb".indexOf(key) >= 0) {
       event.preventDefault();
       this.cuber.cube.twister.twist(key, this.reverse);
       return false;
     }
-  }
+  };
 
   keyDown = (event: KeyboardEvent) => {
     var key = event.which;
@@ -402,7 +428,7 @@ export default class Controller {
       this.cuber.cube.undo();
       return false;
     }
-  }
+  };
 
   keyUp = (event: KeyboardEvent) => {
     var key = event.which;
@@ -411,6 +437,5 @@ export default class Controller {
       this.reverse = false;
       return false;
     }
-  }
-
+  };
 }

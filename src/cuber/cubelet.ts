@@ -166,16 +166,28 @@ export default class Cubelet extends Group {
   public static readonly SIZE: number = 64;
   private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _STICKER_DEPTH: number = 3;
-  private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
-  private static readonly _STICKER: Sticker = new Sticker(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH, Cubelet._STICKER_DEPTH);
-  private static readonly _MIRROR: Mirror = new Mirror(Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH);
+  private static readonly _FRAME: Frame = new Frame(
+    Cubelet.SIZE,
+    Cubelet._BORDER_WIDTH
+  );
+  private static readonly _STICKER: Sticker = new Sticker(
+    Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH,
+    Cubelet._STICKER_DEPTH
+  );
+  private static readonly _MIRROR: Mirror = new Mirror(
+    Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH
+  );
 
   private static LAMBERS = (() => {
     let result: any = {};
     for (const key in COLORS) {
       let color = (<any>COLORS)[key];
       if (key == "BLACK") {
-        result[key] = new MeshPhongMaterial({ color: color, specular: COLORS.GRAY, shininess: 8 });
+        result[key] = new MeshPhongMaterial({
+          color: color,
+          specular: COLORS.GRAY,
+          shininess: 8
+        });
       } else {
         result[key] = new MeshLambertMaterial({ color: color });
       }
@@ -195,8 +207,15 @@ export default class Cubelet extends Group {
   _vector: Vector3;
 
   set vector(vector) {
-    this._vector.set(Math.round(vector.x), Math.round(vector.y), Math.round(vector.z));
-    this._index = (this._vector.z + 1) * 9 + (this._vector.y + 1) * 3 + (this._vector.x + 1);
+    this._vector.set(
+      Math.round(vector.x),
+      Math.round(vector.y),
+      Math.round(vector.z)
+    );
+    this._index =
+      (this._vector.z + 1) * 9 +
+      (this._vector.y + 1) * 3 +
+      (this._vector.x + 1);
     this.position.x = Cubelet.SIZE * this._vector.x;
     this.position.y = Cubelet.SIZE * this._vector.y;
     this.position.z = Cubelet.SIZE * this._vector.z;
@@ -224,13 +243,19 @@ export default class Cubelet extends Group {
   set mirror(value: boolean) {
     if (value) {
       for (let i = 0; i < 6; i++) {
-        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) < 0) {
+        if (
+          this.mirrors[i] instanceof Mesh &&
+          this.children.indexOf(this.mirrors[i]) < 0
+        ) {
           this.add(this.mirrors[i]);
         }
       }
     } else {
       for (let i = 0; i < 6; i++) {
-        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) >= 0) {
+        if (
+          this.mirrors[i] instanceof Mesh &&
+          this.children.indexOf(this.mirrors[i]) >= 0
+        ) {
           this.remove(this.mirrors[i]);
         }
       }
@@ -239,7 +264,10 @@ export default class Cubelet extends Group {
 
   set hollow(value: boolean) {
     if (value) {
-      if (this.frame instanceof Mesh && this.children.indexOf(this.frame) >= 0) {
+      if (
+        this.frame instanceof Mesh &&
+        this.children.indexOf(this.frame) >= 0
+      ) {
         this.remove(this.frame);
       }
     } else {
@@ -369,9 +397,12 @@ export default class Cubelet extends Group {
       if (this.lambers[i] != Cubelet.LAMBERS.GRAY) {
         this.add(_sticker);
         let _mirror = new Mesh(Cubelet._MIRROR, this.basics[i]);
-        _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
-        _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
-        _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
+        _mirror.rotation.x =
+          _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
+        _mirror.rotation.y =
+          _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
+        _mirror.rotation.z =
+          _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
         if (_mirror.rotation.x + _mirror.rotation.y + _mirror.rotation.z == 0) {
           _mirror.rotation.y = Math.PI;
         }
@@ -416,5 +447,18 @@ export default class Cubelet extends Group {
     if (this.mirrors[face] instanceof Mesh) {
       this.mirrors[face].material = basic;
     }
+  }
+
+  _highlight: boolean = false;
+  set highlight(value: boolean) {
+    this._highlight = value;
+    if (value) {
+      this.frame.material = Cubelet.LAMBERS["PINK"];
+    } else {
+      this.frame.material = Cubelet.LAMBERS["BLACK"];
+    }
+  }
+  get highlight() {
+    return this._highlight;
   }
 }
