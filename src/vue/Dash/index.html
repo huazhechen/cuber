@@ -1,14 +1,14 @@
 <v-bottom-sheet v-model="show">
   <v-card text style="margin: auto">
     <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
-      <v-layout row wrap style="padding-bottom: 5%;">
+      <v-layout row wrap style="padding-top: 2%;padding-bottom: 5%;">
         <v-flex xs12 style="display: flex;">
           <v-btn
             :color="context.mode == 0?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('playground')"
-            :style="{height: size * 0.9 + 'px'}"
+            :style="{height: size + 'px'}"
           >
             <v-icon :size="size * 0.8">games</v-icon>
           </v-btn>
@@ -17,7 +17,7 @@
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('algs')"
-            :style="{height: size * 0.9 + 'px'}"
+            :style="{height: size + 'px'}"
           >
             <v-icon :size="size * 0.8">school</v-icon>
           </v-btn>
@@ -26,7 +26,7 @@
             depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
             @click="tap('director')"
-            :style="{height: size * 0.9 + 'px'}"
+            :style="{height: size + 'px'}"
           >
             <v-icon :size="size * 0.8">movie</v-icon>
           </v-btn>

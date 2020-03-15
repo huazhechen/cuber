@@ -41,6 +41,10 @@ export default class Editor extends Vue {
   }
 
   output: string = "gif";
+  @Watch("output")
+  onOutputChange() {
+    window.localStorage.setItem("director.output", this.output);
+  }
 
   constructor() {
     super();
@@ -75,25 +79,6 @@ export default class Editor extends Vue {
     this.action = save != null ? save : "RUR'U'-";
     save = window.localStorage.getItem("director.scene");
     this.scene = save != null ? save : "^";
-    let search = window.location.search.toString().substr(1);
-    if (search.length > 0) {
-      try {
-        let string = Base64.decode(search);
-        let init = JSON.parse(string);
-        this.scene = init.scene || "";
-        this.action = init.action || "";
-        this.stickers = init.stickers || [];
-        if (init.option) {
-          this.context.cuber.preferance.scale = init.option[0];
-          this.context.cuber.preferance.perspective = init.option[1];
-          this.context.cuber.preferance.angle = init.option[2];
-          this.context.cuber.preferance.gradient = init.option[3];
-        }
-        history.replaceState({}, "Cuber", window.location.origin + window.location.pathname);
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
     this.context.cuber.cube.twister.callbacks.push(() => {
       this.callback();
@@ -103,6 +88,7 @@ export default class Editor extends Vue {
     });
     this.delay = Number(window.localStorage.getItem("director.delay") || 2);
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
+    this.output = window.localStorage.getItem("director.output") || "gif";
   }
 
   init() {
