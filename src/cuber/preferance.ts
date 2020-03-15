@@ -17,7 +17,7 @@ export default class Preferance {
     }
     this.scale = Number(this._storage.getItem("setting.scale") || 50);
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
-    this.angle = Number(this._storage.getItem("setting.angle") || 25);
+    this.angle = Number(this._storage.getItem("setting.angle") || 63);
     this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
     this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
     this.frames = Number(this._storage.getItem("setting.frames") || 30);
@@ -30,7 +30,7 @@ export default class Preferance {
   reset = () => {
     this.scale = 50;
     this.perspective = 50;
-    this.angle = 25;
+    this.angle = 63;
     this.gradient = 67;
     this.brightness = 80;
     this.frames = 30;
@@ -73,7 +73,7 @@ export default class Preferance {
   set angle(value) {
     this._angle = value;
     this._storage.setItem("setting.angle", String(value));
-    this.cuber.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 4;
+    this.cuber.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
     this.cuber.dirty = true;
   }
 
