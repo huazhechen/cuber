@@ -3,31 +3,19 @@
     <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
       <v-layout row wrap style="padding-top: 2%;padding-bottom: 5%;">
         <v-flex xs12 style="display: flex;">
-          <v-btn
-            :color="context.mode == 0?'primary':''"
-            depressed
+          <v-btn :color="context.mode == 0?'primary':''" depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
-            @click="tap('playground')"
-            :style="{height: size + 'px'}"
-          >
+            @click="tap('playground')" :style="{height: size + 'px'}">
             <v-icon :size="size * 0.8">games</v-icon>
           </v-btn>
-          <v-btn
-            :color="context.mode == 1?'primary':''"
-            depressed
+          <v-btn :color="context.mode == 1?'primary':''" depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
-            @click="tap('algs')"
-            :style="{height: size + 'px'}"
-          >
+            @click="tap('algs')" :style="{height: size + 'px'}">
             <v-icon :size="size * 0.8">school</v-icon>
           </v-btn>
-          <v-btn
-            :color="context.mode == 2?'primary':''"
-            depressed
+          <v-btn :color="context.mode == 2?'primary':''" depressed
             style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
-            @click="tap('director')"
-            :style="{height: size + 'px'}"
-          >
+            @click="tap('director')" :style="{height: size + 'px'}">
             <v-icon :size="size * 0.8">movie</v-icon>
           </v-btn>
         </v-flex>
@@ -52,17 +40,24 @@
     </v-container>
   </v-card>
   <tune v-model="tune"></tune>
-  <v-dialog v-model="resetd">
+  <v-dialog v-model="resetd" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline">重置数据?</v-card-title>
+      <v-card-title style="text-transform:none;">
+        <div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">重置数据?</div>
+      </v-card-title>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red" text @click="resetd=false;reset()">
-          确定
-        </v-btn>
-        <v-btn color="black" text @click="resetd=false">
-          取消
-        </v-btn>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs6 d-flex>
+            <v-btn block color="red" text @click="resetd=false;reset()" :height="size">
+              <div :style="{'font-size':size/3+'px'}">确定</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block color="black" text @click="resetd=false" :height="size">
+              <div :style="{'font-size':size/3+'px'}">取消</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
       </v-card-actions>
     </v-card>
   </v-dialog>

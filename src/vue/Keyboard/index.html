@@ -50,7 +50,7 @@
   </v-layout>
   <v-dialog v-model="shuffled" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px'}">重新打乱?</div></v-card-title>
+      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">重新打乱?</div></v-card-title>
       <v-card-actions>
         <v-layout row wrap style="margin: 0%;">
           <v-flex xs6 d-flex>
@@ -69,7 +69,7 @@
   </v-dialog>
   <v-dialog v-model="completed" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px'}">复原成功</div></v-card-title>
+      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">复原成功</div></v-card-title>
       <v-card-actions>
         <v-layout row wrap style="margin: 0%;">
           <v-flex xs6 d-flex>
