@@ -55,6 +55,9 @@ export default class Controller {
     this.cuber = cuber;
     this.taps = [];
     this.loop();
+    document.addEventListener('keypress', this.keyPress, false);
+    document.addEventListener('keydown', this.keyDown, false);
+    document.addEventListener('keyup', this.keyUp, false);
   }
 
   loop() {
@@ -375,4 +378,39 @@ export default class Controller {
     }
     return true;
   };
+
+  reverse: boolean = false;
+
+  keyPress = (event: KeyboardEvent) => {
+    var key = String.fromCharCode(event.which);
+    if ('XxRrMmLlYyUuEeDdZzFfSsBb'.indexOf(key) >= 0) {
+      event.preventDefault();
+      this.cuber.cube.twister.twist(key, this.reverse);
+      return false;
+    }
+  }
+
+  keyDown = (event: KeyboardEvent) => {
+    var key = event.which;
+    if (key === 222) {
+      event.preventDefault();
+      this.reverse = true;
+      return false;
+    }
+    if (key === 8) {
+      event.preventDefault();
+      this.cuber.cube.undo();
+      return false;
+    }
+  }
+
+  keyUp = (event: KeyboardEvent) => {
+    var key = event.which;
+    if (key === 222) {
+      event.preventDefault();
+      this.reverse = false;
+      return false;
+    }
+  }
+
 }

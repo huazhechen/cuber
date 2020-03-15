@@ -103,6 +103,17 @@ export default class Cube extends Group {
     this.dirty = true;
   }
 
+  undo() {
+    if (this.history.length == 0) {
+      return;
+    }
+    this.twister.finish();
+    if (this.history.length == 0) {
+      return;
+    }
+    this.twister.twist(this.history.last.value, true, 1, false);
+  }
+
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |

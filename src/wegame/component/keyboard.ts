@@ -245,14 +245,7 @@ class KeyboardButton {
         this.strip();
         break;
       case "backspace":
-        if (this.keyboard.main.cuber.cube.history.last == undefined) {
-          return;
-        }
-        this.keyboard.main.cuber.cube.twister.finish();
-        if (this.keyboard.main.cuber.cube.history.last == undefined) {
-          return;
-        }
-        this.keyboard.main.cuber.cube.twister.twist(this.keyboard.main.cuber.cube.history.last.value, true, 1, false);
+        this.keyboard.main.cuber.cube.undo();
         break;
       case "lock":
         this.keyboard.main.cuber.preferance.lock = !this.keyboard.main.cuber.preferance.lock;
