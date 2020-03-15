@@ -38,7 +38,7 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="reverse()" :style="style" :ripple="false">
+      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="undo()" :style="style" :ripple="false">
         <icon :size="size * 0.85" :color="(context.cuber.cube.history.length == 0 || context.cuber.preferance.lock)?'gray':''" name="backspace"></icon>
       </v-btn>
     </v-flex>
