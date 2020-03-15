@@ -60,8 +60,11 @@ export default class Editor extends Vue {
   size: number = 0;
   resize(width: number, height: number) {
     this.size = Math.ceil(Math.min(width / 8.6, height / 14));
+    if (this.size < 40) {
+      this.size = 40;
+    }
     this.width = width;
-    this.height = this.size * 2.6 + 112;
+    this.height = this.size * 4.8 + 32;
   }
 
   get style() {

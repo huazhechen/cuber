@@ -31,3 +31,17 @@
   margin: 0%;
   padding: 0%;
 }
+.v-input input {
+  max-height: 512px;
+}
+
+.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-outer, .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__prepend-inner, .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner, .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-outer{
+  margin-top: 0%;
+}
+.v-input .v-label {
+  height: 100%;
+  line-height: 100%;
+}
+.v-text-field--outlined.v-input--dense .v-label {
+  top: 0px;
+}

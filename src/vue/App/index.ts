@@ -50,6 +50,9 @@ export default class App extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 8, this.height / 14));
+    if (this.size < 40) {
+      this.size = 40;
+    }
 
     if (this.$refs.dash instanceof Dash) {
       this.$refs.dash.resize(this.width, this.height);
