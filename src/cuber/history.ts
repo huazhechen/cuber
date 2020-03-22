@@ -2,7 +2,7 @@ import { TwistAction } from "./twister";
 
 export default class list {
   list: TwistAction[] = [];
-  constructor() { }
+  constructor() {}
 
   record(action: TwistAction) {
     if (this.list.length == 0) {
@@ -39,7 +39,7 @@ export default class list {
   get moves() {
     let length = this.length;
     for (const twist of this.list) {
-      if (/[xyz]/.test(twist.exp)) {
+      if (twist.exp == "x" || twist.exp == "y" || twist.exp == "z") {
         length--;
       }
     }

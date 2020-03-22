@@ -1,6 +1,6 @@
 import { FACE } from "./define";
 import Cubelet from "./cubelet";
-import CubeGroup from "./group";
+import CubeGroup, { GroupTable } from "./group";
 import { tweener } from "./tweener";
 import { TouchAction } from "../common/toucher";
 import Cuber from "./cuber";
@@ -27,7 +27,7 @@ export default class Controller {
   public matrix = new Matrix4();
   public holder = new Holder();
   public vector = new Vector3();
-  public group: CubeGroup;
+  public group: CubeGroup | undefined;
   public planes = [
     new Plane(new Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
     new Plane(new Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
@@ -63,7 +63,7 @@ export default class Controller {
   }
 
   update() {
-    if (this.rotating) {
+    if (this.rotating && this.group) {
       if (this.group.angle != this.angle) {
         let delta = (this.angle - this.group.angle) / 2;
         let max = (Math.PI / 2 / this.cuber.cube.duration) * 4;
@@ -80,95 +80,26 @@ export default class Controller {
   }
 
   match() {
-    let g;
-    let result = [];
-
-    var index = this.holder.index;
+    let g: CubeGroup | undefined;
     if (this.holder.index === -1) {
-      g = this.cuber.cube.groups.x;
-      if (g.axis.dot(this.holder.plane.normal) === 0) {
-        result.push(g);
+      for (let ax of ["x", "y", "z"]) {
+        g = this.cuber.cube.groups.get(ax);
+        if (g?.axis.dot(this.holder.plane.normal) === 0) {
+          return g;
+        }
       }
-      g = this.cuber.cube.groups.y;
-      if (g.axis.dot(this.holder.plane.normal) === 0) {
-        result.push(g);
+    } else {
+      const plane = this.holder.plane.normal;
+      const finger = this.holder.vector;
+      for (let ax of ["x", "y", "z"]) {
+        let axis = GroupTable.AXIS_VECTOR[ax];
+        if (axis.dot(plane) === 0 && axis.dot(finger) === 0) {
+          let layer = (<any>this.cuber.cube.cubelets[this.holder.index].vector)[ax];
+          return this.cuber.cube.groups.get(GroupTable.FORMAT(ax, layer, layer));
+        }
       }
-      g = this.cuber.cube.groups.z;
-      if (g.axis.dot(this.holder.plane.normal) === 0) {
-        result.push(g);
-      }
-      return result;
     }
-    var x = (index % 3) - 1;
-    var y = Math.floor((index % 9) / 3) - 1;
-    var z = Math.floor(index / 9) - 1;
-    switch (x) {
-      case -1:
-        g = this.cuber.cube.groups.L;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = this.cuber.cube.groups.M;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = this.cuber.cube.groups.R;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    switch (y) {
-      case -1:
-        g = this.cuber.cube.groups.D;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = this.cuber.cube.groups.E;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = this.cuber.cube.groups.U;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    switch (z) {
-      case -1:
-        g = this.cuber.cube.groups.B;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 0:
-        g = this.cuber.cube.groups.S;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      case 1:
-        g = this.cuber.cube.groups.F;
-        if (g.axis.dot(this.holder.plane.normal) === 0) {
-          result.push(g);
-        }
-        break;
-      default:
-        break;
-    }
-    return result;
+    return undefined;
   }
 
   intersect(point: Vector2, plane: Plane) {
@@ -180,9 +111,7 @@ export default class Controller {
       .unproject(this.cuber.camera)
       .sub(this.ray.origin)
       .normalize();
-    this.ray.applyMatrix4(
-      this.matrix.identity().getInverse(this.cuber.scene.matrix)
-    );
+    this.ray.applyMatrix4(this.matrix.identity().getInverse(this.cuber.scene.matrix));
     var result = new Vector3();
     this.ray.intersectPlane(plane, result);
     return result;
@@ -254,22 +183,16 @@ export default class Controller {
       this.rotating = true;
       if (this.holder.index === -1) {
         if (dx * dx > dy * dy) {
-          this.group = this.cuber.cube.groups.y;
+          this.group = this.cuber.cube.groups.get("y");
         } else {
-          let vector = new Vector3(
-            (Cubelet.SIZE * 3) / 2,
-            0,
-            (Cubelet.SIZE * 3) / 2
-          );
-          vector
-            .applyMatrix4(this.cuber.scene.matrix)
-            .project(this.cuber.camera);
+          let vector = new Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
+          vector.applyMatrix4(this.cuber.scene.matrix).project(this.cuber.camera);
           let half = this.cuber.width / 2;
           let x = Math.round(vector.x * half + half);
           if (this.down.x < x) {
-            this.group = this.cuber.cube.groups.x;
+            this.group = this.cuber.cube.groups.get("x");
           } else {
-            this.group = this.cuber.cube.groups.z;
+            this.group = this.cuber.cube.groups.get("z");
           }
         }
       } else {
@@ -286,33 +209,22 @@ export default class Controller {
         this.vector.set(x, y, z);
         this.holder.vector.copy(this.vector.multiply(this.vector).normalize());
 
-        let groups = this.match();
-        groups.some(element => {
-          if (element.axis.dot(this.vector) === 0) {
-            this.group = element;
-            return true;
-          }
-          return false;
-        }, this);
+        this.group = this.match();
         this.vector.crossVectors(this.holder.vector, this.holder.plane.normal);
-        this.holder.vector.multiplyScalar(
-          this.vector.x + this.vector.y + this.vector.z
-        );
+        this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
       }
-      this.group.hold();
+      this.group?.hold();
     }
-    if (this.rotating) {
+    if (this.rotating && this.group) {
       if (this.holder.index === -1) {
         var dx = this.move.x - this.down.x;
         var dy = this.move.y - this.down.y;
-        if (this.group === this.cuber.cube.groups.y) {
+        if (this.group === this.cuber.cube.groups.get("y")) {
           this.angle = ((dx / Cubelet.SIZE) * Math.PI) / 4;
-        } else {
-          if (this.group === this.cuber.cube.groups.x) {
-            this.angle = ((dy / Cubelet.SIZE) * Math.PI) / 4;
-          } else {
-            this.angle = ((-dy / Cubelet.SIZE) * Math.PI) / 4;
-          }
+        } else if (this.group === this.cuber.cube.groups.get("x")) {
+          this.angle = ((dy / Cubelet.SIZE) * Math.PI) / 4;
+        } else if (this.group === this.cuber.cube.groups.get("z")) {
+          this.angle = ((-dy / Cubelet.SIZE) * Math.PI) / 4;
         }
       } else {
         var start = this.intersect(this.down, this.holder.plane);
@@ -353,10 +265,7 @@ export default class Controller {
             let tick = new Date().getTime();
             let speed = Math.abs(this.angle) / (tick - this.tick);
             if (speed > 0.001) {
-              this.angle =
-                this.angle == 0
-                  ? 0
-                  : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
+              this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
             }
           }
           this.group.twist(this.angle);

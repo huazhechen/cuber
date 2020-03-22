@@ -342,8 +342,8 @@ export default class Editor extends Vue {
       return;
     }
     let cubelet: Cubelet = this.context.cuber.cube.cubelets[index];
+    index = cubelet.initial;
     face = cubelet.getColor(face);
-    index = this.context.cuber.cube.groups[FACE[face]].indices.indexOf(cubelet.initial);
     let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
       arr = [];
@@ -351,10 +351,10 @@ export default class Editor extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.context.cuber.cube.stick(face, index + 1, this.colors[this.color]);
+      this.context.cuber.cube.stick(index, face, this.colors[this.color]);
     } else {
       arr[index] = -1;
-      this.context.cuber.cube.stick(face, index + 1, "");
+      this.context.cuber.cube.stick(index, face, "");
     }
     window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
   }
@@ -375,12 +375,12 @@ export default class Editor extends Vue {
           if (!stickers) {
             continue;
           }
-          for (let index = 0; index < 9; index++) {
+          for (let index = 0; index < stickers.length; index++) {
             let sticker = stickers[index];
             if (sticker && sticker >= 0) {
-              this.context.cuber.cube.stick(face, index + 1, this.colors[sticker]);
+              this.context.cuber.cube.stick(index, face, this.colors[sticker]);
             } else {
-              this.context.cuber.cube.stick(face, index + 1, "");
+              this.context.cuber.cube.stick(index, face, "");
             }
           }
         }

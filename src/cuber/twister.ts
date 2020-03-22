@@ -63,6 +63,11 @@ export default class Twister {
     this.update();
   }
 
+  push(action: TwistAction) {
+    this.queue.push(action);
+    this.update();
+  }
+
   update() {
     if (this.queue.length === 0) {
       for (const callback of this.callbacks) {
@@ -115,7 +120,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let part = this.cube.groups[action.exp];
+    let part = this.cube.groups.get(action.exp);
     if (part === undefined) {
       this.update();
       return;

@@ -95,3 +95,161 @@ export default class CubeGroup extends Group {
     cubelet.updateMatrix();
   }
 }
+
+export class GroupTable {
+  private order: number;
+  private groups: Map<string, CubeGroup> = new Map();
+
+  public static FORMAT(axis: string, from: number, to: number) {
+    return axis + ":" + from + ":" + to;
+  }
+
+  public static readonly AXIS_VECTOR: any = {
+    x: new Vector3(1, 0, 0),
+    y: new Vector3(0, 1, 0),
+    z: new Vector3(0, 0, 1),
+    "-x": new Vector3(-1, 0, 0),
+    "-y": new Vector3(0, -1, 0),
+    "-z": new Vector3(0, 0, -1)
+  };
+  constructor(cube: Cube) {
+    this.order = cube.order;
+    let range = Math.floor(this.order / 2);
+    // 根据魔方阶数生成所有正向group
+    for (let axis of ["x", "y", "z"]) {
+      for (let from = -range; from <= range; from++) {
+        for (let to = from; to <= range; to++) {
+          let name = GroupTable.FORMAT(axis, from, to);
+          this.groups.set(name, new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]));
+        }
+      }
+    }
+    // 将每个块索引放入x y z的每层中
+    for (const cubelet of cube.initials) {
+      let vector = <any>cubelet.vector;
+      for (let axis of ["x", "y", "z"]) {
+        let group = this.groups.get(GroupTable.FORMAT(axis, vector[axis], vector[axis]));
+        if (!group) {
+          throw Error();
+        }
+        group.indices.push(cubelet.index);
+      }
+    }
+    // x y z的多层
+    for (let axis of ["x", "y", "z"]) {
+      for (let from = -range; from <= range; from++) {
+        for (let to = from + 1; to <= range; to++) {
+          let dst = this.groups.get(GroupTable.FORMAT(axis, from, to));
+          if (!dst) {
+            throw Error();
+          }
+          for (let i = from; i <= to; i++) {
+            let src = this.groups.get(GroupTable.FORMAT(axis, i, i));
+            if (!src) {
+              throw Error();
+            }
+            dst.indices.push(...src.indices);
+          }
+        }
+      }
+    }
+    // 通过正向group拷贝反向group
+    for (let axis of ["-x", "-y", "-z"]) {
+      for (let from = -range; from <= range; from++) {
+        for (let to = from; to <= range; to++) {
+          let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), from, to));
+          if (!template) {
+            throw Error();
+          }
+          let name = GroupTable.FORMAT(axis, from, to);
+          this.groups.set(name, new CubeGroup(cube, name, template.indices, GroupTable.AXIS_VECTOR[axis]));
+        }
+      }
+    }
+    // 特殊处理整体旋转
+    for (let axis of ["x", "y", "z"]) {
+      let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), -range, range));
+      if (!template) {
+        throw Error();
+      }
+      this.groups.set(axis, new CubeGroup(cube, axis, template.indices, GroupTable.AXIS_VECTOR[axis]));
+    }
+    for (const group of this.groups.values()) {
+      cube.add(group);
+    }
+  }
+
+  private static AXIS_MAP: any = {
+    R: "x",
+    L: "-x",
+    U: "y",
+    D: "-y",
+    F: "z",
+    B: "-z",
+    M: "-x",
+    E: "-y",
+    S: "z"
+  };
+
+  get(name: string) {
+    let axis: string = "";
+    let from: number = 0;
+    let to: number = 0;
+    if (name.match(/[Ww]/)) {
+      name = name.toLowerCase().replace("w", "");
+    }
+    if (/[XYZ]/.test(name)) {
+      name = name.toLowerCase();
+    }
+    if (/[mes]/.test(name)) {
+      name = name.toUpperCase();
+    }
+    let range = Math.floor(this.order / 2);
+    if (name.length === 1) {
+      switch (name) {
+        case "x":
+        case "y":
+        case "z":
+          return this.groups.get(name);
+        case "R":
+        case "L":
+        case "U":
+        case "D":
+        case "F":
+        case "B":
+          axis = GroupTable.AXIS_MAP[name];
+          from = range * (axis.length == 2 ? -1 : 1);
+          to = from;
+          break;
+        case "E":
+        case "M":
+        case "S":
+          axis = GroupTable.AXIS_MAP[name];
+          from = 0;
+          to = 0;
+          break;
+        case "r":
+        case "l":
+        case "u":
+        case "d":
+        case "f":
+        case "b":
+          axis = GroupTable.AXIS_MAP[name.toUpperCase()];
+          from = range * (axis.length == 2 ? -1 : 1);
+          to = (range - 1) * (axis.length == 2 ? -1 : 1);
+          break;
+      }
+    } else if (name.length === 2) {
+      let wide = Number(name.charAt(0));
+      axis = GroupTable.AXIS_MAP[name.charAt(1).toUpperCase()];
+      from = range * (axis.length == 2 ? -1 : 1);
+      to = (range - wide + 1) * (axis.length == 2 ? -1 : 1);
+    } else {
+      return this.groups.get(name);
+    }
+    if (from > to) {
+      [from, to] = [to, from];
+    }
+    return this.groups.get(GroupTable.FORMAT(axis, from, to));
+  }
+}
