@@ -1,6 +1,7 @@
 import Cube from "./cube";
 import Cubelet from "./cubelet";
 import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
+import Twister from "./twister";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;
@@ -8,9 +9,10 @@ export default class Capture {
   public scene: Scene;
   public camera: PerspectiveCamera;
   public cube: Cube;
+  public twister: Twister;
 
   constructor() {
-    this.cube = new Cube();
+    this.cube = new Cube(3);
     for (let cubelet of this.cube.cubelets) {
       cubelet.mirror = false;
     }
@@ -42,7 +44,7 @@ export default class Capture {
   snap(strip: { [face: string]: number[] | undefined }, exp: string) {
     this.cube.strip(strip);
     this.cube.reset();
-    this.cube.twister.twist(exp, true, 1, true);
+    // this.cube.twister.twist(exp, true, 1, true);
 
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();

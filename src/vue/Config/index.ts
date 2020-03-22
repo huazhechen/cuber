@@ -1,12 +1,16 @@
 import Vue from "vue";
-import { Component, Inject, Prop } from "vue-property-decorator";
+import { Component, Inject, Prop, Watch } from "vue-property-decorator";
+import Tune from "../Tune";
 import Context from "../context";
 import Preferance from "../../cuber/preferance";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    tune: Tune
+  }
 })
-export default class Tune extends Vue {
+export default class Config extends Vue {
   @Inject("context")
   context: Context;
 
@@ -33,12 +37,9 @@ export default class Tune extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
   }
-
+  
   reset() {
-    this.preferance.scale = 50;
-    this.preferance.perspective = 50;
-    this.preferance.angle = 63;
-    this.preferance.gradient = 67;
-    this.preferance.brightness = 80;
+    this.preferance.order = 3;
+    this.preferance.frames = 30;
   }
 }

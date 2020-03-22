@@ -2,22 +2,59 @@
   <v-card text style="margin: auto;touch-action: none;user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.scale" always-dirty thumb-label="always" max="100" min="0" label="大小"></v-slider>
+        <v-slider
+          dense
+          v-model="preferance.scale"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="大小"
+        ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视"></v-slider>
+        <v-slider
+          dense
+          v-model="preferance.perspective"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="透视"
+        ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.angle" always-dirty thumb-label="always" max="100" min="0" label="左右"></v-slider>
+        <v-slider
+          dense
+          v-model="preferance.angle"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="左右"
+        ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下"></v-slider>
+        <v-slider
+          dense
+          v-model="preferance.gradient"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="上下"
+        ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.brightness" always-dirty thumb-label="always" max="100" min="0" label="亮度"></v-slider>
-      </v-layout>
-      <v-layout row wrap justify-center align-center>
-        <v-slider dense v-model="preferance.frames" always-dirty thumb-label="always" max="50" min="10" step="5" label="帧数"></v-slider>
+        <v-slider
+          dense
+          v-model="preferance.brightness"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="亮度"
+        ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
         <v-flex xs6>
@@ -26,7 +63,7 @@
           </v-btn>
         </v-flex>
         <v-flex xs6>
-          <v-btn block text @click="preferance.reset" color="error">
+          <v-btn block text @click="reset" color="error">
             重置
           </v-btn>
         </v-flex>

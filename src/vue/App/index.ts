@@ -113,7 +113,7 @@ export default class App extends Vue {
       tick = (tick / 1600) * Math.PI;
       tick = Math.sin(tick) / 32;
       this.context.cuber.cube.position.y = tick * Cubelet.SIZE;
-      this.context.cuber.cube.rotation.y = (tick / 10) * Math.PI;
+      this.context.cuber.cube.rotation.y = (tick / 12) * Math.PI;
       this.context.cuber.cube.updateMatrix();
       this.context.cuber.cube.dirty = true;
     }
@@ -140,5 +140,14 @@ export default class App extends Vue {
       this.context.cuber.cube.updateMatrix();
       this.context.cuber.cube.dirty = true;
     }
+  }
+
+  @Watch("context.cuber.preferance.order")
+  onOrderChange() {
+    let mode = this.context.mode;
+    this.context.mode = -1;
+    this.$nextTick(() => {
+      this.context.mode = mode;
+    });
   }
 }

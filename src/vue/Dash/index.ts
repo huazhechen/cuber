@@ -2,11 +2,13 @@ import Vue from "vue";
 import { Component, Inject, Prop } from "vue-property-decorator";
 import Tune from "../Tune";
 import Context from "../context";
+import Config from "../Config";
 
 @Component({
   template: require("./index.html"),
   components: {
-    tune: Tune
+    tune: Tune,
+    config: Config
   }
 })
 export default class Dash extends Vue {
@@ -32,7 +34,7 @@ export default class Dash extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  
+
   resize(width: number, height: number) {
     this.size = Math.ceil(Math.min(width / 8.6, height / 14));
     this.width = width;
@@ -40,6 +42,7 @@ export default class Dash extends Vue {
   }
 
   tune: boolean = false;
+  config: boolean = false;
   resetd: boolean = false;
 
   reset() {
@@ -58,6 +61,9 @@ export default class Dash extends Vue {
         break;
       case "director":
         this.context.mode = 2;
+        break;
+      case "config":
+        this.config = true;
         break;
       case "tune":
         this.tune = true;

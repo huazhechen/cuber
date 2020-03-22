@@ -1,0 +1,42 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0">
+  <v-card text style="margin: auto;touch-action: none;user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.order"
+          always-dirty
+          thumb-label="always"
+          max="7"
+          min="2"
+          step="1"
+          label="阶数"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.frames"
+          always-dirty
+          thumb-label="always"
+          max="50"
+          min="10"
+          step="5"
+          label="帧数"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-flex xs6>
+          <v-btn block text @click="show=false;" color="primary">
+            确定
+          </v-btn>
+        </v-flex>
+        <v-flex xs6>
+          <v-btn block text @click="reset" color="error">
+            重置
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

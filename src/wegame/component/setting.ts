@@ -4,7 +4,16 @@ import { Button } from "./button";
 import Main from "../main";
 import { COLORS } from "../../common/color";
 import { TouchAction } from "../../common/toucher";
-import { Scene, OrthographicCamera, CanvasTexture, Vector3, LinearFilter, PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
+import {
+  Scene,
+  OrthographicCamera,
+  CanvasTexture,
+  Vector3,
+  LinearFilter,
+  PlaneGeometry,
+  MeshBasicMaterial,
+  Mesh
+} from "three";
 
 class ConfirmButton implements Button {
   public x: number;
@@ -50,9 +59,19 @@ class ConfirmButton implements Button {
       this.main.database.mode = "starter";
     }
     if (x > padding + size + padding && x < padding + size + padding + size) {
-      this.main.cuber.preferance.reset();
+      this.reset();
     }
   }
+
+  reset = () => {
+    this.main.cuber.preferance.order = 3;
+    this.main.cuber.preferance.scale = 50;
+    this.main.cuber.preferance.perspective = 50;
+    this.main.cuber.preferance.angle = 63;
+    this.main.cuber.preferance.gradient = 67;
+    this.main.cuber.preferance.brightness = 80;
+    this.main.cuber.preferance.frames = 30;
+  };
 
   touch(x: number, y: number) {}
 }
@@ -221,7 +240,12 @@ export default class Setting implements Component {
       case "touchstart":
       case "mousedown":
         this.buttons.some((button: Button) => {
-          if (action.x > button.x && action.x < button.x + button.width && action.y > button.y && action.y < button.y + button.height) {
+          if (
+            action.x > button.x &&
+            action.x < button.x + button.width &&
+            action.y > button.y &&
+            action.y < button.y + button.height
+          ) {
             button.tap(action.x - button.x, action.y - button.y);
             this.down = button;
             return true;

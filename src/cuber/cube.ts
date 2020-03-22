@@ -3,7 +3,7 @@ import Cubelet from "./cubelet";
 import History from "./history";
 import Twister, { TwistAction } from "./twister";
 import { FACE, COLORS } from "./define";
-import { Vector3, Group, Euler } from "three";
+import { Group, Euler } from "three";
 
 export default class Cube extends Group {
   public dirty: boolean = true;
@@ -16,20 +16,22 @@ export default class Cube extends Group {
   public groups: GroupTable;
   public complete: boolean = false;
   public duration: number;
-  public order: number = 3;
+  public order: number;
 
-  constructor() {
+  constructor(order: number) {
     super();
+    this.order = order;
+    this.scale.set(3 / order, 3 / order, 3 / order);
     this.twister = new Twister(this);
-    for (var i = 0; i < 27; i++) {
-      let cubelet = new Cubelet(i);
+    for (var i = 0; i < order * order * order; i++) {
+      let cubelet = new Cubelet(order, i);
       this.cubelets.push(cubelet);
       this.initials.push(cubelet);
       this.add(cubelet);
     }
     this.groups = new GroupTable(this);
     this.callbacks.push(() => {
-      let complete = [0, 1, 2, 3, 4, 5].every(face => {
+      let complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every(face => {
         let group = this.groups.get(FACE[face]);
         if (!group) {
           throw Error();

@@ -19,8 +19,19 @@ export default class Cuber {
   public ambient: AmbientLight;
   public directional: DirectionalLight;
 
+  private cubes: Cube[] = [];
+
+  set order(value: number) {
+    this.scene.remove(this.cube);
+    this.cube = this.cubes[value];
+    this.scene.add(this.cube);
+  }
+
   constructor() {
-    this.cube = new Cube();
+    for (let order = 2; order < 8; order++) {
+      this.cubes[order] = new Cube(order);
+    }
+    this.cube = this.cubes[3];
     this.preferance = new Preferance(this);
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;

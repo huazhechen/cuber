@@ -15,6 +15,7 @@ export default class Preferance {
       this._storage.clear();
       this._storage.setItem("version", version);
     }
+    this.order = Number(this._storage.getItem("setting.order") || 3);
     this.scale = Number(this._storage.getItem("setting.scale") || 50);
     this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
     this.angle = Number(this._storage.getItem("setting.angle") || 63);
@@ -27,23 +28,17 @@ export default class Preferance {
     this.mode = "";
   }
 
-  reset = () => {
-    this.scale = 50;
-    this.perspective = 50;
-    this.angle = 63;
-    this.gradient = 67;
-    this.brightness = 80;
-    this.frames = 30;
-  };
-
-  private _frames: number;
-  get frames() {
-    return this._frames;
+  private _order: number;
+  get order() {
+    return this._order;
   }
-  set frames(value) {
-    this._frames = value;
-    this._storage.setItem("setting.frames", String(value));
-    this.cuber.cube.duration = value;
+  set order(value) {
+    this._storage.setItem("setting.order", String(value));
+    this.cuber.order = value;
+    if (this._order != value) {
+      this._order = value;
+      this.load();
+    }
   }
 
   private _scale: number;
@@ -103,6 +98,15 @@ export default class Preferance {
     }
     this.cuber.directional.intensity = d;
     this.cuber.dirty = true;
+  }
+
+  private _frames: number;
+  get frames() {
+    return this._frames;
+  }
+  set frames(value) {
+    this._frames = value;
+    this._storage.setItem("setting.frames", String(value));
   }
 
   private _mirror: boolean;

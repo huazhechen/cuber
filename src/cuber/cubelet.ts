@@ -167,10 +167,7 @@ export default class Cubelet extends Group {
   public static readonly SIZE: number = 64;
   private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _STICKER_DEPTH: number = 3;
-  private static readonly _FRAME: Frame = new Frame(
-    Cubelet.SIZE,
-    Cubelet._BORDER_WIDTH
-  );
+  private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH,
     Cubelet._STICKER_DEPTH
@@ -208,15 +205,15 @@ export default class Cubelet extends Group {
   _vector: Vector3;
 
   set vector(vector) {
-    this._vector.set(
-      Math.round(vector.x),
-      Math.round(vector.y),
-      Math.round(vector.z)
-    );
-    this._index =
-      (this._vector.z + 1) * 9 +
-      (this._vector.y + 1) * 3 +
-      (this._vector.x + 1);
+    let half = (this.order - 1) / 2;
+    let x = Math.round(vector.x * 2) / 2;
+    let y = Math.round(vector.y * 2) / 2;
+    let z = Math.round(vector.z * 2) / 2;
+    this._vector.set(x, y, z);
+    x = Math.round(x + half);
+    y = Math.round(y + half);
+    z = Math.round(z + half);
+    this._index = z * this.order * this.order + y * this.order + x;
     this.position.x = Cubelet.SIZE * this._vector.x;
     this.position.y = Cubelet.SIZE * this._vector.y;
     this.position.z = Cubelet.SIZE * this._vector.z;
@@ -228,9 +225,10 @@ export default class Cubelet extends Group {
   _index: number;
 
   set index(index) {
-    let _x = (index % 3) - 1;
-    let _y = Math.floor((index % 9) / 3) - 1;
-    let _z = Math.floor(index / 9) - 1;
+    let half = (this.order - 1) / 2;
+    let _x = (index % this.order) - half;
+    let _y = Math.floor((index % (this.order * this.order)) / this.order) - half;
+    let _z = Math.floor(index / (this.order * this.order)) - half;
     this.vector = new Vector3(_x, _y, _z);
   }
 
@@ -244,19 +242,13 @@ export default class Cubelet extends Group {
   set mirror(value: boolean) {
     if (value) {
       for (let i = 0; i < 6; i++) {
-        if (
-          this.mirrors[i] instanceof Mesh &&
-          this.children.indexOf(this.mirrors[i]) < 0
-        ) {
+        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) < 0) {
           this.add(this.mirrors[i]);
         }
       }
     } else {
       for (let i = 0; i < 6; i++) {
-        if (
-          this.mirrors[i] instanceof Mesh &&
-          this.children.indexOf(this.mirrors[i]) >= 0
-        ) {
+        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) >= 0) {
           this.remove(this.mirrors[i]);
         }
       }
@@ -265,10 +257,7 @@ export default class Cubelet extends Group {
 
   set hollow(value: boolean) {
     if (value) {
-      if (
-        this.frame instanceof Mesh &&
-        this.children.indexOf(this.frame) >= 0
-      ) {
+      if (this.frame instanceof Mesh && this.children.indexOf(this.frame) >= 0) {
         this.remove(this.frame);
       }
     } else {
@@ -328,36 +317,36 @@ export default class Cubelet extends Group {
   stickers: Mesh[];
   _quaternion: Quaternion;
   frame: Mesh;
+  order: number;
 
-  constructor(index: number) {
+  constructor(order: number, index: number) {
     super();
+    this.order = order;
     this.initial = index;
     this._vector = new Vector3();
+    this.index = index;
     this.stickers = [];
     this._quaternion = new Quaternion();
     this.mirrors = [];
 
-    let _x = (index % 3) - 1;
-    let _y = Math.floor((index % 9) / 3) - 1;
-    let _z = Math.floor(index / 9) - 1;
-    this.vector = new Vector3(_x, _y, _z);
+    let half = (order - 1) / 2;
 
     this.lambers = [
-      this.vector.x < 0 ? Cubelet.LAMBERS.ORANGE : Cubelet.LAMBERS.GRAY,
-      this.vector.x > 0 ? Cubelet.LAMBERS.RED : Cubelet.LAMBERS.GRAY,
-      this.vector.y < 0 ? Cubelet.LAMBERS.WHITE : Cubelet.LAMBERS.GRAY,
-      this.vector.y > 0 ? Cubelet.LAMBERS.YELLOW : Cubelet.LAMBERS.GRAY,
-      this.vector.z < 0 ? Cubelet.LAMBERS.GREEN : Cubelet.LAMBERS.GRAY,
-      this.vector.z > 0 ? Cubelet.LAMBERS.BLUE : Cubelet.LAMBERS.GRAY
+      this.vector.x == -half ? Cubelet.LAMBERS.ORANGE : Cubelet.LAMBERS.GRAY,
+      this.vector.x == half ? Cubelet.LAMBERS.RED : Cubelet.LAMBERS.GRAY,
+      this.vector.y == -half ? Cubelet.LAMBERS.WHITE : Cubelet.LAMBERS.GRAY,
+      this.vector.y == half ? Cubelet.LAMBERS.YELLOW : Cubelet.LAMBERS.GRAY,
+      this.vector.z == -half ? Cubelet.LAMBERS.GREEN : Cubelet.LAMBERS.GRAY,
+      this.vector.z == half ? Cubelet.LAMBERS.BLUE : Cubelet.LAMBERS.GRAY
     ];
 
     this.basics = [
-      this.vector.x < 0 ? Cubelet.BASICS.ORANGE : Cubelet.BASICS.GRAY,
-      this.vector.x > 0 ? Cubelet.BASICS.RED : Cubelet.BASICS.GRAY,
-      this.vector.y < 0 ? Cubelet.BASICS.WHITE : Cubelet.BASICS.GRAY,
-      this.vector.y > 0 ? Cubelet.BASICS.YELLOW : Cubelet.BASICS.GRAY,
-      this.vector.z < 0 ? Cubelet.BASICS.GREEN : Cubelet.BASICS.GRAY,
-      this.vector.z > 0 ? Cubelet.BASICS.BLUE : Cubelet.BASICS.GRAY
+      this.vector.x == -half ? Cubelet.BASICS.ORANGE : Cubelet.BASICS.GRAY,
+      this.vector.x == half ? Cubelet.BASICS.RED : Cubelet.BASICS.GRAY,
+      this.vector.y == -half ? Cubelet.BASICS.WHITE : Cubelet.BASICS.GRAY,
+      this.vector.y == half ? Cubelet.BASICS.YELLOW : Cubelet.BASICS.GRAY,
+      this.vector.z == -half ? Cubelet.BASICS.GREEN : Cubelet.BASICS.GRAY,
+      this.vector.z == half ? Cubelet.BASICS.BLUE : Cubelet.BASICS.GRAY
     ];
 
     this.frame = new Mesh(Cubelet._FRAME, Cubelet.LAMBERS.BLACK);
@@ -398,12 +387,9 @@ export default class Cubelet extends Group {
       if (this.lambers[i] != Cubelet.LAMBERS.GRAY) {
         this.add(_sticker);
         let _mirror = new Mesh(Cubelet._MIRROR, this.basics[i]);
-        _mirror.rotation.x =
-          _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
-        _mirror.rotation.y =
-          _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
-        _mirror.rotation.z =
-          _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
+        _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
+        _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
+        _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
         if (_mirror.rotation.x + _mirror.rotation.y + _mirror.rotation.z == 0) {
           _mirror.rotation.y = Math.PI;
         }

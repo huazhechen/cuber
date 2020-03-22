@@ -66,7 +66,7 @@ export default class Controller {
     if (this.rotating && this.group) {
       if (this.group.angle != this.angle) {
         let delta = (this.angle - this.group.angle) / 2;
-        let max = (Math.PI / 2 / this.cuber.cube.duration) * 4;
+        let max = (Math.PI / 2 / this.cuber.preferance.frames) * 4;
         if (delta > max) {
           delta = max;
         }
@@ -91,11 +91,24 @@ export default class Controller {
     } else {
       const plane = this.holder.plane.normal;
       const finger = this.holder.vector;
-      for (let ax of ["x", "y", "z"]) {
-        let axis = GroupTable.AXIS_VECTOR[ax];
-        if (axis.dot(plane) === 0 && axis.dot(finger) === 0) {
-          let layer = (<any>this.cuber.cube.cubelets[this.holder.index].vector)[ax];
-          return this.cuber.cube.groups.get(GroupTable.FORMAT(ax, layer, layer));
+      const index = this.holder.index;
+      const order = this.cuber.cube.order;
+      for (let axis of ["x", "y", "z"]) {
+        let vector = GroupTable.AXIS_VECTOR[axis];
+        if (vector.dot(plane) === 0 && vector.dot(finger) === 0) {
+          let layer = 0;
+          switch (axis) {
+            case "x":
+              layer = index % order;
+              break;
+            case "y":
+              layer = Math.floor((index % (order * order)) / order);
+              break;
+            case "z":
+              layer = Math.floor(index / (order * order));
+              break;
+          }
+          return this.cuber.cube.groups.get(GroupTable.FORMAT(axis, layer, layer));
         }
       }
     }
@@ -131,26 +144,22 @@ export default class Controller {
     this.planes.forEach(plane => {
       var point = this.intersect(this.down, plane);
       if (point !== null) {
-        if (
-          Math.abs(point.x) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
-          Math.abs(point.y) <= (Cubelet.SIZE * 3) / 2 + 0.01 &&
-          Math.abs(point.z) <= (Cubelet.SIZE * 3) / 2 + 0.01
-        ) {
+        var x = point.x / Cubelet.SIZE / 3;
+        var y = point.y / Cubelet.SIZE / 3;
+        var z = point.z / Cubelet.SIZE / 3;
+        if (Math.abs(x) <= 0.5 && Math.abs(y) <= 0.5 && Math.abs(z) <= 0.5) {
           let d =
             Math.pow(point.x - this.ray.origin.x, 2) +
             Math.pow(point.y - this.ray.origin.y, 2) +
             Math.pow(point.z - this.ray.origin.z, 2);
           if (distance == 0 || d < distance) {
             this.holder.plane = plane;
-            var x = Math.ceil(Math.round(point.x) / Cubelet.SIZE - 0.5);
-            var y = Math.ceil(Math.round(point.y) / Cubelet.SIZE - 0.5);
-            var z = Math.ceil(Math.round(point.z) / Cubelet.SIZE - 0.5);
-            if (x < 2 && x > -2 && y < 2 && y > -2 && z < 2 && z > -2) {
-              this.holder.index = (z + 1) * 9 + (y + 1) * 3 + (x + 1);
-              if (this.holder.index == 13) {
-                this.holder.index = -1;
-              }
-            } else {
+            let order = this.cuber.cube.order;
+            x = Math.ceil((x + 0.5) * order) - 1;
+            y = Math.ceil((y + 0.5) * order) - 1;
+            z = Math.ceil((z + 0.5) * order) - 1;
+            this.holder.index = z * order * order + y * order + x;
+            if (this.holder.index == order * order + order + 1) {
               this.holder.index = -1;
             }
             distance = d;
