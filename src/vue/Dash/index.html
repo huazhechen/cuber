@@ -33,23 +33,51 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap style="padding-bottom: 5%;">
-        <v-flex>
-          <v-btn class="headline" text block @click="tap('config')" style="margin: 0%; padding: 0%;">
+        <v-flex xs3 class="text-center">
+          <v-btn
+            fab
+            depressed
+            @click="tap('config')"
+            style="margin: 0%; padding: 0%;"
+            :style="{width:size+'px', height:size+'px'}"
+            color="primary"
+          >
             <v-icon :size="size * 0.6">dashboard</v-icon>
           </v-btn>
         </v-flex>
-        <v-flex>
-          <v-btn class="headline" text block @click="tap('tune')" style="margin: 0%; padding: 0%;">
+        <v-flex xs3 class="text-center">
+          <v-btn
+            fab
+            depressed
+            @click="tap('tune')"
+            style="margin: 0%; padding: 0%;"
+            :style="{width:size+'px', height:size+'px'}"
+            color="primary"
+          >
             <v-icon :size="size * 0.6">tune</v-icon>
           </v-btn>
         </v-flex>
-        <v-flex>
-          <v-btn class="headline" text block @click="tap('code')" style="margin: 0%; padding: 0%;">
+        <v-flex xs3 class="text-center">
+          <v-btn
+            fab
+            depressed
+            @click="tap('code')"
+            style="margin: 0%; padding: 0%;"
+            :style="{width:size+'px', height:size+'px'}"
+            color="primary"
+          >
             <v-icon :size="size * 0.6">code</v-icon>
           </v-btn>
         </v-flex>
-        <v-flex>
-          <v-btn class="headline" color="error" text block @click="resetd=true" style="margin: 0%; padding: 0%;">
+        <v-flex xs3 class="text-center">
+          <v-btn
+            fab
+            depressed
+            @click="resetd=true"
+            style="margin: 0%; padding: 0%;"
+            :style="{width:size+'px', height:size+'px'}"
+            color="error"
+          >
             <v-icon :size="size * 0.6">delete</v-icon>
           </v-btn>
         </v-flex>

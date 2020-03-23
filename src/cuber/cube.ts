@@ -65,7 +65,11 @@ export default class Cube extends Group {
   }
 
   stick(index: number, face: number, color: string) {
-    this.initials[index].stick(face, color);
+    let cubelet = this.initials[index];
+    if (!cubelet) {
+      throw Error("invalid cubelet index: " + index);
+    }
+    cubelet.stick(face, color);
     this.dirty = true;
   }
 

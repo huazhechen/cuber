@@ -2,7 +2,6 @@ import Vue from "vue";
 import { Component, Watch, Inject } from "vue-property-decorator";
 import Cubelet from "../../cuber/cubelet";
 import GIF from "../../common/gif";
-import Base64 from "../../common/base64";
 
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Context from "../context";
@@ -12,6 +11,7 @@ import { WebGLRenderer } from "three";
 import Icon from "../Icon";
 import { APNG } from "../../common/apng";
 import ZIP from "../../common/zip";
+import Preferance from "../../cuber/preferance";
 
 @Component({
   template: require("./index.html"),
@@ -46,6 +46,8 @@ export default class Editor extends Vue {
     window.localStorage.setItem("director.output", this.output);
   }
 
+  private preferance: Preferance;
+
   constructor() {
     super();
     this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
@@ -53,6 +55,7 @@ export default class Editor extends Vue {
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
+    this.preferance = this.context.cuber.preferance;
   }
 
   width: number = 0;
@@ -77,12 +80,45 @@ export default class Editor extends Vue {
     };
   }
 
-  mounted() {
-    let save = window.localStorage.getItem("director.action");
+  reload() {
+    let save;
+    let order = this.preferance.order;
+    save = window.localStorage.getItem("director.action." + order);
     this.action = save != null ? save : "RUR'U'-";
-    save = window.localStorage.getItem("director.scene");
+    save = window.localStorage.getItem("director.scene." + order);
     this.scene = save != null ? save : "^";
 
+    save = window.localStorage.getItem("director.stickers." + this.preferance.order);
+    this.stickers = {};
+    if (save) {
+      try {
+        let data = JSON.parse(save);
+        for (let face = 0; face < 6; face++) {
+          this.stickers[FACE[face]] = data[FACE[face]];
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      let stickers = this.stickers[FACE[face]];
+      if (!stickers) {
+        continue;
+      }
+      for (let index = 0; index < stickers.length; index++) {
+        let sticker = stickers[index];
+        if (sticker && sticker >= 0) {
+          this.context.cuber.cube.stick(index, face, this.colors[sticker]);
+        } else {
+          this.context.cuber.cube.stick(index, face, "");
+        }
+      }
+    }
+  }
+
+  mounted() {
+    this.reload();
     this.context.cuber.cube.twister.callbacks.push(() => {
       this.callback();
     });
@@ -95,7 +131,7 @@ export default class Editor extends Vue {
   }
 
   init() {
-    this.context.cuber.preferance.lock = false;
+    this.preferance.lock = false;
     this.playing = false;
     this.progress = 0;
     this.context.cuber.controller.disable = false;
@@ -115,7 +151,7 @@ export default class Editor extends Vue {
   scene: string = "";
   @Watch("scene")
   onSceneChange() {
-    window.localStorage.setItem("director.scene", this.scene);
+    window.localStorage.setItem("director.scene." + this.preferance.order, this.scene);
     this.init();
   }
 
@@ -128,27 +164,12 @@ export default class Editor extends Vue {
   action: string = "";
   @Watch("action")
   onActionChange() {
-    window.localStorage.setItem("director.action", this.action);
+    window.localStorage.setItem("director.action." + this.preferance.order, this.action);
     this.actions = new TwistNode(this.action).parse();
     this.init();
   }
 
-  stickers: { [face: string]: number[] | undefined } = (() => {
-    let save = window.localStorage.getItem("director.stickers");
-    if (save) {
-      try {
-        let data = JSON.parse(save);
-        let stickers: { [face: string]: number[] | undefined } = {};
-        for (let face = 0; face < 6; face++) {
-          stickers[FACE[face]] = data[FACE[face]];
-        }
-        return stickers;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    return {};
-  })();
+  stickers: { [face: string]: number[] | undefined };
 
   callback() {
     if (this.context.mode != 2) {
@@ -356,36 +377,21 @@ export default class Editor extends Vue {
       arr[index] = -1;
       this.context.cuber.cube.stick(index, face, "");
     }
-    window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
+    window.localStorage.setItem("director.stickers." + this.preferance.order, JSON.stringify(this.stickers));
   }
 
   clear() {
     this.colord = false;
     this.stickers = {};
-    window.localStorage.setItem("director.stickers", JSON.stringify(this.stickers));
+    window.localStorage.setItem("director.stickers." + this.preferance.order, JSON.stringify(this.stickers));
     this.context.cuber.cube.strip({});
   }
 
   @Watch("context.mode")
   onModeChange(to: number) {
     if (to == 2) {
-      this.$nextTick(() => {
-        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-          let stickers = this.stickers[FACE[face]];
-          if (!stickers) {
-            continue;
-          }
-          for (let index = 0; index < stickers.length; index++) {
-            let sticker = stickers[index];
-            if (sticker && sticker >= 0) {
-              this.context.cuber.cube.stick(index, face, this.colors[sticker]);
-            } else {
-              this.context.cuber.cube.stick(index, face, "");
-            }
-          }
-        }
-        this.init();
-      });
+      this.reload();
+      this.init();
     } else {
       this.context.cuber.cube.strip({});
       this.playing = false;
@@ -396,10 +402,10 @@ export default class Editor extends Vue {
   tap(key: string) {
     switch (key) {
       case "mirror":
-        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        this.preferance.mirror = !this.preferance.mirror;
         break;
       case "hollow":
-        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        this.preferance.hollow = !this.preferance.hollow;
         break;
       case "film":
         if (this.actions.length == 0) {

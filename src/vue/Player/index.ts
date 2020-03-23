@@ -176,6 +176,7 @@ export default class Player extends Vue {
   @Watch("context.mode")
   onModeChange(to: number) {
     if (to == 1) {
+      this.context.cuber.preferance.order = 3;
       this.$nextTick(() => {
         this.onIndexChange();
         this.init();

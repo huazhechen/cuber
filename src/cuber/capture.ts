@@ -44,7 +44,7 @@ export default class Capture {
   snap(strip: { [face: string]: number[] | undefined }, exp: string) {
     this.cube.strip(strip);
     this.cube.reset();
-    // this.cube.twister.twist(exp, true, 1, true);
+    this.cube.twister.twist(exp, true, 1, true);
 
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();
