@@ -119,7 +119,7 @@ export default class Editor extends Vue {
 
   mounted() {
     this.reload();
-    this.context.cuber.cube.twister.callbacks.push(() => {
+    this.context.cuber.twister.callbacks.push(() => {
       this.callback();
     });
     this.context.cuber.controller.taps.push((index: number, face: number) => {
@@ -135,16 +135,16 @@ export default class Editor extends Vue {
     this.playing = false;
     this.progress = 0;
     this.context.cuber.controller.disable = false;
-    this.context.cuber.cube.twister.finish();
-    this.context.cuber.cube.twister.twist("#");
+    this.context.cuber.twister.finish();
+    this.context.cuber.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
-    this.context.cuber.cube.twister.twist(scene, false, 1, true);
+    this.context.cuber.twister.twist(scene, false, 1, true);
     this.context.cuber.cube.history.clear();
   }
 
   end() {
     this.init();
-    this.context.cuber.cube.twister.twist(this.action, false, 1, true);
+    this.context.cuber.twister.twist(this.action, false, 1, true);
     this.progress = this.actions.length;
   }
 
@@ -187,7 +187,7 @@ export default class Editor extends Vue {
       }
       let action = this.actions[this.progress];
       this.progress++;
-      this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times, false);
+      this.context.cuber.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
 
@@ -210,7 +210,7 @@ export default class Editor extends Vue {
     this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
-    this.context.cuber.cube.twister.twist(action.exp, action.reverse, action.times);
+    this.context.cuber.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
@@ -220,7 +220,7 @@ export default class Editor extends Vue {
     this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
-    this.context.cuber.cube.twister.twist(action.exp, !action.reverse, action.times);
+    this.context.cuber.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   recording: boolean = false;

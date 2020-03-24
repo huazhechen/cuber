@@ -59,9 +59,7 @@ export default class CubeGroup extends Group {
     }
     this.cube.lock = false;
     if (this.angle != 0) {
-      for (const callback of this.cube.callbacks) {
-        callback();
-      }
+      this.cube.update();
     }
     this.angle = 0;
   }

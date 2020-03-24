@@ -61,7 +61,7 @@ export default class Main {
     this.views = [this.cuber, this.keyboard, this.dashboard, this.starter, this.retry, this.setting, this.score];
     this.handles = this.views.slice().reverse();
 
-    this.cuber.cube.callbacks.push(this.check);
+    this.cuber.callbacks.push(this.check);
 
     window.onresize = () => {
       this.resize();
@@ -231,7 +231,7 @@ export default class Main {
       if (random < 0.5) {
         exp = exp + "'";
       }
-      this.cuber.cube.twister.twist(exp);
+      this.cuber.twister.twist(exp);
     }
   }
 

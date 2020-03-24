@@ -129,13 +129,13 @@ export default class Keyboard extends Vue implements Panel {
         this.context.cuber.preferance.lock = !this.context.cuber.preferance.lock;
         break;
       default:
-        this.context.cuber.cube.twister.twist(key);
+        this.context.cuber.twister.twist(key);
         break;
     }
   }
 
   undo() {
-    this.context.cuber.cube.undo();
+    this.context.cuber.undo();
   }
 
   start: number = 0;
@@ -164,7 +164,7 @@ export default class Keyboard extends Vue implements Panel {
 
   shuffle() {
     this.complete = false;
-    this.context.cuber.cube.twister.twist("*");
+    this.context.cuber.twister.twist("*");
     this.context.cuber.preferance.lock = false;
     this.start = 0;
     this.now = 0;
@@ -180,7 +180,7 @@ export default class Keyboard extends Vue implements Panel {
     var key = String.fromCharCode(event.which);
     if ("XxRrMmLlYyUuEeDdZzFfSsBb".indexOf(key) >= 0) {
       event.preventDefault();
-      this.context.cuber.cube.twister.twist(key, this.reverse);
+      this.context.cuber.twister.twist(key, this.reverse);
       return false;
     }
   };
@@ -197,7 +197,7 @@ export default class Keyboard extends Vue implements Panel {
     }
     if (key === 8) {
       event.preventDefault();
-      this.context.cuber.cube.undo();
+      this.context.cuber.undo();
       return false;
     }
   };

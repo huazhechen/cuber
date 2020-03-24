@@ -40,8 +40,8 @@ export default class Database {
     this.main.score.display = mode == "score";
     if (mode == "cuber") {
       this.main.cuber.preferance.lock = false;
-      this.main.cuber.cube.twister.finish();
-      this.main.cuber.cube.twister.twist("#x2*", false, 1, true);
+      this.main.cuber.twister.finish();
+      this.main.cuber.twister.twist("#x2*", false, 1, true);
     }
     this._mode = mode;
   }

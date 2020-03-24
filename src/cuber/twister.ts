@@ -1,14 +1,14 @@
-import Cube from "./cube";
 import { tweener } from "./tweener";
+import Cuber from "./cuber";
 
 export default class Twister {
-  cube: Cube;
+  cuber: Cuber;
   queue: TwistAction[];
   public callbacks: Function[] = [];
-  constructor(cube: Cube) {
-    this.cube = cube;
+  constructor(cuber: Cuber) {
+    this.cuber = cuber;
     this.queue = [];
-    this.cube.callbacks.push(this.update.bind(this));
+    this.cuber.callbacks.push(this.update.bind(this));
   }
 
   static shuffle(order: number) {
@@ -77,7 +77,7 @@ export default class Twister {
       }
       return;
     }
-    if (this.cube.lock) {
+    if (this.cuber.cube.lock) {
       return;
     }
     let twist = this.queue.shift();
@@ -93,7 +93,7 @@ export default class Twister {
         this.update();
         return;
       }
-      tweener.tween(0, 1, (this.cube.duration / 2) * action.times, (value: number) => {
+      tweener.tween(0, 1, (this.cuber.cube.duration / 2) * action.times, (value: number) => {
         if (value === 1 || value === 0) {
           this.update();
           return;
@@ -102,17 +102,17 @@ export default class Twister {
       return;
     }
     if (action.exp == "#") {
-      this.cube.history.clear();
-      this.cube.reset();
-      this.cube.dirty = true;
+      this.cuber.cube.history.clear();
+      this.cuber.cube.reset();
+      this.cuber.cube.dirty = true;
       this.update();
       return;
     }
     if (action.exp == "*") {
-      let exp = Twister.shuffle(this.cube.order);
-      this.cube.reset();
+      let exp = Twister.shuffle(this.cuber.cube.order);
+      this.cuber.cube.reset();
       this.twist(exp, false, 1, true);
-      this.cube.history.clear();
+      this.cuber.cube.history.clear();
       return;
     }
     let angle = -Math.PI / 2;
@@ -122,7 +122,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let part = this.cube.groups.get(action.exp);
+    let part = this.cuber.cube.groups.get(action.exp);
     if (part === undefined) {
       this.update();
       return;

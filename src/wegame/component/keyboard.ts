@@ -246,7 +246,7 @@ class KeyboardButton {
         this.strip();
         break;
       case "backspace":
-        this.keyboard.main.cuber.cube.undo();
+        this.keyboard.main.cuber.undo();
         break;
       case "lock":
         this.keyboard.main.cuber.preferance.lock = !this.keyboard.main.cuber.preferance.lock;
@@ -258,7 +258,7 @@ class KeyboardButton {
         this.keyboard.main.cuber.preferance.hollow = !this.keyboard.main.cuber.preferance.hollow;
         break;
       default:
-        this.keyboard.main.cuber.cube.twister.twist(this.key);
+        this.keyboard.main.cuber.twister.twist(this.key);
         break;
     }
   }
@@ -289,7 +289,7 @@ export default class Keyboard implements Component {
     this.height = height;
     this.dirty = false;
     this.main = main;
-    this.main.cuber.cube.callbacks.push(this.paint.bind(this));
+    this.main.cuber.callbacks.push(this.paint.bind(this));
     this.canvas = document.createElement("canvas");
     let context = this.canvas.getContext("2d");
     if (context == null) {

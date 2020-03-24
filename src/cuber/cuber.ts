@@ -3,6 +3,7 @@ import Controller from "./controller";
 import Cubelet from "./cubelet";
 import Preferance from "./preferance";
 import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Vector2 } from "three";
+import Twister, { TwistAction } from "./twister";
 
 export default class Cuber {
   public preferance: Preferance;
@@ -20,6 +21,8 @@ export default class Cuber {
   public directional: DirectionalLight;
 
   private cubes: Cube[] = [];
+  public callbacks: Function[] = [];
+  public twister: Twister;
 
   set order(value: number) {
     this.scene.remove(this.cube);
@@ -29,10 +32,11 @@ export default class Cuber {
 
   constructor() {
     for (let order = 2; order < 8; order++) {
-      this.cubes[order] = new Cube(order);
+      this.cubes[order] = new Cube(order, this.callback);
     }
     this.cube = this.cubes[3];
     this.preferance = new Preferance(this);
+    this.twister = new Twister(this);
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
@@ -51,6 +55,25 @@ export default class Cuber {
     this.camera.position.y = 0;
     this.camera.position.z = 0;
     this.preferance.load();
+  }
+
+  callback = () => {
+    for (let callback of this.callbacks) {
+      callback();
+    }
+  };
+
+  undo() {
+    if (this.cube.history.length == 0) {
+      return;
+    }
+    this.twister.finish();
+    if (this.cube.history.length == 0) {
+      return;
+    }
+    let last = this.cube.history.last;
+    let action = new TwistAction(last.exp, !last.reverse, last.times);
+    this.twister.push(action);
   }
 
   resize() {

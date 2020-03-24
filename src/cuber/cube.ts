@@ -9,20 +9,19 @@ export default class Cube extends Group {
   public dirty: boolean = true;
   public lock: boolean = false;
   public history: History = new History();
-  public twister: Twister;
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
-  public callbacks: Function[] = [];
   public groups: GroupTable;
   public complete: boolean = false;
   public duration: number;
   public order: number;
+  public callback: Function;
 
-  constructor(order: number) {
+  constructor(order: number, callback: Function) {
     super();
     this.order = order;
+    this.callback = callback;
     this.scale.set(3 / order, 3 / order, 3 / order);
-    this.twister = new Twister(this);
     for (var i = 0; i < order * order * order; i++) {
       let cubelet = new Cubelet(order, i);
       this.cubelets.push(cubelet);
@@ -30,23 +29,25 @@ export default class Cube extends Group {
       this.add(cubelet);
     }
     this.groups = new GroupTable(this);
-    this.callbacks.push(() => {
-      let complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every(face => {
-        let group = this.groups.get(FACE[face]);
-        if (!group) {
-          throw Error();
-        }
-        let color = this.cubelets[group.indices[0]].getColor(face);
-        let same = group.indices.every(idx => {
-          return color == this.cubelets[idx].getColor(face);
-        });
-        return same;
-      });
-      this.complete = complete;
-    });
     this.matrixAutoUpdate = false;
     this.updateMatrix();
     this.duration = 30;
+  }
+
+  update() {
+    let complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every(face => {
+      let group = this.groups.get(FACE[face]);
+      if (!group) {
+        throw Error();
+      }
+      let color = this.cubelets[group.indices[0]].getColor(face);
+      let same = group.indices.every(idx => {
+        return color == this.cubelets[idx].getColor(face);
+      });
+      return same;
+    });
+    this.complete = complete;
+    this.callback();
   }
 
   index(value: number) {
@@ -97,20 +98,7 @@ export default class Cube extends Group {
     }
     this.dirty = true;
   }
-
-  undo() {
-    if (this.history.length == 0) {
-      return;
-    }
-    this.twister.finish();
-    if (this.history.length == 0) {
-      return;
-    }
-    let last = this.history.last;
-    let action = new TwistAction(last.exp, !last.reverse, last.times);
-    this.twister.push(action);
-  }
-
+  
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |
