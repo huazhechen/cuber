@@ -11,17 +11,19 @@ export default class Twister {
     this.cube.callbacks.push(this.update.bind(this));
   }
 
-  static shuffle() {
+  static shuffle(order: number) {
     let result = "";
     let exps = ["x2"];
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < order * order * order; i++) {
       let exp = [];
       while (axis == last) {
         axis = Math.floor(Math.random() * 3);
       }
+      let prefix = Math.ceil(Math.random() * Math.floor(order / 2));
+      exp.push(prefix == 1 ? "" : prefix);
       let side = Math.floor(Math.random() * 2);
       exp.push(actions[axis * 2 + side]);
       let suffix = Math.random();
@@ -86,7 +88,7 @@ export default class Twister {
   }
 
   start(action: TwistAction) {
-    if (action.exp == "-") {
+    if (action.exp == "~") {
       if (action.fast) {
         this.update();
         return;
@@ -107,7 +109,7 @@ export default class Twister {
       return;
     }
     if (action.exp == "*") {
-      let exp = Twister.shuffle();
+      let exp = Twister.shuffle(this.cube.order);
       this.cube.reset();
       this.twist(exp, false, 1, true);
       this.cube.history.clear();
@@ -149,28 +151,21 @@ export class TwistAction {
   }
 
   get value() {
-    return this.times == 0
-      ? ""
-      : (this.exp.length > 1 ? "(" : "") +
-          this.exp +
-          (this.exp.length > 1 ? ")" : "") +
-          (this.reverse ? "'" : "") +
-          (this.times == 1 ? "" : String(this.times));
+    return this.times == 0 ? "" : this.exp + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
   }
 }
 
 export class TwistNode {
-  static _ACTIONS = "*#-xyzbsfdeulmrXYZBFSDEULMR";
-  static _SUFFIX = "'0123456789";
+  static AFFIX = "'Ww0123456789-";
   children: TwistNode[];
   twist: TwistAction;
   constructor(exp: string, reverse = false, times = 1) {
     // 合法性校验
     this.children = [];
-    exp = exp.replace(/[^\*#\-xyzbsfdeulmr\(\)'0123456789]/gi, "");
+    exp = exp.replace(/[^\*\-#~xyzbsfdeulmrw\(\)'0123456789 ]/gi, "");
     this.twist = new TwistAction(exp, reverse, times);
     // 不用解析场景
-    if (exp.length == 1) {
+    if (exp.match(/^[0123456789-]*[\*~#xyzbsfdeulmr][w]*$/gi)) {
       if (/[XYZ]/.test(this.twist.exp)) {
         this.twist.exp = this.twist.exp.toLowerCase();
       }
@@ -183,46 +178,38 @@ export class TwistNode {
     let list = [];
     let buffer = "";
     let stack = 0;
+    let ready = false;
     for (let i = 0; i < exp.length; i++) {
       let c = exp.charAt(i);
-      // 起始字符
-      if (buffer.length == 0) {
-        if (TwistNode._ACTIONS.indexOf(c) >= 0) {
-          buffer = buffer.concat(c);
-          continue;
-        } else if (c === "(") {
-          buffer = buffer.concat(c);
-          stack++;
-          continue;
-        } else {
-          return;
-        }
+      if (c === " " && buffer.length == 0) {
+        continue;
       }
-      // 后续字符
-      else {
-        // 非括号场景
-        if (stack == 0) {
-          // 后缀追加到buff中
-          if (TwistNode._SUFFIX.indexOf(c) >= 0) {
-            buffer = buffer.concat(c);
-            continue;
-          }
-          // 处理完一组
-          else {
-            list.push(buffer);
-            buffer = "";
-            i--;
-          }
-        } else {
-          if (c === "(") {
-            stack++;
-          } else if (c === ")") {
-            stack--;
-          }
-          buffer = buffer.concat(c);
-          continue;
-        }
+      // 后缀可以持续增加
+      if (TwistNode.AFFIX.indexOf(c) >= 0) {
+        buffer = buffer.concat(c);
+        continue;
       }
+      // 非后缀检查是否可以中断
+      if (buffer.length > 0 && stack == 0 && ready) {
+        list.push(buffer);
+        buffer = "";
+        i--;
+        ready = false;
+        continue;
+      }
+      //  如果有括号 记录stack
+      if (c === "(") {
+        buffer = buffer.concat(c);
+        stack++;
+        continue;
+      }
+      if (c === ")") {
+        buffer = buffer.concat(c);
+        stack--;
+        continue;
+      }
+      ready = true;
+      buffer = buffer.concat(c);
     }
     if (buffer.length > 0) {
       list.push(buffer);
@@ -232,10 +219,10 @@ export class TwistNode {
     }
     for (let item of list) {
       // 拆解括号
-      var values = item.match(/^\((\S+)\)('?)(\d*)('?)$/i);
+      var values = item.match(/^\((.+)\)('?)(\d*)('?)$/i);
       // 无括号
       if (null === values) {
-        values = item.match(/([\*#\-xyzbsfdeulmr])('?)(\d*)('?)/i);
+        values = item.match(/([0123456789-]*[\*\#~xyzbsfdeulmr][w]*)('?)(\d*)('?)/i);
       }
       // 异常情况
       if (null === values) {

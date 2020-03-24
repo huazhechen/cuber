@@ -116,8 +116,8 @@ export class GroupTable {
     this.order = cube.order;
     // 根据魔方阶数生成所有正向group
     for (let axis of ["x", "y", "z"]) {
-      for (let from = 0; from < this.order; from++) {
-        for (let to = from; to < this.order; to++) {
+      for (let from = 1; from <= this.order; from++) {
+        for (let to = from; to <= this.order; to++) {
           let name = GroupTable.FORMAT(axis, from, to);
           this.groups.set(name, new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]));
         }
@@ -131,7 +131,7 @@ export class GroupTable {
       let group;
 
       axis = "x";
-      layer = index % this.order;
+      layer = (index % this.order) + 1;
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
@@ -139,14 +139,14 @@ export class GroupTable {
       group.indices.push(cubelet.index);
 
       axis = "y";
-      layer = Math.floor((index % (this.order * this.order)) / this.order);
+      layer = Math.floor((index % (this.order * this.order)) / this.order) + 1;
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
       }
       group.indices.push(cubelet.index);
       axis = "z";
-      layer = Math.floor(index / (this.order * this.order));
+      layer = Math.floor(index / (this.order * this.order)) + 1;
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
@@ -155,8 +155,8 @@ export class GroupTable {
     }
     // x y z的多层
     for (let axis of ["x", "y", "z"]) {
-      for (let from = 0; from < this.order; from++) {
-        for (let to = from + 1; to < this.order; to++) {
+      for (let from = 1; from <= this.order; from++) {
+        for (let to = from + 1; to <= this.order; to++) {
           let dst = this.groups.get(GroupTable.FORMAT(axis, from, to));
           if (!dst) {
             throw Error();
@@ -173,8 +173,8 @@ export class GroupTable {
     }
     // 通过正向group拷贝反向group
     for (let axis of ["-x", "-y", "-z"]) {
-      for (let from = 0; from < this.order; from++) {
-        for (let to = from; to < this.order; to++) {
+      for (let from = 1; from <= this.order; from++) {
+        for (let to = from; to <= this.order; to++) {
           let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), from, to));
           if (!template) {
             throw Error();
@@ -186,7 +186,7 @@ export class GroupTable {
     }
     // 特殊处理整体旋转
     for (let axis of ["x", "y", "z"]) {
-      let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), 0, this.order - 1));
+      let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), 1, this.order));
       if (!template) {
         throw Error();
       }
@@ -235,15 +235,15 @@ export class GroupTable {
         case "F":
         case "B":
           axis = GroupTable.AXIS_MAP[name];
-          from = axis.length == 2 ? 0 : this.order - 1;
+          from = axis.length == 2 ? 1 : this.order;
           to = from;
           break;
         case "E":
         case "M":
         case "S":
           axis = GroupTable.AXIS_MAP[name];
-          from = Math.floor((this.order - 1) / 2);
-          to = Math.ceil((this.order - 1) / 2);
+          from = Math.floor((this.order + 1) / 2);
+          to = Math.ceil((this.order + 1) / 2);
           break;
         case "r":
         case "l":
@@ -252,15 +252,27 @@ export class GroupTable {
         case "f":
         case "b":
           axis = GroupTable.AXIS_MAP[name.toUpperCase()];
-          from = axis.length == 2 ? 0 : this.order - 1;
-          to = axis.length == 2 ? 1 : this.order - 2;
+          from = axis.length == 2 ? 1 : this.order;
+          to = axis.length == 2 ? 2 : this.order - 1;
           break;
       }
-    } else if (name.length === 2) {
-      let wide = Number(name.charAt(0));
-      axis = GroupTable.AXIS_MAP[name.charAt(1).toUpperCase()];
-      from = axis.length == 2 ? 0 : this.order - 1;
-      to = axis.length == 2 ? wide - 1 : this.order - wide;
+    } else if (Number(name.charAt(0)) !== NaN) {
+      let list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
+      if (list == null) {
+        return undefined;
+      }
+      from = Number(list[1]);
+      to = Number(list[3]);
+      if (to === NaN || to === 0) {
+        if (/[lrudfb]/.test(list[4])){
+          to = 1;
+        }else{
+          to = from;
+        }
+      }
+      axis = GroupTable.AXIS_MAP[list[4].toUpperCase()];
+      from = axis.length == 2 ? from : this.order - from + 1;
+      to = axis.length == 2 ? to : this.order - to + 1;
     } else {
       return this.groups.get(name);
     }

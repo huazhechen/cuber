@@ -108,6 +108,7 @@ export default class Controller {
               layer = Math.floor(index / (order * order));
               break;
           }
+          layer = layer + 1;
           return this.cuber.cube.groups.get(GroupTable.FORMAT(axis, layer, layer));
         }
       }
