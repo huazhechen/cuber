@@ -90,7 +90,10 @@ export default class Player extends Vue {
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
     if (this.context.pics[this.index.group][this.index.index]) {
-      this.context.pics[this.index.group][this.index.index] = this.context.capture.snap(this.context.algs[this.index.group].strip, this.exp);
+      this.context.pics[this.index.group][this.index.index] = this.context.capture.snap(
+        this.context.algs[this.index.group].strip,
+        this.exp
+      );
     }
     this.context.algs[this.index.group].algs[this.index.index].exp = this.exp;
     this.actions = new TwistNode(this.exp).parse();
@@ -174,16 +177,20 @@ export default class Player extends Vue {
   }
 
   @Watch("context.mode")
-  onModeChange(to: number) {
+  onModeChange(to: number, from: number) {
     if (to == 1) {
-      this.context.cuber.preferance.order = 3;
+      if (this.context.cuber.preferance.order != 3) {
+        this.context.cuber.preferance.order = 3;
+      }
       this.$nextTick(() => {
         this.onIndexChange();
         this.init();
       });
     } else {
-      this.playing = false;
-      this.context.cuber.cube.strip({});
+      if (from == 1) {
+        this.playing = false;
+        this.context.cuber.cube.strip({});
+      }
     }
   }
 

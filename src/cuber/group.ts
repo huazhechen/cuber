@@ -256,25 +256,23 @@ export class GroupTable {
           to = axis.length == 2 ? 2 : this.order - 1;
           break;
       }
-    } else if (Number(name.charAt(0)) !== NaN) {
+    } else {
       let list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
       if (list == null) {
-        return undefined;
+        return this.groups.get(name);
       }
       from = Number(list[1]);
       to = Number(list[3]);
       if (to === NaN || to === 0) {
-        if (/[lrudfb]/.test(list[4])){
+        if (/[lrudfb]/.test(list[4])) {
           to = 1;
-        }else{
+        } else {
           to = from;
         }
       }
       axis = GroupTable.AXIS_MAP[list[4].toUpperCase()];
       from = axis.length == 2 ? from : this.order - from + 1;
       to = axis.length == 2 ? to : this.order - to + 1;
-    } else {
-      return this.groups.get(name);
     }
     if (from > to) {
       [from, to] = [to, from];
