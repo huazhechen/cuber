@@ -88,7 +88,11 @@ export default class Cube extends Group {
         continue;
       }
       for (const index of indexes) {
-        this.initials[index].stick(face, COLORS.BLACK);
+        let cubelet = this.initials[index];
+        if (!cubelet) {
+          throw Error("invalid cubelet index: " + index);
+        }
+        cubelet.stick(face, COLORS.BLACK);
       }
     }
     this.dirty = true;

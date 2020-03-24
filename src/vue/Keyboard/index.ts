@@ -59,15 +59,43 @@ export default class Keyboard extends Vue implements Panel {
     ["M", "E", "S", "z", "y", "x", "M'", "E'", "S'", "z'", "y'", "x'"]
   ];
 
-  strips = [
-    {},
-    { U: [1, 2, 3, 4, 6, 7, 8, 9], F: [1, 2, 3, 4, 6, 7, 9], R: [1, 2, 3, 4, 6, 7, 9], B: [1, 2, 3, 4, 6, 7, 9], L: [1, 2, 3, 4, 6, 7, 9], D: [1, 3, 7, 9] },
-    { U: [1, 2, 3, 4, 5, 6, 7, 8, 9], F: [1, 2, 3], R: [1, 2, 3], B: [1, 2, 3], L: [1, 2, 3] }
-  ];
+  strips = (() => {
+    let list: { [face: string]: number[] | undefined }[][] = [];
+    let item: { [face: string]: number[] | undefined }[];
+    for (let order = 2; order < 8; order++) {
+      item = new Array();
+      item.push({});
+      let c: { [face: string]: number[] | undefined } = {};
+      let f: { [face: string]: number[] | undefined } = {};
+      item.push(c);
+      item.push(f);
+      let indices: number[] = [];
+      for (let i = 0; i < order; i++) {
+        for (let j = 0; j < order; j++) {
+          indices.push(order * order * (i + 1) - j - 1);
+        }
+      }
+      for (let face of ["U", "R", "F", "L", "B"]) {
+        f[face] = indices.slice();
+      }
+      for (let i = 0; i < order - 1; i++) {
+        indices.push(order * i);
+        indices.push(order * i + order - 1);
+        indices.push(order * order * (order - 1) + order * i);
+        indices.push(order * order * (order - 1) + order * i + order - 1);
+      }
+      for (let face of ["U", "R", "F", "L", "B", "D"]) {
+        c[face] = indices.slice();
+      }
+      list[order] = item;
+    }
+    return list;
+  })();
   cfops: number = 0;
   strip() {
-    this.cfops = (this.cfops + 1) % this.strips.length;
-    this.context.cuber.cube.strip(this.strips[this.cfops]);
+    this.cfops = (this.cfops + 1) % 3;
+    console.log();
+    this.context.cuber.cube.strip(this.strips[this.context.cuber.preferance.order][this.cfops] || {});
   }
 
   get style() {
@@ -140,6 +168,8 @@ export default class Keyboard extends Vue implements Panel {
     this.context.cuber.preferance.lock = false;
     this.start = 0;
     this.now = 0;
+    this.cfops = 0;
+    this.context.cuber.cube.strip({});
   }
 
   reverse: boolean = false;

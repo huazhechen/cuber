@@ -1,4 +1,10 @@
-<v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px', height:height + 'px'}" style="padding:0%;touch-action: none;">
+<v-container
+  fluid
+  grid-list-md
+  text-xs-center
+  :style="{width:size * 8 + 'px', height:height + 'px'}"
+  style="padding:0%;touch-action: none;"
+>
   <v-btn
     fixed
     left
@@ -38,8 +44,17 @@
       </v-btn>
     </v-flex>
     <v-flex xs2 d-flex>
-      <v-btn :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock" @click="undo()" :style="style" :ripple="false">
-        <icon :size="size * 0.85" :color="(context.cuber.cube.history.length == 0 || context.cuber.preferance.lock)?'gray':''" name="backspace"></icon>
+      <v-btn
+        :disabled="context.cuber.cube.history.length == 0 || context.cuber.preferance.lock"
+        @click="undo()"
+        :style="style"
+        :ripple="false"
+      >
+        <icon
+          :size="size * 0.85"
+          :color="(context.cuber.cube.history.length == 0 || context.cuber.preferance.lock)?'gray':''"
+          name="backspace"
+        ></icon>
       </v-btn>
     </v-flex>
     <v-flex v-for="exp in exps" :key="exp" d-flex xs2>
@@ -50,7 +65,9 @@
   </v-layout>
   <v-dialog v-model="shuffled" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">重新打乱?</div></v-card-title>
+      <v-card-title style="text-transform:none;" class="headline"
+        ><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">重新打乱?</div></v-card-title
+      >
       <v-card-actions>
         <v-layout row wrap style="margin: 0%;">
           <v-flex xs6 d-flex>
@@ -69,7 +86,9 @@
   </v-dialog>
   <v-dialog v-model="completed" :width="size * 8">
     <v-card>
-      <v-card-title style="text-transform:none;" class="headline"><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">复原成功</div></v-card-title>
+      <v-card-title style="text-transform:none;" class="headline"
+        ><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">复原成功</div></v-card-title
+      >
       <v-card-actions>
         <v-layout row wrap style="margin: 0%;">
           <v-flex xs6 d-flex>
