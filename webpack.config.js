@@ -3,9 +3,7 @@ var webpack = require("webpack");
 
 module.exports = (env, argv) => ({
   entry: {
-    "index.js": "./src/index.ts",
-    "wegame.js": "./src/wegame/index.ts",
-    "wegame/game.js": "./src/wegame/game.js",
+    "index.js": "./src/index.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -18,22 +16,22 @@ module.exports = (env, argv) => ({
       {
         test: /\.s(c|a)ss$/,
         use: [
-          'vue-style-loader',
-          'css-loader',
+          "vue-style-loader",
+          "css-loader",
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
-              implementation: require('sass'),
-              fiber: require('fibers'),
+              implementation: require("sass"),
+              fiber: require("fibers")
             },
             options: {
-              implementation: require('sass'),
+              implementation: require("sass"),
               sassOptions: {
-                fiber: require('fibers'),
-              },
-            },
-          },
-        ],
+                fiber: require("fibers")
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
@@ -68,5 +66,5 @@ module.exports = (env, argv) => ({
   performance: {
     hints: false
   },
-  devtool: argv.mode === 'production' ? "" : "#cheap-module-eval-source-map"
+  devtool: argv.mode === "production" ? "" : "#cheap-module-eval-source-map"
 });

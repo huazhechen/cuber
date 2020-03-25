@@ -1,4 +1,43 @@
-export default class Tweener {
+class Tween {
+  begin: number;
+  end: number;
+  duration: number;
+  callback: Function;
+  value: number;
+  delta: number;
+  constructor(begin: number, end: number, duration: number, callback: Function) {
+    this.begin = begin;
+    this.end = end;
+    this.duration = duration;
+    this.callback = callback;
+    this.value = 0;
+    this.delta = 1;
+  }
+
+  speedup() {
+    this.delta = 4;
+  }
+
+  finish() {
+    this.callback(this.end);
+  }
+
+  update() {
+    this.value = this.value + this.delta;
+    let elapsed = this.value / this.duration;
+    elapsed = elapsed > 1 ? 1 : elapsed;
+    elapsed = elapsed < 0 ? 0 : elapsed;
+    elapsed = elapsed - 1;
+    let value = 1 - elapsed * elapsed;
+    this.callback(this.begin + (this.end - this.begin) * value);
+    if (value == 1) {
+      return false;
+    }
+    return true;
+  }
+}
+
+export class Tweener {
   tweens: Tween[];
 
   get length() {
@@ -46,43 +85,5 @@ export default class Tweener {
   }
 }
 
-export var tweener: Tweener = new Tweener();
-
-class Tween {
-  begin: number;
-  end: number;
-  duration: number;
-  callback: Function;
-  value: number;
-  delta: number;
-  constructor(begin: number, end: number, duration: number, callback: Function) {
-    this.begin = begin;
-    this.end = end;
-    this.duration = duration;
-    this.callback = callback;
-    this.value = 0;
-    this.delta = 1;
-  }
-
-  speedup() {
-    this.delta = 4;
-  }
-
-  finish() {
-    this.callback(this.end);
-  }
-
-  update() {
-    this.value = this.value + this.delta;
-    let elapsed = this.value / this.duration;
-    elapsed = elapsed > 1 ? 1 : elapsed;
-    elapsed = elapsed < 0 ? 0 : elapsed;
-    elapsed = elapsed - 1;
-    let value = 1 - elapsed * elapsed;
-    this.callback(this.begin + (this.end - this.begin) * value);
-    if (value == 1) {
-      return false;
-    }
-    return true;
-  }
-}
+let tweener = new Tweener();
+export default tweener;

@@ -1,7 +1,7 @@
 import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
-import { tweener } from "./tweener";
+import tweener from "./tweener";
 import { Group, Vector3 } from "three";
 
 export default class CubeGroup extends Group {

@@ -1,7 +1,7 @@
 import { FACE } from "./define";
 import Cubelet from "./cubelet";
 import CubeGroup, { GroupTable } from "./group";
-import { tweener } from "./tweener";
+import tweener from "./tweener";
 import { TouchAction } from "../common/toucher";
 import Cuber from "./cuber";
 import { Vector3, Plane, Ray, Vector2, Matrix4 } from "three";

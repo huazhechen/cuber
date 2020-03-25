@@ -1,4 +1,4 @@
-import { tweener } from "./tweener";
+import tweener from "./tweener";
 import Cuber from "./cuber";
 
 export default class Twister {
