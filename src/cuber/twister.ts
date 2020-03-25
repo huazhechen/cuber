@@ -169,9 +169,6 @@ export class TwistNode {
       if (/[XYZ]/.test(this.twist.exp)) {
         this.twist.exp = this.twist.exp.toLowerCase();
       }
-      if (/[mes]/.test(this.twist.exp)) {
-        this.twist.exp = this.twist.exp.toUpperCase();
-      }
       return;
     }
     // 先分段

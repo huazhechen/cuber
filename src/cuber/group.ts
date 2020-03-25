@@ -217,9 +217,6 @@ export class GroupTable {
     if (/[XYZ]/.test(name)) {
       name = name.toLowerCase();
     }
-    if (/[mes]/.test(name)) {
-      name = name.toUpperCase();
-    }
     if (name.length === 1) {
       switch (name) {
         case "x":
@@ -236,13 +233,6 @@ export class GroupTable {
           from = axis.length == 2 ? 1 : this.order;
           to = from;
           break;
-        case "E":
-        case "M":
-        case "S":
-          axis = GroupTable.AXIS_MAP[name];
-          from = Math.floor((this.order + 1) / 2);
-          to = Math.ceil((this.order + 1) / 2);
-          break;
         case "r":
         case "l":
         case "u":
@@ -252,6 +242,20 @@ export class GroupTable {
           axis = GroupTable.AXIS_MAP[name.toUpperCase()];
           from = axis.length == 2 ? 1 : this.order;
           to = axis.length == 2 ? 2 : this.order - 1;
+          break;
+        case "E":
+        case "M":
+        case "S":
+          axis = GroupTable.AXIS_MAP[name];
+          from = Math.floor((this.order + 1) / 2);
+          to = Math.ceil((this.order + 1) / 2);
+          break;
+        case "e":
+        case "m":
+        case "s":
+          axis = GroupTable.AXIS_MAP[name.toUpperCase()];
+          from = 2;
+          to = this.order - 1;
           break;
       }
     } else {
