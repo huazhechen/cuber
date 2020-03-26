@@ -22,6 +22,7 @@ import Vuetify, {
 import App from "./vue/App";
 import "./index.css";
 import cuber from "./cuber";
+import Playground from "./vue/Playground";
 
 Vue.use(Vuetify, {
   components: {
@@ -54,5 +55,5 @@ Vue.prototype.cuber = cuber;
 new Vue({
   vuetify,
   el: "#app",
-  render: h => h(App)
+  render: h => h(Playground)
 });
