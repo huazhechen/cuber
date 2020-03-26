@@ -3,6 +3,7 @@ import { Component, Inject, Watch } from "vue-property-decorator";
 import { Panel } from "../panel";
 import Context from "../context";
 import Icon from "../Icon";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html"),
@@ -33,18 +34,18 @@ export default class Keyboard extends Vue implements Panel {
   completed: boolean = false;
   complete: boolean = false;
   loop() {
-    if (this.context.cuber.cube.history.moves == 0) {
+    if (cuber.history.moves == 0) {
       this.start = 0;
       this.now = 0;
     } else {
       if (this.start == 0) {
         this.start = new Date().getTime();
       }
-      if (!this.context.cuber.cube.complete) {
+      if (!cuber.world.cube.complete) {
         this.now = new Date().getTime();
       } else {
         if (!this.complete) {
-          this.context.cuber.preferance.lock = true;
+          cuber.controller.lock = true;
           this.completed = true;
           this.complete = true;
         }
@@ -94,8 +95,7 @@ export default class Keyboard extends Vue implements Panel {
   cfops: number = 0;
   strip() {
     this.cfops = (this.cfops + 1) % 3;
-    console.log();
-    this.context.cuber.cube.strip(this.strips[this.context.cuber.preferance.order][this.cfops] || {});
+    cuber.world.cube.strip(this.strips[cuber.preferance.order][this.cfops] || {});
   }
 
   get style() {
@@ -120,22 +120,22 @@ export default class Keyboard extends Vue implements Panel {
         this.layers = (this.layers + 1) % 3;
         break;
       case "mirror":
-        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        cuber.preferance.mirror = !cuber.preferance.mirror;
         break;
       case "hollow":
-        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        cuber.preferance.hollow = !cuber.preferance.hollow;
         break;
       case "lock":
-        this.context.cuber.preferance.lock = !this.context.cuber.preferance.lock;
+        cuber.controller.lock = !cuber.controller.lock;
         break;
       default:
-        this.context.cuber.twister.twist(key);
+        cuber.twister.twist(key);
         break;
     }
   }
 
   undo() {
-    this.context.cuber.undo();
+    cuber.history.undo();
   }
 
   start: number = 0;
@@ -148,7 +148,7 @@ export default class Keyboard extends Vue implements Panel {
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
     let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
-    return time + "/" + this.context.cuber.cube.history.moves;
+    return time + "/" + cuber.history.moves;
   }
 
   @Watch("context.mode")
@@ -164,29 +164,29 @@ export default class Keyboard extends Vue implements Panel {
 
   shuffle() {
     this.complete = false;
-    this.context.cuber.twister.twist("*");
-    this.context.cuber.preferance.lock = false;
+    cuber.twister.twist("*");
+    cuber.controller.lock = false;
     this.start = 0;
     this.now = 0;
     this.cfops = 0;
-    this.context.cuber.cube.strip({});
+    cuber.world.cube.strip({});
   }
 
   reverse: boolean = false;
   keyPress = (event: KeyboardEvent) => {
-    if (this.context.mode != 0 || this.context.cuber.preferance.lock) {
+    if (this.context.mode != 0 || cuber.controller.lock) {
       return false;
     }
     var key = String.fromCharCode(event.which);
     if ("XxRrMmLlYyUuEeDdZzFfSsBb".indexOf(key) >= 0) {
       event.preventDefault();
-      this.context.cuber.twister.twist(key, this.reverse);
+      cuber.twister.twist(key, this.reverse);
       return false;
     }
   };
 
   keyDown = (event: KeyboardEvent) => {
-    if (this.context.mode != 0 || this.context.cuber.preferance.lock) {
+    if (this.context.mode != 0 || cuber.controller.lock) {
       return false;
     }
     var key = event.which;
@@ -197,13 +197,13 @@ export default class Keyboard extends Vue implements Panel {
     }
     if (key === 8) {
       event.preventDefault();
-      this.context.cuber.undo();
+      cuber.history.undo();
       return false;
     }
   };
 
   keyUp = (event: KeyboardEvent) => {
-    if (this.context.mode != 0 || this.context.cuber.preferance.lock) {
+    if (this.context.mode != 0 || cuber.controller.lock) {
       return false;
     }
     var key = event.which;

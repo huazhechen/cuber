@@ -1,8 +1,8 @@
 import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
-import tweener from "./tweener";
 import { Group, Vector3 } from "three";
+import cuber from ".";
 
 export default class CubeGroup extends Group {
   cube: Cube;
@@ -70,7 +70,7 @@ export default class CubeGroup extends Group {
     let reverse = angle > 0;
     let times = Math.round(Math.abs(angle) / (Math.PI / 2));
     if (times != 0) {
-      this.cube.history.record(new TwistAction(exp, reverse, times));
+      cuber.history.record(new TwistAction(exp, reverse, times));
     }
     let delta = angle - this.angle;
     if (delta === 0) {
@@ -78,7 +78,7 @@ export default class CubeGroup extends Group {
     } else {
       let d = Math.abs(delta) / (Math.PI / 2);
       var duration = this.cube.duration * (2 - 2 / (d + 1));
-      tweener.tween(this.angle, angle, duration, (value: number) => {
+      cuber.tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (this.angle === angle || this.angle === 0) {
           this.drop();

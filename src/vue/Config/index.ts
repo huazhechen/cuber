@@ -3,6 +3,7 @@ import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import Tune from "../Tune";
 import Context from "../context";
 import Preferance from "../../cuber/preferance";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html"),
@@ -30,14 +31,14 @@ export default class Config extends Vue {
   preferance: Preferance;
   constructor() {
     super();
-    this.preferance = this.context.cuber.preferance;
+    this.preferance = cuber.preferance;
   }
 
   mounted() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
   }
-  
+
   reset() {
     this.preferance.order = 3;
     this.preferance.frames = 30;

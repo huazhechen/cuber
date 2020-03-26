@@ -4,6 +4,7 @@ import Tune from "../Tune";
 import Context from "../context";
 import Player from "../Player";
 import { Panel } from "../panel";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html"),
@@ -24,7 +25,7 @@ export default class Algs extends Vue implements Panel {
       let origin = this.context.algs[idx].algs[group.length].default;
       let exp = save ? save : origin;
       this.context.algs[idx].algs[group.length].exp = exp;
-      group.push(this.context.capture.snap(this.context.algs[idx].strip, exp));
+      group.push(cuber.capture.snap(this.context.algs[idx].strip, exp));
       return true;
     });
   }

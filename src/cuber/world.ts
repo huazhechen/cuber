@@ -1,12 +1,9 @@
+import cuber from ".";
 import Cube from "./cube";
-import Controller from "./controller";
 import Cubelet from "./cubelet";
-import Preferance from "./preferance";
-import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Vector2 } from "three";
-import Twister, { TwistAction } from "./twister";
+import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
 
-export default class Cuber {
-  public preferance: Preferance;
+export default class World {
   public width: number = 1;
   public height: number = 1;
   public dirty: boolean = false;
@@ -14,7 +11,6 @@ export default class Cuber {
   public scene: Scene;
   public camera: PerspectiveCamera;
 
-  public controller: Controller;
   public cube: Cube;
 
   public ambient: AmbientLight;
@@ -22,7 +18,6 @@ export default class Cuber {
 
   private cubes: Cube[] = [];
   public callbacks: Function[] = [];
-  public twister: Twister;
 
   set order(value: number) {
     this.scene.remove(this.cube);
@@ -35,14 +30,10 @@ export default class Cuber {
       this.cubes[order] = new Cube(order, this.callback);
     }
     this.cube = this.cubes[3];
-    this.preferance = new Preferance(this);
-    this.twister = new Twister(this);
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
     this.scene.add(this.cube);
-
-    this.controller = new Controller(this);
 
     this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);
@@ -54,31 +45,18 @@ export default class Cuber {
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;
-    this.preferance.load();
   }
 
   callback = () => {
     for (let callback of this.callbacks) {
       callback();
     }
+    cuber.twister.update();
   };
 
-  undo() {
-    if (this.cube.history.length == 0) {
-      return;
-    }
-    this.twister.finish();
-    if (this.cube.history.length == 0) {
-      return;
-    }
-    let last = this.cube.history.last;
-    let action = new TwistAction(last.exp, !last.reverse, last.times);
-    this.twister.push(action);
-  }
-
   resize() {
-    let scale = this.preferance.scale / 100 + 0.5;
-    let perspective = (100.1 / (this.preferance.perspective + 0.01)) * 4 - 3;
+    let scale = cuber.preferance.scale / 100 + 0.5;
+    let perspective = (100.1 / (cuber.preferance.perspective + 0.01)) * 4 - 3;
     let min = this.height / Math.min(this.width, this.height) / scale / perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 

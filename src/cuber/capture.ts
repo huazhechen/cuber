@@ -1,7 +1,7 @@
 import Cube from "./cube";
 import Cubelet from "./cubelet";
 import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
-import Twister, { TwistNode } from "./twister";
+import { TwistNode } from "./twister";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;
@@ -9,7 +9,6 @@ export default class Capture {
   public scene: Scene;
   public camera: PerspectiveCamera;
   public cube: Cube;
-  public twister: Twister;
 
   constructor() {
     this.cube = new Cube(3, () => {});

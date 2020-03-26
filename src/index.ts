@@ -21,6 +21,7 @@ import Vuetify, {
 } from "vuetify/lib";
 import App from "./vue/App";
 import "./index.css";
+import cuber from "./cuber";
 
 Vue.use(Vuetify, {
   components: {
@@ -48,6 +49,7 @@ Vue.use(Vuetify, {
 });
 const opts = {};
 const vuetify = new Vuetify(opts);
+Vue.prototype.cuber = cuber;
 
 new Vue({
   vuetify,

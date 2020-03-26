@@ -1,11 +1,8 @@
-import Cuber from "./cuber";
+import cuber from ".";
 
 export default class Preferance {
   private _storage = window.localStorage;
-  private cuber: Cuber;
-  constructor(cuber: Cuber) {
-    this.cuber = cuber;
-  }
+  constructor() {}
 
   public mode: string;
 
@@ -22,7 +19,6 @@ export default class Preferance {
     this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
     this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
     this.frames = Number(this._storage.getItem("setting.frames") || 30);
-    this.lock = false;
     this.mirror = false;
     this.hollow = false;
     this.mode = "";
@@ -34,7 +30,7 @@ export default class Preferance {
   }
   set order(value) {
     this._storage.setItem("setting.order", String(value));
-    this.cuber.order = value;
+    cuber.world.order = value;
     if (this._order != value) {
       this._order = value;
       this.load();
@@ -48,7 +44,7 @@ export default class Preferance {
   set scale(value) {
     this._scale = value;
     this._storage.setItem("setting.scale", String(value));
-    this.cuber.resize();
+    cuber.world.resize();
   }
 
   private _perspective: number;
@@ -58,7 +54,7 @@ export default class Preferance {
   set perspective(value) {
     this._perspective = value;
     this._storage.setItem("setting.perspective", String(value));
-    this.cuber.resize();
+    cuber.world.resize();
   }
 
   private _angle: number;
@@ -68,8 +64,8 @@ export default class Preferance {
   set angle(value) {
     this._angle = value;
     this._storage.setItem("setting.angle", String(value));
-    this.cuber.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
-    this.cuber.dirty = true;
+    cuber.world.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
+    cuber.world.dirty = true;
   }
 
   private _gradient: number;
@@ -79,8 +75,8 @@ export default class Preferance {
   set gradient(value) {
     this._gradient = value;
     this._storage.setItem("setting.gradient", String(value));
-    this.cuber.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
-    this.cuber.dirty = true;
+    cuber.world.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
+    cuber.world.dirty = true;
   }
 
   private _brightness: number;
@@ -91,13 +87,13 @@ export default class Preferance {
     this._brightness = value;
     this._storage.setItem("setting.brightness", String(value));
     let light = value / 100;
-    this.cuber.ambient.intensity = light;
+    cuber.world.ambient.intensity = light;
     let d = light / 2;
     if (d > 1 - light) {
       d = 1 - light;
     }
-    this.cuber.directional.intensity = d;
-    this.cuber.dirty = true;
+    cuber.world.directional.intensity = d;
+    cuber.world.dirty = true;
   }
 
   private _frames: number;
@@ -115,10 +111,10 @@ export default class Preferance {
   }
   set mirror(value) {
     this._mirror = value;
-    for (let cubelet of this.cuber.cube.cubelets) {
+    for (let cubelet of cuber.world.cube.cubelets) {
       cubelet.mirror = value;
     }
-    this.cuber.dirty = true;
+    cuber.world.dirty = true;
   }
 
   private _hollow: boolean;
@@ -127,16 +123,9 @@ export default class Preferance {
   }
   set hollow(value: boolean) {
     this._hollow = value;
-    for (let cubelet of this.cuber.cube.cubelets) {
+    for (let cubelet of cuber.world.cube.cubelets) {
       cubelet.hollow = value;
     }
-    this.cuber.dirty = true;
-  }
-
-  get lock() {
-    return this.cuber.controller.lock;
-  }
-  set lock(value) {
-    this.cuber.controller.lock = value;
+    cuber.world.dirty = true;
   }
 }

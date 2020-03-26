@@ -2,6 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Prop } from "vue-property-decorator";
 import Context from "../context";
 import Preferance from "../../cuber/preferance";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html")
@@ -26,7 +27,7 @@ export default class Tune extends Vue {
   preferance: Preferance;
   constructor() {
     super();
-    this.preferance = this.context.cuber.preferance;
+    this.preferance = cuber.preferance;
   }
 
   mounted() {

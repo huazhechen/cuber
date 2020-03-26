@@ -1,6 +1,7 @@
+import cuber from ".";
 import { TwistAction } from "./twister";
 
-export default class list {
+export default class History {
   list: TwistAction[] = [];
   constructor() {}
 
@@ -44,5 +45,18 @@ export default class list {
       }
     }
     return length;
+  }
+
+  undo() {
+    if (this.length == 0) {
+      return;
+    }
+    cuber.twister.finish();
+    if (this.length == 0) {
+      return;
+    }
+    let last = this.last;
+    let action = new TwistAction(last.exp, !last.reverse, last.times);
+    cuber.twister.push(action);
   }
 }

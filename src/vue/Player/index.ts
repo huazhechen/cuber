@@ -2,6 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Watch } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Context from "../context";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html")
@@ -29,7 +30,7 @@ export default class Player extends Vue {
     } else {
       this.index = { group: 0, index: 0 };
     }
-    this.context.cuber.twister.callbacks.push(() => {
+    cuber.twister.callbacks.push(() => {
       this.play();
     });
   }
@@ -61,7 +62,7 @@ export default class Player extends Vue {
   playing: boolean = false;
   @Watch("playing")
   onPlayingChange() {
-    this.context.cuber.controller.disable = this.playing;
+    cuber.controller.disable = this.playing;
   }
 
   index: { group: number; index: number } = { group: 0, index: 0 };
@@ -90,7 +91,7 @@ export default class Player extends Vue {
   onExpChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.exp);
     if (this.context.pics[this.index.group][this.index.index]) {
-      this.context.pics[this.index.group][this.index.index] = this.context.capture.snap(
+      this.context.pics[this.index.group][this.index.index] = cuber.capture.snap(
         this.context.algs[this.index.group].strip,
         this.exp
       );
@@ -110,7 +111,7 @@ export default class Player extends Vue {
     if (this.playing) {
       let action = this.actions[this.progress];
       this.progress++;
-      this.context.cuber.twister.twist(action.exp, action.reverse, action.times, false);
+      cuber.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
 
@@ -121,7 +122,7 @@ export default class Player extends Vue {
     this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
-    this.context.cuber.twister.twist(action.exp, action.reverse, action.times);
+    cuber.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
@@ -131,7 +132,7 @@ export default class Player extends Vue {
     this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
-    this.context.cuber.twister.twist(action.exp, !action.reverse, action.times);
+    cuber.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   toggle() {
@@ -153,34 +154,34 @@ export default class Player extends Vue {
 
   strip() {
     if (this.colorize) {
-      this.context.cuber.cube.strip({});
+      cuber.world.cube.strip({});
     } else {
       let strip: { [face: string]: number[] | undefined } = this.context.algs[this.index.group].strip;
-      this.context.cuber.cube.strip(strip);
+      cuber.world.cube.strip(strip);
     }
   }
 
   colorize: boolean = false;
   init() {
-    this.context.cuber.controller.lock = true;
+    cuber.controller.lock = true;
     this.playing = false;
     this.progress = 0;
-    this.context.cuber.twister.finish();
-    this.context.cuber.twister.twist("#");
-    this.context.cuber.twister.twist(this.exp, true, 1, true);
+    cuber.twister.finish();
+    cuber.twister.twist("#");
+    cuber.twister.twist(this.exp, true, 1, true);
   }
 
   end() {
     this.init();
-    this.context.cuber.twister.twist(this.exp, false, 1, true);
+    cuber.twister.twist(this.exp, false, 1, true);
     this.progress = this.actions.length;
   }
 
   @Watch("context.mode")
   onModeChange(to: number, from: number) {
     if (to == 1) {
-      if (this.context.cuber.preferance.order != 3) {
-        this.context.cuber.preferance.order = 3;
+      if (cuber.preferance.order != 3) {
+        cuber.preferance.order = 3;
       }
       this.$nextTick(() => {
         this.onIndexChange();
@@ -189,7 +190,7 @@ export default class Player extends Vue {
     } else {
       if (from == 1) {
         this.playing = false;
-        this.context.cuber.cube.strip({});
+        cuber.world.cube.strip({});
       }
     }
   }
@@ -204,10 +205,10 @@ export default class Player extends Vue {
   tap(key: string) {
     switch (key) {
       case "mirror":
-        this.context.cuber.preferance.mirror = !this.context.cuber.preferance.mirror;
+        cuber.preferance.mirror = !cuber.preferance.mirror;
         break;
       case "hollow":
-        this.context.cuber.preferance.hollow = !this.context.cuber.preferance.hollow;
+        cuber.preferance.hollow = !cuber.preferance.hollow;
         break;
       case "colorize":
         this.colorize = !this.colorize;

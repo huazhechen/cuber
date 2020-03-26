@@ -1,4 +1,4 @@
-class Tween {
+export class Tween {
   begin: number;
   end: number;
   duration: number;
@@ -37,7 +37,7 @@ class Tween {
   }
 }
 
-export class Tweener {
+export default class Tweener {
   tweens: Tween[];
 
   get length() {
@@ -84,6 +84,3 @@ export class Tweener {
     }
   }
 }
-
-let tweener = new Tweener();
-export default tweener;

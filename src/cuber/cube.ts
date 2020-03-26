@@ -1,14 +1,11 @@
-import CubeGroup, { GroupTable } from "./group";
+import { GroupTable } from "./group";
 import Cubelet from "./cubelet";
-import History from "./history";
-import Twister, { TwistAction } from "./twister";
 import { FACE, COLORS } from "./define";
 import { Group, Euler } from "three";
 
 export default class Cube extends Group {
   public dirty: boolean = true;
   public lock: boolean = false;
-  public history: History = new History();
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
   public groups: GroupTable;
@@ -98,7 +95,7 @@ export default class Cube extends Group {
     }
     this.dirty = true;
   }
-  
+
   //                +------------+
   //                | U1  U2  U3 |
   //                |            |

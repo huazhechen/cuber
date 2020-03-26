@@ -12,6 +12,7 @@ import Icon from "../Icon";
 import { APNG } from "../../common/apng";
 import ZIP from "../../common/zip";
 import Preferance from "../../cuber/preferance";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html"),
@@ -55,7 +56,7 @@ export default class Editor extends Vue {
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
-    this.preferance = this.context.cuber.preferance;
+    this.preferance = cuber.preferance;
   }
 
   width: number = 0;
@@ -109,9 +110,9 @@ export default class Editor extends Vue {
       for (let index = 0; index < stickers.length; index++) {
         let sticker = stickers[index];
         if (sticker && sticker >= 0) {
-          this.context.cuber.cube.stick(index, face, this.colors[sticker]);
+          cuber.world.cube.stick(index, face, this.colors[sticker]);
         } else {
-          this.context.cuber.cube.stick(index, face, "");
+          cuber.world.cube.stick(index, face, "");
         }
       }
     }
@@ -119,10 +120,10 @@ export default class Editor extends Vue {
 
   mounted() {
     this.reload();
-    this.context.cuber.twister.callbacks.push(() => {
+    cuber.twister.callbacks.push(() => {
       this.callback();
     });
-    this.context.cuber.controller.taps.push((index: number, face: number) => {
+    cuber.controller.taps.push((index: number, face: number) => {
       this.stick(index, face);
     });
     this.delay = Number(window.localStorage.getItem("director.delay") || 2);
@@ -131,20 +132,20 @@ export default class Editor extends Vue {
   }
 
   init() {
-    this.preferance.lock = false;
+    cuber.controller.lock = false;
     this.playing = false;
     this.progress = 0;
-    this.context.cuber.controller.disable = false;
-    this.context.cuber.twister.finish();
-    this.context.cuber.twister.twist("#");
+    cuber.controller.disable = false;
+    cuber.twister.finish();
+    cuber.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
-    this.context.cuber.twister.twist(scene, false, 1, true);
-    this.context.cuber.cube.history.clear();
+    cuber.twister.twist(scene, false, 1, true);
+    cuber.history.clear();
   }
 
   end() {
     this.init();
-    this.context.cuber.twister.twist(this.action, false, 1, true);
+    cuber.twister.twist(this.action, false, 1, true);
     this.progress = this.actions.length;
   }
 
@@ -158,7 +159,7 @@ export default class Editor extends Vue {
   progress: number = 0;
   @Watch("progress")
   onProgressChange() {
-    this.context.cuber.controller.lock = this.progress > 0;
+    cuber.controller.lock = this.progress > 0;
   }
   actions: TwistAction[] = [];
   action: string = "";
@@ -187,7 +188,7 @@ export default class Editor extends Vue {
       }
       let action = this.actions[this.progress];
       this.progress++;
-      this.context.cuber.twister.twist(action.exp, action.reverse, action.times, false);
+      cuber.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
 
@@ -210,7 +211,7 @@ export default class Editor extends Vue {
     this.playing = false;
     let action = this.actions[this.progress];
     this.progress++;
-    this.context.cuber.twister.twist(action.exp, action.reverse, action.times);
+    cuber.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
@@ -220,7 +221,7 @@ export default class Editor extends Vue {
     this.playing = false;
     this.progress--;
     let action = this.actions[this.progress];
-    this.context.cuber.twister.twist(action.exp, !action.reverse, action.times);
+    cuber.twister.twist(action.exp, !action.reverse, action.times);
   }
 
   recording: boolean = false;
@@ -233,13 +234,13 @@ export default class Editor extends Vue {
 
   record() {
     let size = this.pixel;
-    let width = this.context.cuber.width;
-    let height = this.context.cuber.height;
-    this.context.cuber.width = size;
-    this.context.cuber.height = size;
-    this.context.cuber.resize();
+    let width = cuber.world.width;
+    let height = cuber.world.height;
+    cuber.world.width = size;
+    cuber.world.height = size;
+    cuber.world.resize();
     this.filmer.clear();
-    this.filmer.render(this.context.cuber.scene, this.context.cuber.camera);
+    this.filmer.render(cuber.world.scene, cuber.world.camera);
     if (this.output == "gif") {
       let content = this.filmer.getContext();
       let pixels = new Uint8Array(size * size * 4);
@@ -258,14 +259,14 @@ export default class Editor extends Vue {
       }
       this.zip.add("cuber" + this.zip.num + ".png", data);
     }
-    this.context.cuber.width = width;
-    this.context.cuber.height = height;
-    this.context.cuber.resize();
+    cuber.world.width = width;
+    cuber.world.height = height;
+    cuber.world.resize();
   }
 
   finish() {
     this.recording = false;
-    this.context.cuber.controller.disable = false;
+    cuber.controller.disable = false;
     let data;
     let blob;
     let url;
@@ -292,12 +293,12 @@ export default class Editor extends Vue {
   film() {
     if (this.recording) {
       this.recording = false;
-      this.context.cuber.controller.disable = false;
+      cuber.controller.disable = false;
       return;
     }
     this.init();
     this.recording = true;
-    this.context.cuber.controller.disable = true;
+    cuber.controller.disable = true;
     let size = this.pixel;
     this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
@@ -314,17 +315,17 @@ export default class Editor extends Vue {
 
   snap() {
     let size = this.pixel;
-    let width = this.context.cuber.width;
-    let height = this.context.cuber.height;
-    this.context.cuber.width = size;
-    this.context.cuber.height = size;
-    this.context.cuber.resize();
+    let width = cuber.world.width;
+    let height = cuber.world.height;
+    cuber.world.width = size;
+    cuber.world.height = size;
+    cuber.world.resize();
     this.filmer.setSize(size, size, true);
     this.filmer.clear();
-    this.filmer.render(this.context.cuber.scene, this.context.cuber.camera);
-    this.context.cuber.width = width;
-    this.context.cuber.height = height;
-    this.context.cuber.resize();
+    this.filmer.render(cuber.world.scene, cuber.world.camera);
+    cuber.world.width = width;
+    cuber.world.height = height;
+    cuber.world.resize();
     let content = this.filmer.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
@@ -362,7 +363,7 @@ export default class Editor extends Vue {
     if (index < 0) {
       return;
     }
-    let cubelet: Cubelet = this.context.cuber.cube.cubelets[index];
+    let cubelet: Cubelet = cuber.world.cube.cubelets[index];
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let arr = this.stickers[FACE[face]];
@@ -372,10 +373,10 @@ export default class Editor extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.context.cuber.cube.stick(index, face, this.colors[this.color]);
+      cuber.world.cube.stick(index, face, this.colors[this.color]);
     } else {
       arr[index] = -1;
-      this.context.cuber.cube.stick(index, face, "");
+      cuber.world.cube.stick(index, face, "");
     }
     window.localStorage.setItem("director.stickers." + this.preferance.order, JSON.stringify(this.stickers));
   }
@@ -384,7 +385,7 @@ export default class Editor extends Vue {
     this.colord = false;
     this.stickers = {};
     window.localStorage.setItem("director.stickers." + this.preferance.order, JSON.stringify(this.stickers));
-    this.context.cuber.cube.strip({});
+    cuber.world.cube.strip({});
   }
 
   @Watch("context.mode")
@@ -393,7 +394,7 @@ export default class Editor extends Vue {
       this.reload();
       this.init();
     } else {
-      this.context.cuber.cube.strip({});
+      cuber.world.cube.strip({});
       this.playing = false;
       this.recording = false;
     }

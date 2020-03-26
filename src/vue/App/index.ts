@@ -10,6 +10,7 @@ import { COLORS } from "../../cuber/define";
 import Algs from "../Algs";
 import { WebGLRenderer } from "three";
 import Cubelet from "../../cuber/cubelet";
+import cuber from "../../cuber";
 
 @Component({
   template: require("./index.html"),
@@ -35,7 +36,7 @@ export default class App extends Vue {
     super();
     let canvas = document.createElement("canvas");
     this.context = new Context();
-    this.context.toucher.init(canvas, this.context.cuber.controller.touch);
+    this.context.toucher.init(canvas, cuber.controller.touch);
     canvas.style.outline = "none";
     this.renderer = new WebGLRenderer({
       canvas: canvas,
@@ -63,14 +64,14 @@ export default class App extends Vue {
       return;
     }
     panel.resize(this.width, this.height);
-    this.context.cuber.width = this.width;
-    this.context.cuber.height = this.height - panel.height;
-    this.context.cuber.resize();
-    this.renderer.setSize(this.context.cuber.width, this.context.cuber.height, true);
-    let cuber = this.$refs.cuber;
-    if (cuber instanceof HTMLElement) {
-      cuber.style.width = this.context.cuber.width + "px";
-      cuber.style.height = this.context.cuber.height + "px";
+    cuber.world.width = this.width;
+    cuber.world.height = this.height - panel.height;
+    cuber.world.resize();
+    this.renderer.setSize(cuber.world.width, cuber.world.height, true);
+    let element = this.$refs.cuber;
+    if (element instanceof HTMLElement) {
+      element.style.width = cuber.world.width + "px";
+      element.style.height = cuber.world.height + "px";
     }
   }
 
@@ -112,16 +113,16 @@ export default class App extends Vue {
       let tick = new Date().getTime();
       tick = (tick / 1600) * Math.PI;
       tick = Math.sin(tick) / 32;
-      this.context.cuber.cube.position.y = tick * Cubelet.SIZE;
-      this.context.cuber.cube.rotation.y = (tick / 12) * Math.PI;
-      this.context.cuber.cube.updateMatrix();
-      this.context.cuber.cube.dirty = true;
+      cuber.world.cube.position.y = tick * Cubelet.SIZE;
+      cuber.world.cube.rotation.y = (tick / 12) * Math.PI;
+      cuber.world.cube.updateMatrix();
+      cuber.world.cube.dirty = true;
     }
-    if (this.context.cuber.dirty || this.context.cuber.cube.dirty) {
+    if (cuber.world.dirty || cuber.world.cube.dirty) {
       this.renderer.clear();
-      this.renderer.render(this.context.cuber.scene, this.context.cuber.camera);
-      this.context.cuber.dirty = false;
-      this.context.cuber.cube.dirty = false;
+      this.renderer.render(cuber.world.scene, cuber.world.camera);
+      cuber.world.dirty = false;
+      cuber.world.cube.dirty = false;
     }
     let panel = this.context.panels[this.context.mode];
     if (panel) {
@@ -135,10 +136,10 @@ export default class App extends Vue {
     window.location.hash = mode == 0 ? "" : "mode=" + mode + ";";
     this.$nextTick(this.resize);
     if (mode != 0) {
-      this.context.cuber.cube.position.y = 0;
-      this.context.cuber.cube.rotation.y = 0;
-      this.context.cuber.cube.updateMatrix();
-      this.context.cuber.cube.dirty = true;
+      cuber.world.cube.position.y = 0;
+      cuber.world.cube.rotation.y = 0;
+      cuber.world.cube.updateMatrix();
+      cuber.world.cube.dirty = true;
     }
   }
 
