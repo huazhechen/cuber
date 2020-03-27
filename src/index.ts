@@ -55,5 +55,5 @@ Vue.prototype.cuber = cuber;
 new Vue({
   vuetify,
   el: "#app",
-  render: h => h(Director)
+  render: h => h(Playground)
 });

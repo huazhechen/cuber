@@ -67,7 +67,7 @@ export default class Director extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
-    this.viewport?.resize(this.width, this.height - this.size * 4.5 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 4.3 - 32);
     this.player?.resize(this.size);
   }
 
