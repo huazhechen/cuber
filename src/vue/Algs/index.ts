@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Prop } from "vue-property-decorator";
 import Tune from "../Tune";
 import Context from "../context";
-import Player from "../Player";
+import Player1 from "../Player1";
 import { Panel } from "../panel";
 import cuber from "../../cuber";
 
@@ -53,7 +53,7 @@ export default class Algs extends Vue implements Panel {
   }
 
   tap(i: number, j: number) {
-    (<Player>this.context.panels[1]).index = { group: i, index: j };
+    (<Player1>this.context.panels[1]).index = { group: i, index: j };
     this.context.mode = 1;
   }
 }

@@ -4,26 +4,56 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.order"
+          v-model="preferance.scale"
           always-dirty
           thumb-label="always"
-          max="7"
-          min="2"
-          step="1"
-          label="阶数"
-          :disabled="context.mode==1"
+          max="100"
+          min="0"
+          label="大小"
         ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.frames"
+          v-model="preferance.perspective"
           always-dirty
           thumb-label="always"
-          max="50"
-          min="10"
-          step="5"
-          label="帧数"
+          max="100"
+          min="0"
+          label="透视"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.angle"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="左右"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.gradient"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="上下"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.brightness"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="亮度"
         ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>

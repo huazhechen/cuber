@@ -15,5 +15,3 @@ let controller = new Controller();
 let capture: Capture = new Capture();
 
 export default { world, controller, preferance, history, twister, tweener, capture };
-
-preferance.load();

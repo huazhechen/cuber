@@ -1,12 +1,12 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import Preferance from "../../cuber/preferance";
 import cuber from "../../cuber";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {}
 })
-export default class Tune extends Vue {
+export default class Layer extends Vue {
   @Prop({ required: true })
   value: boolean;
 
@@ -18,13 +18,14 @@ export default class Tune extends Vue {
     this.$emit("input", value);
   }
 
+  @Prop({ required: false })
+  callback: Function | undefined;
+
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  preferance: Preferance;
   constructor() {
     super();
-    this.preferance = cuber.preferance;
   }
 
   mounted() {
@@ -37,11 +38,13 @@ export default class Tune extends Vue {
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
   }
 
-  reset() {
-    this.preferance.scale = 50;
-    this.preferance.perspective = 50;
-    this.preferance.angle = 63;
-    this.preferance.gradient = 67;
-    this.preferance.brightness = 80;
+  tap(index: number) {
+    if (cuber.preferance.order != index) {
+      cuber.preferance.order = index;
+      if (this.callback) {
+        this.callback();
+      }
+    }
+    this.show = false;
   }
 }

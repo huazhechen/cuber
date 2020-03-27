@@ -2,7 +2,6 @@ import cuber from ".";
 
 export default class Twister {
   queue: TwistAction[];
-  public callbacks: Function[] = [];
   constructor() {
     this.queue = [];
   }
@@ -68,9 +67,6 @@ export default class Twister {
 
   update() {
     if (this.queue.length === 0) {
-      for (const callback of this.callbacks) {
-        callback();
-      }
       return;
     }
     if (cuber.world.cube.lock) {
@@ -89,7 +85,7 @@ export default class Twister {
         this.update();
         return;
       }
-      cuber.tweener.tween(0, 1, (cuber.world.cube.duration / 2) * action.times, (value: number) => {
+      cuber.tweener.tween(0, 1, (cuber.preferance.frames / 2) * action.times, (value: number) => {
         if (value === 1 || value === 0) {
           this.update();
           return;

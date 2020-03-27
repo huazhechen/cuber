@@ -10,7 +10,6 @@ export default class Cube extends Group {
   public initials: Cubelet[] = [];
   public groups: GroupTable;
   public complete: boolean = false;
-  public duration: number;
   public order: number;
   public callback: Function;
 
@@ -28,7 +27,6 @@ export default class Cube extends Group {
     this.groups = new GroupTable(this);
     this.matrixAutoUpdate = false;
     this.updateMatrix();
-    this.duration = 30;
   }
 
   update() {

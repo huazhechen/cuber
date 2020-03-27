@@ -1,91 +1,118 @@
 import cuber from ".";
 
 export default class Preferance {
-  private _storage = window.localStorage;
+  private storage = window.localStorage;
   constructor() {}
 
   public mode: string;
+  data = {
+    order: 3,
+    scale: 50,
+    perspective: 50,
+    angle: 63,
+    gradient: 67,
+    brightness: 80,
+    frames: 30,
+    mirror: false,
+    hollow: false
+  };
 
-  load() {
+  load(mode: string) {
+    this.mode = mode;
     let version = "0.0.3";
-    if (this._storage.getItem("version") != version) {
-      this._storage.clear();
-      this._storage.setItem("version", version);
+    if (this.storage.getItem("version") != version) {
+      this.storage.clear();
+      this.storage.setItem("version", version);
     }
-    this.order = Number(this._storage.getItem("setting.order") || 3);
-    this.scale = Number(this._storage.getItem("setting.scale") || 50);
-    this.perspective = Number(this._storage.getItem("setting.perspective") || 50);
-    this.angle = Number(this._storage.getItem("setting.angle") || 63);
-    this.gradient = Number(this._storage.getItem("setting.gradient") || 67);
-    this.brightness = Number(this._storage.getItem("setting.brightness") || 80);
-    this.frames = Number(this._storage.getItem("setting.frames") || 30);
-    this.mirror = false;
-    this.hollow = false;
-    this.mode = "";
+    let save = this.storage.getItem(mode + "." + "preferance");
+    if (save) {
+      this.data = JSON.parse(save);
+    }
+    this.refresh();
   }
 
-  private _order: number;
+  save() {
+    this.storage.setItem(this.mode + "." + "preferance", JSON.stringify(this.data));
+  }
+
+  refresh() {
+    this.order = this.data.order;
+    this.scale = this.data.scale;
+    this.perspective = this.data.perspective;
+    this.angle = this.data.angle;
+    this.gradient = this.data.gradient;
+    this.brightness = this.data.brightness;
+    this.frames = this.data.frames;
+    this.mirror = this.data.mirror;
+    this.hollow = this.data.hollow;
+  }
+
   get order() {
-    return this._order;
+    return this.data.order;
   }
   set order(value) {
-    this._storage.setItem("setting.order", String(value));
-    cuber.world.order = value;
-    if (this._order != value) {
-      this._order = value;
-      this.load();
+    if (this.data.order != value) {
+      this.data.order = value;
+      this.refresh();
+      this.save();
     }
+    cuber.world.order = value;
   }
 
-  private _scale: number;
   get scale() {
-    return this._scale;
+    return this.data.scale;
   }
   set scale(value) {
-    this._scale = value;
-    this._storage.setItem("setting.scale", String(value));
+    if (this.data.scale != value) {
+      this.data.scale = value;
+      this.save();
+    }
     cuber.world.resize();
   }
 
-  private _perspective: number;
   get perspective() {
-    return this._perspective;
+    return this.data.perspective;
   }
   set perspective(value) {
-    this._perspective = value;
-    this._storage.setItem("setting.perspective", String(value));
+    if (this.data.perspective != value) {
+      this.data.perspective = value;
+      this.save();
+    }
     cuber.world.resize();
   }
 
-  private _angle: number;
   get angle() {
-    return this._angle;
+    return this.data.angle;
   }
   set angle(value) {
-    this._angle = value;
-    this._storage.setItem("setting.angle", String(value));
+    if (this.data.angle != value) {
+      this.data.angle = value;
+      this.save();
+    }
     cuber.world.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
     cuber.world.dirty = true;
   }
 
-  private _gradient: number;
   get gradient() {
-    return this._gradient;
+    return this.data.gradient;
   }
   set gradient(value) {
-    this._gradient = value;
-    this._storage.setItem("setting.gradient", String(value));
+    if (this.data.gradient != value) {
+      this.data.gradient = value;
+      this.save();
+    }
     cuber.world.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
     cuber.world.dirty = true;
   }
 
-  private _brightness: number;
   get brightness() {
-    return this._brightness;
+    return this.data.brightness;
   }
   set brightness(value) {
-    this._brightness = value;
-    this._storage.setItem("setting.brightness", String(value));
+    if (this.data.brightness != value) {
+      this.data.brightness = value;
+      this.save();
+    }
     let light = value / 100;
     cuber.world.ambient.intensity = light;
     let d = light / 2;
@@ -96,33 +123,38 @@ export default class Preferance {
     cuber.world.dirty = true;
   }
 
-  private _frames: number;
   get frames() {
-    return this._frames;
+    return this.data.frames;
   }
   set frames(value) {
-    this._frames = value;
-    this._storage.setItem("setting.frames", String(value));
+    if (this.data.frames != value) {
+      this.data.frames = value;
+      this.save();
+    }
   }
 
-  private _mirror: boolean;
   get mirror() {
-    return this._mirror;
+    return this.data.mirror;
   }
   set mirror(value) {
-    this._mirror = value;
+    if (this.data.mirror != value) {
+      this.data.mirror = value;
+      this.save();
+    }
     for (let cubelet of cuber.world.cube.cubelets) {
       cubelet.mirror = value;
     }
     cuber.world.dirty = true;
   }
 
-  private _hollow: boolean;
   get hollow() {
-    return this._hollow;
+    return this.data.hollow;
   }
   set hollow(value: boolean) {
-    this._hollow = value;
+    if (this.data.hollow != value) {
+      this.data.hollow = value;
+      this.save();
+    }
     for (let cubelet of cuber.world.cube.cubelets) {
       cubelet.hollow = value;
     }

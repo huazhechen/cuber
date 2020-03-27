@@ -157,9 +157,6 @@ export default class Controller {
             y = Math.ceil((y + 0.5) * order) - 1;
             z = Math.ceil((z + 0.5) * order) - 1;
             this.holder.index = z * order * order + y * order + x;
-            if (this.holder.index == order * order + order + 1) {
-              this.holder.index = -1;
-            }
             distance = d;
             return;
           }

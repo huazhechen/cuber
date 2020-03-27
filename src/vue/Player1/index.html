@@ -1,0 +1,137 @@
+<v-container
+  fluid
+  grid-list-md
+  text-xs-center
+  :style="{width:size * 8 + 'px', height:height + 'px'}"
+  style="padding:0%;touch-action: none;"
+>
+  <v-btn
+    fixed
+    left
+    top
+    fab
+    outlined
+    color="primary"
+    @click="mode=3"
+    :style="{width:size+'px', height:size+'px', 'margin-left': width / 2 - size * 4 + 'px'}"
+  >
+    <v-icon :size="size * 0.6">assignment</v-icon>
+  </v-btn>
+  <v-layout row wrap>
+    <v-flex xs12 style="display: flex" :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px'}">
+      <template v-for="(group, i) in context.algs">
+        <v-btn
+          :color="index.group == i?'primary':''"
+          depressed
+          :style="{height:size+'px', 'font-size':size*0.4+'px'}"
+          style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+          @click="tabs(i);"
+        >
+          {{index.group==i?name:group.name}}
+        </v-btn>
+      </template>
+    </v-flex>
+    <v-flex xs12>
+      <v-text-field
+        style="text-transform:none;"
+        :height="size"
+        :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
+        dense
+        single-line
+        hide-details
+        outlined
+        :disabled="playing"
+        v-model="exp"
+      >
+        <v-btn
+          slot="label"
+          text
+          style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+          :style="{width:size/2+'px',height:size+'px'}"
+        >
+          <v-icon :size="size/2" style="vertical-align: middle">theaters</v-icon>
+        </v-btn>
+        <v-btn
+          slot="append"
+          text
+          v-show="exp!=origin"
+          style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+          :style="{width:size/2+'px',height:size+'px'}"
+          @click="exp=origin"
+        >
+          <v-icon :size="size/2">settings_backup_restore</v-icon>
+        </v-btn>
+      </v-text-field>
+    </v-flex>
+    <v-flex
+      xs12
+      :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px','padding-top': size *0.2 + 'px'}"
+    >
+      <v-slider
+        style="margin: 0%"
+        readonly
+        hide-details
+        :thumb-label="progress!=0?'always':false"
+        ticks="always"
+        v-model="progress"
+        :max="actions.length"
+      >
+        <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
+      </v-slider>
+    </v-flex>
+    <v-flex xs12 style="display: flex;margin: 0%; padding:0%; min-width: 0%; min-height: 0%;">
+      <v-flex d-flex>
+        <v-btn :style="style" text large @click="move(-1)">
+          <v-icon :size="size * 0.8">first_page</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large @click="tap('colorize')" :color="colorize?'red':''">
+          <v-icon :size="size * 0.8">colorize</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large @click="tap('mirror')" :color="cuber.preferance.mirror?'red':''">
+          <v-icon :size="size * 0.8">flip</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large @click="tap('hollow')" :color="cuber.preferance.hollow?'red':''">
+          <v-icon :size="size * 0.8">visibility</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large @click="move(1)">
+          <v-icon :size="size * 0.8">last_page</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-flex>
+    <v-flex xs12 style="display: flex">
+      <v-flex d-flex>
+        <v-btn :style="style" text large :disabled="progress==0" @click="init">
+          <v-icon :size="size * 0.8">skip_previous</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large :disabled="progress==0" @click="backward">
+          <v-icon :size="size * 0.8">fast_rewind</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large :disabled="progress == actions.length" @click="toggle">
+          <v-icon :size="size * 0.8">{{playing?'pause':'play_arrow'}}</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large :disabled="progress == actions.length" @click="forward">
+          <v-icon :size="size * 0.8">fast_forward</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex d-flex>
+        <v-btn :style="style" text large :disabled="(progress==actions.length)" @click="end">
+          <v-icon :size="size * 0.8">skip_next</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-flex>
+  </v-layout>
+</v-container>

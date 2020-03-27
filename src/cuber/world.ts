@@ -23,6 +23,11 @@ export default class World {
     this.scene.remove(this.cube);
     this.cube = this.cubes[value];
     this.scene.add(this.cube);
+    this.dirty = true;
+  }
+
+  get order() {
+    return this.cube.order;
   }
 
   constructor() {

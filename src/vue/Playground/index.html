@@ -5,34 +5,38 @@
       fixed
       left
       top
-      @click.stop="shuffled=true"
       text
       color="primary"
       style="margin:0%;padding:0%;"
-      :style="{height:size+'px', 'margin-left': width / 2 - size * 4 + 'px'}"
+      :style="{height:size+'px', 'margin-left': size / 4 + 'px'}"
     >
-      <div :style="{'font-size':(size * 0.8)+'px'}">{{score}}</div>
+      <div :style="{'font-size':(size * 0.6)+'px'}">{{score}}</div>
     </v-btn>
     <v-container
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:size * 8 + 'px', height:height + 'px'}"
+      :style="{width:size * 6 + 'px', height:height + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
-        <v-flex v-for="key in keys" :key="key" d-flex xs2>
-          <v-btn @click="tap(key)" :style="style" :ripple="false" :disabled="disable(key)">
+        <v-flex v-for="key in keys" :key="key" class="text-center">
+          <v-btn @click="tap(key)" :style="style" text :ripple="false" :disabled="disabled[key]?disabled[key]():false">
             <v-icon :size="size * 0.8">{{key}}</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
-    <v-dialog v-model="shuffled" :width="size * 8">
+    <tune v-model="tuned"></tune>
+    <setting v-model="settingd"></setting>
+    <layer v-model="layerd" :callback="order"></layer>
+    <v-dialog v-model="shuffled" :width="size * 6">
       <v-card>
-        <v-card-title style="text-transform:none;" class="headline"
-          ><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">重新打乱?</div></v-card-title
-        >
+        <v-card-title style="text-transform:none;" class="headline">
+          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+            重新打乱?
+          </div>
+        </v-card-title>
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs6 d-flex>
@@ -49,11 +53,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="completed" :width="size * 8">
+    <v-dialog v-model="completed" :width="size * 6">
       <v-card>
-        <v-card-title style="text-transform:none;" class="headline"
-          ><div :style="{'font-size':size/2+'px','padding-top':size/4+'px'}">复原成功</div></v-card-title
-        >
+        <v-card-title style="text-transform:none;" class="headline">
+          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+            复原成功
+          </div>
+        </v-card-title>
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs6 d-flex>

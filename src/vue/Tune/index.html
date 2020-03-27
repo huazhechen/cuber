@@ -57,13 +57,25 @@
         ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
-        <v-flex xs6>
-          <v-btn block text @click="show=false;" color="primary">
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            @click="show=false;"
+            color="primary"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
             确定
           </v-btn>
-        </v-flex>
-        <v-flex xs6>
-          <v-btn block text @click="reset" color="error">
+          <v-btn
+            @click="reset"
+            color="error"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
             重置
           </v-btn>
         </v-flex>

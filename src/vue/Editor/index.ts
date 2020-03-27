@@ -119,10 +119,10 @@ export default class Editor extends Vue {
   }
 
   mounted() {
-    this.reload();
-    cuber.twister.callbacks.push(() => {
+    cuber.world.callbacks.push(() => {
       this.callback();
     });
+    this.reload();
     cuber.controller.taps.push((index: number, face: number) => {
       this.stick(index, face);
     });
@@ -152,7 +152,6 @@ export default class Editor extends Vue {
   scene: string = "";
   @Watch("scene")
   onSceneChange() {
-    window.localStorage.setItem("director.scene." + this.preferance.order, this.scene);
     this.init();
   }
 

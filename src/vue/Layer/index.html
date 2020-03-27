@@ -1,0 +1,20 @@
+<v-bottom-sheet v-resize="resize" v-model="show">
+  <v-card text style="margin: auto;touch-action: none;user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap>
+        <v-flex v-for="order in [2, 3, 4, 5, 6, 7]" :key="order" xs2 style="padding: 1%;">
+          <v-btn
+            @click="tap(order)"
+            block
+            depressed
+            style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+            :height="size"
+            :color="cuber.preferance.order == order?'primary':''"
+          >
+            <div :style="{'font-size':(size * 0.6)+'px'}">{{order}}</div>
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

@@ -77,7 +77,7 @@ export default class CubeGroup extends Group {
       this.drop();
     } else {
       let d = Math.abs(delta) / (Math.PI / 2);
-      var duration = this.cube.duration * (2 - 2 / (d + 1));
+      var duration = cuber.preferance.frames * (2 - 2 / (d + 1));
       cuber.tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (this.angle === angle || this.angle === 0) {

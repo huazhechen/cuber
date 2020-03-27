@@ -1,0 +1,88 @@
+<v-app>
+  <div v-resize="resize" style="user-select: none;background-color: white;">
+    <viewport ref="viewport"></viewport>
+    <v-container
+      fluid
+      grid-list-md
+      text-xs-center
+      :style="{width:size * 8 + 'px'}"
+      style="padding:0%;touch-action: none;"
+    >
+      <v-layout row wrap>
+        <v-flex v-for="key in keys" :key="key" class="text-center">
+          <v-btn @click="tap(key)" :style="style" text :ripple="false" :disabled="disabled[key]?disabled[key]():false">
+            <v-icon :size="size * 0.8">{{key}}</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex xs12>
+          <v-text-field
+            style="text-transform:none;"
+            :height="size * 0.8"
+            :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'font-size':size*0.4+'px'}"
+            dense
+            single-line
+            hide-details
+            outlined
+            :disabled="recording"
+            v-model="scene"
+          >
+            <v-btn
+              slot="label"
+              text
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+            >
+              <v-icon :size="size * 0.4" style="vertical-align: middle">terrain</v-icon>
+            </v-btn>
+            <v-btn
+              slot="append"
+              text
+              v-show="scene != ''"
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
+              @click="scene = ''"
+            >
+              <v-icon :size="size * 0.4">clear</v-icon>
+            </v-btn>
+          </v-text-field>
+        </v-flex>
+        <v-flex xs12>
+          <v-text-field
+            style="text-transform:none;"
+            :height="size * 0.8"
+            :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
+            dense
+            single-line
+            hide-details
+            outlined
+            :disabled="recording"
+            v-model="action"
+          >
+            <v-btn
+              slot="label"
+              text
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+            >
+              <v-icon :size="size * 0.4" style="vertical-align: middle">theaters</v-icon>
+            </v-btn>
+            <v-btn
+              slot="append"
+              text
+              v-show="action != ''"
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+              @click="action = ''"
+            >
+              <v-icon :size="size * 0.4">clear</v-icon>
+            </v-btn>
+          </v-text-field>
+        </v-flex>
+      </v-layout>
+      <player ref="player"></player>
+    </v-container>
+    <tune v-model="tuned"></tune>
+    <setting v-model="settingd"></setting>
+    <layer v-model="layerd" :callback="order"></layer>
+  </div>
+</v-app>

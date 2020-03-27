@@ -1,0 +1,76 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0">
+  <v-card text style="margin: auto;touch-action: none;user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap justify-center align-center>
+        <v-flex xs2>
+          <div :style="{'font-size':size * 0.3+'px'}">帧数:</div>
+        </v-flex>
+        <v-flex xs10 style="display: flex;">
+          <v-btn
+            v-for="frames in [10, 20, 30, 45, 60]"
+            :key="frames"
+            @click="preferance.frames = frames"
+            :color="preferance.frames == frames?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            <div>{{frames}}</div>
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-flex xs2>
+          <div :style="{'font-size':size * 0.3+'px'}">外观:</div>
+        </v-flex>
+        <v-flex xs10 style="display: flex;">
+          <v-btn
+            @click="preferance.mirror=!preferance.mirror"
+            :color="preferance.mirror?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            镜像
+          </v-btn>
+          <v-btn
+            @click="preferance.hollow=!preferance.hollow"
+            :color="preferance.hollow?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            透明
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            @click="show=false;"
+            color="primary"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            确定
+          </v-btn>
+          <v-btn
+            @click="reset"
+            color="error"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.6"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            重置
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

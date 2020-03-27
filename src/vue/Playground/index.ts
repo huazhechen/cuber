@@ -3,11 +3,17 @@ import { Component } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import cuber from "../../cuber";
+import Tune from "../Tune";
+import Layer from "../Layer";
+import Setting from "../Setting";
 
 @Component({
   template: require("./index.html"),
   components: {
-    viewport: Viewport
+    viewport: Viewport,
+    tune: Tune,
+    setting: Setting,
+    layer: Layer
   }
 })
 export default class Playground extends Vue {
@@ -23,14 +29,15 @@ export default class Playground extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 8, this.height / 12)) * 0.95;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
-      view.resize(this.width, this.height - this.size * 1.8);
+      view.resize(this.width, this.height - this.size * 1.5);
     }
   }
 
   mounted() {
+    cuber.preferance.load("playground");
     this.resize();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
@@ -39,9 +46,6 @@ export default class Playground extends Vue {
     this.shuffle();
     this.loop();
   }
-
-  shuffled: boolean = false;
-  completed: boolean = false;
 
   complete: boolean = false;
   start: number = 0;
@@ -56,6 +60,8 @@ export default class Playground extends Vue {
     let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
     return time + "/" + cuber.history.moves;
   }
+
+  completed: boolean = false;
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
@@ -89,31 +95,47 @@ export default class Playground extends Vue {
 
   get style() {
     return {
-      "margin-left": ((this.size * 8) / 6) * 0.06 + "px",
-      "margin-bottom": ((this.size * 8) / 6) * 0.1 + "px",
-      width: ((this.size * 8) / 6) * 0.88 + "px",
-      height: ((this.size * 8) / 6) * 0.88 + "px",
+      width: this.size + "px",
+      height: this.size + "px",
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none"
     };
   }
 
-  keys = ["backspace", "lock", "tune", "layers", "layer1", "layer2"];
+  tuned: boolean = false;
+  settingd: boolean = false;
+  shuffled: boolean = false;
+  layerd: boolean = false;
+  keys = ["widgets", "casino", "palette", "settings", "backspace"];
+  disabled = {
+    backspace: () => {
+      return cuber.history.length == 0 || cuber.controller.lock;
+    }
+  };
   tap(key: string) {
     switch (key) {
+      case "widgets":
+        this.layerd = true;
+        break;
+      case "casino":
+        this.shuffled = true;
+        break;
+      case "palette":
+        this.tuned = true;
+        break;
+      case "settings":
+        this.settingd = true;
+        break;
       case "backspace":
         cuber.history.undo();
+        break;
       default:
         break;
     }
   }
-  disable(key: string) {
-    switch (key) {
-      case "backspace":
-        return cuber.history.length == 0 || cuber.controller.lock;
-      default:
-        break;
-    }
+
+  order() {
+    this.shuffle();
   }
 }

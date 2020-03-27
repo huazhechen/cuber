@@ -19,10 +19,10 @@ import Vuetify, {
   VTabsItems,
   VCardActions
 } from "vuetify/lib";
-import App from "./vue/App";
 import "./index.css";
 import cuber from "./cuber";
 import Playground from "./vue/Playground";
+import Director from "./vue/Director";
 
 Vue.use(Vuetify, {
   components: {
@@ -55,5 +55,5 @@ Vue.prototype.cuber = cuber;
 new Vue({
   vuetify,
   el: "#app",
-  render: h => h(Playground)
+  render: h => h(Director)
 });

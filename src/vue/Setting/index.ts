@@ -6,7 +6,7 @@ import cuber from "../../cuber";
 @Component({
   template: require("./index.html")
 })
-export default class Config extends Vue {
+export default class Setting extends Vue {
   @Prop({ required: true })
   value: boolean;
 
@@ -20,6 +20,7 @@ export default class Config extends Vue {
 
   width: number = 0;
   height: number = 0;
+  size: number = 0;
   preferance: Preferance;
   constructor() {
     super();
@@ -27,15 +28,18 @@ export default class Config extends Vue {
   }
 
   mounted() {
+    this.resize();
+  }
+
+  resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
   }
 
   reset() {
-    this.preferance.scale = 50;
-    this.preferance.perspective = 50;
-    this.preferance.angle = 63;
-    this.preferance.gradient = 67;
-    this.preferance.brightness = 80;
+    this.preferance.frames = 30;
+    this.preferance.mirror = false;
+    this.preferance.hollow = false;
   }
 }
