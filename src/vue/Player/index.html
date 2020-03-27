@@ -15,27 +15,19 @@
       <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
     </v-slider>
   </v-flex>
-  <v-flex d-flex>
+  <v-flex xs12 style="display: flex;">
     <v-btn :style="style" text large :disabled="progress==0" @click="init">
       <v-icon :size="size * 0.8">skip_previous</v-icon>
     </v-btn>
-  </v-flex>
-  <v-flex d-flex>
     <v-btn :style="style" text large :disabled="progress==0" @click="backward">
       <v-icon :size="size * 0.8">fast_rewind</v-icon>
     </v-btn>
-  </v-flex>
-  <v-flex d-flex>
     <v-btn :style="style" text large :disabled="progress == actions.length" @click="toggle">
       <v-icon :size="size * 0.8">{{playing?'pause':'play_arrow'}}</v-icon>
     </v-btn>
-  </v-flex>
-  <v-flex d-flex>
     <v-btn :style="style" text large :disabled="progress == actions.length" @click="forward">
       <v-icon :size="size * 0.8">fast_forward</v-icon>
     </v-btn>
-  </v-flex>
-  <v-flex d-flex>
     <v-btn :style="style" text large :disabled="(progress==actions.length)" @click="finish">
       <v-icon :size="size * 0.8">skip_next</v-icon>
     </v-btn>

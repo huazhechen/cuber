@@ -29,7 +29,8 @@ export default class Player extends Vue {
       height: this.size + "px",
       "min-width": "0%",
       "min-height": "0%",
-      "text-transform": "none"
+      "text-transform": "none",
+      flex: 1
     };
   }
 

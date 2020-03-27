@@ -66,8 +66,8 @@ export default class Director extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.8;
-    this.viewport?.resize(this.width, this.height - this.size * 4.8 - 32);
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
+    this.viewport?.resize(this.width, this.height - this.size * 4.5 - 32);
     this.player?.resize(this.size);
   }
 
@@ -145,7 +145,8 @@ export default class Director extends Vue {
       height: this.size + "px",
       "min-width": "0%",
       "min-height": "0%",
-      "text-transform": "none"
+      "text-transform": "none",
+      flex: 1
     };
   }
 
@@ -174,7 +175,10 @@ export default class Director extends Vue {
     }
   }
 
-  order() {}
+  order() {
+    this.reload();
+    this.player.init();
+  }
 
   scene: string = "";
   @Watch("scene")

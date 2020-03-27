@@ -5,12 +5,20 @@
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:size * 8 + 'px'}"
+      :style="{width:size * 8 + 'px', height:size * 4.8 + 32 + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
-        <v-flex v-for="key in keys" :key="key" class="text-center">
-          <v-btn @click="tap(key)" :style="style" text :ripple="false" :disabled="disabled[key]?disabled[key]():false">
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            v-for="key in keys"
+            :key="key"
+            @click="tap(key)"
+            :style="style"
+            text
+            :ripple="false"
+            :disabled="disabled[key]?disabled[key]():false"
+          >
             <v-icon :size="size * 0.8">{{key}}</v-icon>
           </v-btn>
         </v-flex>
