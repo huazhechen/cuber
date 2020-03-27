@@ -5,11 +5,11 @@
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:size * 8 + 'px', height:size * 4.8 + 32 + 'px'}"
+      :style="{width:size * 8 + 'px', height:size * 4.4 + 32 + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
-        <v-flex xs12 style="display: flex;">
+        <v-flex xs12 style="display: flex;" :style="{'padding-bottom': size / 8 + 'px'}">
           <v-btn
             v-for="key in keys"
             :key="key"
@@ -26,7 +26,7 @@
           <v-text-field
             style="text-transform:none;"
             :height="size * 0.8"
-            :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'font-size':size*0.4+'px'}"
+            :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'font-size':size*0.4+'px'}"
             dense
             single-line
             hide-details
@@ -58,7 +58,7 @@
           <v-text-field
             style="text-transform:none;"
             :height="size * 0.8"
-            :style="{'padding-left': size / 8 + 'px','padding-right': size / 8 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
+            :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
             dense
             single-line
             hide-details
@@ -90,7 +90,6 @@
       <player ref="player"></player>
     </v-container>
     <tune v-model="tuned"></tune>
-    <setting v-model="settingd"></setting>
-    <layer v-model="layerd" :callback="order"></layer>
+    <setting v-model="settingd" v-on:order="order"></setting>
   </div>
 </v-app>

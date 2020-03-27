@@ -4,7 +4,6 @@ import { Component, Watch } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import cuber from "../../cuber";
 import Tune from "../Tune";
-import Layer from "../Layer";
 import Setting from "../Setting";
 import Player from "../Player";
 import { WebGLRenderer } from "three";
@@ -21,8 +20,7 @@ import Util from "../../common/util";
     viewport: Viewport,
     tune: Tune,
     setting: Setting,
-    player: Player,
-    layer: Layer
+    player: Player
   }
 })
 export default class Director extends Vue {
@@ -67,7 +65,7 @@ export default class Director extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
-    this.viewport?.resize(this.width, this.height - this.size * 4.3 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 4.4 - 32);
     this.player?.resize(this.size);
   }
 
@@ -153,22 +151,15 @@ export default class Director extends Vue {
   tuned: boolean = false;
   settingd: boolean = false;
   shuffled: boolean = false;
-  layerd: boolean = false;
-  keys = ["widgets", "colorize", "palette", "settings", "archive", "videocam"];
+  keys = ["colorize", "palette", "settings", "archive", "videocam"];
   disabled = {};
   tap(key: string) {
     switch (key) {
-      case "widgets":
-        this.layerd = true;
-        break;
       case "palette":
         this.tuned = true;
         break;
       case "settings":
         this.settingd = true;
-        break;
-      case "backspace":
-        cuber.history.undo();
         break;
       default:
         break;

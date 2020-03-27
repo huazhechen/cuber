@@ -1,10 +1,9 @@
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import cuber from "../../cuber";
 import Tune from "../Tune";
-import Layer from "../Layer";
 import Setting from "../Setting";
 
 @Component({
@@ -12,8 +11,7 @@ import Setting from "../Setting";
   components: {
     viewport: Viewport,
     tune: Tune,
-    setting: Setting,
-    layer: Layer
+    setting: Setting
   }
 })
 export default class Playground extends Vue {
@@ -107,8 +105,7 @@ export default class Playground extends Vue {
   tuned: boolean = false;
   settingd: boolean = false;
   shuffled: boolean = false;
-  layerd: boolean = false;
-  keys = ["widgets", "casino", "palette", "settings", "backspace"];
+  keys = ["casino", "palette", "settings", "backspace"];
   disabled = {
     backspace: () => {
       return cuber.history.length == 0 || cuber.controller.lock;
@@ -116,9 +113,6 @@ export default class Playground extends Vue {
   };
   tap(key: string) {
     switch (key) {
-      case "widgets":
-        this.layerd = true;
-        break;
       case "casino":
         this.shuffled = true;
         break;
@@ -134,9 +128,5 @@ export default class Playground extends Vue {
       default:
         break;
     }
-  }
-
-  order() {
-    this.shuffle();
   }
 }

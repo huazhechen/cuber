@@ -36,8 +36,7 @@
       </v-layout>
     </v-container>
     <tune v-model="tuned"></tune>
-    <setting v-model="settingd"></setting>
-    <layer v-model="layerd" :callback="order"></layer>
+    <setting v-model="settingd" v-on:order="shuffle"></setting>
     <v-dialog v-model="shuffled" :width="size * 6">
       <v-card>
         <v-card-title style="text-transform:none;" class="headline">
