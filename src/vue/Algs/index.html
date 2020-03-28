@@ -1,6 +1,6 @@
 <v-app>
-  <dash v-show="!listd"> </dash>
   <div v-show="!listd" v-resize="resize" style="user-select: none;background-color: white;">
+    <dash v-show="!listd"> </dash>
     <viewport ref="viewport"></viewport>
     <v-btn
       fixed
@@ -27,9 +27,9 @@
           style="display: flex;"
           :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
         >
-        <v-btn @click="move(-1)" :style="style" text :ripple="false">
-          <v-icon :size="size * 0.8">first_page</v-icon>
-        </v-btn>
+          <v-btn @click="move(-1)" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">first_page</v-icon>
+          </v-btn>
           <v-btn @click="tap('settings')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">widgets</v-icon>
           </v-btn>
