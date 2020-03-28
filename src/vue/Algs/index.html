@@ -1,24 +1,125 @@
-<div v-show="context.mode == 3" style="margin:0;display: flex;flex-flow: column;height: 100%;">
-  <div style="margin: auto;" :style="{width:width+'px'}">
-    <v-tabs v-model="tab" grow color="cyan">
-      <v-tab v-for="(group,i) in context.algs" :key="i" :href="`#tab-${i}`">
-        {{ group.name}}
-      </v-tab>
-    </v-tabs>
+<v-app>
+  <dash v-show="!listd"> </dash>
+  <div v-show="!listd" v-resize="resize" style="user-select: none;background-color: white;">
+    <viewport ref="viewport"></viewport>
+    <v-btn
+      fixed
+      left
+      top
+      text
+      color="primary"
+      style="margin:0%;padding:0%;"
+      :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
+      @click="tap('list')"
+    >
+      <div :style="{'font-size':(size * 0.6)+'px'}">{{name}}</div>
+    </v-btn>
+    <v-container
+      fluid
+      grid-list-md
+      text-xs-center
+      :style="{width:size * 8 + 'px', height:size * 3.6 + 32 + 'px'}"
+      style="padding:0%;touch-action: none;"
+    >
+      <v-layout row wrap>
+        <v-flex
+          xs12
+          style="display: flex;"
+          :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
+        >
+        <v-btn @click="move(-1)" :style="style" text :ripple="false">
+          <v-icon :size="size * 0.8">first_page</v-icon>
+        </v-btn>
+          <v-btn @click="tap('settings')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">widgets</v-icon>
+          </v-btn>
+          <v-btn @click="tap('tune')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">settings</v-icon>
+          </v-btn>
+          <v-btn @click="tap('add')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">note_add</v-icon>
+          </v-btn>
+          <v-btn @click="move(1)" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">last_page</v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex xs12>
+          <v-text-field
+            style="text-transform:none;"
+            :height="size * 0.8"
+            :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
+            dense
+            single-line
+            hide-details
+            outlined
+            v-model="action"
+          >
+            <v-btn
+              slot="label"
+              text
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+            >
+              <v-icon :size="size * 0.4" style="vertical-align: middle">theaters</v-icon>
+            </v-btn>
+            <v-btn
+              slot="append"
+              text
+              v-show="action != ''"
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+              @click="action = ''"
+            >
+              <v-icon :size="size * 0.4">clear</v-icon>
+            </v-btn>
+          </v-text-field>
+        </v-flex>
+      </v-layout>
+      <player ref="player"></player>
+    </v-container>
+    <tune v-model="tuned"></tune>
+    <setting v-model="settingd"></setting>
   </div>
-  <div style="flex: 1;overflow: auto;margin: auto;" :style="{width:width+'px'}">
-    <v-tabs-items v-model="tab">
-      <v-tab-item v-for="(group,i) in context.pics" :key="i" :value="'tab-' + i" style="height: 100%;">
-        <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;align-items: stretch;">
-          <v-flex d-flex style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;" v-for="(pic, j) in group" :key="j" xs3>
-            <v-card outlined :style="{width:width/4+'px',height:width/2.1+'px'}" style="margin: 0%; padding:0%;">
-              <p :style="{'font-size':width/24+'px'}" style="text-align:center;margin: 0%;padding: 0%;color: indianred;">{{context.algs[i].algs[j].name}}</p>
-              <img :src="pic" style="width: 100%;margin: 0%; padding:0%;" @click="tap(i, j)" />
-              <p :style="{'font-size':width/32+'px'}" style="text-align:center;word-wrap:break-word;margin: 0%;padding: 0%;">{{context.algs[i].algs[j].exp}}</p>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
-    </v-tabs-items>
+  <div v-show="listd" style="margin:0;display: flex;flex-flow: column;height: 100%;">
+    <div style="margin: auto;" :style="{width:grid+'px'}">
+      <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
+        <v-tab v-for="(group,i) in algs" :key="i" :href="`#tab-${i}`">
+          <p :style="{'font-size':size * 0.4+'px'}" style="text-align:center;margin: 0%;padding: 0%;">
+            {{ group.name}}
+          </p>
+        </v-tab>
+      </v-tabs>
+    </div>
+    <div style="flex: 1;overflow: auto;margin: auto;" :style="{width:grid+'px'}">
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="(group,i) in pics" :key="i" :value="'tab-' + i" style="height: 100%;">
+          <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;align-items: stretch;">
+            <v-flex
+              d-flex
+              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              v-for="(pic, j) in group"
+              :key="j"
+              xs3
+            >
+              <v-card outlined style="margin: 0%; padding:0%;">
+                <p
+                  :style="{'font-size':size/3+'px'}"
+                  style="text-align:center;margin: 0%;padding: 0%;color: indianred;"
+                >
+                  {{algs[i].algs[j].name}}
+                </p>
+                <img :src="pic" style="width: 100%;margin: 0%; padding:0%;" @click="select(i, j)" />
+                <p
+                  :style="{'font-size':size/4+'px'}"
+                  style="text-align:center;word-wrap:break-word;margin: 0%;padding: 0%;"
+                >
+                  {{algs[i].algs[j].exp}}
+                </p>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
   </div>
-</div>
+</v-app>

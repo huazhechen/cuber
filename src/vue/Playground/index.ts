@@ -5,13 +5,13 @@ import Viewport from "../Viewport";
 import cuber from "../../cuber";
 import Tune from "../Tune";
 import Setting from "../Setting";
-import Dial from "../Dial";
+import Dash from "../Dash";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
-    dial: Dial,
+    dash: Dash,
     tune: Tune,
     setting: Setting
   }
@@ -30,19 +30,16 @@ export default class Playground extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
-    let view = this.$refs.viewport;
-    if (view instanceof Viewport) {
-      view.resize(this.width, this.height - this.size * 1.5);
-    }
+    this.viewport?.resize(this.width, this.height - this.size * 1.5);
   }
 
   mounted() {
     cuber.preferance.load("playground");
-    this.resize();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
     }
+    this.resize();
     this.shuffle();
     this.loop();
   }

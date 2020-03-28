@@ -1,5 +1,5 @@
 <v-app>
-  <dial></dial>
+  <dash></dash>
   <div v-resize="resize" style="user-select: none;background-color: white;">
     <viewport ref="viewport"></viewport>
     <v-container
@@ -58,6 +58,7 @@
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
               @click="scene = ''"
+              :disabled="recording"
             >
               <v-icon :size="size * 0.4">clear</v-icon>
             </v-btn>
@@ -90,6 +91,7 @@
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
               @click="action = ''"
+              :disabled="recording"
             >
               <v-icon :size="size * 0.4">clear</v-icon>
             </v-btn>

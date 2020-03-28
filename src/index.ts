@@ -17,14 +17,14 @@ import Vuetify, {
   VTextField,
   VBottomSheet,
   VTabsItems,
-  VCardActions,
-  VSpeedDial
+  VCardActions
 } from "vuetify/lib";
 import "./index.css";
 import cuber from "./cuber";
 import Playground from "./vue/Playground";
 import Director from "./vue/Director";
 import { VueConstructor } from "vue/types/umd";
+import Algs from "./vue/Algs";
 
 Vue.use(Vuetify, {
   components: {
@@ -44,8 +44,7 @@ Vue.use(Vuetify, {
     VTab,
     VTabItem,
     VTabsItems,
-    VSlider,
-    VSpeedDial
+    VSlider
   },
   directives: {
     Resize
@@ -64,6 +63,9 @@ let app: VueConstructor;
 switch (mode) {
   case "director":
     app = Director;
+    break;
+  case "algs":
+    app = Algs;
     break;
   default:
     app = Playground;

@@ -51,6 +51,8 @@ export default class Viewport extends Vue {
       this.renderer.render(cuber.world.scene, cuber.world.camera);
       cuber.world.dirty = false;
       cuber.world.cube.dirty = false;
+      return true;
     }
+    return false;
   }
 }

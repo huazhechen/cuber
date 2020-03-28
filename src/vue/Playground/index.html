@@ -1,5 +1,5 @@
 <v-app>
-  <dial></dial>
+  <dash></dash>
   <div v-resize="resize" style="user-select: none;background-color: white;">
     <viewport ref="viewport"></viewport>
     <v-btn
@@ -9,7 +9,7 @@
       text
       color="primary"
       style="margin:0%;padding:0%;"
-      :style="{height:size+'px', 'margin-left': size / 4 + 'px'}"
+      :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
     >
       <div :style="{'font-size':(size * 0.6)+'px'}">{{score}}</div>
     </v-btn>

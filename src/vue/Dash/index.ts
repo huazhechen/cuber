@@ -5,7 +5,7 @@ import { Component } from "vue-property-decorator";
   template: require("./index.html"),
   components: {}
 })
-export default class Dial extends Vue {
+export default class Dash extends Vue {
   menu: boolean = false;
 
   constructor() {
@@ -37,6 +37,7 @@ export default class Dial extends Vue {
     switch (key) {
       case "playground":
       case "director":
+      case "algs":
         window.location.search = "mode=" + key;
         break;
       case "code":
