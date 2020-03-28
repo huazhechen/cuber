@@ -105,24 +105,18 @@ export default class Playground extends Vue {
   tuned: boolean = false;
   settingd: boolean = false;
   shuffled: boolean = false;
-  keys = ["casino", "palette", "settings", "backspace"];
-  disabled = {
-    backspace: () => {
-      return cuber.history.length == 0 || cuber.controller.lock;
-    }
-  };
   tap(key: string) {
     switch (key) {
-      case "casino":
+      case "shuffle":
         this.shuffled = true;
         break;
-      case "palette":
+      case "tune":
         this.tuned = true;
         break;
       case "settings":
         this.settingd = true;
         break;
-      case "backspace":
+      case "undo":
         cuber.history.undo();
         break;
       default:

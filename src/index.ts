@@ -23,6 +23,7 @@ import "./index.css";
 import cuber from "./cuber";
 import Playground from "./vue/Playground";
 import Director from "./vue/Director";
+import { VueConstructor } from "vue/types/umd";
 
 Vue.use(Vuetify, {
   components: {
@@ -52,8 +53,20 @@ const opts = {};
 const vuetify = new Vuetify(opts);
 Vue.prototype.cuber = cuber;
 
+let search = location.search || "";
+let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
+let mode = list ? list[2] : "playground";
+let app: VueConstructor;
+switch (mode) {
+  case "director":
+    app = Director;
+    break;
+  default:
+    app = Playground;
+    break;
+}
 new Vue({
   vuetify,
   el: "#app",
-  render: h => h(Director)
+  render: h => h(app)
 });

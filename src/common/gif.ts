@@ -9,7 +9,25 @@ export class LZW {
   static EOF = -1;
   static BITS = 12;
   static HSIZE = 5003;
-  static MASKS = [0x0000, 0x0001, 0x0003, 0x0007, 0x000f, 0x001f, 0x003f, 0x007f, 0x00ff, 0x01ff, 0x03ff, 0x07ff, 0x0fff, 0x1fff, 0x3fff, 0x7fff, 0xffff];
+  static MASKS = [
+    0x0000,
+    0x0001,
+    0x0003,
+    0x0007,
+    0x000f,
+    0x001f,
+    0x003f,
+    0x007f,
+    0x00ff,
+    0x01ff,
+    0x03ff,
+    0x07ff,
+    0x0fff,
+    0x1fff,
+    0x3fff,
+    0x7fff,
+    0xffff
+  ];
 
   width: number;
   height: number;
@@ -85,7 +103,7 @@ export class LZW {
     ent = this.nextPixel();
 
     hshift = 0;
-    for (fcode = LZW.HSIZE; fcode < 65536; fcode *= 2)++hshift;
+    for (fcode = LZW.HSIZE; fcode < 65536; fcode *= 2) ++hshift;
     hshift = 8 - hshift;
     hsize_reg = LZW.HSIZE;
     this.cl_hash(hsize_reg);
@@ -251,17 +269,20 @@ export default class GIF {
     return colors;
   })();
 
-  constructor(width: number, height: number, delay: number) {
+  constructor() {
+    this.dispose = 0;
+    this.frames = 0;
+  }
+
+  frames: number;
+  start(width: number, height: number, delay: number) {
     this.width = ~~width;
     this.height = ~~height;
-    this.delay = delay;
     this.data = new Uint8Array(this.width * this.height);
     this.last = new Uint8Array(this.width * this.height);
     this.real = new Uint8Array(this.width * this.height);
-    this.dispose = 0;
-  }
-
-  start() {
+    this.frames = 0;
+    this.delay = delay;
     this.out = new ByteArray();
     this.writeHeader();
     this.writeLSD();
@@ -305,9 +326,9 @@ export default class GIF {
         let g = this.image[from * 4 + 1];
         let b = this.image[from * 4 + 2];
         if (a == 0) {
-          r = 0xFF;
-          g = 0xFF;
-          b = 0xFF;
+          r = 0xff;
+          g = 0xff;
+          b = 0xff;
         }
         let hash = (r * 31 + g) * 31 + b;
         hash = hash & 0x1ff;
@@ -344,6 +365,7 @@ export default class GIF {
     this.writeGraphicCtrlExt();
     this.writeImageDesc();
     this.writePixels();
+    this.frames++;
   }
 
   finish() {
@@ -368,7 +390,7 @@ export default class GIF {
       0 | // 1:3 reserved
       disp | // 4:6 disposal
       0 | // 7 user input - 0 = none
-      transp // 8 transparency flag
+        transp // 8 transparency flag
     );
 
     this.out.writeShort(this.delay); // delay x 1/100 sec
@@ -395,7 +417,7 @@ export default class GIF {
       0x80 | // 1 : global color table flag = 1 (gct used)
       ((GIF.DEEP - 1) << 4) | // 2-4 : color resolution = 7
       0x00 | // 5 : gct sort flag = 0
-      (GIF.DEEP - 1) // 6-8 : gct size
+        (GIF.DEEP - 1) // 6-8 : gct size
     );
 
     this.out.writeByte(0); // background color index

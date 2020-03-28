@@ -8,6 +8,9 @@ import { TwistAction, TwistNode } from "../../cuber/twister";
   components: {}
 })
 export default class Player extends Vue {
+  @Prop({ required: false, default: false })
+  disable: boolean;
+
   size: number = 0;
   constructor() {
     super();
@@ -91,8 +94,11 @@ export default class Player extends Vue {
     if (this.playing) {
       this.playing = false;
     } else {
-      this.forward();
+      if (this.progress == 0) {
+        this.init();
+      }
       this.playing = true;
+      this.callback();
     }
   }
 

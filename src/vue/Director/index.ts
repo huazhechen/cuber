@@ -57,6 +57,7 @@ export default class Director extends Vue {
     this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+    this.gif = new GIF();
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
   }
@@ -89,7 +90,17 @@ export default class Director extends Vue {
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
     this.output = window.localStorage.getItem("director.output") || "gif";
 
+    cuber.world.callbacks.push(() => {
+      this.callback();
+    });
+
     this.loop();
+  }
+
+  callback() {
+    if (this.recording && this.player.playing == false) {
+      this.finish();
+    }
   }
 
   reload() {
@@ -149,17 +160,25 @@ export default class Director extends Vue {
   }
 
   tuned: boolean = false;
+  colord: boolean = false;
+  outputd: boolean = false;
   settingd: boolean = false;
-  shuffled: boolean = false;
-  keys = ["colorize", "palette", "settings", "archive", "videocam"];
-  disabled = {};
   tap(key: string) {
     switch (key) {
-      case "palette":
+      case "tune":
         this.tuned = true;
         break;
       case "settings":
         this.settingd = true;
+        break;
+      case "color":
+        this.colord = true;
+        break;
+      case "output":
+        this.outputd = true;
+        break;
+      case "film":
+        this.film();
         break;
       default:
         break;
@@ -199,7 +218,6 @@ export default class Director extends Vue {
     COLORS.PINK
   ];
   color = 6;
-  colord = false;
   stickers: { [face: string]: number[] | undefined };
   stick(index: number, face: number) {
     if (index < 0) {
@@ -225,6 +243,7 @@ export default class Director extends Vue {
 
   clear() {
     this.colord = false;
+    this.color = 6;
     this.stickers = {};
     window.localStorage.setItem("director.stickers." + cuber.preferance.order, JSON.stringify(this.stickers));
     cuber.world.cube.strip({});
@@ -234,23 +253,23 @@ export default class Director extends Vue {
     if (this.recording) {
       this.recording = false;
       cuber.controller.disable = false;
+      this.player.toggle();
       return;
     }
-    this.player.init();
-    this.recording = true;
     cuber.controller.disable = true;
     let size = this.pixel;
-    this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
     if (this.output == "gif") {
-      this.gif.start();
+      this.gif.start(size, size, this.delay);
     } else if (this.output == "apng") {
       this.apng.start();
     } else if (this.output == "pngs") {
       this.zip.init();
     }
     this.record();
-    this.player.callback();
+    this.player.init();
+    this.player.toggle();
+    this.recording = true;
   }
 
   snap() {
@@ -310,5 +329,32 @@ export default class Director extends Vue {
     cuber.world.width = width;
     cuber.world.height = height;
     cuber.world.resize();
+  }
+
+  finish() {
+    this.recording = false;
+    cuber.controller.disable = false;
+    let data;
+    let blob;
+    let url;
+    this.player.init();
+    if (this.output == "gif") {
+      this.gif.finish();
+      data = this.gif.out.getData();
+      blob = new Blob([data], { type: "image/gif" });
+      url = URL.createObjectURL(blob);
+      Util.DOWNLOAD("cuber.gif", url);
+    } else if (this.output == "apng") {
+      data = this.apng.finish();
+      blob = new Blob([data], { type: "image/png" });
+      url = URL.createObjectURL(blob);
+      Util.DOWNLOAD("cuber.png", url);
+    } else if (this.output == "pngs") {
+      this.zip.finish();
+      data = this.zip.out.getData();
+      let b = new Blob([data], { type: "application/zip" });
+      let u = URL.createObjectURL(b);
+      Util.DOWNLOAD("cuber.zip", u);
+    }
   }
 }

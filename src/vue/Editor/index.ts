@@ -56,6 +56,7 @@ export default class Editor extends Vue {
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
+    this.gif = new GIF();
     this.preferance = cuber.preferance;
   }
 
@@ -299,10 +300,9 @@ export default class Editor extends Vue {
     this.recording = true;
     cuber.controller.disable = true;
     let size = this.pixel;
-    this.gif = new GIF(size, size, this.delay);
     this.filmer.setSize(size, size, true);
     if (this.output == "gif") {
-      this.gif.start();
+      this.gif.start(size, size, this.delay);
     } else if (this.output == "apng") {
       this.apng.start();
     } else if (this.output == "pngs") {
