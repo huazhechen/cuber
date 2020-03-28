@@ -13,11 +13,13 @@ import ZIP from "../../common/zip";
 import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
+import Dial from "../Dial";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
+    dial: Dial,
     tune: Tune,
     setting: Setting,
     player: Player

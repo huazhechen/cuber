@@ -5,11 +5,13 @@ import Viewport from "../Viewport";
 import cuber from "../../cuber";
 import Tune from "../Tune";
 import Setting from "../Setting";
+import Dial from "../Dial";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
+    dial: Dial,
     tune: Tune,
     setting: Setting
   }

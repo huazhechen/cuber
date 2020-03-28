@@ -16,12 +16,6 @@ export default class Setting extends Vue {
     this.$emit("input", value);
   }
 
-  @Prop({ required: false, default: true })
-  orderable: boolean;
-  get ordershow() {
-    return this.orderable;
-  }
-
   width: number = 0;
   height: number = 0;
   size: number = 0;

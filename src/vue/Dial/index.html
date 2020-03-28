@@ -1,0 +1,50 @@
+<div v-resize="resize">
+  <v-speed-dial v-model="menu" fixed top right direction="bottom" style="user-select: none;">
+    <template v-slot:activator>
+      <v-btn fab color="primary" :style="{width:size+'px', height:size+'px'}">
+        <v-icon v-if="menu" :size="size * 0.7">close</v-icon>
+        <v-icon v-else :size="size * 0.7">menu</v-icon>
+      </v-btn>
+    </template>
+    <v-btn
+      fab
+      :style="{width:size*0.9+'px', height:size*0.9+'px'}"
+      @click="tap('playground')"
+      v-if="mode!='playground'"
+    >
+      <v-icon :size="size * 0.6" color="primary">games</v-icon>
+    </v-btn>
+    <v-btn fab :style="{width:size*0.9+'px', height:size*0.9+'px'}" @click="tap('director')" v-if="mode!='director'">
+      <v-icon :size="size * 0.6" color="primary">movie</v-icon>
+    </v-btn>
+    <v-btn fab :style="{width:size*0.9+'px', height:size*0.9+'px'}" @click="tap('code')">
+      <v-icon :size="size * 0.6" color="primary">code</v-icon>
+    </v-btn>
+    <v-btn fab :style="{width:size*0.9+'px', height:size*0.9+'px'}" @click="tap('reset')">
+      <v-icon :size="size * 0.6" color="error">delete</v-icon>
+    </v-btn>
+  </v-speed-dial>
+  <v-dialog v-model="resetd" :width="size * 6">
+    <v-card>
+      <v-card-title style="text-transform:none;" class="headline">
+        <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+          重置数据
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs6 d-flex>
+            <v-btn block color="red" text @click="resetd = false;reset();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">确定</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block color="black" text @click="resetd = false" :height="size">
+              <div :style="{'font-size':size/3+'px'}">取消</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</div>

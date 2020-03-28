@@ -17,7 +17,8 @@ import Vuetify, {
   VTextField,
   VBottomSheet,
   VTabsItems,
-  VCardActions
+  VCardActions,
+  VSpeedDial
 } from "vuetify/lib";
 import "./index.css";
 import cuber from "./cuber";
@@ -43,7 +44,8 @@ Vue.use(Vuetify, {
     VTab,
     VTabItem,
     VTabsItems,
-    VSlider
+    VSlider,
+    VSpeedDial
   },
   directives: {
     Resize
@@ -56,6 +58,8 @@ Vue.prototype.cuber = cuber;
 let search = location.search || "";
 let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
 let mode = list ? list[2] : "playground";
+Vue.prototype.mode = mode;
+
 let app: VueConstructor;
 switch (mode) {
   case "director":
