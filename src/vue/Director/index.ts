@@ -180,7 +180,11 @@ export default class Director extends Vue {
         this.outputd = true;
         break;
       case "film":
-        this.film();
+        if (this.action.length == 0) {
+          this.snap();
+        } else {
+          this.film();
+        }
         break;
       default:
         break;
@@ -196,12 +200,14 @@ export default class Director extends Vue {
   @Watch("scene")
   onSceneChange() {
     this.player.scene = this.scene;
+    window.localStorage.setItem("director.scene." + cuber.preferance.order, this.scene);
   }
 
   action: string = "";
   @Watch("action")
   onActionChange() {
     this.player.action = this.action;
+    window.localStorage.setItem("director.action." + cuber.preferance.order, this.action);
   }
 
   recording: boolean = false;
@@ -298,7 +304,14 @@ export default class Director extends Vue {
     }
     let blob = new Blob([data], { type: type });
     let url = URL.createObjectURL(blob);
-    Util.DOWNLOAD("cuber.png", url);
+    let date = new Date();
+    let offset = date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() - offset);
+    let id = date
+      .toISOString()
+      .replace(/[^0-9]/g, "")
+      .substring(0, 14);
+    Util.DOWNLOAD("cuber-" + id + ".png", url);
   }
 
   record() {
@@ -340,23 +353,30 @@ export default class Director extends Vue {
     let blob;
     let url;
     this.player.init();
+    let date = new Date();
+    let offset = date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() - offset);
+    let id = date
+      .toISOString()
+      .replace(/[^0-9]/g, "")
+      .substring(0, 14);
     if (this.output == "gif") {
       this.gif.finish();
       data = this.gif.out.getData();
       blob = new Blob([data], { type: "image/gif" });
       url = URL.createObjectURL(blob);
-      Util.DOWNLOAD("cuber.gif", url);
+      Util.DOWNLOAD("cuber-" + id + ".gif", url);
     } else if (this.output == "apng") {
       data = this.apng.finish();
       blob = new Blob([data], { type: "image/png" });
       url = URL.createObjectURL(blob);
-      Util.DOWNLOAD("cuber.png", url);
+      Util.DOWNLOAD("cuber-" + id + ".png", url);
     } else if (this.output == "pngs") {
       this.zip.finish();
       data = this.zip.out.getData();
-      let b = new Blob([data], { type: "application/zip" });
-      let u = URL.createObjectURL(b);
-      Util.DOWNLOAD("cuber.zip", u);
+      let blob = new Blob([data], { type: "application/zip" });
+      let url = URL.createObjectURL(blob);
+      Util.DOWNLOAD("cuber-" + id + ".zip", url);
     }
   }
 }
