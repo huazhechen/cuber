@@ -38,7 +38,12 @@ export default class Dash extends Vue {
       case "playground":
       case "director":
       case "algs":
-        window.location.search = "mode=" + key;
+        let search = location.search || "";
+        let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
+        let mode = list ? list[2] : "playground";
+        if (mode != key) {
+          window.location.search = "mode=" + key;
+        }
         break;
       case "code":
         window.location.href = "https://gitee.com/huazhechen/cuber";

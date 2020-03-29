@@ -8,7 +8,7 @@ export default class Twister {
 
   static shuffle(order: number) {
     let result = "";
-    let exps = ["x2"];
+    let exps = [];
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;

@@ -102,7 +102,8 @@ export class GroupTable {
     return axis + ":" + from + ":" + to;
   }
 
-  public static readonly AXIS_VECTOR: any = {
+  public static readonly AXIS_VECTOR: { [key: string]: Vector3 } = {
+    a: new Vector3(1, 1, 1),
     x: new Vector3(1, 0, 0),
     y: new Vector3(0, 1, 0),
     z: new Vector3(0, 0, 1),
@@ -121,15 +122,23 @@ export class GroupTable {
         }
       }
     }
+    // 块类型group
+    for (let type of ["center", "edge", "corner"]) {
+      this.groups.set(type, new CubeGroup(cube, type, [], GroupTable.AXIS_VECTOR["a"]));
+    }
     // 将每个块索引放入x y z的每层中
     for (const cubelet of cube.initials) {
       let index = cubelet.initial;
       let axis;
       let layer;
       let group;
+      let faces = 0;
 
       axis = "x";
       layer = (index % this.order) + 1;
+      if (layer == 1 || layer == this.order) {
+        faces++;
+      }
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
@@ -138,6 +147,9 @@ export class GroupTable {
 
       axis = "y";
       layer = Math.floor((index % (this.order * this.order)) / this.order) + 1;
+      if (layer == 1 || layer == this.order) {
+        faces++;
+      }
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
@@ -145,11 +157,19 @@ export class GroupTable {
       group.indices.push(cubelet.index);
       axis = "z";
       layer = Math.floor(index / (this.order * this.order)) + 1;
+      if (layer == 1 || layer == this.order) {
+        faces++;
+      }
       group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
       if (!group) {
         throw Error();
       }
       group.indices.push(cubelet.index);
+
+      group = this.groups.get(["", "center", "edge", "corner"][faces]);
+      if (group) {
+        group.indices.push(cubelet.index);
+      }
     }
     // x y z的多层
     for (let axis of ["x", "y", "z"]) {
@@ -211,6 +231,9 @@ export class GroupTable {
     let axis: string = "";
     let from: number = 0;
     let to: number = 0;
+    if (this.groups.get(name)){
+      return this.groups.get(name);
+    }
     if (name.match(/.[Ww]/)) {
       name = name.toLowerCase().replace("w", "");
     }
@@ -261,7 +284,7 @@ export class GroupTable {
     } else {
       let list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
       if (list == null) {
-        return this.groups.get(name);
+        return undefined;
       }
       from = Number(list[1]);
       to = Number(list[3]);

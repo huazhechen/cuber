@@ -118,7 +118,7 @@ export default class Director extends Vue {
     if (save) {
       try {
         let data = JSON.parse(save);
-        for (let face = 0; face < 6; face++) {
+        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
           this.stickers[FACE[face]] = data[FACE[face]];
         }
       } catch (error) {
