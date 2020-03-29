@@ -12,7 +12,7 @@
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
       @click="tap('list')"
     >
-      <div :style="{'font-size':(size * 0.6)+'px'}">{{name}}</div>
+      <div :style="{'font-size':(size * 0.5)+'px'}">{{name}}</div>
     </v-btn>
     <v-container
       fluid
@@ -65,12 +65,12 @@
             <v-btn
               slot="append"
               text
-              v-show="action != ''"
+              v-show="action!=origin"
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-              @click="action = ''"
+              @click="action=origin"
             >
-              <v-icon :size="size * 0.4">clear</v-icon>
+              <v-icon :size="size * 0.4">settings_backup_restore</v-icon>
             </v-btn>
           </v-text-field>
         </v-flex>

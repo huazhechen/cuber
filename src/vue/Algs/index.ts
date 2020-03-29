@@ -31,7 +31,7 @@ export default class Algs extends Vue {
     super();
   }
 
-  tab = null;
+  tab = "tab-0";
   pics: string[][] = [];
 
   mounted() {
@@ -119,6 +119,7 @@ export default class Algs extends Vue {
         this.settingd = true;
         break;
       case "list":
+        this.tab = "tab-" + this.index.group;
         this.listd = true;
         break;
       default:
