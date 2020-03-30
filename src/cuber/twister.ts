@@ -102,7 +102,6 @@ export default class Twister {
     }
     if (action.exp == "*") {
       let exp = Twister.shuffle(cuber.world.cube.order);
-      cuber.world.cube.reset();
       this.twist(exp, false, 1, true);
       cuber.history.clear();
       return;

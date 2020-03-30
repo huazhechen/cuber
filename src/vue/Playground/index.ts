@@ -66,6 +66,9 @@ export default class Playground extends Vue {
   loop() {
     requestAnimationFrame(this.loop.bind(this));
     this.viewport.draw();
+    if (this.complete) {
+      return;
+    }
     if (cuber.history.moves == 0) {
       this.start = 0;
       this.now = 0;
@@ -77,7 +80,6 @@ export default class Playground extends Vue {
         this.now = new Date().getTime();
       } else {
         if (!this.complete) {
-          cuber.controller.lock = true;
           this.completed = true;
           this.complete = true;
         }
@@ -85,10 +87,12 @@ export default class Playground extends Vue {
     }
   }
 
+  shuffler = "*";
+
   shuffle() {
-    this.complete = false;
-    cuber.twister.twist("*");
-    cuber.controller.lock = false;
+    cuber.twister.twist("#x2" + this.shuffler, false, 1, true);
+    cuber.history.clear();    
+    this.complete = cuber.world.cube.complete;
     this.start = 0;
     this.now = 0;
   }

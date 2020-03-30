@@ -51,6 +51,19 @@
         </v-card-title>
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
+            <v-flex xs12>
+              <v-text-field
+                style="text-transform:none;"
+                :height="size * 0.8"
+                :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
+                dense
+                single-line
+                hide-details
+                outlined
+                v-model="shuffler"
+              >
+              </v-text-field>
+            </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block color="red" text @click="shuffled = false;shuffle();" :height="size">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
