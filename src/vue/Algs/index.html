@@ -81,7 +81,7 @@
     <div style="margin: auto;" :style="{width:grid+'px'}">
       <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
         <v-tab v-for="(group,i) in algs" :key="i" :href="`#tab-${i}`">
-          <p :style="{'font-size':size * 0.4+'px'}" style="text-align:center;margin: 0%;padding: 0%;">
+          <p :style="{'font-size':size * 0.2+'px'}" style="text-align:center;margin: 0%;padding: 0%;">
             {{ group.name}}
           </p>
         </v-tab>
