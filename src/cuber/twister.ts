@@ -12,7 +12,7 @@ export default class Twister {
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
-    for (let i = 0; i < order * order * order; i++) {
+    for (let i = 0; i < 3 * 3 * order; i++) {
       let exp = [];
       while (axis == last) {
         axis = Math.floor(Math.random() * 3);

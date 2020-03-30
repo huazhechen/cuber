@@ -21,6 +21,9 @@ export default class World {
 
   set order(value: number) {
     this.scene.remove(this.cube);
+    if (this.cubes[value] == undefined){
+      this.cubes[value] = new Cube(value, this.callback);
+    }
     this.cube = this.cubes[value];
     this.scene.add(this.cube);
     this.dirty = true;
@@ -31,14 +34,10 @@ export default class World {
   }
 
   constructor() {
-    for (let order = 2; order < 8; order++) {
-      this.cubes[order] = new Cube(order, this.callback);
-    }
-    this.cube = this.cubes[3];
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
-    this.scene.add(this.cube);
+    this.order = 3;
 
     this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);
