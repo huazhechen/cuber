@@ -20,7 +20,7 @@ export default class Preferance {
 
   load(mode: string) {
     this.mode = mode;
-    let version = "0.0.3";
+    let version = "0.0.4";
     if (this.storage.getItem("version") != version) {
       this.storage.clear();
       this.storage.setItem("version", version);
