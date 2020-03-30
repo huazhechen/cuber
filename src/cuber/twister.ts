@@ -82,12 +82,12 @@ export default class Twister {
   start(action: TwistAction) {
     if (action.exp == "~") {
       if (action.fast) {
-        this.update();
+        cuber.world.callback();
         return;
       }
       cuber.tweener.tween(0, 1, (cuber.preferance.frames / 2) * action.times, (value: number) => {
-        if (value === 1 || value === 0) {
-          this.update();
+        if (value === 1) {
+          cuber.world.callback();
           return;
         }
       });
@@ -97,7 +97,7 @@ export default class Twister {
       cuber.history.clear();
       cuber.world.cube.reset();
       cuber.world.cube.dirty = true;
-      this.update();
+      cuber.world.callback();
       return;
     }
     if (action.exp == "*") {
