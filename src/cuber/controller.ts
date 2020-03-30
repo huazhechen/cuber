@@ -123,7 +123,7 @@ export default class Controller {
       .sub(this.ray.origin)
       .normalize();
     this.ray.applyMatrix4(this.matrix.identity().getInverse(cuber.world.scene.matrix));
-    var result = new Vector3();
+    var result = new Vector3(Infinity, Infinity, Infinity);
     this.ray.intersectPlane(plane, result);
     return result;
   }
