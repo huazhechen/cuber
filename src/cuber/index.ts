@@ -6,12 +6,25 @@ import Capture from "./capture";
 import World from "./world";
 import History from "./history";
 
-let world = new World();
-let tweener = new Tweener();
-let twister = new Twister();
-let history = new History();
-let preferance = new Preferance();
-let controller = new Controller();
-let capture: Capture = new Capture();
+export class Cuber {
+  world: World;
+  tweener: Tweener;
+  twister: Twister;
+  history: History;
+  preferance: Preferance;
+  controller: Controller;
+  capture: Capture;
 
-export default { world, controller, preferance, history, twister, tweener, capture };
+  constructor() {
+    this.world = new World();
+    this.tweener = new Tweener();
+    this.twister = new Twister();
+    this.history = new History();
+    this.preferance = new Preferance();
+    this.controller = new Controller();
+    this.capture = new Capture();
+  }
+}
+
+let cuber = new Cuber();
+export default cuber;

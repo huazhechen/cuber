@@ -1,12 +1,11 @@
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
-import cuber from "../../cuber";
+import cuber, { Cuber } from "../../cuber";
 import Tune from "../Tune";
 import Setting from "../Setting";
 import Dash from "../Dash";
-import { FACE } from "../../cuber/define";
 
 @Component({
   template: require("./index.html"),
@@ -23,8 +22,11 @@ export default class Playground extends Vue {
   size: number = 0;
   viewport: Viewport;
 
+  cuber: Cuber;
+
   constructor() {
     super();
+    this.cuber = cuber;
   }
 
   resize() {
