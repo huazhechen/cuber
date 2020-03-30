@@ -38,6 +38,7 @@ export default class Setting extends Vue {
   reset() {
     this.order(3);
     this.preferance.frames = 30;
+    this.preferance.sensitivity = 50;
     this.preferance.mirror = false;
     this.preferance.hollow = false;
   }

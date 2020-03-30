@@ -13,6 +13,7 @@ export default class Preferance {
     gradient: 67,
     brightness: 80,
     frames: 30,
+    sensitivity: 50,
     mirror: false,
     hollow: false
   };
@@ -129,6 +130,16 @@ export default class Preferance {
   set frames(value) {
     if (this.data.frames != value) {
       this.data.frames = value;
+      this.save();
+    }
+  }
+
+  get sensitivity() {
+    return this.data.sensitivity;
+  }
+  set sensitivity(value) {
+    if (this.data.sensitivity != value) {
+      this.data.sensitivity = value;
       this.save();
     }
   }

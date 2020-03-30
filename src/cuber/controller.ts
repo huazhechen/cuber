@@ -220,26 +220,29 @@ export default class Controller {
       this.group?.hold();
     }
     if (this.rotating && this.group) {
+      let scale = cuber.preferance.sensitivity / 50 - 1;
+      scale = 2 ** scale;
       if (this.holder.index === -1) {
         var dx = this.move.x - this.down.x;
         var dy = this.move.y - this.down.y;
         if (this.group === cuber.world.cube.groups.get("y")) {
-          this.angle = ((dx / Cubelet.SIZE) * Math.PI) / 4;
+          this.angle = (((dx / Cubelet.SIZE) * Math.PI) / 6) * scale;
         } else if (this.group === cuber.world.cube.groups.get("x")) {
-          this.angle = ((dy / Cubelet.SIZE) * Math.PI) / 4;
+          this.angle = (((dy / Cubelet.SIZE) * Math.PI) / 6) * scale;
         } else if (this.group === cuber.world.cube.groups.get("z")) {
-          this.angle = ((-dy / Cubelet.SIZE) * Math.PI) / 4;
+          this.angle = (((-dy / Cubelet.SIZE) * Math.PI) / 6) * scale;
         }
       } else {
         var start = this.intersect(this.down, this.holder.plane);
         var end = this.intersect(this.move, this.holder.plane);
         this.vector.subVectors(end, start).multiply(this.holder.vector);
         this.angle =
-          (((-(this.vector.x + this.vector.y + this.vector.z) *
+          ((((-(this.vector.x + this.vector.y + this.vector.z) *
             (this.group.axis.x + this.group.axis.y + this.group.axis.z)) /
             Cubelet.SIZE) *
             Math.PI) /
-          4;
+            6) *
+          scale;
       }
     }
   }
