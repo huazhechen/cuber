@@ -6,6 +6,7 @@ import cuber, { Cuber } from "../../cuber";
 import Tune from "../Tune";
 import Setting from "../Setting";
 import Dash from "../Dash";
+import Cubelet from "../../cuber/cubelet";
 
 @Component({
   template: require("./index.html"),
@@ -65,6 +66,13 @@ export default class Playground extends Vue {
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
+    let tick = new Date().getTime();
+    tick = (tick / 2000) * Math.PI;
+    tick = Math.sin(tick) / 64;
+    this.cuber.world.cube.position.y = tick * Cubelet.SIZE;
+    this.cuber.world.cube.rotation.y = (tick / 12) * Math.PI;
+    this.cuber.world.cube.updateMatrix();
+    this.cuber.world.cube.dirty = true;
     this.viewport.draw();
     if (this.complete) {
       return;
