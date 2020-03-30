@@ -29,10 +29,11 @@ export class Tween {
     elapsed = elapsed < 0 ? 0 : elapsed;
     elapsed = elapsed - 1;
     let value = 1 - elapsed * elapsed;
-    this.callback(this.begin + (this.end - this.begin) * value);
     if (value == 1) {
+      this.callback(this.end);
       return false;
     }
+    this.callback(this.begin + (this.end - this.begin) * value);
     return true;
   }
 }

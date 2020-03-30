@@ -80,7 +80,7 @@ export default class CubeGroup extends Group {
       var duration = cuber.preferance.frames * (2 - 2 / (d + 1));
       cuber.tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
-        if (this.angle === angle || this.angle === 0) {
+        if (Math.abs(this.angle - angle) < 1e-6) {
           this.drop();
         }
       });
@@ -231,7 +231,7 @@ export class GroupTable {
     let axis: string = "";
     let from: number = 0;
     let to: number = 0;
-    if (this.groups.get(name)){
+    if (this.groups.get(name)) {
       return this.groups.get(name);
     }
     if (name.match(/.[Ww]/)) {
