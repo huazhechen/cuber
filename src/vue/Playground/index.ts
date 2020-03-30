@@ -99,7 +99,7 @@ export default class Playground extends Vue {
 
   shuffle() {
     cuber.twister.twist("#x2" + this.shuffler, false, 1, true);
-    cuber.history.clear();    
+    cuber.history.clear();
     this.complete = cuber.world.cube.complete;
     this.start = 0;
     this.now = 0;
