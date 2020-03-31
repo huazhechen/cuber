@@ -142,7 +142,16 @@ export class TwistAction {
   }
 
   get value() {
-    return this.times == 0 ? "" : this.exp + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
+    let times = this.times;
+    let reverse = this.reverse;
+    if (times === 3) {
+      times = 1;
+      reverse = !reverse;
+    }
+    if (times === 2) {
+      reverse = false;
+    }
+    return times == 0 ? "" : this.exp + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
   }
 }
 

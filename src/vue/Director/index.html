@@ -44,6 +44,7 @@
             v-model="scene"
           >
             <v-btn
+              tabindex="-1"
               slot="label"
               text
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
@@ -52,15 +53,15 @@
               <v-icon :size="size * 0.4" style="vertical-align: middle">terrain</v-icon>
             </v-btn>
             <v-btn
+              tabindex="-1"
               slot="append"
               text
-              v-show="scene != ''"
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
-              @click="scene = ''"
+              @click="scened=true"
               :disabled="recording"
             >
-              <v-icon :size="size * 0.4">clear</v-icon>
+              <v-icon :size="size * 0.4">edit</v-icon>
             </v-btn>
           </v-text-field>
         </v-flex>
@@ -77,6 +78,7 @@
             v-model="action"
           >
             <v-btn
+              tabindex="-1"
               slot="label"
               text
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
@@ -85,15 +87,15 @@
               <v-icon :size="size * 0.4" style="vertical-align: middle">theaters</v-icon>
             </v-btn>
             <v-btn
+              tabindex="-1"
               slot="append"
               text
-              v-show="action != ''"
               style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-              @click="action = ''"
+              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
+              @click="actiond=true"
               :disabled="recording"
             >
-              <v-icon :size="size * 0.4">clear</v-icon>
+              <v-icon :size="size * 0.4">edit</v-icon>
             </v-btn>
           </v-text-field>
         </v-flex>
@@ -219,5 +221,37 @@
         </v-container>
       </v-card>
     </v-bottom-sheet>
+    <v-dialog v-model="scened" :width="size * 6">
+      <v-card>
+        <v-card-text style="text-transform:none;">
+          <v-textarea
+            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+            auto-grow
+            solo
+            flat
+            no-resize
+            hide-details
+            v-model="scene"
+          >
+          </v-textarea>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="actiond" :width="size * 6">
+      <v-card>
+        <v-card-text style="text-transform:none;">
+          <v-textarea
+            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+            auto-grow
+            solo
+            flat
+            no-resize
+            hide-details
+            v-model="action"
+          >
+          </v-textarea>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </v-app>

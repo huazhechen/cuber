@@ -379,4 +379,7 @@ export default class Director extends Vue {
       Util.DOWNLOAD("cuber-" + id + ".zip", url);
     }
   }
+
+  scened: boolean = false;
+  actiond: boolean = false;
 }

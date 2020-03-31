@@ -7,6 +7,7 @@ import Tune from "../Tune";
 import Setting from "../Setting";
 import Dash from "../Dash";
 import Cubelet from "../../cuber/cubelet";
+import History from "../../cuber/history";
 
 @Component({
   template: require("./index.html"),
@@ -24,6 +25,7 @@ export default class Playground extends Vue {
   viewport: Viewport;
 
   cuber: Cuber;
+  history: string = "";
 
   constructor() {
     super();
@@ -139,6 +141,7 @@ export default class Playground extends Vue {
         cuber.history.undo();
         break;
       case "history":
+        this.history = this.cuber.history.exp.substring(1);
         this.historyd = true;
         break;
       default:

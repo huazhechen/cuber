@@ -103,20 +103,15 @@
     </v-dialog>
     <v-dialog v-model="historyd" :width="size * 6">
       <v-card>
-        <v-card-title style="text-transform:none;">
-          <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
-            历史步骤
-          </div>
-        </v-card-title>
         <v-card-text style="text-transform:none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow
             solo
             flat
-            no-resize
+            hide-details
             readonly
-            v-model="cuber.history.exp"
+            v-model="history"
           >
           </v-textarea>
         </v-card-text>

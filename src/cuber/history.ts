@@ -3,6 +3,7 @@ import { TwistAction } from "./twister";
 
 export default class History {
   list: TwistAction[] = [];
+  exp: string = "";
   constructor() {}
 
   record(action: TwistAction) {
@@ -10,23 +11,29 @@ export default class History {
       action.times = action.times % 4;
       if (action.times != 0) {
         this.list.push(action);
+        this.exp = this.exp + " " + action.value;
       }
     } else {
       let last = this.list[this.list.length - 1];
       if (last.exp == action.exp) {
         last.times = last.times + action.times * (last.reverse == action.reverse ? 1 : -1);
         last.times = last.times % 4;
+        this.exp = this.exp.substring(0, this.exp.lastIndexOf(" "));
         if (last.times == 0) {
           this.list.pop();
+        } else {
+          this.exp = this.exp + " " + last.value;
         }
       } else {
         this.list.push(action);
+        this.exp = this.exp + " " + action.value;
       }
     }
   }
 
   clear() {
     this.list = [];
+    this.exp = "";
   }
 
   get last() {
@@ -58,13 +65,5 @@ export default class History {
     let last = this.last;
     let action = new TwistAction(last.exp, !last.reverse, last.times);
     cuber.twister.push(action);
-  }
-
-  get exp() {
-    let exps: string[] = [];
-    for (const action of this.list) {
-      exps.push(action.value);
-    }
-    return exps.join(" ");
   }
 }
