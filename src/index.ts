@@ -19,6 +19,7 @@ import Vuetify, {
   VTabsItems,
   VCardActions
 } from "vuetify/lib";
+import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import cuber from "./cuber";
 import Playground from "./vue/Playground";
