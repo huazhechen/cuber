@@ -150,19 +150,7 @@ export class TwistNode {
   static AFFIX = "'Ww0123456789-";
   children: TwistNode[];
   twist: TwistAction;
-  constructor(exp: string, reverse = false, times = 1) {
-    // 合法性校验
-    this.children = [];
-    exp = exp.replace(/[^\*\-#~xyzbsfdeulmrw\(\)'0123456789 ]/gi, "");
-    this.twist = new TwistAction(exp, reverse, times);
-    // 不用解析场景
-    if (exp.match(/^[0123456789-]*[\*~#xyzbsfdeulmr][w]*$/gi)) {
-      if (/[XYZ]/.test(this.twist.exp)) {
-        this.twist.exp = this.twist.exp.toLowerCase();
-      }
-      return;
-    }
-    // 先分段
+  static SPLIT_SEGMENT(exp: string) {
     let list = [];
     let buffer = "";
     let stack = 0;
@@ -186,12 +174,12 @@ export class TwistNode {
         continue;
       }
       //  如果有括号 记录stack
-      if (c === "(") {
+      if (c === "(" || c === "[") {
         buffer = buffer.concat(c);
         stack++;
         continue;
       }
-      if (c === ")") {
+      if (c === ")" || c === "]") {
         buffer = buffer.concat(c);
         stack--;
         continue;
@@ -202,14 +190,85 @@ export class TwistNode {
     if (buffer.length > 0) {
       list.push(buffer);
     }
-    if (list.length == 0) {
+    return list;
+  }
+
+  static SPLIT_BRACKET(exp: string) {
+    let list = [];
+    let buffer = "";
+    let stack = 0;
+    for (let i = 0; i < exp.length; i++) {
+      let c = exp.charAt(i);
+      // 非后缀检查是否可以中断
+      if (stack == 0 && (c === "," || c === ":")) {
+        list.push(buffer);
+        list.push(c);
+        buffer = "";
+        continue;
+      }
+      //  如果有括号 记录stack
+      if (c === "(" || c === "[") {
+        buffer = buffer.concat(c);
+        stack++;
+        continue;
+      }
+      if (c === ")" || c === "]") {
+        buffer = buffer.concat(c);
+        stack--;
+        continue;
+      }
+      buffer = buffer.concat(c);
+    }
+    if (buffer.length > 0) {
+      list.push(buffer);
+    }
+    return list;
+  }
+
+  constructor(exp: string, reverse = false, times = 1) {
+    // 合法性校验
+    this.children = [];
+    exp = exp.replace(/[^\*\-#~xyzbsfdeulmrw\(\)\[\]:,'0123456789 ]/gi, "");
+    this.twist = new TwistAction(exp, reverse, times);
+    // 不用解析场景
+    if (exp.match(/^[0123456789-]*[\*~#xyzbsfdeulmr][w]*$/gi)) {
+      if (/[XYZ]/.test(this.twist.exp)) {
+        this.twist.exp = this.twist.exp.toLowerCase();
+      }
       return;
     }
+    let list = TwistNode.SPLIT_SEGMENT(exp);
     for (let item of list) {
-      // 拆解括号
-      var values = item.match(/^\((.+)\)('?)(\d*)('?)$/i);
+      let values;
+      // 只有[]
+      values = item.match(/^\[(.+[:|,].+)\]$/i);
+      if (values) {
+        values = TwistNode.SPLIT_BRACKET(values[1]);
+        switch (values[1]) {
+          case ",":
+            this.children.push(new TwistNode(values[0], false, 1));
+            this.children.push(new TwistNode(values[2], false, 1));
+            this.children.push(new TwistNode(values[0], true, 1));
+            this.children.push(new TwistNode(values[2], true, 1));
+            break;
+          case ":":
+            this.children.push(new TwistNode(values[0], false, 1));
+            this.children.push(new TwistNode(values[2], false, 1));
+            this.children.push(new TwistNode(values[0], true, 1));
+            break;
+          default:
+            break;
+        }
+        continue;
+      }
+      // []'2
+      values = item.match(/^(\[.+[:|,].+\])('?)(\d*)('?)$/i);
+      if (values === null) {
+        // 拆解括号
+        values = item.match(/^\((.+)\)('?)(\d*)('?)$/i);
+      }
       // 无括号
-      if (null === values) {
+      if (values === null) {
         values = item.match(/([0123456789-]*[\*\#~xyzbsfdeulmr][w]*)('?)(\d*)('?)/i);
       }
       // 异常情况
