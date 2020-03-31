@@ -34,6 +34,54 @@ export default class CubeGroup extends Group {
     this.updateMatrix();
   }
 
+  exp(reverse: boolean, times: number) {
+    let exp = this.name;
+    let values = this.name.match(/(^-?[xyz]):(\d*):(\d*$)/i);
+    if (values?.length == 4) {
+      let axis = values[1];
+      let layer = Number(values[2]);
+      if (layer == Number(values[3])) {
+        let half = (this.cube.order + 1) / 2;
+        if (axis.length == 1 && layer < half) {
+          axis = "-" + axis;
+          reverse = !reverse;
+        } else if (axis.length == 2 && layer > half) {
+          axis = axis[1];
+          reverse = !reverse;
+        }
+        if (axis.length == 1) {
+          layer = this.cube.order - layer + 1;
+        }
+        switch (axis) {
+          case "x":
+            exp = layer === half ? "M'" : "R";
+            break;
+          case "y":
+            exp = layer === half ? "E'" : "U";
+            break;
+          case "z":
+            exp = layer === half ? "S" : "F";
+            break;
+          case "-x":
+            exp = layer === half ? "M" : "L";
+            break;
+          case "-y":
+            exp = layer === half ? "E" : "D";
+            break;
+          case "-z":
+            exp = layer === half ? "S'" : "B";
+            break;
+        }
+        if (exp.length == 2) {
+          exp = exp[0];
+          reverse = !reverse;
+        }
+        exp = (layer === 1 || layer === half ? "" : String(layer)) + exp;
+      }
+    }
+    return new TwistAction(exp, reverse, times);
+  }
+
   hold() {
     this.angle = 0;
     for (let i of this.indices) {
@@ -66,11 +114,10 @@ export default class CubeGroup extends Group {
 
   twist(angle = this.angle) {
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    let exp = this.name;
     let reverse = angle > 0;
     let times = Math.round(Math.abs(angle) / (Math.PI / 2));
     if (times != 0) {
-      cuber.history.record(new TwistAction(exp, reverse, times));
+      cuber.history.record(this.exp(reverse, times));
     }
     let delta = angle - this.angle;
     if (delta === 0) {

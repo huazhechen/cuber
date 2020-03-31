@@ -7,6 +7,7 @@
       left
       top
       text
+      @click="tap('history')"
       color="primary"
       style="margin:0%;padding:0%;"
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
@@ -99,6 +100,15 @@
             </v-flex>
           </v-layout>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="historyd" :width="size * 6">
+      <v-card>
+        <v-card-title style="text-transform:none;">
+          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+            历史步骤
+          </div>
+        </v-card-title>
       </v-card>
     </v-dialog>
     <v-bottom-sheet v-model="stripd" overlay-opacity="0" v-resize="resize">

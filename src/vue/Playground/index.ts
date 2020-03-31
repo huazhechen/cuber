@@ -125,6 +125,7 @@ export default class Playground extends Vue {
   settingd: boolean = false;
   shuffled: boolean = false;
   stripd: boolean = false;
+  historyd: boolean = false;
   tap(key: string) {
     switch (key) {
       case "shuffle":
@@ -141,6 +142,9 @@ export default class Playground extends Vue {
         break;
       case "undo":
         cuber.history.undo();
+        break;
+      case "history":
+        this.historyd = true;
         break;
       default:
         break;

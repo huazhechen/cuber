@@ -59,4 +59,12 @@ export default class History {
     let action = new TwistAction(last.exp, !last.reverse, last.times);
     cuber.twister.push(action);
   }
+
+  get exp() {
+    let exps: string[] = [];
+    for (const action of this.list) {
+      exps.push(action.exp);
+    }
+    return exps.join(" ");
+  }
 }
