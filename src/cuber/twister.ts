@@ -164,9 +164,22 @@ export class TwistNode {
     let buffer = "";
     let stack = 0;
     let ready = false;
+    let note = false;
     for (let i = 0; i < exp.length; i++) {
       let c = exp.charAt(i);
       if (c === " " && buffer.length == 0) {
+        continue;
+      }
+      if (c === "/" && exp.charAt(i + 1) === "/") {
+        i++;
+        note = true;
+        continue;
+      }
+      if (c === "\n") {
+        note = false;
+        continue;
+      }
+      if (note) {
         continue;
       }
       // 后缀可以持续增加
@@ -237,7 +250,6 @@ export class TwistNode {
   constructor(exp: string, reverse = false, times = 1) {
     // 合法性校验
     this.children = [];
-    exp = exp.replace(/[^\*\-#~xyzbsfdeulmrw\(\)\[\]:,'0123456789 ]/gi, "");
     this.twist = new TwistAction(exp, reverse, times);
     // 不用解析场景
     if (exp.match(/^[0123456789-]*[\*~#xyzbsfdeulmr][w]*$/gi)) {
