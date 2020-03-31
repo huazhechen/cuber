@@ -26,3 +26,6 @@
 .v-text-field--outlined.v-input--dense .v-label {
   top: 0px;
 }
+.v-textarea textarea {
+  line-height: inherit;
+}

@@ -107,7 +107,6 @@ export default class Playground extends Vue {
 
   order() {
     this.shuffle();
-    this.restrip();
   }
 
   get style() {
@@ -124,7 +123,6 @@ export default class Playground extends Vue {
   tuned: boolean = false;
   settingd: boolean = false;
   shuffled: boolean = false;
-  stripd: boolean = false;
   historyd: boolean = false;
   tap(key: string) {
     switch (key) {
@@ -137,9 +135,6 @@ export default class Playground extends Vue {
       case "settings":
         this.settingd = true;
         break;
-      case "strip":
-        this.stripd = true;
-        break;
       case "undo":
         cuber.history.undo();
         break;
@@ -149,49 +144,5 @@ export default class Playground extends Vue {
       default:
         break;
     }
-  }
-
-  strips: { [key: string]: boolean } = {
-    U: false,
-    F: false,
-    R: false,
-    B: false,
-    L: false,
-    D: false,
-    m: false,
-    e: false,
-    s: false,
-    Center: false,
-    Edge: false,
-    Corner: false
-  };
-  strip(group: string) {
-    this.strips[group] = !this.strips[group];
-    this.restrip();
-  }
-
-  restrip() {
-    cuber.world.cube.strip({});
-    let indices: number[] = [];
-    for (let group in this.strips) {
-      if (this.strips[group]) {
-        if (group.length > 1) {
-          group = group.toLocaleLowerCase();
-        }
-        let g = cuber.world.cube.groups.get(group);
-        if (g) {
-          indices.push(...g.indices);
-        }
-      }
-    }
-    let strips: { [face: string]: number[] | undefined } = {
-      U: indices,
-      F: indices,
-      R: indices,
-      B: indices,
-      L: indices,
-      D: indices
-    };
-    cuber.world.cube.strip(strips);
   }
 }

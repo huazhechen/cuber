@@ -1,24 +1,6 @@
 import Vue from "vue";
-import Vuetify, {
-  VApp,
-  VCard,
-  VTabs,
-  VTab,
-  VBtn,
-  VTabItem,
-  VIcon,
-  VDialog,
-  VSlider,
-  Resize,
-  VCardTitle,
-  VFlex,
-  VLayout,
-  VContainer,
-  VTextField,
-  VBottomSheet,
-  VTabsItems,
-  VCardActions
-} from "vuetify/lib";
+import Vuetify from "vuetify";
+import "vuetify/dist/vuetify.css";
 import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import cuber from "./cuber";
@@ -27,30 +9,7 @@ import Director from "./vue/Director";
 import { VueConstructor } from "vue/types/umd";
 import Algs from "./vue/Algs";
 
-Vue.use(Vuetify, {
-  components: {
-    VApp,
-    VBtn,
-    VIcon,
-    VDialog,
-    VBottomSheet,
-    VContainer,
-    VLayout,
-    VFlex,
-    VTextField,
-    VCard,
-    VCardTitle,
-    VCardActions,
-    VTabs,
-    VTab,
-    VTabItem,
-    VTabsItems,
-    VSlider
-  },
-  directives: {
-    Resize
-  }
-});
+Vue.use(Vuetify);
 const opts = {};
 const vuetify = new Vuetify(opts);
 Vue.prototype.cuber = cuber;

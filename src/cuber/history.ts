@@ -63,7 +63,7 @@ export default class History {
   get exp() {
     let exps: string[] = [];
     for (const action of this.list) {
-      exps.push(action.exp);
+      exps.push(action.value);
     }
     return exps.join(" ");
   }

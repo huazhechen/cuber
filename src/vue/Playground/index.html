@@ -7,7 +7,6 @@
       left
       top
       text
-      @click="tap('history')"
       color="primary"
       style="margin:0%;padding:0%;"
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
@@ -29,8 +28,8 @@
           <v-btn @click="tap('tune')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">settings</v-icon>
           </v-btn>
-          <v-btn @click="tap('strip')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">visibility</v-icon>
+          <v-btn @click="tap('history')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">assignment</v-icon>
           </v-btn>
           <v-btn @click="tap('shuffle')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">casino</v-icon>
@@ -105,75 +104,23 @@
     <v-dialog v-model="historyd" :width="size * 6">
       <v-card>
         <v-card-title style="text-transform:none;">
-          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
             历史步骤
           </div>
         </v-card-title>
+        <v-card-text style="text-transform:none;">
+          <v-textarea
+            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+            auto-grow
+            solo
+            flat
+            no-resize
+            readonly
+            v-model="cuber.history.exp"
+          >
+          </v-textarea>
+        </v-card-text>
       </v-card>
     </v-dialog>
-    <v-bottom-sheet v-model="stripd" overlay-opacity="0" v-resize="resize">
-      <v-card text style="margin: auto;touch-action: none;user-select: none;">
-        <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
-          <v-layout row wrap justify-center align-center>
-            <v-flex xs12 style="display: flex;">
-              <v-btn
-                v-for="i in ['U', 'R', 'F']"
-                :key="i"
-                @click="strip(i)"
-                :color="strips[i]?'primary':''"
-                depressed
-                style="text-transform:none; min-width: 0%;flex: 1"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px', margin:size * 0.06 + 'px'}"
-              >
-                <div>{{i}}</div>
-              </v-btn>
-            </v-flex>
-            <v-flex xs12 style="display: flex;">
-              <v-btn
-                v-for="i in ['e', 'm', 's']"
-                :key="i"
-                @click="strip(i)"
-                :color="strips[i]?'primary':''"
-                depressed
-                style="text-transform:none; min-width: 0%;flex: 1"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px', margin:size * 0.06 + 'px'}"
-              >
-                <div>{{i}}</div>
-              </v-btn>
-            </v-flex>
-            <v-flex xs12 style="display: flex;">
-              <v-btn
-                v-for="i in ['D', 'L', 'B']"
-                :key="i"
-                @click="strip(i)"
-                :color="strips[i]?'primary':''"
-                depressed
-                style="text-transform:none; min-width: 0%;flex: 1"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px', margin:size * 0.06 + 'px'}"
-              >
-                <div>{{i}}</div>
-              </v-btn>
-            </v-flex>
-            <v-flex xs12 style="display: flex;">
-              <v-btn
-                v-for="i in ['Center', 'Edge', 'Corner']"
-                :key="i"
-                @click="strip(i)"
-                :color="strips[i]?'primary':''"
-                depressed
-                style="text-transform:none; min-width: 0%;flex: 1"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px', margin:size * 0.06 + 'px'}"
-              >
-                <div>{{i}}</div>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </v-bottom-sheet>
   </div>
 </v-app>

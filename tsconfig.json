@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
-    "types": ["webpack-env", "vuetify"]
+    "types": ["webpack-env"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
