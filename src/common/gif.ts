@@ -208,7 +208,7 @@ export default class GIF {
   transparent: boolean = true;
 
   private static DEEP = 8;
-  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.DEEP + 1));
+  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, 12));
 
   private static COLORN = 0;
 
@@ -270,9 +270,11 @@ export default class GIF {
   }
 
   frames: number;
+  enc: LZW;
   start(width: number, height: number, delay: number) {
     this.width = ~~width;
     this.height = ~~height;
+    this.enc = new LZW(this.width, this.height, GIF.DEEP);
     this.data = new Uint8Array(this.width * this.height);
     this.last = new Uint8Array(this.width * this.height);
     this.frames = 0;
@@ -321,7 +323,7 @@ export default class GIF {
           b = 0xff;
         }
         let hash = (r * 31 + g) * 31 + b;
-        hash = hash & 0x1ff;
+        hash = hash & 0xfff;
         let index;
         if (GIF.HASH[hash] && GIF.HASH[hash].RGB[0] == r && GIF.HASH[hash].RGB[1] == g && GIF.HASH[hash].RGB[2] == b) {
           index = GIF.HASH[hash].index;
@@ -420,7 +422,6 @@ export default class GIF {
   }
 
   writePixels() {
-    var enc = new LZW(this.width, this.height, GIF.DEEP);
-    enc.encode(this.data, this.out);
+    this.enc.encode(this.data, this.out);
   }
 }
