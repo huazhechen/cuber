@@ -353,13 +353,14 @@ export default class Director extends Vue {
     }
     cuber.world.camera.aspect = 1;
     cuber.world.camera.updateProjectionMatrix();
-    let size = this.pixel;
-    this.svger.setSize(size, size);
+    this.svger.setSize(2 ** 30, 2 ** 30);
     this.svger.clear();
     this.svger.render(cuber.world.scene, cuber.world.camera);
     cuber.world.resize();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);
+    content = content.replace(/width=\"\d*\"/i, 'width="' + this.pixel + '"');
+    content = content.replace(/height=\"\d*\"/i, 'height="' + this.pixel + '"');
     let url = "data:image/svg+xml;base64," + btoa(content);
     let date = new Date();
     let offset = date.getTimezoneOffset() * 60000;
