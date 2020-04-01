@@ -38,7 +38,20 @@ export default class Player extends Vue {
   }
 
   playing: boolean = false;
-  progress: number = 0;
+  pprogress: number = 0;
+
+  get progress() {
+    return this.pprogress;
+  }
+  set progress(value) {
+    this.init();
+    for (let i = 0; i < value; i++) {
+      let action = this.actions[i];
+      cuber.twister.twist(action.exp, action.reverse, action.times, true);
+    }
+    this.pprogress = value;
+  }
+
   @Watch("progress")
   onProgressChange() {
     cuber.controller.lock = this.progress > 0;
@@ -61,7 +74,7 @@ export default class Player extends Vue {
   init() {
     cuber.controller.lock = false;
     this.playing = false;
-    this.progress = 0;
+    this.pprogress = 0;
     cuber.controller.disable = false;
     cuber.twister.finish();
     cuber.twister.twist("#");
@@ -73,19 +86,19 @@ export default class Player extends Vue {
   finish() {
     this.init();
     cuber.twister.twist(this.action, false, 1, true);
-    this.progress = this.actions.length;
+    this.pprogress = this.actions.length;
   }
 
   callback() {
     if (this.playing) {
-      if (this.progress == this.actions.length) {
+      if (this.pprogress == this.actions.length) {
         if (this.playing) {
           this.playing = false;
         }
         return;
       }
-      let action = this.actions[this.progress];
-      this.progress++;
+      let action = this.actions[this.pprogress];
+      this.pprogress++;
       cuber.twister.twist(action.exp, action.reverse, action.times, false);
     }
   }
@@ -94,7 +107,7 @@ export default class Player extends Vue {
     if (this.playing) {
       this.playing = false;
     } else {
-      if (this.progress == 0) {
+      if (this.pprogress == 0) {
         this.init();
       }
       this.playing = true;
@@ -103,25 +116,25 @@ export default class Player extends Vue {
   }
 
   forward() {
-    if (this.progress == this.actions.length) {
+    if (this.pprogress == this.actions.length) {
       return;
     }
-    if (this.progress == 0) {
+    if (this.pprogress == 0) {
       this.init();
     }
     this.playing = false;
-    let action = this.actions[this.progress];
-    this.progress++;
+    let action = this.actions[this.pprogress];
+    this.pprogress++;
     cuber.twister.twist(action.exp, action.reverse, action.times);
   }
 
   backward() {
-    if (this.progress == 0) {
+    if (this.pprogress == 0) {
       return;
     }
     this.playing = false;
-    this.progress--;
-    let action = this.actions[this.progress];
+    this.pprogress--;
+    let action = this.actions[this.pprogress];
     cuber.twister.twist(action.exp, !action.reverse, action.times);
   }
 }
