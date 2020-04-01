@@ -203,14 +203,9 @@ export default class GIF {
   image: Uint8Array;
   data: Uint8Array;
   last: Uint8Array;
-  real: Uint8Array;
   dispose: number;
   out: ByteArray;
   transparent: boolean = true;
-  x0: number;
-  x1: number;
-  y0: number;
-  y1: number;
 
   private static DEEP = 8;
   private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.DEEP + 1));
@@ -280,7 +275,6 @@ export default class GIF {
     this.height = ~~height;
     this.data = new Uint8Array(this.width * this.height);
     this.last = new Uint8Array(this.width * this.height);
-    this.real = new Uint8Array(this.width * this.height);
     this.frames = 0;
     this.delay = delay;
     this.out = new ByteArray();
@@ -313,10 +307,6 @@ export default class GIF {
   getPixels() {
     var w = this.width;
     var h = this.height;
-    this.x0 = w;
-    this.x1 = 0;
-    this.y0 = h;
-    this.y1 = 0;
     for (var i = 0; i < h; i++) {
       for (var j = 0; j < w; j++) {
         let from = i * w + j;
@@ -342,20 +332,10 @@ export default class GIF {
         if (this.last[to] == index) {
           this.data[to] = 0;
         } else {
-          this.x0 = Math.min(this.x0, j);
-          this.x1 = Math.max(this.x1, j + 1);
-          this.y0 = Math.min(this.y0, h - i - 1);
-          this.y1 = Math.max(this.y1, h - i);
           this.data[to] = index;
           this.last[to] = index;
         }
       }
-    }
-    if (this.x0 >= this.x1 || this.y0 >= this.y1) {
-      this.x0 = 0;
-      this.x1 = 1;
-      this.y0 = 0;
-      this.y1 = 1;
     }
   }
 
@@ -400,10 +380,10 @@ export default class GIF {
 
   writeImageDesc() {
     this.out.writeByte(0x2c); // image separator
-    this.out.writeShort(this.x0); // image position x,y = 0,0
-    this.out.writeShort(this.y0);
-    this.out.writeShort(this.x1 - this.x0); // image size
-    this.out.writeShort(this.y1 - this.y0);
+    this.out.writeShort(0); // image position x,y = 0,0
+    this.out.writeShort(0);
+    this.out.writeShort(this.width); // image size
+    this.out.writeShort(this.height);
     this.out.writeByte(0);
   }
 
@@ -440,14 +420,7 @@ export default class GIF {
   }
 
   writePixels() {
-    let width = this.x1 - this.x0;
-    let height = this.y1 - this.y0;
-    var enc = new LZW(width, height, GIF.DEEP);
-    for (let j = 0; j < height; j++) {
-      for (let i = 0; i < width; i++) {
-        this.real[j * width + i] = this.data[(j + this.y0) * this.width + i + this.x0];
-      }
-    }
-    enc.encode(this.real, this.out);
+    var enc = new LZW(this.width, this.height, GIF.DEEP);
+    enc.encode(this.data, this.out);
   }
 }
