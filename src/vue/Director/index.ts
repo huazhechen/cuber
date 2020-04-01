@@ -271,6 +271,7 @@ export default class Director extends Vue {
     cuber.world.cube.strip({});
   }
 
+  pixels: Uint8Array;
   film() {
     if (this.recording) {
       this.recording = false;
@@ -282,6 +283,7 @@ export default class Director extends Vue {
     let size = this.pixel;
     this.filmer.setSize(size, size, true);
     if (this.filmt == "gif") {
+      this.pixels = new Uint8Array(size * size * 4);
       this.gif.start(size, size, this.delay);
     } else if (this.filmt == "apng") {
       this.apng.start();
@@ -380,9 +382,8 @@ export default class Director extends Vue {
     this.filmer.render(cuber.world.scene, cuber.world.camera);
     if (this.filmt == "gif") {
       let content = this.filmer.getContext();
-      let pixels = new Uint8Array(size * size * 4);
-      content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
-      this.gif.add(pixels);
+      content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, this.pixels);
+      this.gif.add(this.pixels);
     } else if (this.filmt == "apng") {
       this.apng.addFrame();
     } else if (this.filmt == "pngs") {
