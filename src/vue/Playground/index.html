@@ -28,11 +28,11 @@
           <v-btn @click="tap('tune')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">settings</v-icon>
           </v-btn>
-          <v-btn @click="tap('history')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">assignment</v-icon>
-          </v-btn>
           <v-btn @click="tap('shuffle')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">casino</v-icon>
+          </v-btn>
+          <v-btn @click="tap('history')" :style="style" text :ripple="false" :disabled="cuber.history.length == 0">
+            <v-icon :size="size * 0.8">assignment</v-icon>
           </v-btn>
           <v-btn @click="tap('undo')" :style="style" text :ripple="false" :disabled="cuber.history.length == 0">
             <v-icon :size="size * 0.8">backspace</v-icon>
