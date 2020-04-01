@@ -10,13 +10,7 @@
   max-height: 512px;
 }
 .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-  .v-input__prepend-outer,
-.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-  .v-input__prepend-inner,
-.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-  .v-input__append-inner,
-.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-  .v-input__append-outer {
+  .v-input__append-inner {
   margin-top: 0%;
 }
 .v-input .v-label {
