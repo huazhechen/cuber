@@ -208,7 +208,9 @@ export default class GIF {
   transparent: boolean = true;
 
   private static DEEP = 8;
-  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, 12));
+  private static HASH_SIZE = 12;
+  private static HASH_MASK = 0xFFF;
+  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.HASH_SIZE));
 
   private static COLORN = 0;
 
@@ -307,29 +309,43 @@ export default class GIF {
   }
 
   getPixels() {
-    var w = this.width;
-    var h = this.height;
-    for (var i = 0; i < h; i++) {
-      for (var j = 0; j < w; j++) {
-        let from = i * w + j;
-        let to = (h - i - 1) * w + j;
-        let a = this.image[from * 4 + 3];
-        let r = this.image[from * 4 + 0];
-        let g = this.image[from * 4 + 1];
-        let b = this.image[from * 4 + 2];
+    let w = this.width;
+    let h = this.height;
+    let a;
+    let r;
+    let g;
+    let b;
+    let from;
+    let to;
+    let index;
+    let hash;
+    let offset;
+    for (let i = 0; i < h; i++) {
+      for (let j = 0; j < w; j++) {
+        from = i * w + j;
+        to = (h - i - 1) * w + j;
+        offset = from * 4;
+        a = this.image[offset + 3];
+        index = 0;
         if (a == 0) {
-          r = 0xff;
-          g = 0xff;
-          b = 0xff;
-        }
-        let hash = (r * 31 + g) * 31 + b;
-        hash = hash & 0xfff;
-        let index;
-        if (GIF.HASH[hash] && GIF.HASH[hash].RGB[0] == r && GIF.HASH[hash].RGB[1] == g && GIF.HASH[hash].RGB[2] == b) {
-          index = GIF.HASH[hash].index;
+          index = 1;
         } else {
-          index = this.getColor(r, g, b);
-          GIF.HASH[hash] = { RGB: [r, g, b], index: index };
+          r = this.image[offset + 0];
+          g = this.image[offset + 1];
+          b = this.image[offset + 2];
+          hash = (r * 31 + g) * 31 + b;
+          hash = hash & GIF.HASH_MASK;
+          if (
+            GIF.HASH[hash] &&
+            GIF.HASH[hash].RGB[0] == r &&
+            GIF.HASH[hash].RGB[1] == g &&
+            GIF.HASH[hash].RGB[2] == b
+          ) {
+            index = GIF.HASH[hash].index;
+          } else {
+            index = this.getColor(r, g, b);
+            GIF.HASH[hash] = { RGB: [r, g, b], index: index };
+          }
         }
         if (this.last[to] == index) {
           this.data[to] = 0;
