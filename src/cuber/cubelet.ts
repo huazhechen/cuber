@@ -353,39 +353,39 @@ export default class Cubelet extends Group {
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
-      let _sticker = new Mesh(Cubelet._STICKER, this.lambers[i]);
-      _sticker.name = FACE[i];
-      switch (i) {
-        case FACE.L:
-          _sticker.rotation.y = -Math.PI / 2;
-          _sticker.position.x = -Cubelet.SIZE / 2;
-          break;
-        case FACE.R:
-          _sticker.rotation.y = Math.PI / 2;
-          _sticker.position.x = Cubelet.SIZE / 2;
-          break;
-        case FACE.D:
-          _sticker.rotation.x = Math.PI / 2;
-          _sticker.position.y = -Cubelet.SIZE / 2;
-          break;
-        case FACE.U:
-          _sticker.rotation.x = -Math.PI / 2;
-          _sticker.position.y = Cubelet.SIZE / 2;
-          break;
-        case FACE.B:
-          _sticker.rotation.x = Math.PI;
-          _sticker.position.z = -Cubelet.SIZE / 2;
-          break;
-        case FACE.F:
-          _sticker.rotation.x = 2 * Math.PI;
-          _sticker.position.z = Cubelet.SIZE / 2;
-          break;
-        default:
-          break;
-      }
-      this.stickers.push(_sticker);
       if (this.lambers[i] != Cubelet.LAMBERS.GRAY) {
+        let _sticker = new Mesh(Cubelet._STICKER, this.lambers[i]);
+        _sticker.name = FACE[i];
+        switch (i) {
+          case FACE.L:
+            _sticker.rotation.y = -Math.PI / 2;
+            _sticker.position.x = -Cubelet.SIZE / 2;
+            break;
+          case FACE.R:
+            _sticker.rotation.y = Math.PI / 2;
+            _sticker.position.x = Cubelet.SIZE / 2;
+            break;
+          case FACE.D:
+            _sticker.rotation.x = Math.PI / 2;
+            _sticker.position.y = -Cubelet.SIZE / 2;
+            break;
+          case FACE.U:
+            _sticker.rotation.x = -Math.PI / 2;
+            _sticker.position.y = Cubelet.SIZE / 2;
+            break;
+          case FACE.B:
+            _sticker.rotation.x = Math.PI;
+            _sticker.position.z = -Cubelet.SIZE / 2;
+            break;
+          case FACE.F:
+            _sticker.rotation.x = 2 * Math.PI;
+            _sticker.position.z = Cubelet.SIZE / 2;
+            break;
+          default:
+            break;
+        }
         this.add(_sticker);
+        this.stickers[i] = _sticker;
         let _mirror = new Mesh(Cubelet._MIRROR, this.basics[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
         _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
@@ -409,6 +409,9 @@ export default class Cubelet extends Group {
     let lamber;
     let basic;
     let index = null;
+    if (this.stickers[face] === undefined) {
+      return;
+    }
     if (color && color.length > 0) {
       for (const key in COLORS) {
         let c = (<any>COLORS)[key];

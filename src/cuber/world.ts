@@ -69,7 +69,7 @@ export default class World {
     let distance = Cubelet.SIZE * 3 * perspective;
     this.camera.position.z = distance;
     this.camera.near = distance - Cubelet.SIZE * 3;
-    this.camera.far = distance + Cubelet.SIZE * 3;
+    this.camera.far = distance + Cubelet.SIZE * 4;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
     this.dirty = true;

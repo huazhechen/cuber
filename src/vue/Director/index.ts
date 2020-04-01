@@ -6,7 +6,8 @@ import cuber from "../../cuber";
 import Tune from "../Tune";
 import Setting from "../Setting";
 import Player from "../Player";
-import { WebGLRenderer } from "three";
+import { WebGLRenderer, Vector3 } from "three";
+import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
 import GIF from "../../common/gif";
 import { APNG } from "../../common/apng";
 import ZIP from "../../common/zip";
@@ -33,6 +34,7 @@ export default class Director extends Vue {
   player: Player;
 
   filmer: WebGLRenderer;
+  svger: SVGRenderer;
   gif: GIF;
   apng: APNG;
   zip: ZIP;
@@ -48,10 +50,16 @@ export default class Director extends Vue {
     this.apng.delay_num = this.delay;
   }
 
-  output: string = "gif";
-  @Watch("output")
-  onOutputChange() {
-    window.localStorage.setItem("director.output", this.output);
+  filmt: string = "gif";
+  @Watch("filmt")
+  onFilmtChange() {
+    window.localStorage.setItem("director.filmt", this.filmt);
+  }
+
+  snapt: string = "png";
+  @Watch("snapt")
+  onSnaptChange() {
+    window.localStorage.setItem("director.snapt", this.snapt);
   }
 
   constructor() {
@@ -59,6 +67,7 @@ export default class Director extends Vue {
     this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+    this.svger = new SVGRenderer();
     this.gif = new GIF();
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
@@ -90,7 +99,8 @@ export default class Director extends Vue {
     });
     this.delay = Number(window.localStorage.getItem("director.delay") || 2);
     this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
-    this.output = window.localStorage.getItem("director.output") || "gif";
+    this.filmt = window.localStorage.getItem("director.filmt") || "gif";
+    this.snapt = window.localStorage.getItem("director.snapt") || "png";
 
     cuber.world.callbacks.push(() => {
       this.callback();
@@ -181,7 +191,11 @@ export default class Director extends Vue {
         break;
       case "film":
         if (this.action.length == 0) {
-          this.snap();
+          if (this.snapt == "png") {
+            this.snap();
+          } else if (this.snapt == "svg") {
+            this.svg();
+          }
         } else {
           this.film();
         }
@@ -267,11 +281,11 @@ export default class Director extends Vue {
     cuber.controller.disable = true;
     let size = this.pixel;
     this.filmer.setSize(size, size, true);
-    if (this.output == "gif") {
+    if (this.filmt == "gif") {
       this.gif.start(size, size, this.delay);
-    } else if (this.output == "apng") {
+    } else if (this.filmt == "apng") {
       this.apng.start();
-    } else if (this.output == "pngs") {
+    } else if (this.filmt == "pngs") {
       this.zip.init();
     }
     this.record();
@@ -314,6 +328,47 @@ export default class Director extends Vue {
     Util.DOWNLOAD("cuber-" + id + ".png", url);
   }
 
+  svg() {
+    let position: Vector3 = new Vector3();
+    let distance;
+    for (const cubelet of cuber.world.cube.cubelets) {
+      distance = cubelet.frame.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+      cubelet.frame.renderOrder = 1 / distance;
+      for (const sticker of cubelet.stickers) {
+        if (sticker === undefined) {
+          continue;
+        }
+        distance = sticker.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+        sticker.renderOrder = 1 / distance;
+      }
+      for (const mirror of cubelet.mirrors) {
+        if (mirror === undefined) {
+          continue;
+        }
+        distance = mirror.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+        mirror.renderOrder = 1 / distance;
+      }
+    }
+    cuber.world.camera.aspect = 1;
+    cuber.world.camera.updateProjectionMatrix();
+    let size = this.pixel;
+    this.svger.setSize(size, size);
+    this.svger.clear();
+    this.svger.render(cuber.world.scene, cuber.world.camera);
+    cuber.world.resize();
+    var serializer = new XMLSerializer();
+    var content = serializer.serializeToString(this.svger.domElement);
+    let url = "data:image/svg+xml;base64," + btoa(content);
+    let date = new Date();
+    let offset = date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() - offset);
+    let id = date
+      .toISOString()
+      .replace(/[^0-9]/g, "")
+      .substring(0, 14);
+    Util.DOWNLOAD("cuber-" + id + ".svg", url);
+  }
+
   record() {
     let size = this.pixel;
     let width = cuber.world.width;
@@ -323,14 +378,14 @@ export default class Director extends Vue {
     cuber.world.resize();
     this.filmer.clear();
     this.filmer.render(cuber.world.scene, cuber.world.camera);
-    if (this.output == "gif") {
+    if (this.filmt == "gif") {
       let content = this.filmer.getContext();
       let pixels = new Uint8Array(size * size * 4);
       content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, pixels);
       this.gif.add(pixels);
-    } else if (this.output == "apng") {
+    } else if (this.filmt == "apng") {
       this.apng.addFrame();
-    } else if (this.output == "pngs") {
+    } else if (this.filmt == "pngs") {
       let content = this.filmer.domElement.toDataURL("image/png");
       let parts = content.split(";base64,");
       let raw = window.atob(parts[1]);
@@ -360,18 +415,18 @@ export default class Director extends Vue {
       .toISOString()
       .replace(/[^0-9]/g, "")
       .substring(0, 14);
-    if (this.output == "gif") {
+    if (this.filmt == "gif") {
       this.gif.finish();
       data = this.gif.out.getData();
       blob = new Blob([data], { type: "image/gif" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber-" + id + ".gif", url);
-    } else if (this.output == "apng") {
+    } else if (this.filmt == "apng") {
       data = this.apng.finish();
       blob = new Blob([data], { type: "image/png" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber-" + id + ".png", url);
-    } else if (this.output == "pngs") {
+    } else if (this.filmt == "pngs") {
       this.zip.finish();
       data = this.zip.out.getData();
       let blob = new Blob([data], { type: "application/zip" });

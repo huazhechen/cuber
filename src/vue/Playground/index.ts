@@ -7,7 +7,6 @@ import Tune from "../Tune";
 import Setting from "../Setting";
 import Dash from "../Dash";
 import Cubelet from "../../cuber/cubelet";
-import History from "../../cuber/history";
 
 @Component({
   template: require("./index.html"),
