@@ -400,9 +400,9 @@ export default class Cubelet extends Group {
         this.add(_mirror);
         this.mirrors[i] = _mirror;
       }
-      this.matrixAutoUpdate = false;
-      this.updateMatrix();
     }
+    this.matrixAutoUpdate = false;
+    this.updateMatrix();
   }
 
   stick(face: number, color: string) {

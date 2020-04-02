@@ -1,5 +1,14 @@
 export default class Util {
-  static DOWNLOAD(filename: string, url: string) {
+  static DOWNLOAD(name: string, suffix: string, url: string) {
+    let date = new Date();
+    let offset = date.getTimezoneOffset() * 60000;
+    date.setTime(date.getTime() - offset);
+    let id = date
+      .toISOString()
+      .replace(/[^0-9]/g, "")
+      .substring(0, 14);
+
+    let filename = name + "-" + id + "." + suffix;
     let link = document.createElement("a");
     link.innerHTML = filename;
     link.setAttribute("download", filename);
