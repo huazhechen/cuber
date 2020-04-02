@@ -1,6 +1,6 @@
 const path = require("path");
 
-module.exports = (env, argv) => ({
+module.exports = () => ({
   entry: {
     index: "./src/index.ts"
   },
