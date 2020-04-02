@@ -7,6 +7,7 @@ import Tune from "../Tune";
 import Setting from "../Setting";
 import Dash from "../Dash";
 import Cubelet from "../../cuber/cubelet";
+import Layer from "../Layer";
 
 @Component({
   template: require("./index.html"),
@@ -14,7 +15,8 @@ import Cubelet from "../../cuber/cubelet";
     viewport: Viewport,
     dash: Dash,
     tune: Tune,
-    setting: Setting
+    setting: Setting,
+    layer: Layer
   }
 })
 export default class Playground extends Vue {
@@ -121,12 +123,16 @@ export default class Playground extends Vue {
     };
   }
 
+  layerd: boolean = false;
   tuned: boolean = false;
   settingd: boolean = false;
   shuffled: boolean = false;
   historyd: boolean = false;
   tap(key: string) {
     switch (key) {
+      case "layers":
+        this.layerd = true;
+        break;
       case "shuffle":
         this.shuffled = true;
         break;

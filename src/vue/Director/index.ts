@@ -15,6 +15,7 @@ import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
 import Dash from "../Dash";
+import Layer from "../Layer";
 
 @Component({
   template: require("./index.html"),
@@ -23,7 +24,8 @@ import Dash from "../Dash";
     dash: Dash,
     tune: Tune,
     setting: Setting,
-    player: Player
+    player: Player,
+    layer: Layer
   }
 })
 export default class Director extends Vue {
@@ -171,12 +173,16 @@ export default class Director extends Vue {
     };
   }
 
+  layerd: boolean = false;
   tuned: boolean = false;
   colord: boolean = false;
   outputd: boolean = false;
   settingd: boolean = false;
   tap(key: string) {
     switch (key) {
+      case "layers":
+        this.layerd = true;
+        break;
       case "tune":
         this.tuned = true;
         break;

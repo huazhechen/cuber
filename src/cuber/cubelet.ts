@@ -329,6 +329,14 @@ export default class Cubelet extends Group {
     this._quaternion = new Quaternion();
     this.mirrors = [];
 
+    let xx = this.position.x * this.position.x;
+    let yy = this.position.y * this.position.y;
+    let zz = this.position.z * this.position.z;
+    let d = xx + yy + zz - Math.min(xx, yy, zz);
+    d = Math.sqrt(d) + (Math.sqrt(2) * Cubelet.SIZE) / 2 - (order * Cubelet.SIZE) / 2;
+    if (d < 0) {
+      return;
+    }
     let half = (order - 1) / 2;
 
     this.lambers = [

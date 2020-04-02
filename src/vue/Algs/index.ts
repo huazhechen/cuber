@@ -1,6 +1,5 @@
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import { TwistAction, TwistNode } from "../../cuber/twister";
 import Tune from "../Tune";
 import Viewport from "../Viewport";
 import Dash from "../Dash";

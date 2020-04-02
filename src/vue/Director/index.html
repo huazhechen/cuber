@@ -15,11 +15,14 @@
           style="display: flex;"
           :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
         >
-          <v-btn @click="tap('settings')" :style="style" text :ripple="false" :disabled="recording">
-            <v-icon :size="size * 0.8">widgets</v-icon>
+          <v-btn @click="tap('layers')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">layers</v-icon>
           </v-btn>
-          <v-btn @click="tap('tune')" :style="style" text :ripple="false" :disabled="recording">
+          <v-btn @click="tap('settings')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">settings</v-icon>
+          </v-btn>
+          <v-btn @click="tap('tune')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">visibility</v-icon>
           </v-btn>
           <v-btn @click="tap('output')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">style</v-icon>
@@ -102,8 +105,9 @@
       </v-layout>
       <player ref="player" :disable="recording"></player>
     </v-container>
+    <layer v-model="layerd" v-on:order="order"></layer>
     <tune v-model="tuned"></tune>
-    <setting v-model="settingd" v-on:order="order"></setting>
+    <setting v-model="settingd"></setting>
     <v-bottom-sheet v-model="outputd">
       <v-card flat style="margin: auto;touch-action: none;user-select: none;">
         <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
