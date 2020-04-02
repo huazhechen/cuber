@@ -1,14 +1,15 @@
-var path = require("path");
-var webpack = require("webpack");
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = (env, argv) => ({
   entry: {
-    "index.js": "./src/index.ts"
+    index: "./src/index.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "[name]",
+    filename: "[name].[chunkhash].js",
     globalObject: "this"
   },
   module: {
@@ -66,5 +67,17 @@ module.exports = (env, argv) => ({
   performance: {
     hints: false
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "template.html",
+      filename: "../index.html",
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyCSS: true
+      }
+    }),
+    new CleanWebpackPlugin()
+  ],
   devtool: argv.mode === "production" ? "" : "#cheap-module-eval-source-map"
 });

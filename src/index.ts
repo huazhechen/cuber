@@ -9,6 +9,20 @@ import Director from "./vue/Director";
 import { VueConstructor } from "vue/types/umd";
 import Algs from "./vue/Algs";
 
+var _hmt: any = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?e3fd96123e7614cd5ea9dc70df73217f";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode?.insertBefore(hm, s);
+})();
+
+if (navigator.serviceWorker != null) {
+  navigator.serviceWorker.register("sw.js").then(function(registartion) {
+    console.log("支持sw:", registartion.scope);
+  });
+}
+
 Vue.use(Vuetify);
 const opts = {};
 const vuetify = new Vuetify(opts);

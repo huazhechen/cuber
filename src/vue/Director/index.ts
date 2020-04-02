@@ -353,10 +353,6 @@ export default class Director extends Vue {
     cuber.world.resize();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);
-    content = content.replace(
-      /fill:(rgb\(\d*,\d*,\d*\))/g,
-      "stroke:$1; stroke-width:1px; vector-effect:non-scaling-stroke; fill:$1"
-    );
     let url = "data:image/svg+xml;base64," + btoa(content);
     Util.DOWNLOAD("cuber", "svg", url);
   }

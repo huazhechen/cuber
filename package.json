@@ -6,17 +6,19 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "watch": "webpack-dev-server --mode=development --hot --inline --host 0.0.0.0",
+    "watch": "webpack-dev-server --mode=development --inline --host 0.0.0.0 --progress",
     "build": "webpack --color --display --display-modules --mode=production --progress"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/three": "^0.103.2",
     "@types/webpack-env": "^1.15.0",
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
     "deepmerge": "^4.2.2",
     "fibers": "^4.0.2",
     "file-loader": "^5.0.2",
+    "html-webpack-plugin": "^4.0.4",
     "material-design-icons": "*",
     "sass": "^1.24.4",
     "sass-loader": "^8.0.2",
