@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WorkboxPlugin = require("workbox-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = () => ({
   entry: {
@@ -9,7 +10,7 @@ module.exports = () => ({
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
-    publicPath: "./dist/",
+    publicPath: "./",
     filename: "[name].[chunkhash].js",
     globalObject: "this"
   },
@@ -63,20 +64,27 @@ module.exports = () => ({
     hints: false
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "template.html",
-      filename: "../index.html",
+      filename: "index.html",
       minify: {
         removeComments: true,
         collapseWhitespace: true,
         minifyCSS: true
       }
     }),
-    new CleanWebpackPlugin(),
     new WorkboxPlugin.GenerateSW({
       skipWaiting: true,
       clientsClaim: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: __dirname + "/resource/",
+        to: __dirname + "/dist/",
+        ignore: ["*.html"]
+      }
+    ])
   ],
   devtool: ""
 });
