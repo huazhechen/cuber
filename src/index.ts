@@ -18,7 +18,7 @@ var _hmt: any = _hmt || [];
 })();
 
 if (navigator.serviceWorker != null) {
-  navigator.serviceWorker.register("./dist/service-worker.js");
+  navigator.serviceWorker.register("./service-worker.js");
 }
 
 Vue.use(Vuetify);
