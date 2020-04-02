@@ -1,16 +1,13 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const WorkboxPlugin = require("workbox-webpack-plugin");
 
-module.exports = () => ({
+module.exports = (env, argv) => ({
   entry: {
     index: "./src/index.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "[name].[chunkhash].js",
+    filename: "[name].js",
     globalObject: "this"
   },
   module: {
@@ -59,24 +56,16 @@ module.exports = () => ({
     },
     extensions: ["*", ".js", ".ts", ".json"]
   },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    overlay: true,
+    disableHostCheck: true,
+    index: "dev.html"
+  },
   performance: {
     hints: false
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "template.html",
-      filename: "../index.html",
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        minifyCSS: true
-      }
-    }),
-    new CleanWebpackPlugin(),
-    new WorkboxPlugin.GenerateSW({
-      skipWaiting: true,
-      clientsClaim: true
-    })
-  ],
-  devtool: ""
+  plugins: [],
+  devtool: "#cheap-module-eval-source-map"
 });

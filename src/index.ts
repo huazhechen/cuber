@@ -18,9 +18,7 @@ var _hmt: any = _hmt || [];
 })();
 
 if (navigator.serviceWorker != null) {
-  navigator.serviceWorker.register("sw.js").then(function(registartion) {
-    console.log("支持sw:", registartion.scope);
-  });
+  navigator.serviceWorker.register("./dist/service-worker.js");
 }
 
 Vue.use(Vuetify);

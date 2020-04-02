@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "watch": "webpack-dev-server --mode=development --inline --host 0.0.0.0 --progress",
+    "watch": "webpack-dev-server --mode=development --hot --inline --host 0.0.0.0 --progress --config ./webpack.dev.config.js",
     "build": "webpack --color --display --display-modules --mode=production --progress"
   },
   "dependencies": {},
