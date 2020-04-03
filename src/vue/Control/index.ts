@@ -34,9 +34,4 @@ export default class Control extends Vue {
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
-
-  reset() {
-    this.preferance.frames = 30;
-    this.preferance.sensitivity = 50;
-  }
 }

@@ -3,7 +3,6 @@ import { Component } from "vue-property-decorator";
 import Order from "../Order";
 import Control from "../Control";
 import Appear from "../Appear";
-import Outward from "../Outward";
 
 export class SettingItem {
   label: string;
@@ -26,8 +25,7 @@ export class SettingItem {
   components: {
     order: Order,
     control: Control,
-    appear: Appear,
-    outward: Outward
+    appear: Appear
   }
 })
 export default class Setting extends Vue {
@@ -39,9 +37,9 @@ export default class Setting extends Vue {
     super();
     this.items["order"] = new SettingItem("阶数选择");
     this.items["control"] = new SettingItem("操作设置");
-    this.items["appear"] = new SettingItem("外观调整");
-    this.items["outward"] = new SettingItem("辅助选项");
+    this.items["appear"] = new SettingItem("外观设置");
     this.items["theme"] = new SettingItem("主题设置");
+    this.items["theme"].disable = true;
   }
   mounted() {
     this.resize();
