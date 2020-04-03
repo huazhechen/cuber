@@ -49,7 +49,7 @@
     <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform:none;">
-          <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
             重新打乱?
           </div>
         </v-card-title>
@@ -70,12 +70,12 @@
             </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block color="red" text @click="shuffled = false;shuffle();" :height="size * 0.8">
-                <div :style="{'font-size':size/4+'px'}">确定</div>
+                <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block color="black" text @click="shuffled = false" :height="size * 0.8">
-                <div :style="{'font-size':size/4+'px'}">取消</div>
+                <div :style="{'font-size':size/3+'px'}">取消</div>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -85,7 +85,7 @@
     <v-dialog v-model="completed" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform:none;">
-          <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
             复原成功
           </div>
         </v-card-title>
@@ -93,12 +93,12 @@
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs6 d-flex>
               <v-btn block color="black" text @click="completed = false;" :height="size * 0.8">
-                <div :style="{'font-size':size/4+'px'}">确定</div>
+                <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block color="red" text @click="completed = false;shuffle();" :height="size * 0.8">
-                <div :style="{'font-size':size/4+'px'}">重试</div>
+                <div :style="{'font-size':size/3+'px'}">重试</div>
               </v-btn>
             </v-flex>
           </v-layout>
