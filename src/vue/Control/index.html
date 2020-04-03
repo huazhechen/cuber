@@ -2,10 +2,10 @@
   <v-card text style="margin: auto;touch-action: none;user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
-        <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">速度:</div> </v-flex>
+        <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">帧数:</div> </v-flex>
         <v-flex xs10 style="display: flex;">
           <v-btn
-            v-for="frames in [5, 10, 20, 30, 45, 60]"
+            v-for="frames in [10, 20, 30, 45, 60]"
             :key="frames"
             @click="preferance.frames = frames"
             :color="preferance.frames == frames?'primary':''"
@@ -18,7 +18,13 @@
           </v-btn>
         </v-flex>
       </v-layout>
-      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}">
+      <v-layout
+        row
+        wrap
+        justify-center
+        align-center
+        :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}"
+      >
         <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">灵敏:</div> </v-flex>
         <v-flex xs10 style="display: flex;">
           <v-btn
