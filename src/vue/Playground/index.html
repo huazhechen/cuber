@@ -9,15 +9,15 @@
       text
       color="primary"
       style="margin:0%;padding:0%;"
-      :style="{height:size*0.8+'px', 'margin-left': width / 2 - Math.min(size*3, width/2 - size/4) + 'px'}"
+      :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
     >
-      <div :style="{'font-size':(size * 0.4)+'px'}">{{score}}</div>
+      <div :style="{'font-size':(size * 0.5)+'px'}">{{score}}</div>
     </v-btn>
     <v-container
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:size * 6 + 'px', height:size * 1.5 + 'px'}"
+      :style="{width:Math.min(size * 8, width) + 'px', height:size * 1.5 + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
@@ -46,7 +46,7 @@
     <layer v-model="layerd" v-on:order="order"></layer>
     <tune v-model="tuned"></tune>
     <setting v-model="settingd"></setting>
-    <v-dialog v-model="shuffled" :width="size * 6">
+    <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform:none;">
           <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
@@ -82,7 +82,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="completed" :width="size * 6">
+    <v-dialog v-model="completed" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform:none;">
           <div :style="{'font-size':size/3+'px','padding-top':size/8+'px'}">
@@ -105,7 +105,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="historyd" :width="size * 6">
+    <v-dialog v-model="historyd" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-text style="text-transform:none;">
           <v-textarea
