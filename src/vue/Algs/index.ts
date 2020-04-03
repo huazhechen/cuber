@@ -34,7 +34,7 @@ export default class Algs extends Vue {
   pics: string[][] = [];
 
   mounted() {
-    cuber.preferance.load("director");
+    cuber.preferance.load("algs");
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -43,7 +43,6 @@ export default class Algs extends Vue {
     if (view instanceof Player) {
       this.player = view;
     }
-    this.resize();
 
     for (let i = 0; i < this.algs.length; i++) {
       this.pics.push([]);
@@ -60,6 +59,7 @@ export default class Algs extends Vue {
     } else {
       this.index = { group: 0, index: 0 };
     }
+    this.$nextTick(this.resize);
     this.loop();
   }
 
@@ -84,13 +84,13 @@ export default class Algs extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
     this.viewport?.resize(this.width, this.height - this.size * 3.6 - 32);
     this.player?.resize(this.size);
   }
 
   get grid() {
-    let width = this.size * 12;
+    let width = this.size * 8;
     return Math.min(this.width, width);
   }
 

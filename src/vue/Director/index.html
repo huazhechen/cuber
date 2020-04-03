@@ -6,7 +6,7 @@
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:size * 8 + 'px', height:size * 4.4 + 32 + 'px'}"
+      :style="{width:size * 6 + 'px', height:size * 4.4 + 32 + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
@@ -110,7 +110,7 @@
     <setting v-model="settingd"></setting>
     <v-bottom-sheet v-model="outputd">
       <v-card flat style="margin: auto;touch-action: none;user-select: none;">
-        <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
+        <v-container fluid grid-list-md text-xs-center :style="{width:size * 6 + 'px'}">
           <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
             <v-flex xs2>
               <div :style="{'font-size':size * 0.3+'px'}">像素:</div>
@@ -216,7 +216,7 @@
     </v-bottom-sheet>
     <v-bottom-sheet v-model="colord">
       <v-card flat style="margin: auto;touch-action: none;user-select: none;">
-        <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
+        <v-container fluid grid-list-md text-xs-center :style="{width:size * 6 + 'px'}">
           <v-layout row wrap>
             <v-flex v-for="(item, index) in colors" :key="index" xs2 style="padding: 1%;">
               <v-btn

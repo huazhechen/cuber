@@ -78,7 +78,7 @@ export default class Director extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
     this.viewport?.resize(this.width, this.height - this.size * 4.4 - 32);
     this.player?.resize(this.size);
   }
@@ -93,7 +93,6 @@ export default class Director extends Vue {
     if (view instanceof Player) {
       this.player = view;
     }
-    this.resize();
 
     this.reload();
     cuber.controller.taps.push((index: number, face: number) => {
@@ -107,7 +106,7 @@ export default class Director extends Vue {
     cuber.world.callbacks.push(() => {
       this.callback();
     });
-
+    this.$nextTick(this.resize);
     this.loop();
   }
 

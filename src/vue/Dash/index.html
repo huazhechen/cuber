@@ -5,14 +5,14 @@
     top
     fab
     color="primary"
-    :style="{width:size+'px', height:size+'px', 'margin-right': width / 2 - Math.min(size*4, width/2) + 'px'}"
+    :style="{width:size*0.8+'px', height:size*0.8+'px', 'margin-right': width / 2 - Math.min(size*3, width/2) + 'px'}"
     @click="menu=!menu"
   >
-    <v-icon :size="size * 0.7">menu</v-icon>
+    <v-icon :size="size * 0.6">menu</v-icon>
   </v-btn>
   <v-bottom-sheet v-model="menu">
     <v-card text style="margin: auto">
-      <v-container fluid grid-list-md text-xs-center :style="{width:size * 8 + 'px'}">
+      <v-container fluid grid-list-md text-xs-center :style="{width:size * 6 + 'px'}">
         <v-layout row wrap style="padding-top: 2%;padding-bottom: 5%;">
           <v-flex xs12 style="display: flex;">
             <v-btn

@@ -32,7 +32,7 @@ export default class Layer extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
 
   order(order: number) {

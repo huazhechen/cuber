@@ -36,7 +36,7 @@ export default class Playground extends Vue {
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12)) * 0.95;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 8));
     this.viewport?.resize(this.width, this.height - this.size * 1.5);
   }
 
@@ -46,8 +46,8 @@ export default class Playground extends Vue {
     if (view instanceof Viewport) {
       this.viewport = view;
     }
-    this.resize();
     this.shuffle();
+    this.$nextTick(this.resize);
     this.loop();
   }
 
