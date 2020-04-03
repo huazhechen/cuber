@@ -1,4 +1,4 @@
-<v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
+<v-bottom-sheet v-model="show" v-resize="resize">
   <v-card text style="margin: auto;touch-action: none;user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}" v-show="mode!='algs'">
