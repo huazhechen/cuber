@@ -120,7 +120,7 @@ export default class Director extends Vue {
     let save;
     let order = cuber.preferance.order;
     save = window.localStorage.getItem("director.action." + order);
-    this.action = save != null ? save : "RUR'U'-";
+    this.action = save != null ? save : "RUR'U'~";
     save = window.localStorage.getItem("director.scene." + order);
     this.scene = save != null ? save : "^";
 

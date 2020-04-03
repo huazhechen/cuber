@@ -80,7 +80,7 @@ export default class Twister {
   }
 
   start(action: TwistAction) {
-    if (action.exp == "~") {
+    if (action.exp == "." || action.exp == "~") {
       if (action.fast) {
         cuber.world.callback();
         return;
@@ -252,7 +252,7 @@ export class TwistNode {
     this.children = [];
     this.twist = new TwistAction(exp, reverse, times);
     // 不用解析场景
-    if (exp.match(/^[0123456789-]*[\*~#xyzbsfdeulmr][w]*$/gi)) {
+    if (exp.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
       if (/[XYZ]/.test(this.twist.exp)) {
         this.twist.exp = this.twist.exp.toLowerCase();
       }
@@ -290,7 +290,7 @@ export class TwistNode {
       }
       // 无括号
       if (values === null) {
-        values = item.match(/([0123456789-]*[\*\#~xyzbsfdeulmr][w]*)('?)(\d*)('?)/i);
+        values = item.match(/([0123456789-]*[\*\#~.xyzbsfdeulmr][w]*)('?)(\d*)('?)/i);
       }
       // 异常情况
       if (null === values) {
