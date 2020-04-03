@@ -3,8 +3,6 @@ import { Component, Watch } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import cuber from "../../cuber";
-import Tune from "../Tune";
-import Setting from "../Setting";
 import Player from "../Player";
 import { WebGLRenderer, Vector3 } from "three";
 import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
@@ -14,18 +12,14 @@ import ZIP from "../../common/zip";
 import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
-import Dash from "../Dash";
-import Layer from "../Layer";
+import Setting, { SettingItem } from "../Setting";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
-    dash: Dash,
-    tune: Tune,
     setting: Setting,
-    player: Player,
-    layer: Layer
+    player: Player
   }
 })
 export default class Director extends Vue {
@@ -92,6 +86,11 @@ export default class Director extends Vue {
     view = this.$refs.player;
     if (view instanceof Player) {
       this.player = view;
+    }
+    view = this.$refs.setting;
+    if (view instanceof Setting) {
+      let item = new SettingItem("输出设置", "output");
+      view.items["output"] = item;
     }
 
     this.reload();
@@ -172,38 +171,22 @@ export default class Director extends Vue {
     };
   }
 
-  layerd: boolean = false;
-  tuned: boolean = false;
   colord: boolean = false;
   outputd: boolean = false;
-  settingd: boolean = false;
   tap(key: string) {
     switch (key) {
-      case "layers":
-        this.layerd = true;
-        break;
-      case "tune":
-        this.tuned = true;
-        break;
-      case "settings":
-        this.settingd = true;
-        break;
       case "color":
         this.colord = true;
         break;
-      case "output":
-        this.outputd = true;
+      case "snap":
+        if (this.snapt == "png") {
+          this.snap();
+        } else if (this.snapt == "svg") {
+          this.svg();
+        }
         break;
       case "film":
-        if (this.action.length == 0) {
-          if (this.snapt == "png") {
-            this.snap();
-          } else if (this.snapt == "svg") {
-            this.svg();
-          }
-        } else {
-          this.film();
-        }
+        this.film();
         break;
       default:
         break;

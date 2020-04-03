@@ -6,14 +6,12 @@ import cuber from "../../cuber";
 @Component({
   template: require("./index.html")
 })
-export default class Tune extends Vue {
+export default class Control extends Vue {
   @Prop({ required: true })
   value: boolean;
-
   get show() {
     return this.value;
   }
-
   set show(value) {
     this.$emit("input", value);
   }
@@ -38,10 +36,7 @@ export default class Tune extends Vue {
   }
 
   reset() {
-    this.preferance.scale = 50;
-    this.preferance.perspective = 50;
-    this.preferance.angle = 63;
-    this.preferance.gradient = 67;
-    this.preferance.brightness = 80;
+    this.preferance.frames = 30;
+    this.preferance.sensitivity = 50;
   }
 }

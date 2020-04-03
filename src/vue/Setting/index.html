@@ -1,89 +1,138 @@
-<v-bottom-sheet v-model="show" v-resize="resize">
-  <v-card text style="margin: auto;touch-action: none;user-select: none;">
-    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
-      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
-        <v-flex xs2> <div :style="{'font-size':size / 4 + 'px'}">帧/步:</div> </v-flex>
-        <v-flex xs10 style="display: flex;">
-          <v-btn
-            v-for="frames in [5, 10, 20, 30, 45, 60]"
-            :key="frames"
-            @click="preferance.frames = frames"
-            :color="preferance.frames == frames?'primary':''"
-            depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
+<div v-resize="resize">
+  <v-btn
+    fixed
+    right
+    top
+    fab
+    color="primary"
+    style="user-select: none;"
+    :style="{width:size+'px', height:size+'px', 'margin-right': width / 2 - Math.min(size*4, width/2) + 'px'}"
+    @click="menu=!menu"
+  >
+    <v-icon :size="size * 0.7">menu</v-icon>
+  </v-btn>
+  <order v-model="items['order'].value" v-on:order="$emit('order');"></order>
+  <control v-model="items['control'].value"></control>
+  <appear v-model="items['appear'].value"></appear>
+  <outward v-model="items['outward'].value"></outward>
+  <v-bottom-sheet v-model="menu">
+    <v-card text style="margin: auto">
+      <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(size * 8, width) + 'px'}">
+        <v-layout row wrap style="padding-top: 2%;padding-bottom: 5%;">
+          <v-flex xs12 style="display: flex;">
+            <v-btn
+              :color="mode == 'playground'?'primary':''"
+              depressed
+              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              @click="tap('playground')"
+              :style="{height: size + 'px'}"
+            >
+              <v-icon :size="size * 0.8">games</v-icon>
+            </v-btn>
+            <v-btn
+              :color="mode == 'algs'?'primary':''"
+              depressed
+              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              @click="tap('algs')"
+              :style="{height: size + 'px'}"
+            >
+              <v-icon :size="size * 0.8">school</v-icon>
+            </v-btn>
+            <v-btn
+              :color="mode == 'director'?'primary':''"
+              depressed
+              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              @click="tap('director')"
+              :style="{height: size + 'px'}"
+            >
+              <v-icon :size="size * 0.8">movie</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap style="padding-bottom: 5%;">
+          <v-flex
+            v-for="(item, i) of items"
+            v-show="item.show"
+            :key="item.label"
+            xs6
+            class="text-center"
+            :style="{'padding-left': size/4 + 'px', 'padding-right': size/4 + 'px', 'padding-bottom': size/6 + 'px'}"
           >
-            <div>{{frames}}</div>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
-        <v-flex xs2> <div :style="{'font-size':size / 4 + 'px'}">外观:</div> </v-flex>
-        <v-flex xs10 style="display: flex;">
-          <v-btn
-            @click="preferance.mirror=!preferance.mirror"
-            :color="preferance.mirror?'primary':''"
-            depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
+            <v-btn
+              rounded
+              depressed
+              block
+              :disabled="item.disable"
+              @click="tap(item)"
+              style="text-transform:none; min-width: 0%;flex: 1"
+              :height="size * 0.8"
+              :style="{'font-size':size * 0.3 + 'px'}"
+              color="primary"
+              class="white--text"
+              >{{item.label}}
+            </v-btn>
+          </v-flex>
+          <v-flex
+            xs6
+            class="text-center"
+            :style="{'padding-left': size/4 + 'px', 'padding-right': size/4 + 'px', 'padding-bottom': size/6 + 'px'}"
           >
-            镜像
-          </v-btn>
-          <v-btn
-            @click="preferance.hollow=!preferance.hollow"
-            :color="preferance.hollow?'primary':''"
-            depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
+            <v-btn
+              rounded
+              depressed
+              block
+              @click="tap('code')"
+              style="text-transform:none; min-width: 0%;flex: 1"
+              :height="size * 0.8"
+              :style="{'font-size':size * 0.3 + 'px'}"
+              color="success"
+              class="white--text"
+              >使用帮助
+            </v-btn>
+          </v-flex>
+          <v-flex
+            xs6
+            class="text-center"
+            :style="{'padding-left': size/4 + 'px', 'padding-right': size/4 + 'px', 'padding-bottom': size/6 + 'px'}"
           >
-            透明
-          </v-btn>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
-        <v-flex xs2> <div :style="{'font-size':size / 4 + 'px'}">灵敏度:</div> </v-flex>
-        <v-flex xs10 style="display: flex;">
-          <v-btn
-            v-for="i in [1, 2, 3, 4, 5]"
-            :key="i"
-            @click="preferance.sensitivity = (i - 1) * 25"
-            :color="preferance.sensitivity == (i - 1) * 25?'primary':''"
-            depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
-          >
-            <div>{{i}}</div>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
-        <v-flex xs12 style="display: flex;">
-          <v-btn
-            @click="show=false;"
-            color="primary"
-            text
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
-          >
-            确定
-          </v-btn>
-          <v-btn
-            @click="reset"
-            color="error"
-            text
-            style="text-transform:none; min-width: 0%;flex: 1"
-            :height="size * 0.8"
-            :style="{'font-size':size / 4 + 'px'}"
-          >
-            重置
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-card>
-</v-bottom-sheet>
+            <v-btn
+              rounded
+              depressed
+              block
+              @click="tap('reset')"
+              style="text-transform:none; min-width: 0%;flex: 1"
+              :height="size * 0.8"
+              :style="{'font-size':size * 0.3 + 'px'}"
+              class="white--text"
+              color="red"
+              >重置数据
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
+  <v-dialog v-model="resetd" :width="Math.min(size * 8, width)">
+    <v-card>
+      <v-card-title style="text-transform:none;" class="headline">
+        <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+          重置数据
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs6 d-flex>
+            <v-btn block color="red" text @click="resetd = false;reset();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">确定</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block color="black" text @click="resetd = false" :height="size">
+              <div :style="{'font-size':size/3+'px'}">取消</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</div>

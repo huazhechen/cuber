@@ -1,33 +1,55 @@
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import Preferance from "../../cuber/preferance";
-import cuber from "../../cuber";
+import { Component } from "vue-property-decorator";
+import Order from "../Order";
+import Control from "../Control";
+import Appear from "../Appear";
+import Outward from "../Outward";
+
+export class SettingItem {
+  label: string;
+  show: boolean;
+  disable: boolean;
+  value: boolean;
+  emit: string | undefined;
+
+  constructor(label: string, emit: string | undefined = undefined) {
+    this.label = label;
+    this.show = true;
+    this.disable = false;
+    this.value = false;
+    this.emit = emit;
+  }
+}
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
+  components: {
+    order: Order,
+    control: Control,
+    appear: Appear,
+    outward: Outward
+  }
 })
 export default class Setting extends Vue {
-  @Prop({ required: true })
-  value: boolean;
-  get show() {
-    return this.value;
+  menu: boolean = false;
+
+  items: { [key: string]: SettingItem } = {};
+
+  constructor() {
+    super();
+    this.items["order"] = new SettingItem("阶数选择");
+    this.items["control"] = new SettingItem("操作设置");
+    this.items["appear"] = new SettingItem("外观调整");
+    this.items["outward"] = new SettingItem("辅助选项");
+    this.items["theme"] = new SettingItem("主题设置");
   }
-  set show(value) {
-    this.$emit("input", value);
+  mounted() {
+    this.resize();
   }
 
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  preferance: Preferance;
-  constructor() {
-    super();
-    this.preferance = cuber.preferance;
-  }
-
-  mounted() {
-    this.resize();
-  }
 
   resize() {
     this.width = window.innerWidth;
@@ -36,9 +58,40 @@ export default class Setting extends Vue {
   }
 
   reset() {
-    this.preferance.frames = 30;
-    this.preferance.sensitivity = 50;
-    this.preferance.mirror = false;
-    this.preferance.hollow = false;
+    let storage = window.localStorage;
+    storage.clear();
+    window.location.reload();
+  }
+
+  resetd: boolean = false;
+  tap(key: string | SettingItem) {
+    switch (key) {
+      case "playground":
+      case "director":
+      case "algs":
+        let search = location.search || "";
+        let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
+        let mode = list ? list[2] : "playground";
+        if (mode != key) {
+          window.location.search = "mode=" + key;
+        }
+        break;
+      case "code":
+        window.location.href = "https://gitee.com/huazhechen/cuber";
+        break;
+      case "reset":
+        this.resetd = true;
+        break;
+      default:
+        if (key instanceof SettingItem) {
+          if (key.emit) {
+            this.$emit(key.emit);
+          } else {
+            key.value = true;
+          }
+        }
+        break;
+    }
+    this.menu = false;
   }
 }

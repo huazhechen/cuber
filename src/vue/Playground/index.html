@@ -1,6 +1,6 @@
 <v-app>
   <div v-resize="resize" style="user-select: none;background-color: white;">
-    <dash></dash>
+    <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-btn
       fixed
@@ -22,15 +22,6 @@
     >
       <v-layout row wrap>
         <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
-          <v-btn @click="tap('layers')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">layers</v-icon>
-          </v-btn>
-          <v-btn @click="tap('settings')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">settings</v-icon>
-          </v-btn>
-          <v-btn @click="tap('tune')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">visibility</v-icon>
-          </v-btn>
           <v-btn @click="tap('shuffle')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">casino</v-icon>
           </v-btn>
@@ -43,9 +34,6 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <layer v-model="layerd" v-on:order="order"></layer>
-    <tune v-model="tuned"></tune>
-    <setting v-model="settingd"></setting>
     <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform:none;">

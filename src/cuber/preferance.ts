@@ -11,16 +11,16 @@ export default class Preferance {
     perspective: 50,
     angle: 63,
     gradient: 67,
-    brightness: 80,
     frames: 30,
     sensitivity: 50,
     mirror: false,
-    hollow: false
+    hollow: false,
+    shadow: true
   };
 
   load(mode: string) {
     this.mode = mode;
-    let version = "0.0.4";
+    let version = "0.0.5";
     if (this.storage.getItem("version") != version) {
       this.storage.clear();
       this.storage.setItem("version", version);
@@ -42,7 +42,7 @@ export default class Preferance {
     this.perspective = this.data.perspective;
     this.angle = this.data.angle;
     this.gradient = this.data.gradient;
-    this.brightness = this.data.brightness;
+    this.shadow = this.data.shadow;
     this.frames = this.data.frames;
     this.mirror = this.data.mirror;
     this.hollow = this.data.hollow;
@@ -106,21 +106,21 @@ export default class Preferance {
     cuber.world.dirty = true;
   }
 
-  get brightness() {
-    return this.data.brightness;
+  get shadow() {
+    return this.data.shadow;
   }
-  set brightness(value) {
-    if (this.data.brightness != value) {
-      this.data.brightness = value;
+  set shadow(value) {
+    if (this.data.shadow != value) {
+      this.data.shadow = value;
       this.save();
     }
-    let light = value / 100;
-    cuber.world.ambient.intensity = light;
-    let d = light / 2;
-    if (d > 1 - light) {
-      d = 1 - light;
+    if (value) {
+      cuber.world.ambient.intensity = 0.8;
+      cuber.world.directional.intensity = 0.2;
+    } else {
+      cuber.world.ambient.intensity = 1;
+      cuber.world.directional.intensity = 0;
     }
-    cuber.world.directional.intensity = d;
     cuber.world.dirty = true;
   }
 

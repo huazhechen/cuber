@@ -1,6 +1,6 @@
 <v-app>
   <div v-resize="resize" style="user-select: none;background-color: white;">
-    <dash></dash>
+    <setting ref="setting" v-on:output="outputd=true"></setting>
     <viewport ref="viewport"></viewport>
     <v-container
       fluid
@@ -15,23 +15,14 @@
           style="display: flex;"
           :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
         >
-          <v-btn @click="tap('layers')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">layers</v-icon>
-          </v-btn>
-          <v-btn @click="tap('settings')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">settings</v-icon>
-          </v-btn>
-          <v-btn @click="tap('tune')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">visibility</v-icon>
-          </v-btn>
-          <v-btn @click="tap('output')" :style="style" text :ripple="false" :disabled="recording">
-            <v-icon :size="size * 0.8">style</v-icon>
-          </v-btn>
           <v-btn @click="tap('color')" :style="style" text :ripple="false" :color="colors[color]" :disabled="recording">
-            <v-icon :size="size * 0.8">palette</v-icon>
+            <v-icon :size="size * 0.8">colorize</v-icon>
+          </v-btn>
+          <v-btn @click="tap('snap')" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">camera_alt</v-icon>
           </v-btn>
           <v-btn @click="tap('film')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">{{action.length==0?'camera_alt':(recording?'stop':'videocam')}}</v-icon>
+            <v-icon :size="size * 0.8">{{recording?'stop':'videocam'}}</v-icon>
           </v-btn>
         </v-flex>
         <v-flex xs12>
@@ -105,9 +96,6 @@
       </v-layout>
       <player ref="player" :disable="recording"></player>
     </v-container>
-    <layer v-model="layerd" v-on:order="order"></layer>
-    <tune v-model="tuned"></tune>
-    <setting v-model="settingd"></setting>
     <v-bottom-sheet v-model="outputd">
       <v-card flat style="margin: auto;touch-action: none;user-select: none;">
         <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(size * 8, width) + 'px'}">

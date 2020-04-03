@@ -1,8 +1,6 @@
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
-import Tune from "../Tune";
 import Viewport from "../Viewport";
-import Dash from "../Dash";
 import Setting from "../Setting";
 import Player from "../Player";
 import cuber from "../../cuber";
@@ -11,8 +9,6 @@ import cuber from "../../cuber";
   template: require("./index.html"),
   components: {
     viewport: Viewport,
-    dash: Dash,
-    tune: Tune,
     setting: Setting,
     player: Player
   }
@@ -42,6 +38,10 @@ export default class Algs extends Vue {
     view = this.$refs.player;
     if (view instanceof Player) {
       this.player = view;
+    }
+    view = this.$refs.setting;
+    if (view instanceof Setting) {
+      view.items["order"].disable = true;
     }
 
     for (let i = 0; i < this.algs.length; i++) {
@@ -85,7 +85,7 @@ export default class Algs extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 3.6 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 2.6 - 32);
     this.player?.resize(this.size);
   }
 
@@ -105,18 +105,9 @@ export default class Algs extends Vue {
     };
   }
 
-  menu: boolean = false;
-  tuned: boolean = false;
-  settingd: boolean = false;
   listd: boolean = false;
   tap(key: string) {
     switch (key) {
-      case "tune":
-        this.tuned = true;
-        break;
-      case "settings":
-        this.settingd = true;
-        break;
       case "list":
         this.tab = "tab-" + this.index.group;
         this.listd = true;

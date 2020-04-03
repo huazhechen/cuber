@@ -1,0 +1,64 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
+  <v-card text style="margin: auto;touch-action: none;user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            @click="preferance.mirror=!preferance.mirror"
+            :color="preferance.mirror?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.8"
+            :style="{'font-size':size / 4 + 'px'}"
+          >
+            镜像
+          </v-btn>
+          <v-btn
+            @click="preferance.hollow=!preferance.hollow"
+            :color="preferance.hollow?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.8"
+            :style="{'font-size':size / 4 + 'px'}"
+          >
+            透明
+          </v-btn>
+          <v-btn
+            @click="preferance.shadow=!preferance.shadow"
+            :color="preferance.shadow?'primary':''"
+            depressed
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.8"
+            :style="{'font-size':size / 4 + 'px'}"
+          >
+            阴影
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap justify-center align-center style="padding: 0%;">
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            @click="show=false;"
+            color="primary"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.8"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            确定
+          </v-btn>
+          <v-btn
+            @click="reset"
+            color="error"
+            text
+            style="text-transform:none; min-width: 0%;flex: 1"
+            :height="size * 0.8"
+            :style="{'font-size':size * 0.3+'px'}"
+          >
+            重置
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

@@ -3,20 +3,14 @@ import { Component } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import cuber, { Cuber } from "../../cuber";
-import Tune from "../Tune";
 import Setting from "../Setting";
-import Dash from "../Dash";
 import Cubelet from "../../cuber/cubelet";
-import Layer from "../Layer";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
-    dash: Dash,
-    tune: Tune,
-    setting: Setting,
-    layer: Layer
+    setting: Setting
   }
 })
 export default class Playground extends Vue {
@@ -123,24 +117,12 @@ export default class Playground extends Vue {
     };
   }
 
-  layerd: boolean = false;
-  tuned: boolean = false;
-  settingd: boolean = false;
   shuffled: boolean = false;
   historyd: boolean = false;
   tap(key: string) {
     switch (key) {
-      case "layers":
-        this.layerd = true;
-        break;
       case "shuffle":
         this.shuffled = true;
-        break;
-      case "tune":
-        this.tuned = true;
-        break;
-      case "settings":
-        this.settingd = true;
         break;
       case "undo":
         cuber.history.undo();

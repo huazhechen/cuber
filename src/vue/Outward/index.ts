@@ -6,12 +6,14 @@ import cuber from "../../cuber";
 @Component({
   template: require("./index.html")
 })
-export default class Layer extends Vue {
+export default class Outward extends Vue {
   @Prop({ required: true })
   value: boolean;
+
   get show() {
     return this.value;
   }
+
   set show(value) {
     this.$emit("input", value);
   }
@@ -35,10 +37,9 @@ export default class Layer extends Vue {
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
 
-  order(order: number) {
-    if (this.preferance.order != order) {
-      this.preferance.order = order;
-      this.$emit("order");
-    }
+  reset() {
+    this.preferance.mirror = false;
+    this.preferance.hollow = false;
+    this.preferance.shadow = true;
   }
 }

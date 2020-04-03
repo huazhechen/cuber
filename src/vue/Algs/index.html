@@ -1,6 +1,6 @@
 <v-app>
   <div v-show="!listd" v-resize="resize" style="user-select: none;background-color: white;">
-    <dash v-show="!listd"> </dash>
+    <setting v-show="!listd" ref="setting"> </setting>
     <viewport ref="viewport"></viewport>
     <v-btn
       fixed
@@ -18,28 +18,10 @@
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px'}"
+      :style="{width:Math.min(size * 8, width) + 'px', height:size * 2.6 + 32 + 'px'}"
       style="padding:0%;touch-action: none;"
     >
       <v-layout row wrap>
-        <v-flex
-          xs12
-          style="display: flex;"
-          :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
-        >
-          <v-btn @click="move(-1)" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">first_page</v-icon>
-          </v-btn>
-          <v-btn @click="tap('settings')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">settings</v-icon>
-          </v-btn>
-          <v-btn @click="tap('tune')" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">visibility</v-icon>
-          </v-btn>
-          <v-btn @click="move(1)" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">last_page</v-icon>
-          </v-btn>
-        </v-flex>
         <v-flex xs12>
           <v-text-field
             style="text-transform:none;"
@@ -74,8 +56,6 @@
       </v-layout>
       <player ref="player"></player>
     </v-container>
-    <tune v-model="tuned"></tune>
-    <setting v-model="settingd"></setting>
   </div>
   <div v-show="listd" style="margin:0;display: flex;flex-flow: column;height: 100%;">
     <div style="margin: auto;" :style="{width:grid+'px'}">
