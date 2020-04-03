@@ -1,6 +1,6 @@
 <v-app>
   <div v-resize="resize" style="user-select: none;background-color: white;">
-    <setting ref="setting" v-on:output="outputd=true"></setting>
+    <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-container
       fluid
@@ -18,7 +18,10 @@
           <v-btn @click="tap('color')" :style="style" text :ripple="false" :color="colors[color]" :disabled="recording">
             <v-icon :size="size * 0.8">colorize</v-icon>
           </v-btn>
-          <v-btn @click="tap('snap')" :style="style" text :ripple="false">
+          <v-btn @click="tap('save')" :style="style" text :ripple="false" :disabled="recording">
+            <v-icon :size="size * 0.8">save</v-icon>
+          </v-btn>
+          <v-btn @click="tap('snap')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">camera_alt</v-icon>
           </v-btn>
           <v-btn @click="tap('film')" :style="style" text :ripple="false">

@@ -87,11 +87,6 @@ export default class Director extends Vue {
     if (view instanceof Player) {
       this.player = view;
     }
-    view = this.$refs.setting;
-    if (view instanceof Setting) {
-      let item = new SettingItem("输出设置", "output");
-      view.items["output"] = item;
-    }
 
     this.reload();
     cuber.controller.taps.push((index: number, face: number) => {
@@ -177,6 +172,9 @@ export default class Director extends Vue {
     switch (key) {
       case "color":
         this.colord = true;
+        break;
+      case "save":
+        this.outputd = true;
         break;
       case "snap":
         if (this.snapt == "png") {
