@@ -1,8 +1,7 @@
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+import { Component, Watch, Provide } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
-import cuber from "../../cuber";
 import Player from "../Player";
 import { WebGLRenderer, Vector3 } from "three";
 import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
@@ -12,17 +11,25 @@ import ZIP from "../../common/zip";
 import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
-import Setting, { SettingItem } from "../Setting";
+import Setting from "../Setting";
+import World from "../../cuber/world";
+import Database from "../../database";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
     setting: Setting,
-    player: Player
-  }
+    player: Player,
+  },
 })
 export default class Director extends Vue {
+  @Provide("world")
+  world: World = new World();
+
+  @Provide("database")
+  database: Database = new Database("director", this.world);
+
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -34,29 +41,6 @@ export default class Director extends Vue {
   gif: GIF;
   apng: APNG;
   zip: ZIP;
-  pixel: number = 512;
-  @Watch("pixel")
-  onPixelChange() {
-    window.localStorage.setItem("director.pixel", String(this.pixel));
-  }
-  delay: number = 2;
-  @Watch("delay")
-  onDelayChange() {
-    window.localStorage.setItem("director.delay", String(this.delay));
-    this.apng.delay_num = this.delay;
-  }
-
-  filmt: string = "gif";
-  @Watch("filmt")
-  onFilmtChange() {
-    window.localStorage.setItem("director.filmt", this.filmt);
-  }
-
-  snapt: string = "png";
-  @Watch("snapt")
-  onSnaptChange() {
-    window.localStorage.setItem("director.snapt", this.snapt);
-  }
 
   constructor() {
     super();
@@ -78,7 +62,7 @@ export default class Director extends Vue {
   }
 
   mounted() {
-    cuber.preferance.load("director");
+    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -89,15 +73,11 @@ export default class Director extends Vue {
     }
 
     this.reload();
-    cuber.controller.taps.push((index: number, face: number) => {
+    this.world.controller.taps.push((index: number, face: number) => {
       this.stick(index, face);
     });
-    this.delay = Number(window.localStorage.getItem("director.delay") || 2);
-    this.pixel = Number(window.localStorage.getItem("director.pixel") || 512);
-    this.filmt = window.localStorage.getItem("director.filmt") || "gif";
-    this.snapt = window.localStorage.getItem("director.snapt") || "png";
 
-    cuber.world.callbacks.push(() => {
+    this.world.callbacks.push(() => {
       this.callback();
     });
     this.$nextTick(this.resize);
@@ -112,25 +92,15 @@ export default class Director extends Vue {
 
   reload() {
     let save;
-    let order = cuber.preferance.order;
-    save = window.localStorage.getItem("director.action." + order);
-    this.action = save != null ? save : "RUR'U'~";
-    save = window.localStorage.getItem("director.scene." + order);
-    this.scene = save != null ? save : "^";
-
-    save = window.localStorage.getItem("director.stickers." + order);
-    this.stickers = {};
-    if (save) {
-      try {
-        let data = JSON.parse(save);
-        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-          this.stickers[FACE[face]] = data[FACE[face]];
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    let order = this.world.order;
+    save = this.database.director.dramas[order];
+    if (!save) {
+      save = { scene: "^", action: "RUR'U'~", stickers: {} };
+      this.database.director.dramas[order] = save;
     }
-
+    this.scene = save.scene;
+    this.action = save.action;
+    this.stickers = save.stickers;
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       let stickers = this.stickers[FACE[face]];
       if (!stickers) {
@@ -139,9 +109,9 @@ export default class Director extends Vue {
       for (let index = 0; index < stickers.length; index++) {
         let sticker = stickers[index];
         if (sticker && sticker >= 0) {
-          cuber.world.cube.stick(index, face, this.colors[sticker]);
+          this.world.cube.stick(index, face, this.colors[sticker]);
         } else {
-          cuber.world.cube.stick(index, face, "");
+          this.world.cube.stick(index, face, "");
         }
       }
     }
@@ -162,7 +132,7 @@ export default class Director extends Vue {
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none",
-      flex: 1
+      flex: 1,
     };
   }
 
@@ -177,9 +147,10 @@ export default class Director extends Vue {
         this.outputd = true;
         break;
       case "snap":
-        if (this.snapt == "png") {
+        let snapt = this.database.director.snapt;
+        if (snapt == "png") {
           this.snap();
-        } else if (this.snapt == "svg") {
+        } else if (snapt == "svg") {
           this.svg();
         }
         break;
@@ -192,6 +163,8 @@ export default class Director extends Vue {
   }
 
   order() {
+    this.database.director.order = this.world.order;
+    this.database.save();
     this.reload();
     this.player.init();
   }
@@ -200,14 +173,16 @@ export default class Director extends Vue {
   @Watch("scene")
   onSceneChange() {
     this.player.scene = this.scene;
-    window.localStorage.setItem("director.scene." + cuber.preferance.order, this.scene);
+    this.database.director.dramas[this.world.order].scene = this.scene;
+    this.database.save();
   }
 
   action: string = "";
   @Watch("action")
   onActionChange() {
     this.player.action = this.action;
-    window.localStorage.setItem("director.action." + cuber.preferance.order, this.action);
+    this.database.director.dramas[this.world.order].action = this.action;
+    this.database.save();
   }
 
   recording: boolean = false;
@@ -223,7 +198,7 @@ export default class Director extends Vue {
     COLORS.GRAY,
     COLORS.CYAN,
     COLORS.LIME,
-    COLORS.PINK
+    COLORS.PINK,
   ];
   color = 6;
   stickers: { [face: string]: number[] | undefined };
@@ -231,7 +206,7 @@ export default class Director extends Vue {
     if (index < 0) {
       return;
     }
-    let cubelet: Cubelet = cuber.world.cube.cubelets[index];
+    let cubelet: Cubelet = this.world.cube.cubelets[index];
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let arr = this.stickers[FACE[face]];
@@ -241,39 +216,44 @@ export default class Director extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      cuber.world.cube.stick(index, face, this.colors[this.color]);
+      this.world.cube.stick(index, face, this.colors[this.color]);
     } else {
       arr[index] = -1;
-      cuber.world.cube.stick(index, face, "");
+      this.world.cube.stick(index, face, "");
     }
-    window.localStorage.setItem("director.stickers." + cuber.preferance.order, JSON.stringify(this.stickers));
+    this.database.director.dramas[this.world.order].stickers = this.stickers;
+    this.database.save();
   }
 
   clear() {
     this.colord = false;
     this.color = 6;
     this.stickers = {};
-    window.localStorage.setItem("director.stickers." + cuber.preferance.order, JSON.stringify(this.stickers));
-    cuber.world.cube.strip({});
+    this.database.director.dramas[this.world.order].stickers = this.stickers;
+    this.database.save();
+    this.world.cube.strip({});
   }
 
   pixels: Uint8Array;
   film() {
     if (this.recording) {
       this.recording = false;
-      cuber.controller.disable = false;
+      this.world.controller.disable = false;
       this.player.toggle();
       return;
     }
-    cuber.controller.disable = true;
-    let size = this.pixel;
-    this.filmer.setSize(size, size, true);
-    if (this.filmt == "gif") {
-      this.pixels = new Uint8Array(size * size * 4);
-      this.gif.start(size, size, this.delay);
-    } else if (this.filmt == "apng") {
+    this.world.controller.disable = true;
+    let pixel = this.database.director.pixel;
+    let filmt = this.database.director.filmt;
+    let delay = this.database.director.delay;
+    this.filmer.setSize(pixel, pixel, true);
+    if (filmt == "gif") {
+      this.pixels = new Uint8Array(pixel * pixel * 4);
+      this.gif.start(pixel, pixel, delay);
+    } else if (filmt == "apng") {
+      this.apng.delay_num = delay;
       this.apng.start();
-    } else if (this.filmt == "pngs") {
+    } else if (filmt == "pngs") {
       this.zip.init();
     }
     this.record();
@@ -283,18 +263,18 @@ export default class Director extends Vue {
   }
 
   snap() {
-    let size = this.pixel;
-    let width = cuber.world.width;
-    let height = cuber.world.height;
-    cuber.world.width = size;
-    cuber.world.height = size;
-    cuber.world.resize();
-    this.filmer.setSize(size, size, true);
+    let pixel = this.database.director.pixel;
+    let width = this.world.width;
+    let height = this.world.height;
+    this.world.width = pixel;
+    this.world.height = pixel;
+    this.world.resize();
+    this.filmer.setSize(pixel, pixel, true);
     this.filmer.clear();
-    this.filmer.render(cuber.world.scene, cuber.world.camera);
-    cuber.world.width = width;
-    cuber.world.height = height;
-    cuber.world.resize();
+    this.filmer.render(this.world.scene, this.world.camera);
+    this.world.width = width;
+    this.world.height = height;
+    this.world.resize();
     let content = this.filmer.domElement.toDataURL("image/png");
     let parts = content.split(";base64,");
     let type = parts[0].split(":")[1];
@@ -312,31 +292,32 @@ export default class Director extends Vue {
   svg() {
     let position: Vector3 = new Vector3();
     let distance;
-    for (const cubelet of cuber.world.cube.cubelets) {
-      distance = cubelet.frame.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+    for (const cubelet of this.world.cube.cubelets) {
+      distance = cubelet.frame.getWorldPosition(position).distanceTo(this.world.camera.position);
       cubelet.frame.renderOrder = 1 / distance;
       for (const sticker of cubelet.stickers) {
         if (sticker === undefined) {
           continue;
         }
-        distance = sticker.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+        distance = sticker.getWorldPosition(position).distanceTo(this.world.camera.position);
         sticker.renderOrder = 1 / distance;
       }
       for (const mirror of cubelet.mirrors) {
         if (mirror === undefined) {
           continue;
         }
-        distance = mirror.getWorldPosition(position).distanceTo(cuber.world.camera.position);
+        distance = mirror.getWorldPosition(position).distanceTo(this.world.camera.position);
         mirror.renderOrder = 1 / distance;
       }
     }
-    cuber.world.camera.aspect = 1;
-    cuber.world.camera.updateProjectionMatrix();
-    this.svger.setSize(this.pixel, this.pixel);
+    this.world.camera.aspect = 1;
+    this.world.camera.updateProjectionMatrix();
+    let pixel = this.database.director.pixel;
+    this.svger.setSize(pixel, pixel);
     this.svger.clear();
     this.svger.overdraw = 0;
-    this.svger.render(cuber.world.scene, cuber.world.camera);
-    cuber.world.resize();
+    this.svger.render(this.world.scene, this.world.camera);
+    this.world.resize();
     var serializer = new XMLSerializer();
     var content = serializer.serializeToString(this.svger.domElement);
     let url = "data:image/svg+xml;base64," + btoa(content);
@@ -344,21 +325,22 @@ export default class Director extends Vue {
   }
 
   record() {
-    let size = this.pixel;
-    let width = cuber.world.width;
-    let height = cuber.world.height;
-    cuber.world.width = size;
-    cuber.world.height = size;
-    cuber.world.resize();
+    let pixel = this.database.director.pixel;
+    let filmt = this.database.director.filmt;
+    let width = this.world.width;
+    let height = this.world.height;
+    this.world.width = pixel;
+    this.world.height = pixel;
+    this.world.resize();
     this.filmer.clear();
-    this.filmer.render(cuber.world.scene, cuber.world.camera);
-    if (this.filmt == "gif") {
+    this.filmer.render(this.world.scene, this.world.camera);
+    if (filmt == "gif") {
       let content = this.filmer.getContext();
-      content.readPixels(0, 0, size, size, content.RGBA, content.UNSIGNED_BYTE, this.pixels);
+      content.readPixels(0, 0, pixel, pixel, content.RGBA, content.UNSIGNED_BYTE, this.pixels);
       this.gif.add(this.pixels);
-    } else if (this.filmt == "apng") {
+    } else if (filmt == "apng") {
       this.apng.addFrame();
-    } else if (this.filmt == "pngs") {
+    } else if (filmt == "pngs") {
       let content = this.filmer.domElement.toDataURL("image/png");
       let parts = content.split(";base64,");
       let raw = window.atob(parts[1]);
@@ -369,30 +351,31 @@ export default class Director extends Vue {
       }
       this.zip.add("cuber" + this.zip.num + ".png", data);
     }
-    cuber.world.width = width;
-    cuber.world.height = height;
-    cuber.world.resize();
+    this.world.width = width;
+    this.world.height = height;
+    this.world.resize();
   }
 
   finish() {
+    let filmt = this.database.director.filmt;
     this.recording = false;
-    cuber.controller.disable = false;
+    this.world.controller.disable = false;
     let data;
     let blob;
     let url;
     this.player.init();
-    if (this.filmt == "gif") {
+    if (filmt == "gif") {
       this.gif.finish();
       data = this.gif.out.getData();
       blob = new Blob([data], { type: "image/gif" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber", "gif", url);
-    } else if (this.filmt == "apng") {
+    } else if (filmt == "apng") {
       data = this.apng.finish();
       blob = new Blob([data], { type: "image/png" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber", "png", url);
-    } else if (this.filmt == "pngs") {
+    } else if (filmt == "pngs") {
       this.zip.finish();
       data = this.zip.out.getData();
       let blob = new Blob([data], { type: "application/zip" });

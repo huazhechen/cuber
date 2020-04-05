@@ -1,12 +1,18 @@
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import Preferance from "../../cuber/preferance";
-import cuber from "../../cuber";
+import { Component, Prop, Inject } from "vue-property-decorator";
+import World from "../../cuber/world";
+import Database from "../../database";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
 })
 export default class Order extends Vue {
+  @Inject("world")
+  world: World;
+
+  @Inject("database")
+  database: Database;
+
   @Prop({ required: true })
   value: boolean;
   get show() {
@@ -19,10 +25,8 @@ export default class Order extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  preferance: Preferance;
   constructor() {
     super();
-    this.preferance = cuber.preferance;
   }
 
   mounted() {
@@ -36,8 +40,9 @@ export default class Order extends Vue {
   }
 
   order(order: number) {
-    if (this.preferance.order != order) {
-      this.preferance.order = order;
+    if (this.world.order != order) {
+      this.world.order = order;
+      this.database.refresh();
       this.$emit("order");
       this.show = false;
     }

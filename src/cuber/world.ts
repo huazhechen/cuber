@@ -1,7 +1,8 @@
-import cuber from ".";
 import Cube from "./cube";
 import Cubelet from "./cubelet";
 import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
+import Twister from "./twister";
+import Controller from "./controller";
 
 export default class World {
   public width: number = 1;
@@ -19,25 +20,13 @@ export default class World {
   private cubes: Cube[] = [];
   public callbacks: Function[] = [];
 
-  set order(value: number) {
-    this.scene.remove(this.cube);
-    if (this.cubes[value] == undefined){
-      this.cubes[value] = new Cube(value, this.callback);
-    }
-    this.cube = this.cubes[value];
-    this.scene.add(this.cube);
-    this.dirty = true;
-  }
-
-  get order() {
-    return this.cube.order;
-  }
+  public twister: Twister;
+  public controller: Controller;
 
   constructor() {
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
-    this.order = 3;
 
     this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);
@@ -49,24 +38,41 @@ export default class World {
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;
+
+    this.twister = new Twister(this);
+    this.controller = new Controller(this);
+    this.order = 3;
+  }
+
+  set order(value: number) {
+    this.scene.remove(this.cube);
+    if (this.cubes[value] == undefined) {
+      this.cubes[value] = new Cube(value, this.callback);
+    }
+    this.cube = this.cubes[value];
+    this.scene.add(this.cube);
+    this.dirty = true;
+  }
+
+  get order() {
+    return this.cube.order;
   }
 
   callback = () => {
     for (let callback of this.callbacks) {
       callback();
     }
-    cuber.twister.update();
   };
 
+  scale: number = 1;
+  perspective: number = 5;
   resize() {
-    let scale = cuber.preferance.scale / 100 + 0.5;
-    let perspective = (100.1 / (cuber.preferance.perspective + 0.01)) * 4 - 3;
-    let min = this.height / Math.min(this.width, this.height) / scale / perspective;
+    let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
     let fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
     this.camera.fov = fov;
-    let distance = Cubelet.SIZE * 3 * perspective;
+    let distance = Cubelet.SIZE * 3 * this.perspective;
     this.camera.position.z = distance;
     this.camera.near = distance - Cubelet.SIZE * 3;
     this.camera.far = distance + Cubelet.SIZE * 4;

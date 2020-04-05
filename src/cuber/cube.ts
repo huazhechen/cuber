@@ -2,6 +2,8 @@ import { GroupTable } from "./group";
 import Cubelet from "./cubelet";
 import { FACE, COLORS } from "./define";
 import { Group, Euler } from "three";
+import { TwistAction } from "./twister";
+import History from "./history";
 
 export default class Cube extends Group {
   public dirty: boolean = true;
@@ -12,6 +14,7 @@ export default class Cube extends Group {
   public complete: boolean = false;
   public order: number;
   public callback: Function;
+  public history: History;
 
   constructor(order: number, callback: Function) {
     super();
@@ -24,19 +27,24 @@ export default class Cube extends Group {
       this.initials.push(cubelet);
       this.add(cubelet);
     }
+    this.history = new History();
     this.groups = new GroupTable(this);
     this.matrixAutoUpdate = false;
     this.updateMatrix();
   }
 
+  record(action: TwistAction) {
+    this.history.record(action);
+  }
+
   update() {
-    let complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every(face => {
+    let complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every((face) => {
       let group = this.groups.get(FACE[face]);
       if (!group) {
         throw Error();
       }
       let color = this.cubelets[group.indices[0]].getColor(face);
-      let same = group.indices.every(idx => {
+      let same = group.indices.every((idx) => {
         return color == this.cubelets[idx].getColor(face);
       });
       return same;

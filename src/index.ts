@@ -3,7 +3,6 @@ import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.css";
 import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
-import cuber from "./cuber";
 import Playground from "./vue/Playground";
 import Director from "./vue/Director";
 import { VueConstructor } from "vue/types/umd";
@@ -24,7 +23,6 @@ if (navigator.serviceWorker != null) {
 Vue.use(Vuetify);
 const opts = {};
 const vuetify = new Vuetify(opts);
-Vue.prototype.cuber = cuber;
 
 let search = location.search || "";
 let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);

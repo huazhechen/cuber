@@ -4,7 +4,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.scale"
+          v-model="database.scale"
           always-dirty
           thumb-label="always"
           max="100"
@@ -15,7 +15,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.perspective"
+          v-model="database.perspective"
           always-dirty
           thumb-label="always"
           max="100"
@@ -26,7 +26,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.angle"
+          v-model="database.angle"
           always-dirty
           thumb-label="always"
           max="100"
@@ -37,7 +37,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="preferance.gradient"
+          v-model="database.gradient"
           always-dirty
           thumb-label="always"
           max="100"
@@ -48,8 +48,8 @@
       <v-layout row wrap justify-center align-center>
         <v-flex xs12 style="display: flex;">
           <v-btn
-            @click="preferance.mirror=!preferance.mirror"
-            :color="preferance.mirror?'primary':''"
+            @click="database.mirror=!database.mirror"
+            :color="database.mirror?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"
@@ -58,8 +58,8 @@
             镜像
           </v-btn>
           <v-btn
-            @click="preferance.hollow=!preferance.hollow"
-            :color="preferance.hollow?'primary':''"
+            @click="database.hollow=!database.hollow"
+            :color="database.hollow?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"
@@ -68,8 +68,8 @@
             透明
           </v-btn>
           <v-btn
-            @click="preferance.shadow=!preferance.shadow"
-            :color="preferance.shadow?'primary':''"
+            @click="database.shadow=!database.shadow"
+            :color="database.shadow?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"

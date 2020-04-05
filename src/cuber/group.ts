@@ -2,9 +2,10 @@ import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
 import { Group, Vector3 } from "three";
-import cuber from ".";
+import tweener from "./tweener";
 
 export default class CubeGroup extends Group {
+  public static frames: number = 30;
   cube: Cube;
   cubelets: Cubelet[];
   name: string;
@@ -117,15 +118,15 @@ export default class CubeGroup extends Group {
     let reverse = angle > 0;
     let times = Math.round(Math.abs(angle) / (Math.PI / 2));
     if (times != 0) {
-      cuber.history.record(this.exp(reverse, times));
+      this.cube.record(this.exp(reverse, times));
     }
     let delta = angle - this.angle;
     if (delta === 0) {
       this.drop();
     } else {
       let d = Math.abs(delta) / (Math.PI / 2);
-      var duration = cuber.preferance.frames * (2 - 2 / (d + 1));
-      cuber.tweener.tween(this.angle, angle, duration, (value: number) => {
+      var duration = CubeGroup.frames * (2 - 2 / (d + 1));
+      tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (Math.abs(this.angle - angle) < 1e-6) {
           this.drop();
@@ -156,7 +157,7 @@ export class GroupTable {
     z: new Vector3(0, 0, 1),
     "-x": new Vector3(-1, 0, 0),
     "-y": new Vector3(0, -1, 0),
-    "-z": new Vector3(0, 0, -1)
+    "-z": new Vector3(0, 0, -1),
   };
   constructor(cube: Cube) {
     this.order = cube.order;
@@ -260,6 +261,8 @@ export class GroupTable {
     for (const group of this.groups.values()) {
       cube.add(group);
     }
+    this.groups.set(".", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
+    this.groups.set("~", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
   }
 
   private static AXIS_MAP: any = {
@@ -271,7 +274,7 @@ export class GroupTable {
     B: "-z",
     M: "-x",
     E: "-y",
-    S: "z"
+    S: "z",
   };
 
   get(name: string) {

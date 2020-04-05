@@ -5,10 +5,10 @@
         <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">帧数:</div> </v-flex>
         <v-flex xs10 style="display: flex;">
           <v-btn
-            v-for="frames in [10, 20, 30, 45, 60]"
+            v-for="frames in [5, 10, 20, 30, 45, 60]"
             :key="frames"
-            @click="preferance.frames = frames"
-            :color="preferance.frames == frames?'primary':''"
+            @click="database.frames = frames"
+            :color="database.frames == frames?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"
@@ -28,10 +28,10 @@
         <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">灵敏:</div> </v-flex>
         <v-flex xs10 style="display: flex;">
           <v-btn
-            v-for="i in [1, 2, 3, 4, 5]"
+            v-for="i in [1, 2, 3, 4, 5, 6]"
             :key="i"
-            @click="preferance.sensitivity = (i - 1) * 25"
-            :color="preferance.sensitivity == (i - 1) * 25?'primary':''"
+            @click="database.sensitivity = i"
+            :color="database.sensitivity == i?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"

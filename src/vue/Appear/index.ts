@@ -1,12 +1,17 @@
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import Preferance from "../../cuber/preferance";
-import cuber from "../../cuber";
+import { Component, Prop, Inject } from "vue-property-decorator";
+import Database from "../../database";
+import World from "../../cuber/world";
 
 @Component({
   template: require("./index.html")
 })
 export default class Appear extends Vue {
+  @Inject("world")
+  world: World;
+  @Inject("database")
+  database: Database;
+  
   @Prop({ required: true })
   value: boolean;
 
@@ -21,10 +26,8 @@ export default class Appear extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  preferance: Preferance;
   constructor() {
     super();
-    this.preferance = cuber.preferance;
   }
 
   mounted() {
@@ -38,12 +41,12 @@ export default class Appear extends Vue {
   }
 
   reset() {
-    this.preferance.scale = 50;
-    this.preferance.perspective = 50;
-    this.preferance.angle = 63;
-    this.preferance.gradient = 67;
-    this.preferance.mirror = false;
-    this.preferance.hollow = false;
-    this.preferance.shadow = true;
+    this.database.scale = 50;
+    this.database.perspective = 50;
+    this.database.angle = 63;
+    this.database.gradient = 67;
+    this.database.mirror = false;
+    this.database.hollow = false;
+    this.database.shadow = true;
   }
 }

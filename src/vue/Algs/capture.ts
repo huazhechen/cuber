@@ -1,7 +1,7 @@
-import Cube from "./cube";
-import Cubelet from "./cubelet";
+import Cube from "../../cuber/cube";
+import Cubelet from "../../cuber/cubelet";
 import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
-import { TwistNode } from "./twister";
+import { TwistNode } from "../../cuber/twister";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;

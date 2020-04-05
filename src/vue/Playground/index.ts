@@ -1,30 +1,35 @@
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Provide } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
-import cuber, { Cuber } from "../../cuber";
 import Setting from "../Setting";
 import Cubelet from "../../cuber/cubelet";
+import World from "../../cuber/world";
+import Database from "../../database";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
-    setting: Setting
-  }
+    setting: Setting,
+  },
 })
 export default class Playground extends Vue {
+  @Provide("world")
+  world: World = new World();
+
+  @Provide("database")
+  database: Database = new Database("playground", this.world);
+
   width: number = 0;
   height: number = 0;
   size: number = 0;
   viewport: Viewport;
 
-  cuber: Cuber;
   history: string = "";
 
   constructor() {
     super();
-    this.cuber = cuber;
   }
 
   resize() {
@@ -35,7 +40,7 @@ export default class Playground extends Vue {
   }
 
   mounted() {
-    cuber.preferance.load("playground");
+    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -56,7 +61,7 @@ export default class Playground extends Vue {
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
     let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
-    return time + "/" + cuber.history.moves;
+    return time + "/" + this.world.cube.history.moves;
   }
 
   completed: boolean = false;
@@ -66,22 +71,22 @@ export default class Playground extends Vue {
     let tick = new Date().getTime();
     tick = (tick / 2000) * Math.PI;
     tick = Math.sin(tick) / 64;
-    this.cuber.world.cube.position.y = tick * Cubelet.SIZE;
-    this.cuber.world.cube.rotation.y = (tick / 12) * Math.PI;
-    this.cuber.world.cube.updateMatrix();
-    this.cuber.world.cube.dirty = true;
+    this.world.cube.position.y = tick * Cubelet.SIZE;
+    this.world.cube.rotation.y = (tick / 12) * Math.PI;
+    this.world.cube.updateMatrix();
+    this.world.cube.dirty = true;
     this.viewport.draw();
     if (this.complete) {
       return;
     }
-    if (cuber.history.moves == 0) {
+    if (this.world.cube.history.moves == 0) {
       this.start = 0;
       this.now = 0;
     } else {
       if (this.start == 0) {
         this.start = new Date().getTime();
       }
-      if (!cuber.world.cube.complete) {
+      if (!this.world.cube.complete) {
         this.now = new Date().getTime();
       } else {
         if (!this.complete) {
@@ -95,14 +100,16 @@ export default class Playground extends Vue {
   shuffler = "*";
 
   shuffle() {
-    cuber.twister.twist("# x2 " + this.shuffler, false, 1, true);
-    cuber.history.clear();
-    this.complete = cuber.world.cube.complete;
+    this.world.twister.twist("# x2 " + this.shuffler, false, 1, true);
+    this.world.cube.history.clear();
+    this.complete = this.world.cube.complete;
     this.start = 0;
     this.now = 0;
   }
 
   order() {
+    this.database.playground.order = this.world.order;
+    this.database.save();
     this.shuffle();
   }
 
@@ -113,7 +120,7 @@ export default class Playground extends Vue {
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none",
-      flex: 1
+      flex: 1,
     };
   }
 
@@ -125,10 +132,10 @@ export default class Playground extends Vue {
         this.shuffled = true;
         break;
       case "undo":
-        cuber.history.undo();
+        this.world.twister.undo();
         break;
       case "history":
-        this.history = this.cuber.history.exp.substring(1);
+        this.history = this.world.cube.history.exp.substring(1);
         this.historyd = true;
         break;
       default:

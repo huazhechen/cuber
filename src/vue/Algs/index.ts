@@ -1,19 +1,29 @@
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+import { Component, Watch, Provide } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Setting from "../Setting";
 import Player from "../Player";
-import cuber from "../../cuber";
+import World from "../../cuber/world";
+import Database from "../../database";
+import Capture from "./capture";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
     setting: Setting,
-    player: Player
-  }
+    player: Player,
+  },
 })
 export default class Algs extends Vue {
+  @Provide("world")
+  world: World = new World();
+
+  @Provide("database")
+  database: Database = new Database("algs", this.world);
+
+  capture: Capture = new Capture();
+
   algs = require("./algs.json");
 
   width: number = 0;
@@ -30,7 +40,7 @@ export default class Algs extends Vue {
   pics: string[][] = [];
 
   mounted() {
-    cuber.preferance.load("algs");
+    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -76,7 +86,7 @@ export default class Algs extends Vue {
       let origin = this.algs[idx].algs[group.length].default;
       let exp = save ? save : origin;
       this.algs[idx].algs[group.length].exp = exp;
-      group.push(cuber.capture.snap(this.algs[idx].strip, exp));
+      group.push(this.capture.snap(this.algs[idx].strip, exp));
       return true;
     });
   }
@@ -101,7 +111,7 @@ export default class Algs extends Vue {
       "min-width": "0%",
       "min-height": "0%",
       "text-transform": "none",
-      flex: 1
+      flex: 1,
     };
   }
 
@@ -121,7 +131,7 @@ export default class Algs extends Vue {
   @Watch("index")
   onIndexChange() {
     let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
-    cuber.world.cube.strip(strip);
+    this.world.cube.strip(strip);
     this.name = this.algs[this.index.group].algs[this.index.index].name;
     this.origin = this.algs[this.index.group].algs[this.index.index].default;
     let action = window.localStorage.getItem("algs.exp." + this.name);
@@ -141,10 +151,7 @@ export default class Algs extends Vue {
   onActionChange() {
     window.localStorage.setItem("algs.exp." + this.name, this.action);
     if (this.pics[this.index.group][this.index.index]) {
-      this.pics[this.index.group][this.index.index] = cuber.capture.snap(
-        this.algs[this.index.group].strip,
-        this.action
-      );
+      this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.action);
     }
     this.algs[this.index.group].algs[this.index.index].exp = this.action;
     this.player.action = this.action;
