@@ -26,7 +26,7 @@ export class LZW {
     0x1fff,
     0x3fff,
     0x7fff,
-    0xffff
+    0xffff,
   ];
 
   width: number;
@@ -209,7 +209,7 @@ export default class GIF {
 
   private static DEEP = 8;
   private static HASH_SIZE = 12;
-  private static HASH_MASK = 0xFFF;
+  private static HASH_MASK = 0xfff;
   private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.HASH_SIZE));
 
   private static COLORN = 0;
@@ -261,7 +261,7 @@ export default class GIF {
     }
     GIF.COLORN = i;
     if (GIF.COLORN > 3 * Math.pow(2, GIF.DEEP)) {
-      throw "too many colors";
+      throw "too many colors: " + GIF.COLORN / 3;
     }
     return colors;
   })();

@@ -152,15 +152,67 @@ export class Preferance {
   }
 }
 
+export class Theme {
+  colors = {
+    BACKGROUND: ["#FFFFFF", "#E0E0E0", "#C0C0C0", "#808080", "#404040", "#000000"],
+    GRAY: "#404040",
+    BLACK: "#202020",
+    WHITE: "#F0F0F0",
+    GREEN: "#00A020",
+    ORANGE: "#FF6D00",
+    BLUE: "#0D47A1",
+    YELLOW: "#FFD600",
+    RED: "#B71C1C",
+    CYAN: "#18FFFF",
+    LIME: "#C6FF00",
+    PINK: "#FF4081",
+  };
+  private world: World;
+
+  constructor(world: World) {
+    this.world = world;
+  }
+  private data = {
+    version: "0.1",
+    background: 0,
+  };
+
+  load(value: string) {
+    let data = JSON.parse(value);
+    if (data.version === this.data.version) {
+      this.data = data;
+      this.refresh();
+    }
+  }
+  get value() {
+    return JSON.stringify(this.data);
+  }
+
+  refresh() {
+    this.background = this.data.background;
+  }
+
+  get background() {
+    return this.data.background;
+  }
+  set background(value) {
+    if (this.data.background != value) {
+      this.data.background = value;
+    }
+  }
+}
+
 export default class Database {
   private storage = window.localStorage;
   mode: string;
   world: World;
   preferance: Preferance;
+  theme: Theme;
   constructor(mode: string, world: World) {
     this.mode = mode;
     this.world = world;
     this.preferance = new Preferance(this.world);
+    this.theme = new Theme(this.world);
   }
 
   playground = {
@@ -204,6 +256,12 @@ export default class Database {
       this.storage.setItem("preferance", this.preferance.value);
     }
 
+    save = this.storage.getItem("theme");
+    if (save) {
+      this.theme.load(save);
+      this.storage.setItem("theme", this.theme.value);
+    }
+
     if ((<any>this)[this.mode]) {
       save = this.storage.getItem(this.mode);
       if (save) {
@@ -221,6 +279,7 @@ export default class Database {
 
   save() {
     this.storage.setItem("preferance", this.preferance.value);
+    this.storage.setItem("theme", this.theme.value);
     this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
   }
 }
