@@ -265,8 +265,6 @@ export default class Database {
   save() {
     this.storage.setItem("preferance", this.preferance.value);
     this.storage.setItem("theme", this.theme.value);
-    console.log(this.storage.getItem("theme"));
-    console.log(new Error().stack);
     this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
   }
 }
