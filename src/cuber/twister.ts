@@ -125,11 +125,11 @@ export default class Twister {
   }
 
   undo() {
-    if (this.length == 0) {
+    if (this.world.cube.history.length == 0) {
       return;
     }
     this.finish();
-    if (this.length == 0) {
+    if (this.world.cube.history.length == 0) {
       return;
     }
     let last = this.world.cube.history.last;

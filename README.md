@@ -24,7 +24,7 @@
 
 ## [虚拟魔方](https://huazhechen.gitee.io/cuber)
 
-- 极致触控体验
+- 触控操作
 
   ![touch](https://gitee.com/huazhechen/cuber/raw/master/screenshot/touch.gif)
 
