@@ -83,6 +83,7 @@ export default class Playbar extends Vue {
     this.world.twister.twist("#");
     let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
     this.world.twister.twist(scene, false, 1, true);
+    this.world.cube.history.clear();
   }
 
   finish() {
@@ -138,5 +139,9 @@ export default class Playbar extends Vue {
     this.pprogress--;
     let action = this.actions[this.pprogress];
     this.world.twister.twist(action.exp, !action.reverse, action.times);
+  }
+
+  get chaos() {
+    return this.progress == 0 && this.world.cube.history.length != 0;
   }
 }

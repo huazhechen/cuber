@@ -15,19 +15,19 @@
     </v-slider>
   </v-flex>
   <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
-    <v-btn :style="style" text large :disabled="disable || progress==0" @click="init">
+    <v-btn :style="style" text large :disabled="disable || (progress==0 && !chaos)" @click="init">
       <v-icon :size="size * 0.8">skip_previous</v-icon>
     </v-btn>
-    <v-btn :style="style" text large :disabled="disable || progress==0" @click="backward">
+    <v-btn :style="style" text large :disabled="disable || progress==0 || chaos" @click="backward">
       <v-icon :size="size * 0.8">fast_rewind</v-icon>
     </v-btn>
-    <v-btn :style="style" text large :disabled="disable || progress == actions.length" @click="toggle">
+    <v-btn :style="style" text large :disabled="disable || progress == actions.length || chaos" @click="toggle">
       <v-icon :size="size * 0.8">{{playing?'pause':'play_arrow'}}</v-icon>
     </v-btn>
-    <v-btn :style="style" text large :disabled="disable || progress == actions.length" @click="forward">
+    <v-btn :style="style" text large :disabled="disable || progress == actions.length || chaos" @click="forward">
       <v-icon :size="size * 0.8">fast_forward</v-icon>
     </v-btn>
-    <v-btn :style="style" text large :disabled="disable || (progress==actions.length)" @click="finish">
+    <v-btn :style="style" text large :disabled="disable || (progress==actions.length) || chaos" @click="finish">
       <v-icon :size="size * 0.8">skip_next</v-icon>
     </v-btn>
   </v-flex>
