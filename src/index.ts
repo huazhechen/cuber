@@ -5,11 +5,12 @@ import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import Playground from "./vue/Playground";
 import Director from "./vue/Director";
-import { VueConstructor } from "vue/types/umd";
 import Algs from "./vue/Algs";
+import Player from "./vue/Player";
+import { VueConstructor } from "vue/types/umd";
 
 var _hmt: any = _hmt || [];
-(function() {
+(function () {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?e3fd96123e7614cd5ea9dc70df73217f";
   var s = document.getElementsByTagName("script")[0];
@@ -37,6 +38,9 @@ switch (mode) {
   case "algs":
     app = Algs;
     break;
+  case "player":
+    app = Player;
+    break;
   default:
     app = Playground;
     break;
@@ -44,5 +48,5 @@ switch (mode) {
 new Vue({
   vuetify,
   el: "#app",
-  render: h => h(app)
+  render: (h) => h(app),
 });

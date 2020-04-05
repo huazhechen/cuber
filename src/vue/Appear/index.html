@@ -4,7 +4,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="database.scale"
+          v-model="database.preferance.scale"
           always-dirty
           thumb-label="always"
           max="100"
@@ -15,7 +15,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="database.perspective"
+          v-model="database.preferance.perspective"
           always-dirty
           thumb-label="always"
           max="100"
@@ -26,7 +26,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="database.angle"
+          v-model="database.preferance.angle"
           always-dirty
           thumb-label="always"
           max="100"
@@ -37,7 +37,7 @@
       <v-layout row wrap justify-center align-center>
         <v-slider
           dense
-          v-model="database.gradient"
+          v-model="database.preferance.gradient"
           always-dirty
           thumb-label="always"
           max="100"
@@ -48,8 +48,8 @@
       <v-layout row wrap justify-center align-center>
         <v-flex xs12 style="display: flex;">
           <v-btn
-            @click="database.mirror=!database.mirror"
-            :color="database.mirror?'primary':''"
+            @click="database.preferance.mirror=!database.preferance.mirror"
+            :color="database.preferance.mirror?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"
@@ -58,8 +58,8 @@
             镜像
           </v-btn>
           <v-btn
-            @click="database.hollow=!database.hollow"
-            :color="database.hollow?'primary':''"
+            @click="database.preferance.hollow=!database.preferance.hollow"
+            :color="database.preferance.hollow?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"
@@ -68,8 +68,8 @@
             透明
           </v-btn>
           <v-btn
-            @click="database.shadow=!database.shadow"
-            :color="database.shadow?'primary':''"
+            @click="database.preferance.shadow=!database.preferance.shadow"
+            :color="database.preferance.shadow?'primary':''"
             depressed
             style="text-transform:none; min-width: 0%;flex: 1"
             :height="size * 0.8"

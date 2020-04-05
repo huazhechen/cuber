@@ -14,7 +14,7 @@ export default class Twister {
 
   static shuffle(order: number) {
     let result = "";
-    let exps = [];
+    let exps = ["x2"];
     let last = -1;
     let actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
@@ -94,6 +94,8 @@ export default class Twister {
       return;
     }
     if (action.exp == "*") {
+      this.world.cube.reset();
+      this.world.cube.dirty = true;
       let exp = Twister.shuffle(this.world.cube.order);
       this.twist(exp, false, 1, true);
       this.world.cube.history.clear();

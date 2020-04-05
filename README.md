@@ -58,7 +58,7 @@
 
 - 公式播放
 
-  ![algs-player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-player.gif)
+  ![algs-playbar](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-playbar.gif)
 
 * 快捷公式跳转
 

@@ -6,6 +6,8 @@ import Setting from "../Setting";
 import Cubelet from "../../cuber/cubelet";
 import World from "../../cuber/world";
 import Database from "../../database";
+import pako from "pako";
+import Base64 from "../../common/base64";
 
 @Component({
   template: require("./index.html"),
@@ -100,8 +102,13 @@ export default class Playground extends Vue {
   shuffler = "*";
 
   shuffle() {
-    this.world.twister.twist("# x2 " + this.shuffler, false, 1, true);
-    this.world.cube.history.clear();
+    if (this.shuffler === "*") {
+      this.world.twister.twist("*");
+    } else {
+      this.world.twister.twist("# x2 " + this.shuffler, false, 1, true);
+      this.world.cube.history.clear();
+      this.world.cube.history.init = "x2 " + this.shuffler;
+    }
     this.complete = this.world.cube.complete;
     this.start = 0;
     this.now = 0;
@@ -141,5 +148,19 @@ export default class Playground extends Vue {
       default:
         break;
     }
+  }
+
+  save() {
+    let data: { [key: string]: any } = {};
+    let order = this.world.order;
+    data["order"] = order;
+    let drama = { scene: this.world.cube.history.init, action: this.world.cube.history.exp.substring(1) };
+    data["drama"] = drama;
+    data["preferance"] = this.database.preferance.value;
+    let string = JSON.stringify(data);
+    string = pako.deflate(string, { to: "string" });
+    string = Base64.encode(string);
+    let search = "mode=player&data=" + string;
+    window.location.search = search;
   }
 }

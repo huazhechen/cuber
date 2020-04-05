@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Watch, Provide } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
-import Player from "../Player";
+import Playbar from "../Playbar";
 import { WebGLRenderer, Vector3 } from "three";
 import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
 import GIF from "../../common/gif";
@@ -14,13 +14,15 @@ import Util from "../../common/util";
 import Setting from "../Setting";
 import World from "../../cuber/world";
 import Database from "../../database";
+import Base64 from "../../common/base64";
+import pako from "pako";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
     setting: Setting,
-    player: Player,
+    playbar: Playbar,
   },
 })
 export default class Director extends Vue {
@@ -30,11 +32,29 @@ export default class Director extends Vue {
   @Provide("database")
   database: Database = new Database("director", this.world);
 
+  public static COLORS = [
+    COLORS.YELLOW,
+    COLORS.WHITE,
+    COLORS.BLUE,
+    COLORS.GREEN,
+    COLORS.RED,
+    COLORS.ORANGE,
+    COLORS.BLACK,
+    COLORS.GRAY,
+    COLORS.CYAN,
+    COLORS.LIME,
+    COLORS.PINK,
+  ];
+
+  get colors() {
+    return Director.COLORS;
+  }
+
   width: number = 0;
   height: number = 0;
   size: number = 0;
   viewport: Viewport;
-  player: Player;
+  playbar: Playbar;
 
   filmer: WebGLRenderer;
   svger: SVGRenderer;
@@ -58,7 +78,7 @@ export default class Director extends Vue {
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
     this.viewport?.resize(this.width, this.height - this.size * 4.4 - 32);
-    this.player?.resize(this.size);
+    this.playbar?.resize(this.size);
   }
 
   mounted() {
@@ -67,9 +87,9 @@ export default class Director extends Vue {
     if (view instanceof Viewport) {
       this.viewport = view;
     }
-    view = this.$refs.player;
-    if (view instanceof Player) {
-      this.player = view;
+    view = this.$refs.playbar;
+    if (view instanceof Playbar) {
+      this.playbar = view;
     }
 
     this.reload();
@@ -85,7 +105,7 @@ export default class Director extends Vue {
   }
 
   callback() {
-    if (this.recording && this.player.playing == false) {
+    if (this.recording && this.playbar.playing == false) {
       this.finish();
     }
   }
@@ -109,7 +129,7 @@ export default class Director extends Vue {
       for (let index = 0; index < stickers.length; index++) {
         let sticker = stickers[index];
         if (sticker && sticker >= 0) {
-          this.world.cube.stick(index, face, this.colors[sticker]);
+          this.world.cube.stick(index, face, Director.COLORS[sticker]);
         } else {
           this.world.cube.stick(index, face, "");
         }
@@ -143,13 +163,13 @@ export default class Director extends Vue {
       case "color":
         this.colord = true;
         break;
-      case "save":
+      case "output":
         this.outputd = true;
         break;
       case "snap":
         let snapt = this.database.director.snapt;
         if (snapt == "png") {
-          this.snap();
+          this.png();
         } else if (snapt == "svg") {
           this.svg();
         }
@@ -157,22 +177,38 @@ export default class Director extends Vue {
       case "film":
         this.film();
         break;
+      case "save":
+        this.save();
+        break;
       default:
         break;
     }
+  }
+
+  save() {
+    let data: { [key: string]: any } = {};
+    let order = this.world.order;
+    data["order"] = order;
+    data["drama"] = this.database.director.dramas[order];
+    data["preferance"] = this.database.preferance.value;
+    let string = JSON.stringify(data);
+    string = pako.deflate(string, { to: "string" });
+    string = Base64.encode(string);
+    let search = "mode=player&data=" + string;
+    window.location.search = search;
   }
 
   order() {
     this.database.director.order = this.world.order;
     this.database.save();
     this.reload();
-    this.player.init();
+    this.playbar.init();
   }
 
   scene: string = "";
   @Watch("scene")
   onSceneChange() {
-    this.player.scene = this.scene;
+    this.playbar.scene = this.scene;
     this.database.director.dramas[this.world.order].scene = this.scene;
     this.database.save();
   }
@@ -180,26 +216,13 @@ export default class Director extends Vue {
   action: string = "";
   @Watch("action")
   onActionChange() {
-    this.player.action = this.action;
+    this.playbar.action = this.action;
     this.database.director.dramas[this.world.order].action = this.action;
     this.database.save();
   }
 
   recording: boolean = false;
 
-  colors = [
-    COLORS.YELLOW,
-    COLORS.WHITE,
-    COLORS.BLUE,
-    COLORS.GREEN,
-    COLORS.RED,
-    COLORS.ORANGE,
-    COLORS.BLACK,
-    COLORS.GRAY,
-    COLORS.CYAN,
-    COLORS.LIME,
-    COLORS.PINK,
-  ];
   color = 6;
   stickers: { [face: string]: number[] | undefined };
   stick(index: number, face: number) {
@@ -216,7 +239,7 @@ export default class Director extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.world.cube.stick(index, face, this.colors[this.color]);
+      this.world.cube.stick(index, face, Director.COLORS[this.color]);
     } else {
       arr[index] = -1;
       this.world.cube.stick(index, face, "");
@@ -239,7 +262,7 @@ export default class Director extends Vue {
     if (this.recording) {
       this.recording = false;
       this.world.controller.disable = false;
-      this.player.toggle();
+      this.playbar.toggle();
       return;
     }
     this.world.controller.disable = true;
@@ -257,12 +280,12 @@ export default class Director extends Vue {
       this.zip.init();
     }
     this.record();
-    this.player.init();
-    this.player.toggle();
+    this.playbar.init();
+    this.playbar.toggle();
     this.recording = true;
   }
 
-  snap() {
+  png() {
     let pixel = this.database.director.pixel;
     let width = this.world.width;
     let height = this.world.height;
@@ -293,6 +316,9 @@ export default class Director extends Vue {
     let position: Vector3 = new Vector3();
     let distance;
     for (const cubelet of this.world.cube.cubelets) {
+      if (cubelet === undefined || cubelet.frame === undefined) {
+        continue;
+      }
       distance = cubelet.frame.getWorldPosition(position).distanceTo(this.world.camera.position);
       cubelet.frame.renderOrder = 1 / distance;
       for (const sticker of cubelet.stickers) {
@@ -363,7 +389,7 @@ export default class Director extends Vue {
     let data;
     let blob;
     let url;
-    this.player.init();
+    this.playbar.init();
     if (filmt == "gif") {
       this.gif.finish();
       data = this.gif.out.getData();

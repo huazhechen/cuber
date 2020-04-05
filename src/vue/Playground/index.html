@@ -1,5 +1,5 @@
 <v-app>
-  <div v-resize="resize" style="user-select: none;background-color: white;">
+  <div v-resize="resize" style="user-select: none; background-color: white;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-btn
@@ -8,7 +8,7 @@
       top
       text
       color="primary"
-      style="user-select: none;margin:0%;padding:0%;"
+      style="user-select: none; margin: 0%; padding: 0%;"
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
     >
       <div :style="{'font-size':(size * 0.5)+'px'}">{{score}}</div>
@@ -18,7 +18,7 @@
       grid-list-md
       text-xs-center
       :style="{width:Math.min(size * 8, width) + 'px', height:size * 1.5 + 'px'}"
-      style="padding:0%;touch-action: none;"
+      style="padding: 0%; touch-action: none;"
     >
       <v-layout row wrap>
         <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
@@ -36,7 +36,7 @@
     </v-container>
     <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
       <v-card>
-        <v-card-title style="text-transform:none;">
+        <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
             重新打乱?
           </div>
@@ -45,7 +45,7 @@
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs12>
               <v-text-field
-                style="text-transform:none;"
+                style="text-transform: none;"
                 :height="size * 0.8"
                 :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
                 dense
@@ -72,7 +72,7 @@
     </v-dialog>
     <v-dialog v-model="completed" :width="Math.min(size * 8, width)">
       <v-card>
-        <v-card-title style="text-transform:none;">
+        <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
             复原成功
           </div>
@@ -85,8 +85,8 @@
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="red" text @click="completed = false;shuffle();" :height="size * 0.8">
-                <div :style="{'font-size':size/3+'px'}">重试</div>
+              <v-btn block color="red" text @click="save();" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">复盘</div>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -95,7 +95,7 @@
     </v-dialog>
     <v-dialog v-model="historyd" :width="Math.min(size * 8, width)">
       <v-card>
-        <v-card-text style="text-transform:none;">
+        <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow

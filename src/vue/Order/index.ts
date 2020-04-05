@@ -42,7 +42,7 @@ export default class Order extends Vue {
   order(order: number) {
     if (this.world.order != order) {
       this.world.order = order;
-      this.database.refresh();
+      this.database.preferance.refresh();
       this.$emit("order");
       this.show = false;
     }

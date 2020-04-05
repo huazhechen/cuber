@@ -1,142 +1,97 @@
 import Vue from "vue";
-import { Component, Prop, Watch, Inject } from "vue-property-decorator";
-import { TwistAction, TwistNode } from "../../cuber/twister";
+import { Component, Provide } from "vue-property-decorator";
+import Viewport from "../Viewport";
+import Playbar from "../Playbar";
 import World from "../../cuber/world";
+import Base64 from "../../common/base64";
+import { Preferance } from "../../database";
+import { FACE } from "../../cuber/define";
+import Director from "../Director";
+import pako from "pako";
 
 @Component({
   template: require("./index.html"),
-  components: {},
+  components: {
+    viewport: Viewport,
+    playbar: Playbar,
+  },
 })
-export default class Player extends Vue {
-  @Inject("world")
-  world: World;
+export default class Algs extends Vue {
+  @Provide("world")
+  world: World = new World();
 
-  @Prop({ required: false, default: false })
-  disable: boolean;
-
+  width: number = 0;
+  height: number = 0;
   size: number = 0;
+  viewport: Viewport;
+  playbar: Playbar;
+
   constructor() {
     super();
   }
 
   mounted() {
-    this.world.callbacks.push(() => {
-      this.callback();
-    });
-  }
-
-  resize(size: number) {
-    this.size = size;
-  }
-
-  get style() {
-    return {
-      width: this.size + "px",
-      height: this.size + "px",
-      "min-width": "0%",
-      "min-height": "0%",
-      "text-transform": "none",
-      flex: 1,
-    };
-  }
-
-  playing: boolean = false;
-  pprogress: number = 0;
-
-  get progress() {
-    return this.pprogress;
-  }
-  set progress(value) {
-    this.init();
-    for (let i = 0; i < value; i++) {
-      let action = this.actions[i];
-      this.world.twister.twist(action.exp, action.reverse, action.times, true);
+    let view = this.$refs.viewport;
+    if (view instanceof Viewport) {
+      this.viewport = view;
     }
-    this.pprogress = value;
-  }
+    view = this.$refs.playbar;
+    if (view instanceof Playbar) {
+      this.playbar = view;
+    }
 
-  @Watch("progress")
-  onProgressChange() {
-    this.world.controller.lock = this.progress > 0;
-  }
-
-  scene: string = "";
-  @Watch("scene")
-  onSceneChange() {
-    this.init();
-  }
-
-  action: string = "";
-  actions: TwistAction[] = [];
-  @Watch("action")
-  onActionChange() {
-    this.actions = new TwistNode(this.action).parse();
-    this.init();
-  }
-
-  init() {
-    this.world.controller.lock = false;
-    this.playing = false;
-    this.pprogress = 0;
-    this.world.controller.disable = false;
-    this.world.twister.finish();
-    this.world.twister.twist("#");
-    let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
-    this.world.twister.twist(scene, false, 1, true);
-  }
-
-  finish() {
-    this.init();
-    this.world.twister.twist(this.action, false, 1, true);
-    this.pprogress = this.actions.length;
-  }
-
-  callback() {
-    if (this.playing) {
-      if (this.pprogress == this.actions.length) {
-        if (this.playing) {
-          this.playing = false;
+    let search = location.search || "";
+    let list = search.match(/(\?|\&)data=([^&]*)(&|$)/);
+    let string = list ? list[2] : "";
+    string = Base64.decode(string);
+    string = pako.inflate(string, { to: "string" });
+    let data = JSON.parse(string);
+    let preferance = new Preferance(this.world);
+    if (data.order) {
+      this.world.order = data.order;
+    }
+    if (data.preferance) {
+      preferance.load(data.preferance);
+    }
+    if (data.drama) {
+      this.playbar.scene = data.drama.scene;
+      this.playbar.action = data.drama.action;
+      let stickers = data.drama.stickers;
+      if (stickers) {
+        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+          let list = stickers[FACE[face]];
+          if (!list) {
+            continue;
+          }
+          for (let index = 0; index < list.length; index++) {
+            let sticker = list[index];
+            if (sticker && sticker >= 0) {
+              this.world.cube.stick(index, face, Director.COLORS[sticker]);
+            } else {
+              this.world.cube.stick(index, face, "");
+            }
+          }
         }
-        return;
       }
-      let action = this.actions[this.pprogress];
-      this.pprogress++;
-      this.world.twister.twist(action.exp, action.reverse, action.times, false);
     }
+    this.$nextTick(this.resize);
+    this.loop();
   }
 
-  toggle() {
-    if (this.playing) {
-      this.playing = false;
-    } else {
-      if (this.pprogress == 0) {
-        this.init();
-      }
-      this.playing = true;
-      this.callback();
-    }
+  loop() {
+    requestAnimationFrame(this.loop.bind(this));
+    this.viewport?.draw();
   }
 
-  forward() {
-    if (this.pprogress == this.actions.length) {
-      return;
-    }
-    if (this.pprogress == 0) {
-      this.init();
-    }
-    this.playing = false;
-    let action = this.actions[this.pprogress];
-    this.pprogress++;
-    this.world.twister.twist(action.exp, action.reverse, action.times);
+  resize() {
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
+    this.viewport?.resize(this.width, this.height - this.size * 1.6 - 32);
+    this.playbar?.resize(this.size);
   }
 
-  backward() {
-    if (this.pprogress == 0) {
-      return;
-    }
-    this.playing = false;
-    this.pprogress--;
-    let action = this.actions[this.pprogress];
-    this.world.twister.twist(action.exp, !action.reverse, action.times);
+  home() {
+    window.location.search = "";
   }
 }

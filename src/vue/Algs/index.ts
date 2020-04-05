@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Watch, Provide } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Setting from "../Setting";
-import Player from "../Player";
+import Playbar from "../Playbar";
 import World from "../../cuber/world";
 import Database from "../../database";
 import Capture from "./capture";
@@ -12,7 +12,7 @@ import Capture from "./capture";
   components: {
     viewport: Viewport,
     setting: Setting,
-    player: Player,
+    playbar: Playbar,
   },
 })
 export default class Algs extends Vue {
@@ -30,7 +30,7 @@ export default class Algs extends Vue {
   height: number = 0;
   size: number = 0;
   viewport: Viewport;
-  player: Player;
+  playbar: Playbar;
 
   constructor() {
     super();
@@ -45,9 +45,9 @@ export default class Algs extends Vue {
     if (view instanceof Viewport) {
       this.viewport = view;
     }
-    view = this.$refs.player;
-    if (view instanceof Player) {
-      this.player = view;
+    view = this.$refs.playbar;
+    if (view instanceof Playbar) {
+      this.playbar = view;
     }
     view = this.$refs.setting;
     if (view instanceof Setting) {
@@ -96,7 +96,7 @@ export default class Algs extends Vue {
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
     this.viewport?.resize(this.width, this.height - this.size * 2.6 - 32);
-    this.player?.resize(this.size);
+    this.playbar?.resize(this.size);
   }
 
   get grid() {
@@ -140,7 +140,7 @@ export default class Algs extends Vue {
     } else {
       this.action = this.origin;
     }
-    this.player.scene = "^";
+    this.playbar.scene = "^";
     window.localStorage.setItem("algs.index", JSON.stringify(this.index));
   }
 
@@ -154,18 +154,11 @@ export default class Algs extends Vue {
       this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.action);
     }
     this.algs[this.index.group].algs[this.index.index].exp = this.action;
-    this.player.action = this.action;
+    this.playbar.action = this.action;
   }
 
   select(i: number, j: number) {
     this.index = { group: i, index: j };
     this.listd = false;
-  }
-
-  move(step: number) {
-    let group = this.index.group;
-    let index = this.index.index + this.algs[group].algs.length + step;
-    index = index % this.algs[group].algs.length;
-    this.index = { group: group, index: index };
   }
 }
