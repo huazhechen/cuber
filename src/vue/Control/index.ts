@@ -4,21 +4,24 @@ import World from "../../cuber/world";
 import Database from "../../database";
 
 @Component({
-  template: require("./index.html")
+  template: require("./index.html"),
 })
 export default class Control extends Vue {
   @Inject("world")
   world: World;
-  
+
   @Inject("database")
   database: Database;
-  
+
   @Prop({ required: true })
   value: boolean;
   get show() {
     return this.value;
   }
   set show(value) {
+    if (!value) {
+      this.database.save();
+    }
     this.$emit("input", value);
   }
 
