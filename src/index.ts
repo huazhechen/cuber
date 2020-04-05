@@ -24,6 +24,7 @@ if (navigator.serviceWorker != null) {
 Vue.use(Vuetify);
 const opts = {};
 const vuetify = new Vuetify(opts);
+Vue.prototype.vuetify = vuetify;
 
 let search = location.search || "";
 let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
@@ -45,8 +46,9 @@ switch (mode) {
     app = Playground;
     break;
 }
-new Vue({
+let vm = new Vue({
   vuetify,
   el: "#app",
   render: (h) => h(app),
 });
+export default vm;

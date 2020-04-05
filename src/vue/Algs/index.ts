@@ -40,7 +40,6 @@ export default class Algs extends Vue {
   pics: string[][] = [];
 
   mounted() {
-    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -70,6 +69,9 @@ export default class Algs extends Vue {
       this.index = { group: 0, index: 0 };
     }
     this.$nextTick(this.resize);
+    this.$nextTick(() => {
+      this.database.refresh();
+    });
     this.loop();
   }
 

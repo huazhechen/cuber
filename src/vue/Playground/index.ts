@@ -40,13 +40,15 @@ export default class Playground extends Vue {
   }
 
   mounted() {
-    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
     }
     this.shuffle();
     this.$nextTick(this.resize);
+    this.$nextTick(() => {
+      this.database.refresh();
+    });
     this.loop();
   }
 

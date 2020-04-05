@@ -83,7 +83,6 @@ export default class Director extends Vue {
   }
 
   mounted() {
-    this.database.load();
     let view = this.$refs.viewport;
     if (view instanceof Viewport) {
       this.viewport = view;
@@ -96,7 +95,7 @@ export default class Director extends Vue {
     if (view) {
       new ClipboardJS((<any>view).$el);
     }
-    this.$el
+    this.$el;
 
     this.reload();
     this.world.controller.taps.push((index: number, face: number) => {
@@ -107,6 +106,9 @@ export default class Director extends Vue {
       this.callback();
     });
     this.$nextTick(this.resize);
+    this.$nextTick(() => {
+      this.database.refresh();
+    });
     this.loop();
   }
 

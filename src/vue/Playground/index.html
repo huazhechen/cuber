@@ -1,5 +1,5 @@
 <v-app>
-  <div v-resize="resize" style="user-select: none; background-color: white;">
+  <div v-resize="resize" style="user-select: none;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-btn
@@ -57,12 +57,12 @@
               </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="red" text @click="shuffled = false;shuffle();" :height="size * 0.8">
+              <v-btn block color="error" text @click="shuffled = false;shuffle();" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="black" text @click="shuffled = false" :height="size * 0.8">
+              <v-btn block text @click="shuffled = false" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">取消</div>
               </v-btn>
             </v-flex>
@@ -80,12 +80,12 @@
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs6 d-flex>
-              <v-btn block color="black" text @click="completed = false;" :height="size * 0.8">
+              <v-btn block text @click="completed = false;" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="red" text @click="replay" :height="size * 0.8">
+              <v-btn block color="error" text @click="replay" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">复盘</div>
               </v-btn>
             </v-flex>

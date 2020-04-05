@@ -14,15 +14,16 @@
   <order v-model="items['order'].value" v-on:order="$emit('order');"></order>
   <control v-model="items['control'].value"></control>
   <appear v-model="items['appear'].value"></appear>
+  <theme v-model="items['theme'].value"></theme>
   <v-bottom-sheet v-model="menu">
-    <v-card text style="margin: auto">
+    <v-card text style="margin: auto;">
       <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(size * 8, width) + 'px'}">
-        <v-layout row wrap style="padding-top: 2%;padding-bottom: 5%;">
+        <v-layout row wrap style="padding-top: 2%; padding-bottom: 5%;">
           <v-flex xs12 style="display: flex;">
             <v-btn
               :color="mode == 'playground'?'primary':''"
               depressed
-              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
               @click="tap('playground')"
               :style="{height: size + 'px'}"
             >
@@ -31,7 +32,7 @@
             <v-btn
               :color="mode == 'algs'?'primary':''"
               depressed
-              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
               @click="tap('algs')"
               :style="{height: size + 'px'}"
             >
@@ -40,7 +41,7 @@
             <v-btn
               :color="mode == 'director'?'primary':''"
               depressed
-              style="text-transform:none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1"
+              style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
               @click="tap('director')"
               :style="{height: size + 'px'}"
             >
@@ -63,7 +64,7 @@
               block
               :disabled="item.disable"
               @click="tap(item)"
-              style="text-transform:none; min-width: 0%;flex: 1"
+              style="text-transform: none; min-width: 0%; flex: 1;"
               :height="size * 0.8"
               :style="{'font-size':size * 0.3 + 'px'}"
               color="primary"
@@ -81,7 +82,7 @@
               depressed
               block
               @click="tap('code')"
-              style="text-transform:none; min-width: 0%;flex: 1"
+              style="text-transform: none; min-width: 0%; flex: 1;"
               :height="size * 0.8"
               :style="{'font-size':size * 0.3 + 'px'}"
               color="success"
@@ -99,11 +100,11 @@
               depressed
               block
               @click="tap('reset')"
-              style="text-transform:none; min-width: 0%;flex: 1"
+              style="text-transform: none; min-width: 0%; flex: 1;"
               :height="size * 0.8"
               :style="{'font-size':size * 0.3 + 'px'}"
               class="white--text"
-              color="red"
+              color="error"
               >重置数据
             </v-btn>
           </v-flex>
@@ -113,7 +114,7 @@
   </v-bottom-sheet>
   <v-dialog v-model="resetd" :width="Math.min(size * 8, width)">
     <v-card>
-      <v-card-title style="text-transform:none;">
+      <v-card-title style="text-transform: none;">
         <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
           重置数据?
         </div>
@@ -121,12 +122,12 @@
       <v-card-actions>
         <v-layout row wrap style="margin: 0%;">
           <v-flex xs6 d-flex>
-            <v-btn block color="red" text @click="resetd = false;reset();" :height="size">
+            <v-btn block color="error" text @click="resetd = false;reset();" :height="size">
               <div :style="{'font-size':size/3+'px'}">确定</div>
             </v-btn>
           </v-flex>
           <v-flex xs6 d-flex>
-            <v-btn block color="black" text @click="resetd = false" :height="size">
+            <v-btn block text @click="resetd = false" :height="size">
               <div :style="{'font-size':size/3+'px'}">取消</div>
             </v-btn>
           </v-flex>

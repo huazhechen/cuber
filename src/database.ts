@@ -1,5 +1,6 @@
 import World from "./cuber/world";
 import CubeGroup from "./cuber/group";
+import vm from ".";
 
 export class Preferance {
   private world: World;
@@ -11,8 +12,8 @@ export class Preferance {
     version: "0.1",
     scale: 50,
     perspective: 50,
-    angle: 63,
-    gradient: 67,
+    angle: 60,
+    gradient: 65,
     frames: 20,
     sensitivity: 3,
     mirror: false,
@@ -24,7 +25,6 @@ export class Preferance {
     let data = JSON.parse(value);
     if (data.version === this.data.version) {
       this.data = data;
-      this.refresh();
     }
   }
   get value() {
@@ -166,7 +166,6 @@ export class Theme {
     let data = JSON.parse(value);
     if (data.version === this.data.version) {
       this.data = data;
-      this.refresh();
     }
   }
   get value() {
@@ -184,6 +183,7 @@ export class Theme {
     if (this.data.dark != value) {
       this.data.dark = value;
     }
+    vm.$vuetify.theme.dark = value;
   }
 }
 
@@ -198,6 +198,35 @@ export default class Database {
     this.world = world;
     this.preferance = new Preferance(this.world);
     this.theme = new Theme(this.world);
+    let version = "0.1";
+    if (this.storage.getItem("version") != version) {
+      this.storage.clear();
+      this.storage.setItem("version", version);
+    }
+    let save;
+    save = this.storage.getItem("preferance");
+    if (save) {
+      this.preferance.load(save);
+      this.storage.setItem("preferance", this.preferance.value);
+    }
+
+    save = this.storage.getItem("theme");
+    if (save) {
+      this.theme.load(save);
+      this.storage.setItem("theme", this.theme.value);
+    }
+    if ((<any>this)[this.mode]) {
+      save = this.storage.getItem(this.mode);
+      if (save) {
+        let data = JSON.parse(save);
+        if (data.version === (<any>this)[this.mode].version) {
+          (<any>this)[this.mode] = data;
+        } else {
+          this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
+        }
+      }
+      this.world.order = (<any>this)[this.mode].order;
+    }
   }
 
   playground = {
@@ -228,43 +257,16 @@ export default class Database {
     dramas: [],
   };
 
-  load() {
-    let version = "0.1";
-    if (this.storage.getItem("version") != version) {
-      this.storage.clear();
-      this.storage.setItem("version", version);
-    }
-    let save;
-    save = this.storage.getItem("preferance");
-    if (save) {
-      this.preferance.load(save);
-      this.storage.setItem("preferance", this.preferance.value);
-    }
-
-    save = this.storage.getItem("theme");
-    if (save) {
-      this.theme.load(save);
-      this.storage.setItem("theme", this.theme.value);
-    }
-
-    if ((<any>this)[this.mode]) {
-      save = this.storage.getItem(this.mode);
-      if (save) {
-        let data = JSON.parse(save);
-        if (data.version === (<any>this)[this.mode].version) {
-          (<any>this)[this.mode] = data;
-        } else {
-          this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
-        }
-      }
-      this.world.order = (<any>this)[this.mode].order;
-    }
+  refresh() {
     this.preferance.refresh();
+    this.theme.refresh();
   }
 
   save() {
     this.storage.setItem("preferance", this.preferance.value);
     this.storage.setItem("theme", this.theme.value);
+    console.log(this.storage.getItem("theme"));
+    console.log(new Error().stack);
     this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
   }
 }

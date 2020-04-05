@@ -7,12 +7,12 @@ import World from "../../cuber/world";
 
 @Component({
   template: require("./index.html"),
-  components: {}
+  components: {},
 })
 export default class Viewport extends Vue {
   @Inject("world")
   world: World;
-  
+
   renderer: WebGLRenderer;
   constructor() {
     super();
@@ -20,10 +20,11 @@ export default class Viewport extends Vue {
     canvas.style.outline = "none";
     this.renderer = new WebGLRenderer({
       canvas: canvas,
-      antialias: true
+      antialias: true,
+      alpha: true,
     });
     this.renderer.autoClear = false;
-    this.renderer.setClearColor(COLORS.BACKGROUND);
+    this.renderer.setClearColor(COLORS.BACKGROUND, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     let toucher = new Toucher();
     toucher.init(canvas, this.world.controller.touch);

@@ -10,7 +10,7 @@
       >
         <v-flex xs12 style="display: flex;">
           <v-btn
-            @click="database.theme.dark=!database.theme.dark"
+            @click="database.theme.dark=!database.theme.dark; database.save();"
             :color="database.theme.dark?'primary':''"
             depressed
             style="text-transform: none; min-width: 0%; flex: 1;"

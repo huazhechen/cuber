@@ -3,6 +3,7 @@ import { Component } from "vue-property-decorator";
 import Order from "../Order";
 import Control from "../Control";
 import Appear from "../Appear";
+import Theme from "../Theme";
 
 export class SettingItem {
   label: string;
@@ -25,8 +26,9 @@ export class SettingItem {
   components: {
     order: Order,
     control: Control,
-    appear: Appear
-  }
+    appear: Appear,
+    theme: Theme,
+  },
 })
 export default class Setting extends Vue {
   menu: boolean = false;
@@ -39,7 +41,6 @@ export default class Setting extends Vue {
     this.items["control"] = new SettingItem("操作设置");
     this.items["appear"] = new SettingItem("外观设置");
     this.items["theme"] = new SettingItem("主题设置");
-    this.items["theme"].disable = true;
   }
   mounted() {
     this.resize();
