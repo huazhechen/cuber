@@ -3,11 +3,13 @@
 - 在线魔方工具箱
 
 ## 主要特性
+
 - 虚拟魔方
 - 公式播放
 - 动画制作
 
 ## 技术栈
+
 - typescript
 - webpack
 - threejs
@@ -30,47 +32,33 @@
 
 - 撤销操作
 
-  ![backspace](https://gitee.com/huazhechen/cuber/raw/master/screenshot/backspace.gif)
+  ![undo](https://gitee.com/huazhechen/cuber/raw/master/screenshot/undo.gif)
 
-- 贴纸助手
+- 操作历史
 
-  ![strip](https://gitee.com/huazhechen/cuber/raw/master/screenshot/strip.gif)
+  ![history](https://gitee.com/huazhechen/cuber/raw/master/screenshot/history.gif)
 
 - 自定义打乱
 
-  ![random](https://gitee.com/huazhechen/cuber/raw/master/screenshot/random.gif)
+  ![shuffle](https://gitee.com/huazhechen/cuber/raw/master/screenshot/shuffle.gif)
 
-- 自定义外观
+- 复盘
 
-  ![tune](https://gitee.com/huazhechen/cuber/raw/master/screenshot/tune.gif)
-
-
-- 镜像与透明
-
-  ![look](https://gitee.com/huazhechen/cuber/raw/master/screenshot/look.gif)
-
-
-- 1-10阶
-
-  ![order](https://gitee.com/huazhechen/cuber/raw/master/screenshot/order.gif)
+  ![replay](https://gitee.com/huazhechen/cuber/raw/master/screenshot/replay.gif)
 
 ## [公式播放](https://huazhechen.gitee.io/cuber/?mode=algs)
 
 - 公式播放
 
-  ![algs-playbar](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-playbar.gif)
+  ![algs-player](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-player.gif)
 
-* 快捷公式跳转
+* 公式列表
 
   ![algs-list](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-list.gif)
 
 - 播放控制
 
   ![algs-step](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-step.gif)
-
-* 公式修改
-
-  ![algs-modify](https://gitee.com/huazhechen/cuber/raw/master/screenshot/algs-modify.gif)
 
 ## [动画制作](https://huazhechen.gitee.io/cuber?mode=director)
 
@@ -90,10 +78,28 @@
 
   ![colorize](https://gitee.com/huazhechen/cuber/raw/master/screenshot/colorize.gif)
 
-- 控制字符
-
-  ![control-sign](https://gitee.com/huazhechen/cuber/raw/master/screenshot/control-sign.gif)
-
 - 输出配置
 
   ![output](https://gitee.com/huazhechen/cuber/raw/master/screenshot/output.gif)
+
+- 动画共享
+
+  ![output](https://gitee.com/huazhechen/cuber/raw/master/screenshot/share.gif)
+
+## 配置选项
+
+- 阶数选择
+
+  ![order](https://gitee.com/huazhechen/cuber/raw/master/screenshot/order.gif)
+
+- 操作设置
+
+  ![control](https://gitee.com/huazhechen/cuber/raw/master/screenshot/control.gif)
+
+- 外观设置
+
+  ![appear](https://gitee.com/huazhechen/cuber/raw/master/screenshot/appear.gif)
+
+- 主题设置
+
+  ![theme](https://gitee.com/huazhechen/cuber/raw/master/screenshot/theme.gif)

@@ -14,7 +14,6 @@ import Util from "../../common/util";
 import Setting from "../Setting";
 import World from "../../cuber/world";
 import Database from "../../database";
-import Base64 from "../../common/base64";
 import pako from "pako";
 import ClipboardJS from "clipboard";
 
@@ -203,7 +202,7 @@ export default class Director extends Vue {
     data["preferance"] = this.database.preferance.value;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
-    string = Base64.encode(string);
+    string = window.btoa(string);
     let search = "mode=player&data=" + string;
     this.link = window.location.origin + window.location.pathname + "?" + search;
     this.shared = true;

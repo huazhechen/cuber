@@ -3,7 +3,6 @@ import { Component, Provide } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
-import Base64 from "../../common/base64";
 import { Preferance } from "../../database";
 import { FACE } from "../../cuber/define";
 import Director from "../Director";
@@ -45,7 +44,7 @@ export default class Algs extends Vue {
     let search = location.search || "";
     let list = search.match(/(\?|\&)data=([^&]*)(&|$)/);
     let string = list ? list[2] : "";
-    string = Base64.decode(string);
+    string = window.atob(string);
     string = pako.inflate(string, { to: "string" });
     let data = JSON.parse(string);
     let preferance = new Preferance(this.world);
@@ -55,6 +54,7 @@ export default class Algs extends Vue {
     if (data.preferance) {
       preferance.load(data.preferance);
     }
+    preferance.refresh();
     if (data.drama) {
       this.scene = data.drama.scene;
       this.playbar.scene = this.scene;

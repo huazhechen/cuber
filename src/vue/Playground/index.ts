@@ -7,7 +7,6 @@ import Cubelet from "../../cuber/cubelet";
 import World from "../../cuber/world";
 import Database from "../../database";
 import pako from "pako";
-import Base64 from "../../common/base64";
 
 @Component({
   template: require("./index.html"),
@@ -161,7 +160,7 @@ export default class Playground extends Vue {
     data["preferance"] = this.database.preferance.value;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
-    string = Base64.encode(string);
+    string = window.btoa(string);
     let search = "mode=player&data=" + string;
     window.location.search = search;
   }

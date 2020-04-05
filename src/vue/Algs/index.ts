@@ -62,7 +62,6 @@ export default class Algs extends Vue {
         let data = JSON.parse(index);
         this.index = { group: data.group, index: data.index };
       } catch (error) {
-        console.log(error);
         this.index = { group: 0, index: 0 };
       }
     } else {
