@@ -75,8 +75,8 @@ export default class Setting extends Vue {
           window.location.search = "mode=" + key;
         }
         break;
-      case "code":
-        window.location.href = "https://gitee.com/huazhechen/cuber";
+      case "help":
+        window.location.href = "https://gitee.com/huazhechen/cuber/blob/master/README.md";
         break;
       case "reset":
         this.resetd = true;
