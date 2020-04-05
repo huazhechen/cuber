@@ -153,28 +153,13 @@ export class Preferance {
 }
 
 export class Theme {
-  colors = {
-    BACKGROUND: ["#FFFFFF", "#E0E0E0", "#C0C0C0", "#808080", "#404040", "#000000"],
-    GRAY: "#404040",
-    BLACK: "#202020",
-    WHITE: "#F0F0F0",
-    GREEN: "#00A020",
-    ORANGE: "#FF6D00",
-    BLUE: "#0D47A1",
-    YELLOW: "#FFD600",
-    RED: "#B71C1C",
-    CYAN: "#18FFFF",
-    LIME: "#C6FF00",
-    PINK: "#FF4081",
-  };
   private world: World;
-
   constructor(world: World) {
     this.world = world;
   }
   private data = {
     version: "0.1",
-    background: 0,
+    dark: false,
   };
 
   load(value: string) {
@@ -189,15 +174,15 @@ export class Theme {
   }
 
   refresh() {
-    this.background = this.data.background;
+    this.dark = this.data.dark;
   }
 
-  get background() {
-    return this.data.background;
+  get dark() {
+    return this.data.dark;
   }
-  set background(value) {
-    if (this.data.background != value) {
-      this.data.background = value;
+  set dark(value) {
+    if (this.data.dark != value) {
+      this.data.dark = value;
     }
   }
 }
