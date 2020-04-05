@@ -218,7 +218,7 @@ export default class GIF {
     let colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
     let i = 0;
     // TRANSPARENT
-    colors[i++] = 0xff;
+    colors[i++] = 0x00;
     colors[i++] = 0x00;
     colors[i++] = 0x00;
     // BLACK-WHITE
@@ -289,10 +289,10 @@ export default class GIF {
   }
 
   getColor(r: number, g: number, b: number) {
-    let index = 0;
+    let index = 1;
     let dmin = 256 * 256 * 256;
     let best = 0;
-    for (let i = 0; i < GIF.COLORN; index++) {
+    for (let i = 3; i < GIF.COLORN; index++) {
       let cr = GIF.COLORS[i++];
       let cg = GIF.COLORS[i++];
       let cb = GIF.COLORS[i++];
