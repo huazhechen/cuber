@@ -10,3 +10,10 @@ declare module "pako" {
   }
   export default pako;
 }
+
+declare module "clipboard" {
+  export class ClipboardJS {
+    constructor(args: any);
+  }
+  export default ClipboardJS;
+}

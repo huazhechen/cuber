@@ -14,6 +14,7 @@
     "@types/three": "^0.103.2",
     "@types/webpack-env": "^1.15.0",
     "clean-webpack-plugin": "^3.0.0",
+    "clipboard": "^2.0.6",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
     "deepmerge": "^4.2.2",

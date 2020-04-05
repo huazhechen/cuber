@@ -37,24 +37,24 @@
     <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform: none;">
-          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
             重新打乱?
           </div>
         </v-card-title>
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs12>
-              <v-text-field
-                style="text-transform: none;"
-                :height="size * 0.8"
-                :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
-                dense
-                single-line
-                hide-details
+              <v-textarea
+                :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+                auto-grow
+                solo
+                flat
                 outlined
+                hide-details
+                rows="2"
                 v-model="shuffler"
               >
-              </v-text-field>
+              </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block color="red" text @click="shuffled = false;shuffle();" :height="size * 0.8">
@@ -73,8 +73,8 @@
     <v-dialog v-model="completed" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform: none;">
-          <div :style="{'font-size':size/2+'px','padding-top':size/8+'px'}">
-            复原成功
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            复原成功!
           </div>
         </v-card-title>
         <v-card-actions>
@@ -85,7 +85,7 @@
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="red" text @click="save();" :height="size * 0.8">
+              <v-btn block color="red" text @click="replay" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">复盘</div>
               </v-btn>
             </v-flex>
@@ -97,7 +97,7 @@
       <v-card>
         <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size * 0.4+'px'}">
-            打乱
+            打乱:
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none; padding-bottom: 0%;">
@@ -116,7 +116,7 @@
         </v-card-text>
         <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size * 0.4+'px'}">
-            复原
+            复原:
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none;">

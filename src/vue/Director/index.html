@@ -19,7 +19,7 @@
             <v-icon :size="size * 0.8">colorize</v-icon>
           </v-btn>
           <v-btn @click="tap('output')" :style="style" text :ripple="false" :disabled="recording">
-            <v-icon :size="size * 0.8">settings</v-icon>
+            <v-icon :size="size * 0.8">save</v-icon>
           </v-btn>
           <v-btn @click="tap('snap')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">camera_alt</v-icon>
@@ -27,8 +27,8 @@
           <v-btn @click="tap('film')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">{{recording?'stop':'movie'}}</v-icon>
           </v-btn>
-          <v-btn @click="tap('save')" :style="style" text :ripple="false" :disabled="recording">
-            <v-icon :size="size * 0.8">save</v-icon>
+          <v-btn @click="tap('share')" :style="style" text :ripple="false" :disabled="recording">
+            <v-icon :size="size * 0.8">share</v-icon>
           </v-btn>
         </v-flex>
         <v-flex xs12>
@@ -222,14 +222,20 @@
     </v-bottom-sheet>
     <v-dialog v-model="scened" :width="Math.min(size * 8, width)">
       <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            场景:
+          </div>
+        </v-card-title>
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow
             solo
             flat
-            no-resize
+            outlined
             hide-details
+            rows="2"
             v-model="scene"
           >
           </v-textarea>
@@ -238,18 +244,61 @@
     </v-dialog>
     <v-dialog v-model="actiond" :width="Math.min(size * 8, width)">
       <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            动作:
+          </div>
+        </v-card-title>
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow
             solo
             flat
-            no-resize
+            outlined
             hide-details
+            rows="2"
             v-model="action"
           >
           </v-textarea>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="shared" :width="Math.min(size * 8, width)" eager>
+      <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            分享链接:
+          </div>
+        </v-card-title>
+        <v-card-actions>
+          <v-layout row wrap style="margin: 0%;">
+            <v-textarea
+              id="link"
+              :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+              solo
+              flat
+              outlined
+              hide-details
+              rows="6"
+              v-model="link"
+            >
+            </v-textarea>
+            <v-flex xs12 d-flex>
+              <v-btn
+                block
+                color="black"
+                text
+                @click="shared = false;"
+                :height="size * 0.8"
+                data-clipboard-target="#link"
+                ref="copy"
+              >
+                <div :style="{'font-size':size/3+'px'}">一键复制</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>

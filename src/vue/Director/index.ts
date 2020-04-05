@@ -16,6 +16,7 @@ import World from "../../cuber/world";
 import Database from "../../database";
 import Base64 from "../../common/base64";
 import pako from "pako";
+import ClipboardJS from "clipboard";
 
 @Component({
   template: require("./index.html"),
@@ -91,6 +92,11 @@ export default class Director extends Vue {
     if (view instanceof Playbar) {
       this.playbar = view;
     }
+    view = this.$refs.copy;
+    if (view) {
+      new ClipboardJS((<any>view).$el);
+    }
+    this.$el
 
     this.reload();
     this.world.controller.taps.push((index: number, face: number) => {
@@ -177,15 +183,17 @@ export default class Director extends Vue {
       case "film":
         this.film();
         break;
-      case "save":
-        this.save();
+      case "share":
+        this.share();
         break;
       default:
         break;
     }
   }
 
-  save() {
+  shared: boolean = false;
+  link: string = "";
+  share() {
     let data: { [key: string]: any } = {};
     let order = this.world.order;
     data["order"] = order;
@@ -195,7 +203,8 @@ export default class Director extends Vue {
     string = pako.deflate(string, { to: "string" });
     string = Base64.encode(string);
     let search = "mode=player&data=" + string;
-    window.location.search = search;
+    this.link = window.location.origin + window.location.pathname + "?" + search;
+    this.shared = true;
   }
 
   order() {

@@ -150,7 +150,7 @@ export default class Playground extends Vue {
     }
   }
 
-  save() {
+  replay() {
     let data: { [key: string]: any } = {};
     let order = this.world.order;
     data["order"] = order;
