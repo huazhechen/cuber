@@ -28,8 +28,6 @@ export default class Playground extends Vue {
   size: number = 0;
   viewport: Viewport;
 
-  history: string = "";
-
   constructor() {
     super();
   }
@@ -100,7 +98,6 @@ export default class Playground extends Vue {
   }
 
   shuffler = "*";
-
   shuffle() {
     if (this.shuffler === "*") {
       this.world.twister.twist("*");
@@ -133,6 +130,8 @@ export default class Playground extends Vue {
 
   shuffled: boolean = false;
   historyd: boolean = false;
+  history: string = "";
+  scene: string = "";
   tap(key: string) {
     switch (key) {
       case "shuffle":
@@ -143,6 +142,7 @@ export default class Playground extends Vue {
         break;
       case "history":
         this.history = this.world.cube.history.exp.substring(1);
+        this.scene = this.world.cube.history.init;
         this.historyd = true;
         break;
       default:

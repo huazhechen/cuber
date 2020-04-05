@@ -25,6 +25,8 @@ export default class Algs extends Vue {
   size: number = 0;
   viewport: Viewport;
   playbar: Playbar;
+  scene: string = "";
+  action: string = "";
 
   constructor() {
     super();
@@ -54,8 +56,10 @@ export default class Algs extends Vue {
       preferance.load(data.preferance);
     }
     if (data.drama) {
-      this.playbar.scene = data.drama.scene;
-      this.playbar.action = data.drama.action;
+      this.scene = data.drama.scene;
+      this.playbar.scene = this.scene;
+      this.action = data.drama.action;
+      this.playbar.action = this.action;
       let stickers = data.drama.stickers;
       if (stickers) {
         for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
@@ -93,5 +97,10 @@ export default class Algs extends Vue {
 
   home() {
     window.location.search = "";
+  }
+
+  scriptd: boolean = false;
+  script() {
+    this.scriptd = true;
   }
 }

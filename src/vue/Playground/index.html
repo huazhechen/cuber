@@ -95,14 +95,40 @@
     </v-dialog>
     <v-dialog v-model="historyd" :width="Math.min(size * 8, width)">
       <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px'}">
+            场景
+          </div>
+        </v-card-title>
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow
             solo
             flat
+            outlined
             hide-details
             readonly
+            rows="2"
+            v-model="scene"
+          >
+          </v-textarea>
+        </v-card-text>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px'}">
+            动作
+          </div>
+        </v-card-title>
+        <v-card-text style="text-transform: none;">
+          <v-textarea
+            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+            auto-grow
+            solo
+            flat
+            outlined
+            hide-details
+            readonly
+            rows="2"
             v-model="history"
           >
           </v-textarea>
