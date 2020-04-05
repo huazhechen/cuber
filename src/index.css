@@ -9,17 +9,17 @@
 .v-input input {
   max-height: 512px;
 }
-.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-  .v-input__append-inner {
-  margin-top: 0%;
+.v-input__append-inner {
+  margin-top: 0% !important;
 }
 .v-input .v-label {
   height: 100%;
   line-height: 100%;
 }
 .v-text-field--outlined.v-input--dense .v-label {
-  top: 0px;
+  top: 0px !important;
 }
 .v-textarea textarea {
   line-height: inherit;
+  margin-top: 0 !important;
 }

@@ -25,7 +25,7 @@
           <v-btn @click="tap('shuffle')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">casino</v-icon>
           </v-btn>
-          <v-btn @click="tap('history')" :style="style" text :ripple="false" :disabled="world.cube.history.length == 0">
+          <v-btn @click="tap('history')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">assignment</v-icon>
           </v-btn>
           <v-btn @click="tap('undo')" :style="style" text :ripple="false" :disabled="world.cube.history.length == 0">
@@ -97,10 +97,10 @@
       <v-card>
         <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size * 0.4+'px'}">
-            场景
+            打乱
           </div>
         </v-card-title>
-        <v-card-text style="text-transform: none;">
+        <v-card-text style="text-transform: none; padding-bottom: 0%;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
             auto-grow
@@ -116,7 +116,7 @@
         </v-card-text>
         <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size * 0.4+'px'}">
-            动作
+            复原
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none;">
