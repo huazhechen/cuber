@@ -210,61 +210,10 @@ export default class GIF {
   private static DEEP = 8;
   private static HASH_SIZE = 12;
   private static HASH_MASK = 0xfff;
-  private static HASH: { RGB: number[]; index: number }[] = new Array(Math.pow(2, GIF.HASH_SIZE));
 
-  private static COLORN = 0;
-
-  private static COLORS: Uint8Array = (() => {
-    let colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
-    let i = 0;
-    // TRANSPARENT
-    colors[i++] = 0x00;
-    colors[i++] = 0x00;
-    colors[i++] = 0x00;
-    // BLACK-WHITE
-    colors[i++] = 0xff;
-    colors[i++] = 0xff;
-    colors[i++] = 0xff;
-    for (let v = 0; v < 255; v = v + 4) {
-      colors[i++] = v;
-      colors[i++] = v;
-      colors[i++] = v;
-    }
-    // LIGHT
-    for (const key in COLORS) {
-      let rgb = Color.RGB((<any>COLORS)[key]);
-      let hsv = Color.RGB2HSV(rgb);
-      if (hsv[1] == 0 || hsv[2] == 0) {
-        continue;
-      }
-      let value = hsv[2];
-      for (let d = 0; d < 24; d++) {
-        value = value - 2 ** Math.ceil(d / 8);
-        if (value < 0) {
-          break;
-        }
-        let dhsv = [hsv[0], hsv[1], value];
-        let drgb = Color.HSV2RGB(dhsv);
-        colors[i++] = drgb[0];
-        colors[i++] = drgb[1];
-        colors[i++] = drgb[2];
-      }
-      if (hsv[1] >= 9) {
-        for (let d = 0; d < 2; d++) {
-          let dhsv = [hsv[0], (hsv[1] / 3) * (d + 1), hsv[2]];
-          let drgb = Color.HSV2RGB(dhsv);
-          colors[i++] = drgb[0];
-          colors[i++] = drgb[1];
-          colors[i++] = drgb[2];
-        }
-      }
-    }
-    GIF.COLORN = i;
-    if (GIF.COLORN > 3 * Math.pow(2, GIF.DEEP)) {
-      throw "too many colors: " + GIF.COLORN / 3;
-    }
-    return colors;
-  })();
+  private hash: { rgb: number[]; index: number }[] = new Array(Math.pow(2, GIF.HASH_SIZE));
+  private colorn = 0;
+  private colors: Uint8Array;
 
   constructor() {
     this.dispose = 0;
@@ -282,20 +231,85 @@ export default class GIF {
     this.frames = 0;
     this.delay = delay;
     this.out = new ByteArray();
+    this.genColorTable();
     this.writeHeader();
     this.writeLSD();
     this.writePalette();
     this.writeNetscapeExt();
   }
 
+  genColorTable() {
+    this.colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
+    let i = 0;
+    // TRANSPARENT
+    this.colors[i++] = 0x00;
+    this.colors[i++] = 0x00;
+    this.colors[i++] = 0x00;
+    // BLACK-WHITE
+    this.colors[i++] = 0xff;
+    this.colors[i++] = 0xff;
+    this.colors[i++] = 0xff;
+    for (let v = 0; v < 255; v = v + 5) {
+      this.colors[i++] = v;
+      this.colors[i++] = v;
+      this.colors[i++] = v;
+    }
+    // LIGHT
+    for (const key in COLORS) {
+      let rgb = Color.HEX2RGB((<any>COLORS)[key]);
+      let hsl = Color.RGB2HSL(rgb);
+      if (hsl[1] === 0 || hsl[2] === 1 || hsl[2] === 0) {
+        continue;
+      }
+      let gray = Math.round(hsl[2] / 5);
+      let start, end, delta;
+      start = hsl[2] - gray;
+      end = start;
+      start = (start % 6) + 5;
+      delta = 6;
+      for (let l = start; l < end; l = l + delta) {
+        let dhsv = [hsl[0], hsl[1], l];
+        let drgb = Color.HSL2RGB(dhsv);
+        this.colors[i++] = drgb[0];
+        this.colors[i++] = drgb[1];
+        this.colors[i++] = drgb[2];
+      }
+      start = hsl[2] - gray;
+      end = hsl[2];
+      delta = 1;
+      for (let l = start; l < end; l = l + delta) {
+        let dhsv = [hsl[0], hsl[1], l];
+        let drgb = Color.HSL2RGB(dhsv);
+        this.colors[i++] = drgb[0];
+        this.colors[i++] = drgb[1];
+        this.colors[i++] = drgb[2];
+      }
+      start = hsl[2];
+      end = 95;
+      delta = 6;
+      for (let l = start; l < end; l = l + delta) {
+        let dhsv = [hsl[0], hsl[1], l];
+        let drgb = Color.HSL2RGB(dhsv);
+        this.colors[i++] = drgb[0];
+        this.colors[i++] = drgb[1];
+        this.colors[i++] = drgb[2];
+      }
+    }
+    this.colorn = i;
+    if (this.colorn > 3 * Math.pow(2, GIF.DEEP)) {
+      throw "too many this.colors: " + this.colorn / 3;
+    }
+    return this.colors;
+  }
+
   getColor(r: number, g: number, b: number) {
     let index = 1;
     let dmin = 256 * 256 * 256;
     let best = 0;
-    for (let i = 3; i < GIF.COLORN; index++) {
-      let cr = GIF.COLORS[i++];
-      let cg = GIF.COLORS[i++];
-      let cb = GIF.COLORS[i++];
+    for (let i = 3; i < this.colorn; index++) {
+      let cr = this.colors[i++];
+      let cg = this.colors[i++];
+      let cb = this.colors[i++];
       let d = Color.RGBD([r, g, b], [cr, cg, cb]);
       if (d == 0) {
         return index;
@@ -325,27 +339,21 @@ export default class GIF {
         from = i * w + j;
         to = (h - i - 1) * w + j;
         offset = from * 4;
-        a = this.image[offset + 3];
-        index = 0;
-        if (a == 0) {
-          index = 1;
+        r = this.image[offset + 0];
+        g = this.image[offset + 1];
+        b = this.image[offset + 2];
+        hash = (r * 31 + g) * 31 + b;
+        hash = hash & GIF.HASH_MASK;
+        if (
+          this.hash[hash] &&
+          this.hash[hash].rgb[0] == r &&
+          this.hash[hash].rgb[1] == g &&
+          this.hash[hash].rgb[2] == b
+        ) {
+          index = this.hash[hash].index;
         } else {
-          r = this.image[offset + 0];
-          g = this.image[offset + 1];
-          b = this.image[offset + 2];
-          hash = (r * 31 + g) * 31 + b;
-          hash = hash & GIF.HASH_MASK;
-          if (
-            GIF.HASH[hash] &&
-            GIF.HASH[hash].RGB[0] == r &&
-            GIF.HASH[hash].RGB[1] == g &&
-            GIF.HASH[hash].RGB[2] == b
-          ) {
-            index = GIF.HASH[hash].index;
-          } else {
-            index = this.getColor(r, g, b);
-            GIF.HASH[hash] = { RGB: [r, g, b], index: index };
-          }
+          index = this.getColor(r, g, b);
+          this.hash[hash] = { rgb: [r, g, b], index: index };
         }
         if (this.last[to] == index) {
           this.data[to] = 0;
@@ -434,7 +442,7 @@ export default class GIF {
   }
 
   writePalette() {
-    this.out.writeBytes(GIF.COLORS);
+    this.out.writeBytes(this.colors);
   }
 
   writePixels() {

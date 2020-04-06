@@ -1,5 +1,13 @@
 export default class Color {
-  static RGB(value: string) {
+  static RGB2HEX(rgb: number[]) {
+    var r = rgb[0];
+    var g = rgb[1];
+    var b = rgb[2];
+    var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    return hex;
+  }
+
+  static HEX2RGB(value: string) {
     value = value.toLowerCase();
     var result = [];
     for (var i = 1; i < 7; i += 2) {
@@ -37,9 +45,9 @@ export default class Color {
     } else if (max === b) {
       h = 60 * ((r - g) / (max - min)) + 240;
     }
-    h = Math.floor(h);
-    s = Math.floor(s * 100);
-    v = Math.floor(v * 100);
+    h = Math.round(h);
+    s = Math.round(s * 100);
+    v = Math.round(v * 100);
     return [h, s, v];
   }
 
@@ -52,7 +60,7 @@ export default class Color {
     var r = 0,
       g = 0,
       b = 0;
-    var i = Math.floor((h / 60) % 6);
+    var i = Math.round((h / 60) % 6);
     var f = h / 60 - i;
     var p = v * (1 - s);
     var q = v * (1 - f * s);
@@ -91,9 +99,68 @@ export default class Color {
       default:
         break;
     }
-    r = Math.floor(r * 255.0);
-    g = Math.floor(g * 255.0);
-    b = Math.floor(b * 255.0);
+    r = Math.round(r * 255.0);
+    g = Math.round(g * 255.0);
+    b = Math.round(b * 255.0);
+    return [r, g, b];
+  }
+
+  static RGB2HSL(rgb: number[]) {
+    var r = rgb[0] / 255,
+      g = rgb[1] / 255,
+      b = rgb[2] / 255;
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
+    let v = max - min;
+
+    let h = 0;
+    if (v === 0) {
+      h = 0;
+    } else if (max === r) {
+      h = 60 * (((g - b) / v) % 6);
+    } else if (max === g) {
+      h = 60 * ((b - r) / v + 2);
+    } else if (max === b) {
+      h = 60 * ((r - g) / v + 4);
+    }
+
+    h = h % 360;
+    if (h < 0) {
+      h += 360;
+    }
+    let l = (max + min) / 2;
+    let s = v === 0 ? 0 : v / (1 - Math.abs(2 * l - 1));
+    h = Math.round(h);
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+    return [h, s, l];
+  }
+
+  static HSL2RGB(hsl: number[]) {
+    var h = hsl[0],
+      s = hsl[1] / 100,
+      l = hsl[2] / 100;
+    let c = (1 - Math.abs(2 * l - 1)) * s;
+    let x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    let m = l - c / 2;
+    let rgb = [];
+    if (h >= 0 && h < 60) {
+      rgb.push(c, x, 0);
+    } else if (h >= 60 && h < 120) {
+      rgb.push(x, c, 0);
+    } else if (h >= 120 && h < 180) {
+      rgb.push(0, c, x);
+    } else if (h >= 180 && h < 240) {
+      rgb.push(0, x, c);
+    } else if (h >= 240 && h < 300) {
+      rgb.push(x, 0, c);
+    } else if (h >= 300 && h < 360) {
+      rgb.push(c, 0, x);
+    }
+    let [r, g, b] = rgb;
+    r = Math.round(255 * (r + m));
+    g = Math.round(255 * (g + m));
+    b = Math.round(255 * (b + m));
     return [r, g, b];
   }
 

@@ -31,7 +31,7 @@ export default class World {
     this.ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(this.ambient);
     this.directional = new DirectionalLight(0xffffff, 0.2);
-    this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
+    this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 3, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
 
     this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);

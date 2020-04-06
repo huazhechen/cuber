@@ -283,11 +283,14 @@ export default class Director extends Vue {
     if (filmt == "gif") {
       this.pixels = new Uint8Array(pixel * pixel * 4);
       this.gif.start(pixel, pixel, delay);
+      this.filmer.setClearColor(COLORS.BACKGROUND, 1);
     } else if (filmt == "apng") {
       this.apng.delay_num = delay;
       this.apng.start();
+      this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     } else if (filmt == "pngs") {
       this.zip.init();
+      this.filmer.setClearColor(COLORS.BACKGROUND, 0);
     }
     this.record();
     this.playbar.init();
