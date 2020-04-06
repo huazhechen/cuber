@@ -284,9 +284,14 @@
               v-model="link"
             >
             </v-textarea>
-            <v-flex xs12 d-flex>
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="tap('open')" :height="size * 0.8" data-clipboard-target="#link" ref="copy">
+                <div :style="{'font-size':size/3+'px'}">打开</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs6 d-flex>
               <v-btn block text @click="shared = false;" :height="size * 0.8" data-clipboard-target="#link" ref="copy">
-                <div :style="{'font-size':size/3+'px'}">一键复制</div>
+                <div :style="{'font-size':size/3+'px'}">复制</div>
               </v-btn>
             </v-flex>
           </v-layout>

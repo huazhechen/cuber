@@ -162,6 +162,7 @@ export default class Playground extends Vue {
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     let search = "mode=player&data=" + string;
-    window.location.search = search;
+    let link = window.location.origin + window.location.pathname + "?" + search;
+    window.open(link);
   }
 }

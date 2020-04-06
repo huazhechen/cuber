@@ -128,18 +128,16 @@ export default class Director extends Vue {
     this.scene = save.scene;
     this.action = save.action;
     this.stickers = save.stickers;
+    this.world.cube.strip({});
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-      let stickers = this.stickers[FACE[face]];
-      if (!stickers) {
+      let list = this.stickers[FACE[face]];
+      if (!list) {
         continue;
       }
-      for (let index = 0; index < stickers.length; index++) {
-        let sticker = stickers[index];
-        if (sticker && sticker >= 0) {
-          this.world.cube.stick(index, face, Director.COLORS[sticker]);
-        } else {
-          this.world.cube.stick(index, face, "");
-        }
+      for (const sticker in list) {
+        let index = Number(sticker);
+        let value = list[index];
+        this.world.cube.stick(index, face, Director.COLORS[value]);
       }
     }
   }
@@ -187,6 +185,9 @@ export default class Director extends Vue {
       case "share":
         this.share();
         break;
+      case "open":
+        window.open(this.link);
+        break;
       default:
         break;
     }
@@ -201,6 +202,7 @@ export default class Director extends Vue {
     data["drama"] = this.database.director.dramas[order];
     data["preferance"] = this.database.preferance.value;
     let string = JSON.stringify(data);
+    console.log(data);
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     let search = "mode=player&data=" + string;
@@ -234,7 +236,7 @@ export default class Director extends Vue {
   recording: boolean = false;
 
   color = 6;
-  stickers: { [face: string]: number[] | undefined };
+  stickers: { [face: string]: { [index: number]: number } | undefined };
   stick(index: number, face: number) {
     if (index < 0) {
       return;
@@ -244,14 +246,14 @@ export default class Director extends Vue {
     face = cubelet.getColor(face);
     let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
-      arr = [];
+      arr = {};
       this.stickers[FACE[face]] = arr;
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
       this.world.cube.stick(index, face, Director.COLORS[this.color]);
     } else {
-      arr[index] = -1;
+      delete arr[index];
       this.world.cube.stick(index, face, "");
     }
     this.database.director.dramas[this.world.order].stickers = this.stickers;
