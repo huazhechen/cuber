@@ -10,25 +10,25 @@ export class TouchAction {
 }
 
 export default class Toucher {
-  init(canvas: HTMLCanvasElement, callback: Function) {
-    this.canvas = canvas;
+  init(dom: HTMLElement, callback: Function) {
+    this.dom = dom;
     this.callback = callback;
-    canvas.addEventListener("touchstart", this.touch);
-    canvas.addEventListener("touchmove", this.touch);
-    canvas.addEventListener("touchend", this.touch);
-    canvas.addEventListener("touchcancel", this.touch);
+    dom.addEventListener("touchstart", this.touch);
+    dom.addEventListener("touchmove", this.touch);
+    dom.addEventListener("touchend", this.touch);
+    dom.addEventListener("touchcancel", this.touch);
 
-    canvas.addEventListener("mousedown", this.mouse);
-    canvas.addEventListener("mousemove", this.mouse);
-    canvas.addEventListener("mouseup", this.mouse);
-    canvas.addEventListener("mouseout", this.mouse);
+    dom.addEventListener("mousedown", this.mouse);
+    dom.addEventListener("mousemove", this.mouse);
+    dom.addEventListener("mouseup", this.mouse);
+    dom.addEventListener("mouseout", this.mouse);
   }
-  canvas: HTMLCanvasElement;
+  dom: HTMLElement;
   callback: Function;
 
   mouse = (event: MouseEvent) => {
-    this.canvas.tabIndex = 1;
-    this.canvas.focus();
+    this.dom.tabIndex = 1;
+    this.dom.focus();
     let action = new TouchAction(event.type, event.clientX, event.clientY);
     this.callback(action);
     event.returnValue = false;
@@ -36,8 +36,8 @@ export default class Toucher {
   };
 
   touch = (event: TouchEvent) => {
-    this.canvas.tabIndex = 1;
-    this.canvas.focus();
+    this.dom.tabIndex = 1;
+    this.dom.focus();
     let touches = event.changedTouches;
     let first = touches[0];
     let action = new TouchAction(event.type, first.clientX, first.clientY);

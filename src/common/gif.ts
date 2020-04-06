@@ -279,7 +279,7 @@ export default class GIF {
       delta = 1;
       for (let l = start; l < end; l = l + delta) {
         let dhsv = [hsl[0], hsl[1], l];
-        let drgb = Color.HSL2RGB(dhsv);
+        let drgb = Color.HSL2RGB(dhsv);        
         this.colors[i++] = drgb[0];
         this.colors[i++] = drgb[1];
         this.colors[i++] = drgb[2];

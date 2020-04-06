@@ -1,22 +1,7 @@
 import { FACE, COLORS } from "./define";
-import {
-  Vector3,
-  Group,
-  Geometry,
-  Face3,
-  ExtrudeGeometry,
-  Shape,
-  ShapeGeometry,
-  MeshPhongMaterial,
-  MeshNormalMaterial,
-  MeshLambertMaterial,
-  MeshBasicMaterial,
-  Mesh,
-  Quaternion,
-  Material,
-} from "three";
+import * as THREE from "three";
 
-class Frame extends Geometry {
+class Frame extends THREE.Geometry {
   private static readonly _INDICES = [
     [0, 2, 1],
     [0, 3, 2],
@@ -103,18 +88,18 @@ class Frame extends Geometry {
 
     for (let i = 0; i < _verts.length; i++) {
       let _vert = _verts[i];
-      this.vertices.push(new Vector3(_vert[0], _vert[1], _vert[2]));
+      this.vertices.push(new THREE.Vector3(_vert[0], _vert[1], _vert[2]));
     }
     for (let i = 0; i < Frame._INDICES.length; i++) {
       let _indice = Frame._INDICES[i];
-      let _face = new Face3(_indice[0], _indice[1], _indice[2]);
+      let _face = new THREE.Face3(_indice[0], _indice[1], _indice[2]);
       this.faces.push(_face);
     }
     this.computeFaceNormals();
   }
 }
 
-class Sticker extends ExtrudeGeometry {
+class Sticker extends THREE.ExtrudeGeometry {
   constructor(size: number, depth: number) {
     size = size / 2;
     let left = -size;
@@ -123,7 +108,7 @@ class Sticker extends ExtrudeGeometry {
     let right = size;
     let radius = size / 4;
 
-    let shape = new Shape();
+    let shape = new THREE.Shape();
     shape.moveTo(left, top + radius);
     shape.lineTo(left, bottom - radius);
     shape.quadraticCurveTo(left, bottom, left + radius, bottom);
@@ -139,7 +124,7 @@ class Sticker extends ExtrudeGeometry {
   }
 }
 
-class Mirror extends ShapeGeometry {
+class Mirror extends THREE.ShapeGeometry {
   constructor(size: number) {
     size = size / 2;
     let left = -size;
@@ -148,7 +133,7 @@ class Mirror extends ShapeGeometry {
     let right = size;
     let radius = size / 4;
 
-    let shape = new Shape();
+    let shape = new THREE.Shape();
     shape.moveTo(left, top + radius);
     shape.lineTo(left, bottom - radius);
     shape.quadraticCurveTo(left, bottom, left + radius, bottom);
@@ -164,7 +149,7 @@ class Mirror extends ShapeGeometry {
   }
 }
 
-export default class Cubelet extends Group {
+export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
   private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _STICKER_DEPTH: number = 3;
@@ -177,31 +162,31 @@ export default class Cubelet extends Group {
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH
   );
 
-  private static LAMBERS = (() => {
-    let result: { [key: string]: MeshLambertMaterial } = {};
+  public static LAMBERS = (() => {
+    let result: { [key: string]: THREE.MeshLambertMaterial } = {};
     for (const key in COLORS) {
       let color = COLORS[key];
-      result[key] = new MeshLambertMaterial({ color: color });
+      result[key] = new THREE.MeshLambertMaterial({ color: color });
     }
     return result;
   })();
 
-  private static PHONG = new MeshPhongMaterial({
-    color: COLORS.CORE,
+  public static PHONG = new THREE.MeshPhongMaterial({
+    color: COLORS.Core,
     specular: 0x606060,
     shininess: 8,
   });
-
-  private static BASICS = (() => {
-    let result: { [key: string]: MeshBasicMaterial } = {};
+  
+  public static BASICS = (() => {
+    let result: { [key: string]: THREE.MeshBasicMaterial } = {};
     for (const key in COLORS) {
       let color = COLORS[key];
-      result[key] = new MeshBasicMaterial({ color: color });
+      result[key] = new THREE.MeshBasicMaterial({ color: color });
     }
     return result;
   })();
 
-  _vector: Vector3;
+  _vector: THREE.Vector3;
 
   set vector(vector) {
     let half = (this.order - 1) / 2;
@@ -228,26 +213,26 @@ export default class Cubelet extends Group {
     let _x = (index % this.order) - half;
     let _y = Math.floor((index % (this.order * this.order)) / this.order) - half;
     let _z = Math.floor(index / (this.order * this.order)) - half;
-    this.vector = new Vector3(_x, _y, _z);
+    this.vector = new THREE.Vector3(_x, _y, _z);
   }
 
   get index(): number {
     return this._index;
   }
 
-  mirrors: Mesh[];
-  lamberts: (MeshLambertMaterial | undefined)[];
-  basics: (MeshBasicMaterial | undefined)[];
+  mirrors: THREE.Mesh[];
+  lamberts: (THREE.MeshLambertMaterial | undefined)[];
+  basics: (THREE.MeshBasicMaterial | undefined)[];
   set mirror(value: boolean) {
     if (value) {
       for (let i = 0; i < 6; i++) {
-        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) < 0) {
+        if (this.mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this.mirrors[i]) < 0) {
           this.add(this.mirrors[i]);
         }
       }
     } else {
       for (let i = 0; i < 6; i++) {
-        if (this.mirrors[i] instanceof Mesh && this.children.indexOf(this.mirrors[i]) >= 0) {
+        if (this.mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this.mirrors[i]) >= 0) {
           this.remove(this.mirrors[i]);
         }
       }
@@ -256,18 +241,18 @@ export default class Cubelet extends Group {
 
   set hollow(value: boolean) {
     if (value) {
-      if (this.frame instanceof Mesh && this.children.indexOf(this.frame) >= 0) {
+      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) >= 0) {
         this.remove(this.frame);
       }
     } else {
-      if (this.frame instanceof Mesh && this.children.indexOf(this.frame) < 0) {
+      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) < 0) {
         this.add(this.frame);
       }
     }
   }
 
   getColor(face: FACE) {
-    let position = new Vector3(0, 0, 0);
+    let position = new THREE.Vector3(0, 0, 0);
     switch (face) {
       case FACE.L:
         position.x = -1;
@@ -313,19 +298,19 @@ export default class Cubelet extends Group {
   }
 
   initial: number;
-  stickers: Mesh[];
-  _quaternion: Quaternion;
-  frame: Mesh;
+  stickers: THREE.Mesh[];
+  _quaternion: THREE.Quaternion;
+  frame: THREE.Mesh;
   order: number;
 
   constructor(order: number, index: number) {
     super();
     this.order = order;
     this.initial = index;
-    this._vector = new Vector3();
+    this._vector = new THREE.Vector3();
     this.index = index;
     this.stickers = [];
-    this._quaternion = new Quaternion();
+    this._quaternion = new THREE.Quaternion();
     this.mirrors = [];
 
     let xx = this.position.x * this.position.x;
@@ -356,12 +341,12 @@ export default class Cubelet extends Group {
       this.vector.z == half ? Cubelet.BASICS.F : undefined,
     ];
 
-    this.frame = new Mesh(Cubelet._FRAME, Cubelet.PHONG);
+    this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.PHONG);
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
       if (this.lamberts[i] != Cubelet.LAMBERS.GRAY) {
-        let _sticker = new Mesh(Cubelet._STICKER, this.lamberts[i]);
+        let _sticker = new THREE.Mesh(Cubelet._STICKER, this.lamberts[i]);
         _sticker.name = FACE[i];
         switch (i) {
           case FACE.L:
@@ -393,7 +378,7 @@ export default class Cubelet extends Group {
         }
         this.add(_sticker);
         this.stickers[i] = _sticker;
-        let _mirror = new Mesh(Cubelet._MIRROR, this.basics[i]);
+        let _mirror = new THREE.Mesh(Cubelet._MIRROR, this.basics[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
         _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
         _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
@@ -412,31 +397,20 @@ export default class Cubelet extends Group {
     this.updateMatrix();
   }
 
-  stick(face: number, color: string) {
+  stick(face: number, value: string) {
     let lamber;
     let basic;
-    let index = null;
     if (this.stickers[face] === undefined) {
       return;
     }
-    if (index == "remove") {
+    if (value == "remove") {
       this.stickers[face].visible = false;
       return;
-    } else {
-      this.stickers[face].visible = true;
     }
-    if (color && color.length > 0) {
-      for (const key in COLORS) {
-        let c = COLORS[key];
-        if (c == color) {
-          index = key;
-          break;
-        }
-      }
-    }
-    if (index) {
-      lamber = Cubelet.LAMBERS[index];
-      basic = Cubelet.LAMBERS[index];
+    this.stickers[face].visible = true;
+    if (value && value.length > 0) {
+      lamber = Cubelet.LAMBERS[value];
+      basic = Cubelet.LAMBERS[value];
     } else {
       lamber = this.lamberts[face];
       basic = this.basics[face];
@@ -445,7 +419,7 @@ export default class Cubelet extends Group {
       return;
     }
     this.stickers[face].material = lamber;
-    if (this.mirrors[face] instanceof Mesh) {
+    if (this.mirrors[face] instanceof THREE.Mesh) {
       this.mirrors[face].material = basic;
     }
   }

@@ -68,12 +68,12 @@ export default class Cube extends Group {
     });
   }
 
-  stick(index: number, face: number, color: string) {
+  stick(index: number, face: number, value: string) {
     let cubelet = this.initials[index];
     if (!cubelet) {
       throw Error("invalid cubelet index: " + index);
     }
-    cubelet.stick(face, color);
+    cubelet.stick(face, value);
     this.dirty = true;
   }
 
@@ -96,7 +96,7 @@ export default class Cube extends Group {
         if (!cubelet) {
           throw Error("invalid cubelet index: " + index);
         }
-        cubelet.stick(face, COLORS.CORE);
+        cubelet.stick(face, "remove");
       }
     }
     this.dirty = true;

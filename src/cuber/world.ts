@@ -3,6 +3,7 @@ import Cubelet from "./cubelet";
 import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
 import Twister from "./twister";
 import Controller from "./controller";
+import { COLORS } from "./define";
 
 export default class World {
   public width: number = 1;

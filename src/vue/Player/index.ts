@@ -74,7 +74,7 @@ export default class Algs extends Vue {
           for (const sticker in list) {
             let index = Number(sticker);
             let value = list[index];
-            this.world.cube.stick(index, face, COLORS[value]);
+            this.world.cube.stick(index, face, value);
           }
         }
       }

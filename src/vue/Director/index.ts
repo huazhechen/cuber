@@ -32,10 +32,6 @@ export default class Director extends Vue {
   @Provide("database")
   database: Database = new Database("director", this.world);
 
-  get colors() {
-    return COLORS;
-  }
-
   width: number = 0;
   height: number = 0;
   size: number = 0;
@@ -47,6 +43,7 @@ export default class Director extends Vue {
   gif: GIF;
   apng: APNG;
   zip: ZIP;
+  colors: { [key: string]: string };
 
   constructor() {
     super();
@@ -57,6 +54,7 @@ export default class Director extends Vue {
     this.gif = new GIF();
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
+    this.colors = COLORS;
   }
 
   resize() {
@@ -123,7 +121,7 @@ export default class Director extends Vue {
       for (const sticker in list) {
         let index = Number(sticker);
         let value = list[index];
-        this.world.cube.stick(index, face, COLORS[value]);
+        this.world.cube.stick(index, face, value);
       }
     }
   }
@@ -219,8 +217,8 @@ export default class Director extends Vue {
 
   recording: boolean = false;
 
-  color = 6;
-  stickers: { [face: string]: { [index: number]: number } | undefined };
+  color = "Core";
+  stickers: { [face: string]: { [index: number]: string } | undefined };
   stick(index: number, face: number) {
     if (index < 0) {
       return;
@@ -235,7 +233,7 @@ export default class Director extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.world.cube.stick(index, face, COLORS[this.color]);
+      this.world.cube.stick(index, face, this.color);
     } else {
       delete arr[index];
       this.world.cube.stick(index, face, "");
@@ -246,7 +244,7 @@ export default class Director extends Vue {
 
   clear() {
     this.colord = false;
-    this.color = 6;
+    this.color = "Core";
     this.stickers = {};
     this.database.director.dramas[this.world.order].stickers = this.stickers;
     this.database.save();
@@ -278,9 +276,9 @@ export default class Director extends Vue {
       this.zip.init();
       this.filmer.setClearColor(0xffffff, 0);
     }
-    this.record();
     this.playbar.init();
     this.playbar.toggle();
+    this.record();
     this.recording = true;
   }
 
