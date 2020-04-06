@@ -5,15 +5,15 @@ declare module "*.vue" {
 
 declare module "pako" {
   export namespace pako {
-    function deflate(s: string, option: any): string;
-    function inflate(s: string, option: any): string;
+    function deflate(s: string, option: { to: string }): string;
+    function inflate(s: string, option: { to: string }): string;
   }
   export default pako;
 }
 
 declare module "clipboard" {
   export class ClipboardJS {
-    constructor(args: any);
+    constructor(args: Element);
   }
   export default ClipboardJS;
 }

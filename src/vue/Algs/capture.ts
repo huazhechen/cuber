@@ -44,7 +44,8 @@ export default class Capture {
     this.cube.strip(strip);
     this.cube.reset();
 
-    this.twist(exp);
+    this.twist("x2", false);
+    this.twist(exp, true);
 
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();
@@ -53,8 +54,8 @@ export default class Capture {
     return content;
   }
 
-  twist(exp: string) {
-    let list = new TwistNode(exp, true, 1).parse();
+  twist(exp: string, reverse: boolean) {
+    let list = new TwistNode(exp, reverse, 1).parse();
     for (let action of list) {
       let angle = -Math.PI / 2;
       if (action.reverse) {

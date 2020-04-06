@@ -4,20 +4,16 @@ export enum FACE {
   D,
   U,
   B,
-  F
+  F,
 }
 
-export var COLORS = {
-  BACKGROUND: "#FFFFFF",
-  GRAY: "#404040",
-  BLACK: "#202020",
-  WHITE: "#F0F0F0",
-  GREEN: "#00A020",
-  ORANGE: "#FF6D00",
-  BLUE: "#0D47A1",
-  YELLOW: "#FFD600",
-  RED: "#B71C1C",
-  CYAN: "#18FFFF",
-  LIME: "#C6FF00",
-  PINK: "#FF4081",
+export var COLORS: { [key: string]: string } = {
+  L: "#FF6D00",
+  R: "#B71C1C",
+  D: "#FFD600",
+  U: "#F0F0F0",
+  B: "#0D47A1",
+  F: "#00A020",
+  CORE: "#202020",
+  HIGHLIGHT: "#FF4081",
 };

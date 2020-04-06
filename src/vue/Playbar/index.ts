@@ -81,7 +81,7 @@ export default class Playbar extends Vue {
     this.world.controller.disable = false;
     this.world.twister.finish();
     this.world.twister.twist("#");
-    let scene = this.scene == "^" ? "(" + this.action + ")'" : this.scene;
+    let scene = this.scene.replace("^", "(" + this.action + ")'");
     this.world.twister.twist(scene, false, 1, true);
     this.world.cube.history.clear();
   }

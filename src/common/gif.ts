@@ -256,7 +256,7 @@ export default class GIF {
     }
     // LIGHT
     for (const key in COLORS) {
-      let rgb = Color.HEX2RGB((<any>COLORS)[key]);
+      let rgb = Color.HEX2RGB(COLORS[key]);
       let hsl = Color.RGB2HSL(rgb);
       if (hsl[1] === 0 || hsl[2] === 1 || hsl[2] === 0) {
         continue;

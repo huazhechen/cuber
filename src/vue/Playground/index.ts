@@ -152,7 +152,7 @@ export default class Playground extends Vue {
   }
 
   replay() {
-    let data: { [key: string]: any } = {};
+    let data: { [key: string]: {} } = {};
     let order = this.world.order;
     data["order"] = order;
     let drama = { scene: this.world.cube.history.init, action: this.world.cube.history.exp.substring(1) };

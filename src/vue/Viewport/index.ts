@@ -24,7 +24,7 @@ export default class Viewport extends Vue {
       alpha: true,
     });
     this.renderer.autoClear = false;
-    this.renderer.setClearColor(COLORS.BACKGROUND, 0);
+    this.renderer.setClearColor(COLORS.WHITE, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     let toucher = new Toucher();
     toucher.init(canvas, this.world.controller.touch);

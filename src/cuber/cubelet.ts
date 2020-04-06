@@ -12,7 +12,8 @@ import {
   MeshLambertMaterial,
   MeshBasicMaterial,
   Mesh,
-  Quaternion
+  Quaternion,
+  Material,
 } from "three";
 
 class Frame extends Geometry {
@@ -60,7 +61,7 @@ class Frame extends Geometry {
     [23, 2, 17],
     [11, 16, 3],
     [22, 18, 15],
-    [8, 14, 19]
+    [8, 14, 19],
   ];
 
   constructor(size: number, border: number) {
@@ -97,7 +98,7 @@ class Frame extends Geometry {
       [+_O, +_I, +_I],
       [+_O, +_I, -_I],
       [+_O, -_I, -_I],
-      [+_O, -_I, +_I]
+      [+_O, -_I, +_I],
     ];
 
     for (let i = 0; i < _verts.length; i++) {
@@ -177,26 +178,24 @@ export default class Cubelet extends Group {
   );
 
   private static LAMBERS = (() => {
-    let result: any = {};
+    let result: { [key: string]: MeshLambertMaterial } = {};
     for (const key in COLORS) {
-      let color = (<any>COLORS)[key];
-      if (key == "BLACK") {
-        result[key] = new MeshPhongMaterial({
-          color: color,
-          specular: COLORS.GRAY,
-          shininess: 8
-        });
-      } else {
-        result[key] = new MeshLambertMaterial({ color: color });
-      }
+      let color = COLORS[key];
+      result[key] = new MeshLambertMaterial({ color: color });
     }
     return result;
   })();
 
+  private static PHONG = new MeshPhongMaterial({
+    color: COLORS.CORE,
+    specular: 0x606060,
+    shininess: 8,
+  });
+
   private static BASICS = (() => {
-    let result: any = {};
+    let result: { [key: string]: MeshBasicMaterial } = {};
     for (const key in COLORS) {
-      let color = (<any>COLORS)[key];
+      let color = COLORS[key];
       result[key] = new MeshBasicMaterial({ color: color });
     }
     return result;
@@ -237,8 +236,8 @@ export default class Cubelet extends Group {
   }
 
   mirrors: Mesh[];
-  lambers: MeshLambertMaterial[];
-  basics: MeshBasicMaterial[];
+  lamberts: (MeshLambertMaterial | undefined)[];
+  basics: (MeshBasicMaterial | undefined)[];
   set mirror(value: boolean) {
     if (value) {
       for (let i = 0; i < 6; i++) {
@@ -339,30 +338,30 @@ export default class Cubelet extends Group {
     }
     let half = (order - 1) / 2;
 
-    this.lambers = [
-      this.vector.x == -half ? Cubelet.LAMBERS.ORANGE : Cubelet.LAMBERS.GRAY,
-      this.vector.x == half ? Cubelet.LAMBERS.RED : Cubelet.LAMBERS.GRAY,
-      this.vector.y == -half ? Cubelet.LAMBERS.WHITE : Cubelet.LAMBERS.GRAY,
-      this.vector.y == half ? Cubelet.LAMBERS.YELLOW : Cubelet.LAMBERS.GRAY,
-      this.vector.z == -half ? Cubelet.LAMBERS.GREEN : Cubelet.LAMBERS.GRAY,
-      this.vector.z == half ? Cubelet.LAMBERS.BLUE : Cubelet.LAMBERS.GRAY
+    this.lamberts = [
+      this.vector.x == -half ? Cubelet.LAMBERS.L : undefined,
+      this.vector.x == half ? Cubelet.LAMBERS.R : undefined,
+      this.vector.y == -half ? Cubelet.LAMBERS.D : undefined,
+      this.vector.y == half ? Cubelet.LAMBERS.U : undefined,
+      this.vector.z == -half ? Cubelet.LAMBERS.B : undefined,
+      this.vector.z == half ? Cubelet.LAMBERS.F : undefined,
     ];
 
     this.basics = [
-      this.vector.x == -half ? Cubelet.BASICS.ORANGE : Cubelet.BASICS.GRAY,
-      this.vector.x == half ? Cubelet.BASICS.RED : Cubelet.BASICS.GRAY,
-      this.vector.y == -half ? Cubelet.BASICS.WHITE : Cubelet.BASICS.GRAY,
-      this.vector.y == half ? Cubelet.BASICS.YELLOW : Cubelet.BASICS.GRAY,
-      this.vector.z == -half ? Cubelet.BASICS.GREEN : Cubelet.BASICS.GRAY,
-      this.vector.z == half ? Cubelet.BASICS.BLUE : Cubelet.BASICS.GRAY
+      this.vector.x == -half ? Cubelet.BASICS.L : undefined,
+      this.vector.x == half ? Cubelet.BASICS.R : undefined,
+      this.vector.y == -half ? Cubelet.BASICS.D : undefined,
+      this.vector.y == half ? Cubelet.BASICS.U : undefined,
+      this.vector.z == -half ? Cubelet.BASICS.B : undefined,
+      this.vector.z == half ? Cubelet.BASICS.F : undefined,
     ];
 
-    this.frame = new Mesh(Cubelet._FRAME, Cubelet.LAMBERS.BLACK);
+    this.frame = new Mesh(Cubelet._FRAME, Cubelet.PHONG);
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
-      if (this.lambers[i] != Cubelet.LAMBERS.GRAY) {
-        let _sticker = new Mesh(Cubelet._STICKER, this.lambers[i]);
+      if (this.lamberts[i] != Cubelet.LAMBERS.GRAY) {
+        let _sticker = new Mesh(Cubelet._STICKER, this.lamberts[i]);
         _sticker.name = FACE[i];
         switch (i) {
           case FACE.L:
@@ -420,9 +419,15 @@ export default class Cubelet extends Group {
     if (this.stickers[face] === undefined) {
       return;
     }
+    if (index == "remove") {
+      this.stickers[face].visible = false;
+      return;
+    } else {
+      this.stickers[face].visible = true;
+    }
     if (color && color.length > 0) {
       for (const key in COLORS) {
-        let c = (<any>COLORS)[key];
+        let c = COLORS[key];
         if (c == color) {
           index = key;
           break;
@@ -433,13 +438,11 @@ export default class Cubelet extends Group {
       lamber = Cubelet.LAMBERS[index];
       basic = Cubelet.LAMBERS[index];
     } else {
-      lamber = this.lambers[face];
+      lamber = this.lamberts[face];
       basic = this.basics[face];
     }
-    if (index == "BLACK") {
-      this.stickers[face].visible = false;
-    } else {
-      this.stickers[face].visible = true;
+    if (lamber === undefined || basic === undefined) {
+      return;
     }
     this.stickers[face].material = lamber;
     if (this.mirrors[face] instanceof Mesh) {

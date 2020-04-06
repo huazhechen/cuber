@@ -4,7 +4,7 @@ import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
 import Database from "../../database";
-import { FACE } from "../../cuber/define";
+import { FACE, COLORS } from "../../cuber/define";
 import Director from "../Director";
 import pako from "pako";
 import Setting from "../Setting";
@@ -74,7 +74,7 @@ export default class Algs extends Vue {
           for (const sticker in list) {
             let index = Number(sticker);
             let value = list[index];
-            this.world.cube.stick(index, face, Director.COLORS[value]);
+            this.world.cube.stick(index, face, COLORS[value]);
           }
         }
       }

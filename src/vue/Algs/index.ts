@@ -141,7 +141,7 @@ export default class Algs extends Vue {
     } else {
       this.action = this.origin;
     }
-    this.playbar.scene = "^";
+    this.playbar.scene = "x2^";
     window.localStorage.setItem("algs.index", JSON.stringify(this.index));
   }
 

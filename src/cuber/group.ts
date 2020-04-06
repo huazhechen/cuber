@@ -265,7 +265,7 @@ export class GroupTable {
     this.groups.set("~", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
   }
 
-  private static AXIS_MAP: any = {
+  private static AXIS_MAP: { [key: string]: string } = {
     R: "x",
     L: "-x",
     U: "y",

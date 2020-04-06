@@ -96,7 +96,7 @@ export default class Cube extends Group {
         if (!cubelet) {
           throw Error("invalid cubelet index: " + index);
         }
-        cubelet.stick(face, COLORS.BLACK);
+        cubelet.stick(face, COLORS.CORE);
       }
     }
     this.dirty = true;

@@ -215,17 +215,18 @@ export default class Database {
       this.theme.load(save);
       this.storage.setItem("theme", this.theme.value);
     }
-    if ((<any>this)[this.mode]) {
+    let self = this as { [key: string]: any };
+    if (self[this.mode]) {
       save = this.storage.getItem(this.mode);
       if (save) {
         let data = JSON.parse(save);
-        if (data.version === (<any>this)[this.mode].version) {
-          (<any>this)[this.mode] = data;
+        if (data.version === self[this.mode].version) {
+          self[this.mode] = data;
         } else {
-          this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
+          this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));
         }
       }
-      this.world.order = (<any>this)[this.mode].order;
+      this.world.order = self[this.mode].order;
     }
   }
 
@@ -265,6 +266,9 @@ export default class Database {
   save() {
     this.storage.setItem("preferance", this.preferance.value);
     this.storage.setItem("theme", this.theme.value);
-    this.storage.setItem(this.mode, JSON.stringify((<any>this)[this.mode]));
+    let self = this as { [key: string]: any };
+    if (self[this.mode]) {
+      this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));
+    }
   }
 }

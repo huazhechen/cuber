@@ -32,22 +32,8 @@ export default class Director extends Vue {
   @Provide("database")
   database: Database = new Database("director", this.world);
 
-  public static COLORS = [
-    COLORS.YELLOW,
-    COLORS.WHITE,
-    COLORS.BLUE,
-    COLORS.GREEN,
-    COLORS.RED,
-    COLORS.ORANGE,
-    COLORS.BLACK,
-    COLORS.GRAY,
-    COLORS.CYAN,
-    COLORS.LIME,
-    COLORS.PINK,
-  ];
-
   get colors() {
-    return Director.COLORS;
+    return COLORS;
   }
 
   width: number = 0;
@@ -66,7 +52,7 @@ export default class Director extends Vue {
     super();
     this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
-    this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+    this.filmer.setClearColor(0xffffff, 0);
     this.svger = new SVGRenderer();
     this.gif = new GIF();
     this.apng = new APNG(this.filmer.domElement);
@@ -137,7 +123,7 @@ export default class Director extends Vue {
       for (const sticker in list) {
         let index = Number(sticker);
         let value = list[index];
-        this.world.cube.stick(index, face, Director.COLORS[value]);
+        this.world.cube.stick(index, face, COLORS[value]);
       }
     }
   }
@@ -196,7 +182,7 @@ export default class Director extends Vue {
   shared: boolean = false;
   link: string = "";
   share() {
-    let data: { [key: string]: any } = {};
+    let data: { [key: string]: {} } = {};
     let order = this.world.order;
     data["order"] = order;
     data["drama"] = this.database.director.dramas[order];
@@ -249,7 +235,7 @@ export default class Director extends Vue {
     }
     if (arr[index] != this.color) {
       arr[index] = this.color;
-      this.world.cube.stick(index, face, Director.COLORS[this.color]);
+      this.world.cube.stick(index, face, COLORS[this.color]);
     } else {
       delete arr[index];
       this.world.cube.stick(index, face, "");
@@ -283,14 +269,14 @@ export default class Director extends Vue {
     if (filmt == "gif") {
       this.pixels = new Uint8Array(pixel * pixel * 4);
       this.gif.start(pixel, pixel, delay);
-      this.filmer.setClearColor(COLORS.BACKGROUND, 1);
+      this.filmer.setClearColor(0xffffff, 1);
     } else if (filmt == "apng") {
       this.apng.delay_num = delay;
       this.apng.start();
-      this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+      this.filmer.setClearColor(0xffffff, 0);
     } else if (filmt == "pngs") {
       this.zip.init();
-      this.filmer.setClearColor(COLORS.BACKGROUND, 0);
+      this.filmer.setClearColor(0xffffff, 0);
     }
     this.record();
     this.playbar.init();
