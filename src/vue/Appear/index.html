@@ -1,5 +1,5 @@
 <v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
-  <v-card text style="margin: auto;touch-action: none;user-select: none;">
+  <v-card text style="margin: auto; touch-action: none; user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap justify-center align-center>
         <v-slider
@@ -51,19 +51,29 @@
             @click="database.preferance.mirror=!database.preferance.mirror"
             :color="database.preferance.mirror?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
+            style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
-            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.1 + 'px', 'margin-right':size * 0.1 + 'px'}"
+            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
           >
             镜像
+          </v-btn>
+          <v-btn
+            @click="database.preferance.cloud=!database.preferance.cloud"
+            :color="database.preferance.cloud?'primary':''"
+            depressed
+            style="text-transform: none; min-width: 0%; flex: 1;"
+            :height="size * 0.8"
+            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
+          >
+            云雾
           </v-btn>
           <v-btn
             @click="database.preferance.hollow=!database.preferance.hollow"
             :color="database.preferance.hollow?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
+            style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
-            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.1 + 'px', 'margin-right':size * 0.1 + 'px'}"
+            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
           >
             透明
           </v-btn>
@@ -71,9 +81,9 @@
             @click="database.preferance.shadow=!database.preferance.shadow"
             :color="database.preferance.shadow?'primary':''"
             depressed
-            style="text-transform:none; min-width: 0%;flex: 1"
+            style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
-            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.1 + 'px', 'margin-right':size * 0.1 + 'px'}"
+            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
           >
             阴影
           </v-btn>
@@ -85,7 +95,7 @@
             @click="show=false;"
             color="primary"
             text
-            style="text-transform:none; min-width: 0%;flex: 1"
+            style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
             :style="{'font-size':size * 0.3+'px'}"
           >
@@ -95,7 +105,7 @@
             @click="reset"
             color="error"
             text
-            style="text-transform:none; min-width: 0%;flex: 1"
+            style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
             :style="{'font-size':size * 0.3+'px'}"
           >

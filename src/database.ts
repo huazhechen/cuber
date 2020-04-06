@@ -20,6 +20,7 @@ export class Preferance {
     sensitivity: 3,
     mirror: false,
     hollow: false,
+    cloud: false,
     shadow: true,
   };
 
@@ -34,14 +35,11 @@ export class Preferance {
   }
 
   refresh() {
-    this.scale = this.data.scale;
-    this.perspective = this.data.perspective;
-    this.angle = this.data.angle;
-    this.gradient = this.data.gradient;
-    this.shadow = this.data.shadow;
-    this.frames = this.data.frames;
-    this.mirror = this.data.mirror;
-    this.hollow = this.data.hollow;
+    let self = this as { [key: string]: any };
+    let data = this.data as { [key: string]: any };
+    for (const key in data) {
+      self[key] = data[key];
+    }
   }
 
   get scale() {
@@ -149,6 +147,19 @@ export class Preferance {
     }
     for (let cubelet of this.world.cube.cubelets) {
       cubelet.hollow = value;
+    }
+    this.world.dirty = true;
+  }
+
+  get cloud() {
+    return this.data.cloud;
+  }
+  set cloud(value: boolean) {
+    if (this.data.cloud != value) {
+      this.data.cloud = value;
+    }
+    for (let cubelet of this.world.cube.cubelets) {
+      cubelet.cloud = value;
     }
     this.world.dirty = true;
   }

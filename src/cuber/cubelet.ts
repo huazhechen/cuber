@@ -176,7 +176,9 @@ export default class Cubelet extends THREE.Group {
     specular: 0x606060,
     shininess: 8,
   });
-  
+
+  public static DEPTH = new THREE.MeshDepthMaterial({});
+
   public static BASICS = (() => {
     let result: { [key: string]: THREE.MeshBasicMaterial } = {};
     for (const key in COLORS) {
@@ -235,6 +237,16 @@ export default class Cubelet extends THREE.Group {
         if (this.mirrors[i] instanceof THREE.Mesh && this.children.indexOf(this.mirrors[i]) >= 0) {
           this.remove(this.mirrors[i]);
         }
+      }
+    }
+  }
+
+  set cloud(value: boolean) {
+    if (this.frame instanceof THREE.Mesh) {
+      if (value) {
+        this.frame.material = Cubelet.DEPTH;
+      } else {
+        this.frame.material = Cubelet.PHONG;
       }
     }
   }
