@@ -76,7 +76,7 @@ export default class Setting extends Vue {
         }
         break;
       case "help":
-        window.location.href = "https://gitee.com/huazhechen/cuber/blob/master/README.md";
+        window.open("https://gitee.com/huazhechen/cuber/blob/master/README.md");
         break;
       case "reset":
         this.resetd = true;

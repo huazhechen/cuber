@@ -200,9 +200,7 @@ export default class Director extends Vue {
     let order = this.world.order;
     data["order"] = order;
     data["drama"] = this.database.director.dramas[order];
-    data["preferance"] = this.database.preferance.value;
     let string = JSON.stringify(data);
-    console.log(data);
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     let search = "mode=player&data=" + string;

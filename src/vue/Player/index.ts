@@ -3,21 +3,26 @@ import { Component, Provide } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
-import { Preferance } from "../../database";
+import Database from "../../database";
 import { FACE } from "../../cuber/define";
 import Director from "../Director";
 import pako from "pako";
+import Setting from "../Setting";
 
 @Component({
   template: require("./index.html"),
   components: {
     viewport: Viewport,
     playbar: Playbar,
+    setting: Setting,
   },
 })
 export default class Algs extends Vue {
   @Provide("world")
   world: World = new World();
+
+  @Provide("database")
+  database: Database = new Database("playground", this.world);
 
   width: number = 0;
   height: number = 0;
@@ -40,6 +45,10 @@ export default class Algs extends Vue {
     if (view instanceof Playbar) {
       this.playbar = view;
     }
+    view = this.$refs.setting;
+    if (view instanceof Setting) {
+      view.items["order"].disable = true;
+    }
 
     let search = location.search || "";
     let list = search.match(/(\?|\&)data=([^&]*)(&|$)/);
@@ -47,14 +56,9 @@ export default class Algs extends Vue {
     string = window.atob(string);
     string = pako.inflate(string, { to: "string" });
     let data = JSON.parse(string);
-    let preferance = new Preferance(this.world);
     if (data.order) {
       this.world.order = data.order;
     }
-    if (data.preferance) {
-      preferance.load(data.preferance);
-    }
-    preferance.refresh();
     if (data.drama) {
       this.scene = data.drama.scene;
       this.playbar.scene = this.scene;
@@ -76,6 +80,9 @@ export default class Algs extends Vue {
       }
     }
     this.$nextTick(this.resize);
+    this.$nextTick(() => {
+      this.database.refresh();
+    });
     this.loop();
   }
 

@@ -157,7 +157,6 @@ export default class Playground extends Vue {
     data["order"] = order;
     let drama = { scene: this.world.cube.history.init, action: this.world.cube.history.exp.substring(1) };
     data["drama"] = drama;
-    data["preferance"] = this.database.preferance.value;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
