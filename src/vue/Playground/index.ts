@@ -103,9 +103,9 @@ export default class Playground extends Vue {
     if (this.shuffler === "*") {
       this.world.twister.twist("*");
     } else {
-      this.world.twister.twist("# x2 " + this.shuffler, false, 1, true);
+      this.world.twister.twist("# " + this.shuffler, false, 1, true);
       this.world.cube.history.clear();
-      this.world.cube.history.init = "x2 " + this.shuffler;
+      this.world.cube.history.init = this.shuffler;
     }
     this.complete = this.world.cube.complete;
     this.start = 0;
