@@ -10,8 +10,22 @@
       color="primary"
       style="user-select: none; margin: 0%; padding: 0%;"
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
+      :ripple="false"
     >
       <div :style="{'font-size':(size * 0.5)+'px'}">{{score}}</div>
+    </v-btn>
+    <v-btn
+      fixed
+      block
+      bottom
+      text
+      color="primary"
+      style="user-select: none; margin: 0%; padding: 0%;"
+      :style="{height:size+'px', 'margin-bottom': size * 1.5 + 'px'}"
+      :ripple="false"
+      v-show="key.length > 0"
+    >
+      <div :style="{'font-size':(size * 0.5)+'px'}">{{key}}</div>
     </v-btn>
     <v-container
       fluid

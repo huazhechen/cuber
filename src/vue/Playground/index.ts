@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Provide } from "vue-property-decorator";
+import { Component, Provide, Watch } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import Setting from "../Setting";
@@ -26,9 +26,13 @@ export default class Playground extends Vue {
   height: number = 0;
   size: number = 0;
   viewport: Viewport;
+  keyboard: KeyHandle;
 
   constructor() {
     super();
+    this.keyboard = new KeyHandle((exp: string) => {
+      this.world.twister.twist(exp);
+    });
   }
 
   resize() {
@@ -63,6 +67,17 @@ export default class Playground extends Vue {
     let ms = Math.floor(diff / 100);
     let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
     return time + "/" + this.world.cube.history.moves;
+  }
+
+  get key() {
+    let exp = "";
+    if (this.keyboard.prefix > 1) {
+      exp = exp + this.keyboard.prefix;
+    }
+    if (this.keyboard.reverse) {
+      exp = exp + "'";
+    }
+    return exp;
   }
 
   completed: boolean = false;
@@ -130,6 +145,11 @@ export default class Playground extends Vue {
   }
 
   shuffled: boolean = false;
+  @Watch("shuffled")
+  onShuffledChange() {
+    this.keyboard.disable = this.shuffled;
+  }
+
   historyd: boolean = false;
   history: string = "";
   scene: string = "";
@@ -164,4 +184,67 @@ export default class Playground extends Vue {
     let link = window.location.origin + window.location.pathname + "?" + search;
     window.open(link);
   }
+}
+
+class KeyHandle {
+  reverse: boolean = false;
+  prefix: number = 1;
+
+  public disable: boolean = false;
+
+  callback: Function;
+  keymap: { [key: string]: string } = {
+    U: "U",
+    I: "F",
+    O: "R",
+    J: "D",
+    K: "B",
+    L: "L",
+    u: "u",
+    i: "f",
+    o: "r",
+    j: "d",
+    k: "b",
+    l: "l",
+  };
+
+  constructor(callback: Function) {
+    this.callback = callback;
+    document.addEventListener("keypress", this.keyPress, false);
+  }
+
+  keyPress = (event: KeyboardEvent) => {
+    if (this.disable) {
+      return false;
+    }
+    let id = event.which;
+    if (id === 96) {
+      event.preventDefault();
+      this.reverse = !this.reverse;
+      return false;
+    }
+    let key = String.fromCharCode(event.which);
+    if ("123456789".indexOf(key) >= 0) {
+      event.preventDefault();
+      this.prefix = Number(key);
+      return false;
+    }
+    if (this.keymap[key]) {
+      key = this.keymap[key];
+      event.preventDefault();
+      let exp = "";
+      if (this.prefix == 1) {
+        key = key.toUpperCase();
+      } else {
+        exp = exp + this.prefix;
+      }
+      exp = exp + key;
+      if (this.reverse) {
+        exp = exp + "'";
+      }
+      this.callback(exp);
+      this.prefix = 1;
+      return false;
+    }
+  };
 }
