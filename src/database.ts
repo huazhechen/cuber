@@ -193,6 +193,7 @@ export class Theme {
       if (value) {
         COLORS[key] = value;
         Cubelet.LAMBERS[key].color.set(value);
+        Cubelet.BASICS[key].color.set(value);
         if (key == "Core") {
           Cubelet.PHONG.color.set(value);
         }
@@ -205,6 +206,7 @@ export class Theme {
     this.data.colors[key] = value;
     COLORS[key] = value;
     Cubelet.LAMBERS[key].color.set(value);
+    Cubelet.BASICS[key].color.set(value);
     if (key == "Core") {
       Cubelet.PHONG.color.set(value);
     }
