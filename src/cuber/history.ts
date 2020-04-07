@@ -15,7 +15,7 @@ export default class History {
       }
     } else {
       let last = this.list[this.list.length - 1];
-      if (last.exp == action.exp) {
+      if (last.group == action.group) {
         last.times = last.times + action.times * (last.reverse == action.reverse ? 1 : -1);
         last.times = last.times % 4;
         this.exp = this.exp.substring(0, this.exp.lastIndexOf(" "));
@@ -48,7 +48,7 @@ export default class History {
   get moves() {
     let length = this.length;
     for (const twist of this.list) {
-      if (twist.exp == "x" || twist.exp == "y" || twist.exp == "z") {
+      if (twist.group == "x" || twist.group == "y" || twist.group == "z") {
         length--;
       }
     }

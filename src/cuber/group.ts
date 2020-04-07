@@ -1,16 +1,16 @@
 import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
-import { Group, Vector3 } from "three";
+import * as THREE from "three";
 import tweener from "./tweener";
 
-export default class CubeGroup extends Group {
+export default class CubeGroup extends THREE.Group {
   public static frames: number = 30;
   cube: Cube;
   cubelets: Cubelet[];
   name: string;
   indices: number[];
-  axis: Vector3;
+  axis: THREE.Vector3;
 
   _angle: number;
   set angle(angle) {
@@ -23,7 +23,7 @@ export default class CubeGroup extends Group {
     return this._angle;
   }
 
-  constructor(cube: Cube, name: string, indices: number[], axis: Vector3) {
+  constructor(cube: Cube, name: string, indices: number[], axis: THREE.Vector3) {
     super();
     this.cube = cube;
     this._angle = 0;
@@ -35,52 +35,79 @@ export default class CubeGroup extends Group {
     this.updateMatrix();
   }
 
+  static AXIS_TABLE: { [key: string]: string } = {
+    x: "R",
+    y: "U",
+    z: "F",
+    "-x": "L",
+    "-y": "D",
+    "-z": "B",
+  };
+
+  static MES_TABLE: { [key: string]: string } = {
+    R: "M'",
+    U: "E'",
+    F: "S",
+    L: "M",
+    D: "E",
+    B: "S'",
+  };
+
   exp(reverse: boolean, times: number) {
-    let exp = this.name;
+    let group = this.name;
     let values = this.name.match(/(^-?[xyz]):(\d*):(\d*$)/i);
     if (values?.length == 4) {
       let axis = values[1];
-      let layer = Number(values[2]);
-      if (layer == Number(values[3])) {
-        let half = (this.cube.order + 1) / 2;
-        if (axis.length == 1 && layer < half) {
-          axis = "-" + axis;
-          reverse = !reverse;
-        } else if (axis.length == 2 && layer > half) {
-          axis = axis[1];
-          reverse = !reverse;
+      let from = Number(values[2]);
+      let to = Number(values[3]);
+      let half = (this.cube.order + 1) / 2;
+
+      // 找到哪个离得远
+      if (Math.abs(from - half) < Math.abs(to - half)) {
+        [from, to] = [to, from];
+      }
+      if (axis.length == 1 && from < half) {
+        axis = "-" + axis;
+        reverse = !reverse;
+      } else if (axis.length == 2 && from > half) {
+        axis = axis[1];
+        reverse = !reverse;
+      }
+      if (axis.length == 1) {
+        from = this.cube.order - from + 1;
+        to = this.cube.order - to + 1;
+      }
+      group = CubeGroup.AXIS_TABLE[axis];
+      if (from == to) {
+        if (from === half) {
+          group = CubeGroup.MES_TABLE[group].toUpperCase();
+          if (group.length == 2) {
+            group = group[0];
+            reverse = !reverse;
+          }
+        } else {
+          group = (from === 1 ? "" : String(from)) + group;
         }
-        if (axis.length == 1) {
-          layer = this.cube.order - layer + 1;
+      } else {
+        if (from === 1 && to === this.cube.order) {
+          group = axis;
+          if (group.length == 2) {
+            group = group[1];
+            reverse = !reverse;
+          }
+        } else if (from === 2 && to === this.cube.order - 1) {
+          group = CubeGroup.MES_TABLE[group].toLowerCase();
+          if (group.length == 2) {
+            group = group[0];
+            reverse = !reverse;
+          }
+        } else {
+          group = (from === 1 ? "" : String(from) + "-") + String(to) + group.toLowerCase();
         }
-        switch (axis) {
-          case "x":
-            exp = layer === half ? "M'" : "R";
-            break;
-          case "y":
-            exp = layer === half ? "E'" : "U";
-            break;
-          case "z":
-            exp = layer === half ? "S" : "F";
-            break;
-          case "-x":
-            exp = layer === half ? "M" : "L";
-            break;
-          case "-y":
-            exp = layer === half ? "E" : "D";
-            break;
-          case "-z":
-            exp = layer === half ? "S'" : "B";
-            break;
-        }
-        if (exp.length == 2) {
-          exp = exp[0];
-          reverse = !reverse;
-        }
-        exp = (layer === 1 || layer === half ? "" : String(layer)) + exp;
       }
     }
-    return new TwistAction(exp, reverse, times);
+    console.log(new TwistAction(group, reverse, times).value);
+    return new TwistAction(group, reverse, times);
   }
 
   hold() {
@@ -150,14 +177,14 @@ export class GroupTable {
     return axis + ":" + from + ":" + to;
   }
 
-  public static readonly AXIS_VECTOR: { [key: string]: Vector3 } = {
-    a: new Vector3(1, 1, 1),
-    x: new Vector3(1, 0, 0),
-    y: new Vector3(0, 1, 0),
-    z: new Vector3(0, 0, 1),
-    "-x": new Vector3(-1, 0, 0),
-    "-y": new Vector3(0, -1, 0),
-    "-z": new Vector3(0, 0, -1),
+  public static readonly AXIS_VECTOR: { [key: string]: THREE.Vector3 } = {
+    a: new THREE.Vector3(1, 1, 1),
+    x: new THREE.Vector3(1, 0, 0),
+    y: new THREE.Vector3(0, 1, 0),
+    z: new THREE.Vector3(0, 0, 1),
+    "-x": new THREE.Vector3(-1, 0, 0),
+    "-y": new THREE.Vector3(0, -1, 0),
+    "-z": new THREE.Vector3(0, 0, -1),
   };
   constructor(cube: Cube) {
     this.order = cube.order;

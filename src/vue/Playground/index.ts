@@ -70,14 +70,14 @@ export default class Playground extends Vue {
   }
 
   get key() {
-    let exp = "";
+    let exp = "(_)";
     if (this.keyboard.prefix > 1) {
-      exp = exp + this.keyboard.prefix;
+      exp = this.keyboard.prefix + exp;
     }
     if (this.keyboard.reverse) {
       exp = exp + "'";
     }
-    return exp;
+    return exp === "(_)" ? "" : exp;
   }
 
   completed: boolean = false;
@@ -244,6 +244,7 @@ class KeyHandle {
       }
       this.callback(exp);
       this.prefix = 1;
+      this.reverse = false;
       return false;
     }
   };

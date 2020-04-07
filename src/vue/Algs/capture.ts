@@ -64,7 +64,7 @@ export default class Capture {
       if (action.times) {
         angle = angle * action.times;
       }
-      let part = this.cube.groups.get(action.exp);
+      let part = this.cube.groups.get(action.group);
       if (part === undefined) {
         continue;
       }

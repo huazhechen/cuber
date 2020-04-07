@@ -50,7 +50,7 @@ export default class Playbar extends Vue {
     this.init();
     for (let i = 0; i < value; i++) {
       let action = this.actions[i];
-      this.world.twister.twist(action.exp, action.reverse, action.times, true);
+      this.world.twister.twist(action.group, action.reverse, action.times, true);
     }
     this.pprogress = value;
   }
@@ -102,7 +102,7 @@ export default class Playbar extends Vue {
       }
       let action = this.actions[this.pprogress];
       this.pprogress++;
-      this.world.twister.twist(action.exp, action.reverse, action.times, false);
+      this.world.twister.twist(action.group, action.reverse, action.times, false);
     }
   }
 
@@ -128,7 +128,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     let action = this.actions[this.pprogress];
     this.pprogress++;
-    this.world.twister.twist(action.exp, action.reverse, action.times);
+    this.world.twister.twist(action.group, action.reverse, action.times);
   }
 
   backward() {
@@ -138,7 +138,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress--;
     let action = this.actions[this.pprogress];
-    this.world.twister.twist(action.exp, !action.reverse, action.times);
+    this.world.twister.twist(action.group, !action.reverse, action.times);
   }
 
   get chaos() {

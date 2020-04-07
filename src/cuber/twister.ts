@@ -86,14 +86,14 @@ export default class Twister {
   }
 
   start(action: TwistAction) {
-    if (action.exp == "#") {
+    if (action.group == "#") {
       this.world.cube.reset();
       this.world.cube.dirty = true;
       this.world.cube.history.clear();
       this.world.callback();
       return;
     }
-    if (action.exp == "*") {
+    if (action.group == "*") {
       this.world.cube.reset();
       this.world.cube.dirty = true;
       let exp = Twister.shuffle(this.world.cube.order);
@@ -109,7 +109,7 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    let part = this.world.cube.groups.get(action.exp);
+    let part = this.world.cube.groups.get(action.group);
     if (part === undefined) {
       this.update();
       return;
@@ -133,18 +133,18 @@ export default class Twister {
       return;
     }
     let last = this.world.cube.history.last;
-    let action = new TwistAction(last.exp, !last.reverse, last.times);
+    let action = new TwistAction(last.group, !last.reverse, last.times);
     this.push(action);
   }
 }
 
 export class TwistAction {
-  exp: string;
+  group: string;
   reverse: boolean;
   times: number;
   fast: boolean;
   constructor(exp: string, reverse: boolean = false, times: number = 1, fast: boolean = false) {
-    this.exp = exp;
+    this.group = exp;
     this.reverse = reverse;
     this.times = times;
     this.fast = fast;
@@ -160,7 +160,7 @@ export class TwistAction {
     if (times === 2) {
       reverse = false;
     }
-    return times == 0 ? "" : this.exp + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
+    return times == 0 ? "" : this.group + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
   }
 }
 
@@ -262,8 +262,8 @@ export class TwistNode {
     this.twist = new TwistAction(exp, reverse, times);
     // 不用解析场景
     if (exp.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
-      if (/[XYZ]/.test(this.twist.exp)) {
-        this.twist.exp = this.twist.exp.toLowerCase();
+      if (/[XYZ]/.test(this.twist.group)) {
+        this.twist.group = this.twist.group.toLowerCase();
       }
       return;
     }
@@ -329,8 +329,8 @@ export class TwistNode {
           }
         }
       }
-    } else if (this.twist.exp != "") {
-      let action = new TwistAction(this.twist.exp, reverse, this.twist.times);
+    } else if (this.twist.group != "") {
+      let action = new TwistAction(this.twist.group, reverse, this.twist.times);
       _result.push(action);
     }
     return _result;
