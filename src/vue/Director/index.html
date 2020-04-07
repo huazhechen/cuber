@@ -259,7 +259,6 @@
             flat
             outlined
             hide-details
-            rows="2"
             v-model="scene"
           >
           </v-textarea>
@@ -281,7 +280,6 @@
             flat
             outlined
             hide-details
-            rows="2"
             v-model="action"
           >
           </v-textarea>
@@ -297,17 +295,18 @@
         </v-card-title>
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
-            <v-textarea
-              id="link"
-              :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-              solo
-              flat
-              outlined
-              hide-details
-              rows="6"
-              v-model="link"
-            >
-            </v-textarea>
+            <v-flex xs12 d-flex>
+              <v-textarea
+                id="link"
+                :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+                solo
+                flat
+                outlined
+                hide-details
+                v-model="link"
+              >
+              </v-textarea>
+            </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block text @click="tap('open')" :height="size * 0.8" data-clipboard-target="#link" ref="copy">
                 <div :style="{'font-size':size/3+'px'}">打开</div>
