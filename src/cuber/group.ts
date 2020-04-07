@@ -106,7 +106,6 @@ export default class CubeGroup extends THREE.Group {
         }
       }
     }
-    console.log(new TwistAction(group, reverse, times).value);
     return new TwistAction(group, reverse, times);
   }
 
