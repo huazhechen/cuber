@@ -22,7 +22,13 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex v-for="(item, index) in colors" :key="index" xs6 :style="{padding:size * 0.06 + 'px'}">
+        <v-flex
+          v-for="(item, index) in colors"
+          :key="index"
+          xs6
+          :style="{padding:size * 0.06 + 'px'}"
+          v-show="index!=='Gray'"
+        >
           <v-btn
             @click="tap(index)"
             :color="item"

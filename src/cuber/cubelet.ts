@@ -173,7 +173,7 @@ export default class Cubelet extends THREE.Group {
 
   public static PHONG = new THREE.MeshPhongMaterial({
     color: COLORS.Core,
-    specular: 0x606060,
+    specular: 0x808080,
     shininess: 8,
   });
 
@@ -357,7 +357,7 @@ export default class Cubelet extends THREE.Group {
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {
-      if (this.lamberts[i] != Cubelet.LAMBERS.GRAY) {
+      if (this.lamberts[i] != undefined) {
         let _sticker = new THREE.Mesh(Cubelet._STICKER, this.lamberts[i]);
         _sticker.name = FACE[i];
         switch (i) {
@@ -420,7 +420,10 @@ export default class Cubelet extends THREE.Group {
       return;
     }
     this.stickers[face].visible = true;
-    if (value && value.length > 0) {
+    if (value == "cloud") {
+      lamber = Cubelet.DEPTH;
+      basic = Cubelet.DEPTH;
+    } else if (value && value.length > 0) {
       lamber = Cubelet.LAMBERS[value];
       basic = Cubelet.LAMBERS[value];
     } else {
