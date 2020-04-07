@@ -11,7 +11,7 @@ export class Preferance {
     this.world = world;
   }
   private data = {
-    version: "0.1",
+    version: "0.2",
     scale: 50,
     perspective: 50,
     angle: 60,
@@ -21,6 +21,7 @@ export class Preferance {
     mirror: false,
     hollow: false,
     cloud: false,
+    wireframe: false,
     shadow: true,
   };
 
@@ -160,6 +161,19 @@ export class Preferance {
     }
     for (let cubelet of this.world.cube.cubelets) {
       cubelet.cloud = value;
+    }
+    this.world.dirty = true;
+  }
+
+  get wireframe() {
+    return this.data.wireframe;
+  }
+  set wireframe(value: boolean) {
+    if (this.data.wireframe != value) {
+      this.data.wireframe = value;
+    }
+    for (let cubelet of this.world.cube.cubelets) {
+      cubelet.wireframe = value;
     }
     this.world.dirty = true;
   }

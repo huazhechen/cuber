@@ -58,6 +58,16 @@
             镜像
           </v-btn>
           <v-btn
+            @click="database.preferance.shadow=!database.preferance.shadow"
+            :color="database.preferance.shadow?'primary':''"
+            depressed
+            style="text-transform: none; min-width: 0%; flex: 1;"
+            :height="size * 0.8"
+            :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
+          >
+            阴影
+          </v-btn>
+          <v-btn
             @click="database.preferance.cloud=!database.preferance.cloud"
             :color="database.preferance.cloud?'primary':''"
             depressed
@@ -78,14 +88,14 @@
             透明
           </v-btn>
           <v-btn
-            @click="database.preferance.shadow=!database.preferance.shadow"
-            :color="database.preferance.shadow?'primary':''"
+            @click="database.preferance.wireframe=!database.preferance.wireframe"
+            :color="database.preferance.wireframe?'primary':''"
             depressed
             style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
             :style="{'font-size':size * 0.3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px'}"
           >
-            阴影
+            框架
           </v-btn>
         </v-flex>
       </v-layout>

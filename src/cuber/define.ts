@@ -16,7 +16,7 @@ export const DEFAULT_COLORS: { [key: string]: string } = {
   B: "#0D47A1",
   Core: "#202020",
   High: "#FF4081",
-  Gray: "#404040",
+  Gray: "#606060",
 };
 
 export var COLORS: { [key: string]: string } = JSON.parse(JSON.stringify(DEFAULT_COLORS));

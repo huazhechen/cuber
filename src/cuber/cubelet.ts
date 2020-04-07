@@ -251,13 +251,26 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
+  set wireframe(value: boolean) {
+    if (value) {
+      console.log(value);
+      if (this.box && this.children.indexOf(this.box) < 0) {
+        this.add(this.box);
+      }
+    } else {
+      if (this.box && this.children.indexOf(this.box) >= 0) {
+        this.remove(this.box);
+      }
+    }
+  }
+
   set hollow(value: boolean) {
     if (value) {
-      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) >= 0) {
+      if (this.frame && this.children.indexOf(this.frame) >= 0) {
         this.remove(this.frame);
       }
     } else {
-      if (this.frame instanceof THREE.Mesh && this.children.indexOf(this.frame) < 0) {
+      if (this.frame && this.children.indexOf(this.frame) < 0) {
         this.add(this.frame);
       }
     }
@@ -313,6 +326,7 @@ export default class Cubelet extends THREE.Group {
   stickers: THREE.Mesh[];
   _quaternion: THREE.Quaternion;
   frame: THREE.Mesh;
+  box: THREE.BoxHelper;
   order: number;
 
   constructor(order: number, index: number) {
@@ -355,6 +369,7 @@ export default class Cubelet extends THREE.Group {
 
     this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.PHONG);
     this.add(this.frame);
+    this.box = new THREE.BoxHelper(this.frame, new THREE.Color(COLORS.Gray));
 
     for (let i = 0; i < 6; i++) {
       if (this.lamberts[i] != undefined) {
