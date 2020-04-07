@@ -195,16 +195,16 @@ class KeyHandle {
   callback: Function;
   keymap: { [key: string]: string } = {
     U: "U",
-    I: "F",
-    O: "R",
-    J: "D",
-    K: "B",
+    I: "R",
+    O: "B",
+    J: "F",
+    K: "D",
     L: "L",
     u: "u",
-    i: "f",
-    o: "r",
-    j: "d",
-    k: "b",
+    i: "r",
+    o: "b",
+    j: "f",
+    k: "d",
     l: "l",
   };
 
