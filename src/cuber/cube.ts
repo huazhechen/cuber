@@ -80,7 +80,7 @@ export default class Cube extends Group {
   strip(strip: { [face: string]: number[] | undefined }) {
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       let key = FACE[face];
-      let group = this.groups.get(FACE[face]);
+      let group = this.groups.get(key);
       if (!group) {
         throw Error();
       }

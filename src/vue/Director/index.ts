@@ -217,7 +217,7 @@ export default class Director extends Vue {
 
   recording: boolean = false;
 
-  color = "Core";
+  color = "High";
   stickers: { [face: string]: { [index: number]: string } | undefined };
   stick(index: number, face: number) {
     if (index < 0) {
@@ -231,24 +231,43 @@ export default class Director extends Vue {
       arr = {};
       this.stickers[FACE[face]] = arr;
     }
-    if (arr[index] != this.color) {
-      arr[index] = this.color;
-      this.world.cube.stick(index, face, this.color);
-    } else {
+    if (this.color == FACE[face]) {
       delete arr[index];
       this.world.cube.stick(index, face, "");
+    } else {
+      arr[index] = this.color;
+      this.world.cube.stick(index, face, this.color);
     }
     this.database.director.dramas[this.world.order].stickers = this.stickers;
     this.database.save();
   }
 
   clear() {
-    this.colord = false;
-    this.color = "Core";
-    this.stickers = {};
+    if (JSON.stringify(this.stickers) == "{}") {
+      let strip: { [face: string]: number[] | undefined } = {};
+      for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+        let key = FACE[face];
+        let group = this.world.cube.groups.get(key);
+        if (!group) {
+          throw Error();
+        }
+        strip[key] = group.indices;
+        let arr = this.stickers[FACE[face]];
+        if (arr == undefined) {
+          arr = {};
+          this.stickers[FACE[face]] = arr;
+        }
+        for (const index of group.indices) {
+          arr[index] = "remove";
+        }
+      }
+      this.world.cube.strip(strip);
+    } else {
+      this.stickers = {};
+      this.world.cube.strip({});
+    }
     this.database.director.dramas[this.world.order].stickers = this.stickers;
     this.database.save();
-    this.world.cube.strip({});
   }
 
   pixels: Uint8Array;
