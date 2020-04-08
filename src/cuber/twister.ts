@@ -16,17 +16,23 @@ export default class Twister {
     let result = "";
     let exps = [];
     let last = -1;
-    let actions = ["U", "D", "R", "L", "F", "B"];
+    let actions = ["Uw", "Dw", "Rw", "Lw", "Fw", "Bw"];
     let axis = -1;
     for (let i = 0; i < 3 * 3 * order; i++) {
       let exp = [];
       while (axis == last) {
         axis = Math.floor(Math.random() * 3);
       }
-      let prefix = Math.ceil(Math.random() * Math.floor(order / 2));
-      exp.push(prefix == 1 ? "" : prefix);
       let side = Math.floor(Math.random() * 2);
-      exp.push(actions[axis * 2 + side]);
+      let action = actions[axis * 2 + side];
+      let prefix = Math.ceil(Math.random() * Math.floor(order / 2));
+      if (prefix === 1) {
+        action = action[0];
+      }
+      if (prefix > 2) {
+        exp.push(prefix);
+      }
+      exp.push(action);
       let suffix = Math.random();
       if (suffix < 0.2) {
         exp.push("2");

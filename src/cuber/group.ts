@@ -90,19 +90,23 @@ export default class CubeGroup extends THREE.Group {
         }
       } else {
         if (from === 1 && to === this.cube.order) {
+          // xyz
           group = axis;
           if (group.length == 2) {
             group = group[1];
             reverse = !reverse;
           }
         } else if (from === 2 && to === this.cube.order - 1) {
+          // mes
           group = CubeGroup.MES_TABLE[group].toLowerCase();
           if (group.length == 2) {
             group = group[0];
             reverse = !reverse;
           }
+        } else if (from === 1) {
+          group = (to > 2 ? String(to) : "") + group + "w";
         } else {
-          group = (from === 1 ? "" : String(from) + "-") + String(to) + group.toLowerCase();
+          group = String(from) + "-" + String(to) + group + "w";
         }
       }
     }
