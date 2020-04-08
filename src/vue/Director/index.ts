@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Watch, Provide } from "vue-property-decorator";
+import { Component, Watch, Provide, Ref } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
@@ -35,8 +35,15 @@ export default class Director extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
+
+  @Ref("viewport")
   viewport: Viewport;
+
+  @Ref("playbar")
   playbar: Playbar;
+
+  @Ref("copy")
+  copy: Vue;
 
   filmer: WebGLRenderer;
   svger: SVGRenderer;
@@ -66,19 +73,7 @@ export default class Director extends Vue {
   }
 
   mounted() {
-    let view = this.$refs.viewport;
-    if (view instanceof Viewport) {
-      this.viewport = view;
-    }
-    view = this.$refs.playbar;
-    if (view instanceof Playbar) {
-      this.playbar = view;
-    }
-    view = this.$refs.copy;
-    if (view) {
-      new ClipboardJS((<any>view).$el);
-    }
-    this.$el;
+    new ClipboardJS(this.copy.$el);
 
     this.reload();
     this.world.controller.taps.push((index: number, face: number) => {

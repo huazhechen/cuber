@@ -1,9 +1,10 @@
 import Vue from "vue";
-import { Component, Inject } from "vue-property-decorator";
+import { Component, Inject, Ref } from "vue-property-decorator";
 import { WebGLRenderer } from "three";
 import { COLORS } from "../../cuber/define";
 import Toucher from "../../common/toucher";
 import World from "../../cuber/world";
+import Playbar from "../Playbar";
 
 @Component({
   template: require("./index.html"),
@@ -12,6 +13,9 @@ import World from "../../cuber/world";
 export default class Viewport extends Vue {
   @Inject("world")
   world: World;
+
+  @Ref("canvas")
+  canvas: HTMLElement;
 
   renderer: WebGLRenderer;
   constructor() {
@@ -35,18 +39,11 @@ export default class Viewport extends Vue {
     this.world.height = height;
     this.world.resize();
     this.renderer.setSize(width, height, true);
-    let view = this.$refs.cuber;
-    if (view instanceof HTMLElement) {
-      view.style.width = width + "px";
-      view.style.height = height + "px";
-    }
     this.world.dirty = true;
   }
 
   mounted() {
-    if (this.$refs.canvas instanceof Element) {
-      this.$refs.canvas.appendChild(this.renderer.domElement);
-    }
+    this.canvas.appendChild(this.renderer.domElement);
   }
 
   draw() {

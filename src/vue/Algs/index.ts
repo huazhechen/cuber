@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Watch, Provide } from "vue-property-decorator";
+import { Component, Watch, Provide, Ref } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Setting from "../Setting";
 import Playbar from "../Playbar";
@@ -29,8 +29,15 @@ export default class Algs extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
+
+  @Ref("viewport")
   viewport: Viewport;
+
+  @Ref("playbar")
   playbar: Playbar;
+
+  @Ref("setting")
+  setting: Setting;
 
   constructor() {
     super();
@@ -40,19 +47,7 @@ export default class Algs extends Vue {
   pics: string[][] = [];
 
   mounted() {
-    let view = this.$refs.viewport;
-    if (view instanceof Viewport) {
-      this.viewport = view;
-    }
-    view = this.$refs.playbar;
-    if (view instanceof Playbar) {
-      this.playbar = view;
-    }
-    view = this.$refs.setting;
-    if (view instanceof Setting) {
-      view.items["order"].disable = true;
-    }
-
+    this.setting.items["order"].disable = true;
     for (let i = 0; i < this.algs.length; i++) {
       this.pics.push([]);
     }

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Provide } from "vue-property-decorator";
+import { Component, Provide, Ref } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
@@ -27,8 +27,16 @@ export default class Algs extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
+
+  @Ref("viewport")
   viewport: Viewport;
+  
+  @Ref("playbar")
   playbar: Playbar;
+
+  @Ref("setting")
+  setting: Setting;
+
   scene: string = "";
   action: string = "";
 
@@ -37,19 +45,7 @@ export default class Algs extends Vue {
   }
 
   mounted() {
-    let view = this.$refs.viewport;
-    if (view instanceof Viewport) {
-      this.viewport = view;
-    }
-    view = this.$refs.playbar;
-    if (view instanceof Playbar) {
-      this.playbar = view;
-    }
-    view = this.$refs.setting;
-    if (view instanceof Setting) {
-      view.items["order"].disable = true;
-    }
-
+    this.setting.items["order"].disable = true;
     let search = location.search || "";
     let list = search.match(/(\?|\&)data=([^&]*)(&|$)/);
     let string = list ? list[2] : "";

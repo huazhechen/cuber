@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Component, Provide, Watch } from "vue-property-decorator";
+import { Component, Provide, Watch, Ref } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import Setting from "../Setting";
@@ -25,6 +25,8 @@ export default class Playground extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
+  
+  @Ref("viewport")
   viewport: Viewport;
   keyboard: KeyHandle;
 
@@ -43,10 +45,6 @@ export default class Playground extends Vue {
   }
 
   mounted() {
-    let view = this.$refs.viewport;
-    if (view instanceof Viewport) {
-      this.viewport = view;
-    }
     this.shuffle();
     this.$nextTick(this.resize);
     this.$nextTick(() => {
