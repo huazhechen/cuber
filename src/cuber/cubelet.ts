@@ -253,7 +253,6 @@ export default class Cubelet extends THREE.Group {
 
   set wireframe(value: boolean) {
     if (value) {
-      console.log(value);
       if (this.box && this.children.indexOf(this.box) < 0) {
         this.add(this.box);
       }
