@@ -1,7 +1,7 @@
 import World from "./cuber/world";
 import CubeGroup from "./cuber/group";
 import vm from ".";
-import { COLORS, DEFAULT_COLORS } from "./cuber/define";
+import { COLORS } from "./cuber/define";
 import Cubelet from "./cuber/cubelet";
 
 export class Preferance {
@@ -181,8 +181,10 @@ export class Preferance {
 
 export class Theme {
   private world: World;
+  private default: string;
   constructor(world: World) {
     this.world = world;
+    this.default = JSON.stringify(COLORS);
   }
   private data: { version: string; dark: boolean; colors: { [key: string]: string } } = {
     version: "0.2",
@@ -228,8 +230,7 @@ export class Theme {
   }
 
   reset() {
-    let string = JSON.stringify(DEFAULT_COLORS);
-    this.data.colors = JSON.parse(string);
+    this.data.colors = JSON.parse(this.default);
     this.refresh();
     this.data.colors = {};
   }

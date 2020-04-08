@@ -7,7 +7,7 @@ export enum FACE {
   F,
 }
 
-export const DEFAULT_COLORS: { [key: string]: string } = {
+export var COLORS: { [key: string]: string } = {
   R: "#B71C1C",
   L: "#FF6D00",
   U: "#FFFFFF",
@@ -18,5 +18,3 @@ export const DEFAULT_COLORS: { [key: string]: string } = {
   High: "#FF4081",
   Gray: "#606060",
 };
-
-export var COLORS: { [key: string]: string } = JSON.parse(JSON.stringify(DEFAULT_COLORS));
