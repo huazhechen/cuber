@@ -72,8 +72,7 @@ export default class Setting extends Vue {
         let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
         let mode = list ? list[2] : "playground";
         if (mode != key) {
-          search = "mode=" + key;
-          let link = window.location.origin + window.location.pathname + "?" + search;
+          let link = window.location.origin + window.location.pathname + (key === "playground" ? "" : "?mode=" + key);
           window.location.replace(link);
         }
         break;
