@@ -1,26 +1,8 @@
 # [魔方栈](https://huazhechen.gitee.io/cuber)
 
-- 在线魔方工具箱
-
-## 主要特性
-
 - 虚拟魔方
-- 公式播放
+- 复原教程
 - 动画制作
-
-## 技术栈
-
-- typescript
-- webpack
-- threejs
-- vue
-- vuetify
-
-## 联系方式
-
-- 微信: huazhechen
-- QQ: 37705123
-- email: 37705123@qq.com
 
 # 功能介绍
 
@@ -103,3 +85,17 @@
 - 主题设置
 
   ![theme](https://gitee.com/huazhechen/cuber/raw/master/screenshot/theme.gif)
+
+## 技术栈
+
+- typescript
+- webpack
+- threejs
+- vue
+- vuetify
+
+## 联系方式
+
+- 微信: huazhechen
+- QQ: 37705123
+- email: 37705123@qq.com
