@@ -151,32 +151,6 @@ export class Preferance {
     }
     this.world.dirty = true;
   }
-
-  get cloud() {
-    return this.data.cloud;
-  }
-  set cloud(value: boolean) {
-    if (this.data.cloud != value) {
-      this.data.cloud = value;
-    }
-    for (let cubelet of this.world.cube.cubelets) {
-      cubelet.cloud = value;
-    }
-    this.world.dirty = true;
-  }
-
-  get wireframe() {
-    return this.data.wireframe;
-  }
-  set wireframe(value: boolean) {
-    if (this.data.wireframe != value) {
-      this.data.wireframe = value;
-    }
-    for (let cubelet of this.world.cube.cubelets) {
-      cubelet.wireframe = value;
-    }
-    this.world.dirty = true;
-  }
 }
 
 export class Theme {

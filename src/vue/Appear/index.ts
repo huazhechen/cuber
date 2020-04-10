@@ -49,7 +49,6 @@ export default class Appear extends Vue {
     this.database.preferance.angle = 60;
     this.database.preferance.gradient = 65;
     this.database.preferance.mirror = false;
-    this.database.preferance.cloud = false;
     this.database.preferance.hollow = false;
     this.database.preferance.shadow = true;
   }

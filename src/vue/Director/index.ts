@@ -237,30 +237,32 @@ export default class Director extends Vue {
     this.database.save();
   }
 
+  reset() {
+    this.stickers = {};
+    this.world.cube.strip({});
+    this.database.director.dramas[this.world.order].stickers = this.stickers;
+    this.database.save();
+  }
+
   clear() {
-    if (JSON.stringify(this.stickers) == "{}") {
-      let strip: { [face: string]: number[] | undefined } = {};
-      for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-        let key = FACE[face];
-        let group = this.world.cube.groups.get(key);
-        if (!group) {
-          throw Error();
-        }
-        strip[key] = group.indices;
-        let arr = this.stickers[FACE[face]];
-        if (arr == undefined) {
-          arr = {};
-          this.stickers[FACE[face]] = arr;
-        }
-        for (const index of group.indices) {
-          arr[index] = "remove";
-        }
+    let strip: { [face: string]: number[] | undefined } = {};
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      let key = FACE[face];
+      let group = this.world.cube.groups.get(key);
+      if (!group) {
+        throw Error();
       }
-      this.world.cube.strip(strip);
-    } else {
-      this.stickers = {};
-      this.world.cube.strip({});
+      strip[key] = group.indices;
+      let arr = this.stickers[FACE[face]];
+      if (arr == undefined) {
+        arr = {};
+        this.stickers[FACE[face]] = arr;
+      }
+      for (const index of group.indices) {
+        arr[index] = "remove";
+      }
     }
+    this.world.cube.strip(strip);
     this.database.director.dramas[this.world.order].stickers = this.stickers;
     this.database.save();
   }

@@ -17,8 +17,7 @@
         >
           <v-btn @click="tap('color')" :style="style" text :ripple="false" :color="colors[color]" :disabled="recording">
             <v-icon :size="size * 0.8" v-show="colors[color]">colorize</v-icon>
-            <v-icon :size="size * 0.8" v-show="color=='cloud'">filter_drama</v-icon>
-            <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
+            <v-icon :size="size * 0.8" v-show="color=='remove'">visibility_off</v-icon>
           </v-btn>
           <v-btn @click="tap('output')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">save</v-icon>
@@ -209,24 +208,13 @@
             </v-flex>
             <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
-                @click="colord = false; color = 'cloud';"
-                block
-                text
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-              >
-                <v-icon :size="size * 0.8">filter_drama</v-icon>
-              </v-btn>
-            </v-flex>
-            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
                 @click="colord = false; color = 'remove';"
                 block
                 text
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
-                <v-icon :size="size * 0.8">block</v-icon>
+                <v-icon :size="size * 0.8">visibility_off</v-icon>
               </v-btn>
             </v-flex>
             <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
@@ -237,7 +225,18 @@
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
-                <v-icon :size="size * 0.8" color="error">replay</v-icon>
+                <v-icon :size="size * 0.8" color="error">block</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
+              <v-btn
+                @click="reset"
+                block
+                text
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+                :height="size"
+              >
+                <v-icon :size="size * 0.8" color="success">replay</v-icon>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -308,7 +307,7 @@
               </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block text @click="tap('open')" :height="size * 0.8" data-clipboard-target="#link">
+              <v-btn block text @click="tap('open')" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">打开</div>
               </v-btn>
             </v-flex>

@@ -177,8 +177,6 @@ export default class Cubelet extends THREE.Group {
     shininess: 8,
   });
 
-  public static DEPTH = new THREE.MeshDepthMaterial({});
-
   public static BASICS = (() => {
     let result: { [key: string]: THREE.MeshBasicMaterial } = {};
     for (const key in COLORS) {
@@ -241,37 +239,15 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  set cloud(value: boolean) {
-    if (this.frame instanceof THREE.Mesh) {
-      if (value) {
-        this.frame.material = Cubelet.DEPTH;
-      } else {
-        this.frame.material = Cubelet.PHONG;
-      }
-    }
-  }
-
-  set wireframe(value: boolean) {
-    if (value) {
-      if (this.box && this.children.indexOf(this.box) < 0) {
-        this.add(this.box);
-      }
-    } else {
-      if (this.box && this.children.indexOf(this.box) >= 0) {
-        this.remove(this.box);
-      }
-    }
-  }
-
   set hollow(value: boolean) {
     if (value) {
-      if (this.frame && this.children.indexOf(this.frame) >= 0) {
-        this.remove(this.frame);
-      }
+      Cubelet.PHONG.transparent = true;
+      Cubelet.PHONG.opacity = 0.1;
+      Cubelet.PHONG.depthWrite = false;
     } else {
-      if (this.frame && this.children.indexOf(this.frame) < 0) {
-        this.add(this.frame);
-      }
+      Cubelet.PHONG.transparent = false;
+      Cubelet.PHONG.opacity = 1;
+      Cubelet.PHONG.depthWrite = true;
     }
   }
 
@@ -325,7 +301,6 @@ export default class Cubelet extends THREE.Group {
   stickers: THREE.Mesh[];
   _quaternion: THREE.Quaternion;
   frame: THREE.Mesh;
-  box: THREE.BoxHelper;
   order: number;
 
   constructor(order: number, index: number) {
@@ -368,7 +343,6 @@ export default class Cubelet extends THREE.Group {
 
     this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.PHONG);
     this.add(this.frame);
-    this.box = new THREE.BoxHelper(this.frame, new THREE.Color(COLORS.Gray));
 
     for (let i = 0; i < 6; i++) {
       if (this.lamberts[i] != undefined) {
@@ -434,12 +408,9 @@ export default class Cubelet extends THREE.Group {
       return;
     }
     this.stickers[face].visible = true;
-    if (value == "cloud") {
-      lamber = Cubelet.DEPTH;
-      basic = Cubelet.DEPTH;
-    } else if (value && value.length > 0) {
+    if (value && value.length > 0) {
       lamber = Cubelet.LAMBERS[value];
-      basic = Cubelet.LAMBERS[value];
+      basic = Cubelet.BASICS[value];
     } else {
       lamber = this.lamberts[face];
       basic = this.basics[face];
