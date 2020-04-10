@@ -28,7 +28,7 @@
 
   ![replay](https://gitee.com/huazhechen/cuber/raw/master/screenshot/replay.gif)
 
-## [公式播放](https://huazhechen.gitee.io/cuber/?mode=algs)
+## [复原教程](https://huazhechen.gitee.io/cuber/?mode=algs)
 
 - 公式播放
 
@@ -99,3 +99,7 @@
 - 微信: huazhechen
 - QQ: 37705123
 - email: 37705123@qq.com
+
+## 给作者买杯咖啡
+
+  ![appreciation](https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg)
