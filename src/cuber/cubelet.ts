@@ -173,8 +173,8 @@ export default class Cubelet extends THREE.Group {
 
   public static CORE = new THREE.MeshPhongMaterial({
     color: COLORS.Core,
-    specular: 0x808080,
-    shininess: 8,
+    specular: COLORS.Gray,
+    shininess: 6,
   });
 
   public static TRANS = new THREE.MeshBasicMaterial({

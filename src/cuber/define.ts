@@ -10,11 +10,11 @@ export enum FACE {
 export var COLORS: { [key: string]: string } = {
   R: "#B71C1C",
   L: "#FF6D00",
-  U: "#FFFFFF",
+  U: "#F0F0F0",
   D: "#FFD600",
   F: "#00A020",
   B: "#0D47A1",
   Core: "#202020",
   High: "#FF4081",
-  Gray: "#606060",
+  Gray: "#808080",
 };

@@ -101,11 +101,11 @@ export default class Theme extends Vue {
     "#885500",
     // WB
     "#202020",
-    "#000000",
-    "#606060",
+    "#505050",
+    "#808080",
     "#A0A0A0",
     "#D0D0D0",
-    "#FFFFFF",
+    "#F0F0F0",
   ];
 
   reset() {
