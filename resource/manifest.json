@@ -1,16 +1,16 @@
 {
   "name": "魔方栈",
   "short_name": "魔方栈",  
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "orientation": "portrait",
-  "icon": [
+  "icons": [
     {
-      "src": "icon.png",
+      "src": "./icon.png",
       "type": "image/png",
-      "sizes": "512*512"
+      "sizes": "512x512"
     }
   ]
 }
