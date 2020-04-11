@@ -13,36 +13,57 @@ export default class Toucher {
   init(dom: HTMLElement, callback: Function) {
     this.dom = dom;
     this.callback = callback;
-    dom.addEventListener("touchstart", this.touch);
-    dom.addEventListener("touchmove", this.touch);
-    dom.addEventListener("touchend", this.touch);
-    dom.addEventListener("touchcancel", this.touch);
-
-    dom.addEventListener("mousedown", this.mouse);
-    dom.addEventListener("mousemove", this.mouse);
-    dom.addEventListener("mouseup", this.mouse);
-    dom.addEventListener("mouseout", this.mouse);
+    document.addEventListener("touchstart", this.touch);
+    document.addEventListener("touchmove", this.touch);
+    document.addEventListener("touchend", this.touch);
+    document.addEventListener("touchcancel", this.touch);
+    document.addEventListener("mousedown", this.mouse);
+    document.addEventListener("mousemove", this.mouse);
+    document.addEventListener("mouseup", this.mouse);
   }
   dom: HTMLElement;
   callback: Function;
+  target: EventTarget | null;
 
   mouse = (event: MouseEvent) => {
+    if (event.type === "mousedown") {
+      this.target = event.target;
+    }
+    if (this.target !== this.dom) {
+      return true;
+    }
     this.dom.tabIndex = 1;
     this.dom.focus();
     let action = new TouchAction(event.type, event.clientX, event.clientY);
     this.callback(action);
     event.returnValue = false;
+    if (event.type === "mouseup") {
+      this.target = null;
+    }
     return false;
   };
 
   touch = (event: TouchEvent) => {
+    if (event.type === "touchstart") {
+      this.target = event.target;
+    }
+    if (this.target !== this.dom) {
+      return false;
+    }
     this.dom.tabIndex = 1;
     this.dom.focus();
     let touches = event.changedTouches;
     let first = touches[0];
-    let action = new TouchAction(event.type, first.clientX, first.clientY);
+    let action = new TouchAction(
+      event.type,
+      first.clientX - this.dom.getBoundingClientRect().left,
+      first.clientY - this.dom.getBoundingClientRect().top
+    );
     this.callback(action);
     event.preventDefault();
+    if (event.type === "touchend" || event.type === "touchcancel") {
+      this.target = null;
+    }
     return true;
   };
 }
