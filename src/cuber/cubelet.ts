@@ -171,10 +171,17 @@ export default class Cubelet extends THREE.Group {
     return result;
   })();
 
-  public static PHONG = new THREE.MeshPhongMaterial({
+  public static CORE = new THREE.MeshPhongMaterial({
     color: COLORS.Core,
     specular: 0x808080,
     shininess: 8,
+  });
+
+  public static TRANS = new THREE.MeshBasicMaterial({
+    color: COLORS.Gray,
+    transparent: true,
+    opacity: 0.1,
+    depthWrite: false,
   });
 
   public static BASICS = (() => {
@@ -240,14 +247,8 @@ export default class Cubelet extends THREE.Group {
   }
 
   set hollow(value: boolean) {
-    if (value) {
-      Cubelet.PHONG.transparent = true;
-      Cubelet.PHONG.opacity = 0.1;
-      Cubelet.PHONG.depthWrite = false;
-    } else {
-      Cubelet.PHONG.transparent = false;
-      Cubelet.PHONG.opacity = 1;
-      Cubelet.PHONG.depthWrite = true;
+    if (this.frame) {
+      this.frame.material = value ? Cubelet.TRANS : Cubelet.CORE;
     }
   }
 
@@ -341,7 +342,7 @@ export default class Cubelet extends THREE.Group {
       this.vector.z == half ? Cubelet.BASICS.F : undefined,
     ];
 
-    this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.PHONG);
+    this.frame = new THREE.Mesh(Cubelet._FRAME, Cubelet.CORE);
     this.add(this.frame);
 
     for (let i = 0; i < 6; i++) {

@@ -185,7 +185,7 @@ export class Theme {
         Cubelet.LAMBERS[key].color.set(value);
         Cubelet.BASICS[key].color.set(value);
         if (key == "Core") {
-          Cubelet.PHONG.color.set(value);
+          Cubelet.CORE.color.set(value);
         }
       }
     }
@@ -198,7 +198,7 @@ export class Theme {
     Cubelet.LAMBERS[key].color.set(value);
     Cubelet.BASICS[key].color.set(value);
     if (key == "Core") {
-      Cubelet.PHONG.color.set(value);
+      Cubelet.CORE.color.set(value);
     }
     this.world.dirty = true;
   }
