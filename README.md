@@ -4,7 +4,7 @@
 
 - 地址: <https://huazhechen.gitee.io/cuber>
 
-  <img style="width:120px;" src="https://gitee.com/huazhechen/cuber/raw/master/resource/icon.png"  alt="icon"/>
+  <img width="120px" src="https://gitee.com/huazhechen/cuber/raw/master/resource/icon.png"  alt="icon"/>
 
 - 使用过程中发现任何问题, 或者有任何需求和想法, 欢迎联系作者:
   > 微信: huazhechen
@@ -105,4 +105,4 @@
 
 ## 赞赏
 
-  <img style="width:360px;" src="https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg"  alt="赞赏" />
+  <img width="320px" src="https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg"  alt="赞赏" />
