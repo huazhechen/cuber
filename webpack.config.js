@@ -74,7 +74,24 @@ module.exports = () => ({
         minifyCSS: true,
       },
     }),
-    new WorkboxPlugin.GenerateSW({}),
+    new WorkboxPlugin.GenerateSW({
+      runtimeCaching: [
+        {
+          urlPattern: /\.(?:js|html)$/,
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "content",
+          },
+        },
+        {
+          urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
+          handler: "CacheFirst",
+          options: {
+            cacheName: "images",
+          },
+        },
+      ],
+    }),
     new CopyWebpackPlugin([
       {
         from: __dirname + "/resource/",
