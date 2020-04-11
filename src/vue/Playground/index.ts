@@ -60,9 +60,8 @@ export default class Playground extends Vue {
     this.loop();
   }
 
-  now: number = 0;
   get score() {
-    let diff = this.now - this.database.playground.start;
+    let diff = this.database.playground.now - this.database.playground.start;
     let hour = Math.floor(diff / 1000 / 60 / 60);
     diff = diff % (1000 * 60 * 60);
     let minute = Math.floor(diff / 1000 / 60);
@@ -120,7 +119,7 @@ export default class Playground extends Vue {
     }
     if (this.world.cube.history.moves == 0) {
       this.database.playground.start = 0;
-      this.now = 0;
+      this.database.playground.now = 0;
       this.database.save();
     } else {
       if (this.database.playground.start == 0) {
@@ -128,7 +127,7 @@ export default class Playground extends Vue {
         this.database.save();
       }
       if (!this.database.playground.complete) {
-        this.now = new Date().getTime();
+        this.database.playground.now = new Date().getTime();
       }
     }
   }
@@ -144,7 +143,6 @@ export default class Playground extends Vue {
     this.world.cube.history.init = this.database.playground.scene;
     this.world.twister.twist(this.database.playground.history, false, 1, true);
     this.callback();
-    this.now = new Date().getTime();
   }
 
   shuffle() {
@@ -158,7 +156,7 @@ export default class Playground extends Vue {
     this.callback();
     this.database.playground.complete = this.world.cube.complete;
     this.database.playground.start = 0;
-    this.now = 0;
+    this.database.playground.now = 0;
     this.database.save();
   }
 

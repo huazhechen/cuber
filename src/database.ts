@@ -266,12 +266,13 @@ export default class Database {
   }
 
   playground = {
-    version: "0.2",
+    version: "0.3",
     order: 3,
     shuffler: "*",
     history: "",
     scene: "*",
     start: 0,
+    now: 0,
     complete: false,
   };
 
