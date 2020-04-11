@@ -1,8 +1,17 @@
 # [魔方栈](https://huazhechen.gitee.io/cuber)
 
-- 虚拟魔方
-- 复原教程
-- 动画制作
+- 一个优美而强大的网页魔方
+
+- 地址: <https://huazhechen.gitee.io/cuber>
+
+  <img style="width:120px;" src="https://gitee.com/huazhechen/cuber/raw/master/resource/icon.png"  alt="icon"/>
+
+- 使用过程中发现任何问题, 或者有任何需求和想法, 欢迎联系作者:
+  > 微信: huazhechen
+  >
+  > QQ: 37705123
+  >
+  > email: <37705123@qq.com>
 
 # 功能介绍
 
@@ -94,12 +103,6 @@
 - vue
 - vuetify
 
-## 联系方式
+## 赞赏
 
-- 微信: huazhechen
-- QQ: 37705123
-- email: 37705123@qq.com
-
-## 给作者买杯咖啡
-
-  ![appreciation](https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg)
+  <img style="width:360px;" src="https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg"  alt="赞赏" />
