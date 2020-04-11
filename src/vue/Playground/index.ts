@@ -71,7 +71,7 @@ export default class Playground extends Vue {
     let ms = Math.floor(diff / 100);
     let time =
       (hour > 0 ? hour + ":" : "") +
-      (minute > 0 ? minute + ":" : "") +
+      (minute > 0 ? (Array(2).join("0") + minute).slice(-2) + ":" : "") +
       (Array(2).join("0") + second).slice(-2) +
       "." +
       ms;
