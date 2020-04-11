@@ -6,13 +6,13 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = () => ({
   entry: {
-    index: "./src/index.ts"
+    index: "./src/index.ts",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "./",
     filename: "[name].[chunkhash].js",
-    globalObject: "this"
+    globalObject: "this",
   },
   module: {
     rules: [
@@ -25,43 +25,43 @@ module.exports = () => ({
             loader: "sass-loader",
             options: {
               implementation: require("sass"),
-              fiber: require("fibers")
+              fiber: require("fibers"),
             },
             options: {
               implementation: require("sass"),
               sassOptions: {
-                fiber: require("fibers")
-              }
-            }
-          }
-        ]
+                fiber: require("fibers"),
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.tsx?$/,
-        loader: "ts-loader"
+        loader: "ts-loader",
       },
       {
         test: /\.(html|svg)?$/,
-        loader: "text-loader"
+        loader: "text-loader",
       },
       {
         test: /.(png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
-        loader: "url-loader"
-      }
-    ]
+        loader: "url-loader",
+      },
+    ],
   },
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js"
+      vue$: "vue/dist/vue.esm.js",
     },
-    extensions: ["*", ".js", ".ts", ".json"]
+    extensions: ["*", ".js", ".ts", ".json"],
   },
   performance: {
-    hints: false
+    hints: false,
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -71,20 +71,17 @@ module.exports = () => ({
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        minifyCSS: true
-      }
+        minifyCSS: true,
+      },
     }),
-    new WorkboxPlugin.GenerateSW({
-      skipWaiting: true,
-      clientsClaim: true
-    }),
+    new WorkboxPlugin.GenerateSW({}),
     new CopyWebpackPlugin([
       {
         from: __dirname + "/resource/",
         to: __dirname + "/dist/",
-        ignore: ["*.html"]
-      }
-    ])
+        ignore: ["*.html"],
+      },
+    ]),
   ],
-  devtool: ""
+  devtool: "",
 });
