@@ -25,14 +25,19 @@ export class Preferance {
     shadow: true,
   };
 
-  load(value: string) {
-    let data = JSON.parse(value);
-    if (data.version === this.data.version) {
-      this.data = data;
+  load() {
+    let string = window.localStorage.getItem("preferance");
+    if (string) {
+      let data = JSON.parse(string);
+      if (data.version === this.data.version) {
+        this.data = data;
+      } else {
+        this.save();
+      }
     }
   }
-  get value() {
-    return JSON.stringify(this.data);
+  save() {
+    window.localStorage.setItem("preferance", JSON.stringify(this.data));
   }
 
   refresh() {
@@ -166,14 +171,19 @@ export class Theme {
     colors: {},
   };
 
-  load(value: string) {
-    let data = JSON.parse(value);
-    if (data.version === this.data.version) {
-      this.data = data;
+  load() {
+    let string = window.localStorage.getItem("theme");
+    if (string) {
+      let data = JSON.parse(string);
+      if (data.version === this.data.version) {
+        this.data = data;
+      } else {
+        this.save();
+      }
     }
   }
-  get value() {
-    return JSON.stringify(this.data);
+  save() {
+    window.localStorage.setItem("theme", JSON.stringify(this.data));
   }
 
   refresh() {
@@ -236,18 +246,10 @@ export default class Database {
       this.storage.clear();
       this.storage.setItem("version", version);
     }
-    let save;
-    save = this.storage.getItem("preferance");
-    if (save) {
-      this.preferance.load(save);
-      this.storage.setItem("preferance", this.preferance.value);
-    }
+    this.preferance.load();
+    this.theme.load();
 
-    save = this.storage.getItem("theme");
-    if (save) {
-      this.theme.load(save);
-      this.storage.setItem("theme", this.theme.value);
-    }
+    let save;
     let self = this as { [key: string]: any };
     if (self[this.mode]) {
       save = this.storage.getItem(this.mode);
@@ -264,8 +266,13 @@ export default class Database {
   }
 
   playground = {
-    version: "0.1",
+    version: "0.2",
     order: 3,
+    shuffler: "*",
+    history: "",
+    scene: "*",
+    start: 0,
+    complete: false,
   };
 
   algs = {
@@ -297,8 +304,6 @@ export default class Database {
   }
 
   save() {
-    this.storage.setItem("preferance", this.preferance.value);
-    this.storage.setItem("theme", this.theme.value);
     let self = this as { [key: string]: any };
     if (self[this.mode]) {
       this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));

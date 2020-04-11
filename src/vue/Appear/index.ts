@@ -21,7 +21,7 @@ export default class Appear extends Vue {
 
   set show(value) {
     if (!value) {
-      this.database.save();
+      this.database.preferance.save();
     }
     this.$emit("input", value);
   }

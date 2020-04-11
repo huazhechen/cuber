@@ -25,7 +25,7 @@ export default class Playground extends Vue {
   width: number = 0;
   height: number = 0;
   size: number = 0;
-  
+
   @Ref("viewport")
   viewport: Viewport;
   keyboard: KeyHandle;
@@ -33,7 +33,11 @@ export default class Playground extends Vue {
   constructor() {
     super();
     this.keyboard = new KeyHandle((exp: string) => {
-      this.world.twister.twist(exp);
+      if (exp === "^") {
+        this.world.twister.undo();
+      } else {
+        this.world.twister.twist(exp);
+      }
     });
   }
 
@@ -45,25 +49,33 @@ export default class Playground extends Vue {
   }
 
   mounted() {
-    this.shuffle();
+    this.load();
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.database.refresh();
     });
+    this.world.callbacks.push(() => {
+      this.callback();
+    });
     this.loop();
   }
 
-  complete: boolean = false;
-  start: number = 0;
   now: number = 0;
   get score() {
-    let diff = this.now - this.start;
+    let diff = this.now - this.database.playground.start;
+    let hour = Math.floor(diff / 1000 / 60 / 60);
+    diff = diff % (1000 * 60 * 60);
     let minute = Math.floor(diff / 1000 / 60);
     diff = diff % (1000 * 60);
     let second = Math.floor(diff / 1000);
     diff = diff % 1000;
     let ms = Math.floor(diff / 100);
-    let time = (minute > 0 ? minute + ":" : "") + (Array(2).join("0") + second).slice(-2) + "." + ms;
+    let time =
+      (hour > 0 ? hour + ":" : "") +
+      (minute > 0 ? minute + ":" : "") +
+      (Array(2).join("0") + second).slice(-2) +
+      "." +
+      ms;
     return time + "/" + this.world.cube.history.moves;
   }
 
@@ -79,6 +91,19 @@ export default class Playground extends Vue {
   }
 
   completed: boolean = false;
+  callback() {
+    this.database.playground.scene = this.world.cube.history.init;
+    this.database.playground.history = this.world.cube.history.exp.substring(1);
+    if (this.database.playground.complete) {
+      this.database.save();
+      return;
+    }
+    this.database.playground.complete = this.world.cube.complete;
+    this.database.save();
+    if (this.database.playground.complete) {
+      this.completed = true;
+    }
+  }
 
   loop() {
     requestAnimationFrame(this.loop.bind(this));
@@ -90,39 +115,51 @@ export default class Playground extends Vue {
     this.world.cube.updateMatrix();
     this.world.cube.dirty = true;
     this.viewport.draw();
-    if (this.complete) {
+    if (this.database.playground.complete) {
       return;
     }
     if (this.world.cube.history.moves == 0) {
-      this.start = 0;
+      this.database.playground.start = 0;
       this.now = 0;
+      this.database.save();
     } else {
-      if (this.start == 0) {
-        this.start = new Date().getTime();
+      if (this.database.playground.start == 0) {
+        this.database.playground.start = new Date().getTime();
+        this.database.save();
       }
-      if (!this.world.cube.complete) {
+      if (!this.database.playground.complete) {
         this.now = new Date().getTime();
-      } else {
-        if (!this.complete) {
-          this.completed = true;
-          this.complete = true;
-        }
       }
     }
   }
 
-  shuffler = "*";
+  load() {
+    // 未初始化
+    if (this.database.playground.scene === "*") {
+      this.shuffle();
+      return;
+    }
+    this.world.twister.twist("# " + this.database.playground.scene, false, 1, true);
+    this.world.cube.history.clear();
+    this.world.cube.history.init = this.database.playground.scene;
+    this.world.twister.twist(this.database.playground.history, false, 1, true);
+    this.callback();
+    this.now = new Date().getTime();
+  }
+
   shuffle() {
-    if (this.shuffler === "*") {
+    if (this.database.playground.shuffler === "*") {
       this.world.twister.twist("*");
     } else {
-      this.world.twister.twist("# " + this.shuffler, false, 1, true);
+      this.world.twister.twist("# " + this.database.playground.shuffler, false, 1, true);
       this.world.cube.history.clear();
-      this.world.cube.history.init = this.shuffler;
+      this.world.cube.history.init = this.database.playground.shuffler;
     }
-    this.complete = this.world.cube.complete;
-    this.start = 0;
+    this.callback();
+    this.database.playground.complete = this.world.cube.complete;
+    this.database.playground.start = 0;
     this.now = 0;
+    this.database.save();
   }
 
   order() {
@@ -146,11 +183,12 @@ export default class Playground extends Vue {
   @Watch("shuffled")
   onShuffledChange() {
     this.keyboard.disable = this.shuffled;
+    if (this.shuffled === false) {
+      this.database.save();
+    }
   }
 
   historyd: boolean = false;
-  history: string = "";
-  scene: string = "";
   tap(key: string) {
     switch (key) {
       case "shuffle":
@@ -160,8 +198,6 @@ export default class Playground extends Vue {
         this.world.twister.undo();
         break;
       case "history":
-        this.history = this.world.cube.history.exp.substring(1);
-        this.scene = this.world.cube.history.init;
         this.historyd = true;
         break;
       default:
@@ -173,7 +209,7 @@ export default class Playground extends Vue {
     let data: { [key: string]: {} } = {};
     let order = this.world.order;
     data["order"] = order;
-    let drama = { scene: this.world.cube.history.init, action: this.world.cube.history.exp.substring(1) };
+    let drama = { scene: this.database.playground.scene, action: this.database.playground.history };
     data["drama"] = drama;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
@@ -208,14 +244,19 @@ class KeyHandle {
 
   constructor(callback: Function) {
     this.callback = callback;
-    document.addEventListener("keypress", this.keyPress, false);
+    document.addEventListener("keydown", this.keydown, false);
   }
 
-  keyPress = (event: KeyboardEvent) => {
+  keydown = (event: KeyboardEvent) => {
     if (this.disable) {
       return false;
     }
     let id = event.which;
+    if (id === 8) {
+      this.callback("^");
+      event.preventDefault();
+      return false;
+    }
     if (id === 96) {
       event.preventDefault();
       this.reverse = !this.reverse;

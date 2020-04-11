@@ -53,7 +53,7 @@ export default class Theme extends Vue {
   color(color: string) {
     this.colord = false;
     this.database.theme.color(this.face, color);
-    this.database.save();
+    this.database.theme.save();
   }
 
   palette: string[] = [
@@ -110,6 +110,6 @@ export default class Theme extends Vue {
 
   reset() {
     this.database.theme.reset();
-    this.database.save();
+    this.database.theme.save();
   }
 }
