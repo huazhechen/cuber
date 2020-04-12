@@ -15,6 +15,6 @@ export var COLORS: { [key: string]: string } = {
   F: "#00A020",
   B: "#0D47A1",
   Core: "#202020",
-  High: "#FF4081",
   Gray: "#808080",
+  High: "#FF4081",
 };

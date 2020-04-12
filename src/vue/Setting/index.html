@@ -9,7 +9,7 @@
     :style="{width:size * 0.9+'px', height:size * 0.9+'px', 'margin-right': width / 2 - Math.min(size*4, width/2) + 'px'}"
     @click="menu=!menu"
   >
-    <v-icon :size="size * 0.7">menu</v-icon>
+    <v-icon :size="size * 0.6">menu</v-icon>
   </v-btn>
   <order v-model="items['order'].value" v-on:order="$emit('order');"></order>
   <control v-model="items['control'].value"></control>
