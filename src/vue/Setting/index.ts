@@ -73,9 +73,8 @@ export default class Setting extends Vue {
         let mode = list ? list[2] : "playground";
         if (mode != key) {
           search = key === "playground" ? "" : "?mode=" + key;
-          location.search = search;
-          // let link = window.location.origin + window.location.pathname + search;
-          // window.location.replace(link);
+          let link = window.location.origin + window.location.pathname + search;
+          window.location.replace(link);
         }
         break;
       case "help":

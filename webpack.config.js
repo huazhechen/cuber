@@ -76,17 +76,8 @@ module.exports = () => ({
     }),
     new WorkboxPlugin.GenerateSW({
       // https://developers.google.cn/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW?hl=zh_cn#GenerateSW
-      skipWaiting: true,
-      clientsClaim: true,
       ignoreURLParametersMatching: [/.*/],
       runtimeCaching: [
-        {
-          urlPattern: /\.(?:js|html)$/,
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "content",
-          },
-        },
         {
           urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
           handler: "CacheFirst",
