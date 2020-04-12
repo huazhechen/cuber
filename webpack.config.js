@@ -80,27 +80,16 @@ module.exports = () => ({
       skipWaiting: true,
       cleanupOutdatedCaches: true,
       directoryIndex: "./index.html",
-      navigateFallback: "./index.html",
       exclude: [/./],
       runtimeCaching: [
         {
-          urlPattern: /mode=/,
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "mode",
-            matchOptions: {
-              ignoreSearch: true,
-            },
-            fetchOptions: {
-              mode: "navigate",
-            },
-          },
-        },
-        {
-          urlPattern: /(\.(?:js|png|html))|\/$/,
+          urlPattern: /cuber.*/,
           handler: "NetworkFirst",
           options: {
             cacheName: "data",
+            matchOptions: {
+              ignoreSearch: true,
+            },
           },
         },
       ],
