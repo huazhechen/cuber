@@ -79,6 +79,13 @@ module.exports = () => ({
       ignoreURLParametersMatching: [/.*/],
       runtimeCaching: [
         {
+          urlPattern: /\.(?:js|html)$/,
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "content",
+          },
+        },
+        {
           urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
           handler: "CacheFirst",
           options: {
