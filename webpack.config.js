@@ -83,7 +83,7 @@ module.exports = () => ({
       exclude: [/./],
       runtimeCaching: [
         {
-          urlPattern: /cuber.*/,
+          urlPattern: /cuber/,
           handler: "NetworkFirst",
           options: {
             cacheName: "data",
