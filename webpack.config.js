@@ -80,6 +80,7 @@ module.exports = () => ({
       skipWaiting: true,
       cleanupOutdatedCaches: true,
       directoryIndex: "./index.html",
+      navigateFallback: "./index.html",
       exclude: [/./],
       runtimeCaching: [
         {
@@ -89,6 +90,9 @@ module.exports = () => ({
             cacheName: "data",
             matchOptions: {
               ignoreSearch: true,
+            },
+            fetchOptions: {
+              mode: "navigate",
             },
           },
         },
