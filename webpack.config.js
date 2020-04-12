@@ -84,17 +84,20 @@ module.exports = () => ({
       exclude: [/./],
       runtimeCaching: [
         {
-          urlPattern: /\.html\??|\/\??/,
+          urlPattern: /mode=/,
           handler: "NetworkFirst",
           options: {
-            cacheName: "data",
+            cacheName: "mode",
             matchOptions: {
               ignoreSearch: true,
+            },
+            fetchOptions: {
+              mode: "navigate",
             },
           },
         },
         {
-          urlPattern: /\.(?:js|png)|$/,
+          urlPattern: /(\.(?:js|png|html))|\/$/,
           handler: "NetworkFirst",
           options: {
             cacheName: "data",
