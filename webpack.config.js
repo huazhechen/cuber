@@ -81,6 +81,15 @@ module.exports = () => ({
       cleanupOutdatedCaches: true,
       ignoreURLParametersMatching: [/./],
       directoryIndex: "./index.html",
+      runtimeCaching: [
+        {
+          urlPattern: /./,
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "all",
+          },
+        },
+      ],
     }),
     new CopyWebpackPlugin([
       {
