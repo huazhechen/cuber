@@ -91,9 +91,6 @@ module.exports = () => ({
             matchOptions: {
               ignoreSearch: true,
             },
-            fetchOptions: {
-              mode: "navigate",
-            },
           },
         },
         {
