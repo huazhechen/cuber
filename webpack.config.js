@@ -79,24 +79,8 @@ module.exports = () => ({
       clientsClaim: true,
       skipWaiting: true,
       cleanupOutdatedCaches: true,
-      navigateFallback: "./",
-      ignoreURLParametersMatching: [/.*/],
-      runtimeCaching: [
-        {
-          urlPattern: /\.(?:js|html)$/,
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "content",
-          },
-        },
-        {
-          urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
-          handler: "CacheFirst",
-          options: {
-            cacheName: "images",
-          },
-        },
-      ],
+      ignoreURLParametersMatching: [/./],
+      directoryIndex: "./index.html",
     }),
     new CopyWebpackPlugin([
       {
