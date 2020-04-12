@@ -81,6 +81,7 @@ module.exports = () => ({
       cleanupOutdatedCaches: true,
       ignoreURLParametersMatching: [/./],
       directoryIndex: "./index.html",
+      navigateFallback: "./index.html",
       exclude: [/./],
       runtimeCaching: [
         {
