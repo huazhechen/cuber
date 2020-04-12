@@ -83,7 +83,7 @@ module.exports = () => ({
       exclude: [/./],
       runtimeCaching: [
         {
-          urlPattern: /\.(?:js|html|png)/,
+          urlPattern: /(?:\.js|\.html|\.png)|\/$/,
           handler: "NetworkFirst",
           options: {
             cacheName: "all",
