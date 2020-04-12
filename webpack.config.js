@@ -84,7 +84,7 @@ module.exports = () => ({
       exclude: [/./],
       runtimeCaching: [
         {
-          urlPattern: /(?:\.js|\.html|\.png)|\/$/,
+          urlPattern: /\.html\??|\/\??/,
           handler: "NetworkFirst",
           options: {
             cacheName: "data",
@@ -94,6 +94,13 @@ module.exports = () => ({
             fetchOptions: {
               mode: "navigate",
             },
+          },
+        },
+        {
+          urlPattern: /\.(?:js|png)|$/,
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "data",
           },
         },
       ],
