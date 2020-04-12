@@ -86,20 +86,11 @@ module.exports = () => ({
           urlPattern: /(?:\.js|\.html|\.png)|\/$/,
           handler: "NetworkFirst",
           options: {
-            cacheName: "all",
+            cacheName: "data",
+            matchOptions: {
+              ignoreSearch: true,
+            },
           },
-        },
-      ],
-      manifestTransforms: [
-        async (entries) => {
-          const manifest = entries.map((entry) => {
-            let idx = entry.url.indexOf("?");
-            if (idx > 0) {
-              entry.url = entry.url.substring(0, idx);
-            }
-            return entry;
-          });
-          return { manifest, warnings: [] };
         },
       ],
     }),
