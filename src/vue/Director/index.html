@@ -191,7 +191,7 @@
         </v-container>
       </v-card>
     </v-bottom-sheet>
-    <v-bottom-sheet v-model="colord" hide-overlay persistent>
+    <v-bottom-sheet v-model="colord" hide-overlay>
       <v-card flat style="margin: auto; touch-action: none; user-select: none;">
         <v-btn
           absolute
@@ -213,7 +213,7 @@
           :style="{width:Math.min(size * 8, width) + 'px', 'padding-top': size * 0.5 + 'px', 'padding-bottom': size * 0.5 + 'px'}"
         >
           <v-layout row wrap>
-            <v-flex v-for="(item, index) in colors" :key="index" xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex v-for="(item, index) in colors" :key="index" xs2 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="color = index;"
                 :color="item"
@@ -225,19 +225,19 @@
                 <v-icon :size="size * 0.8" v-show="color==index">colorize</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="color = 'remove';"
                 block
-                text
                 outlined
+                text
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
                 <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="clear"
                 block
@@ -246,10 +246,10 @@
                 :height="size"
                 color="error"
               >
-                <div :style="{'font-size':size * 0.4+'px'}">清空</div>
+                <v-icon :size="size * 0.8">delete</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="reset"
                 block
@@ -258,7 +258,7 @@
                 :height="size"
                 color="success"
               >
-                <div :style="{'font-size':size * 0.4+'px'}">恢复</div>
+                <v-icon :size="size * 0.8">replay</v-icon>
               </v-btn>
             </v-flex>
           </v-layout>
