@@ -1,5 +1,5 @@
 <v-app>
-  <div v-resize="resize" style="user-select: none;touch-action: none;">
+  <div v-resize="resize" style="user-select: none; touch-action: none;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-container
@@ -253,7 +253,8 @@
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            auto-grow
+            rows="12"
+            no-resize
             solo
             flat
             outlined
@@ -274,7 +275,8 @@
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            auto-grow
+            rows="12"
+            no-resize
             solo
             flat
             outlined
