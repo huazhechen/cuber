@@ -80,10 +80,10 @@ module.exports = () => ({
       skipWaiting: true,
       cleanupOutdatedCaches: true,
       navigateFallback: "./",
-      navigationPreload: true,
+      ignoreURLParametersMatching: [/.*/],
       runtimeCaching: [
         {
-          urlPattern: /\/$|\.(?:js|html)$/,
+          urlPattern: /\.(?:js|html)$/,
           handler: "NetworkFirst",
           options: {
             cacheName: "content",
