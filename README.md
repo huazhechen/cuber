@@ -1,6 +1,6 @@
 # [魔方栈](https://huazhechen.gitee.io/cuber)
 
-- 一个优美而强大的网页魔方
+- 优美而强大的网页魔方
 
 - 地址: <https://huazhechen.gitee.io/cuber>
 
