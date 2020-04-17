@@ -191,21 +191,8 @@
         </v-container>
       </v-card>
     </v-bottom-sheet>
-    <v-bottom-sheet v-model="colord" hide-overlay>
+    <v-bottom-sheet v-model="colord" hide-overlay persistent no-click-animation>
       <v-card flat style="margin: auto; touch-action: none; user-select: none;">
-        <v-btn
-          absolute
-          right
-          top
-          fab
-          depressed
-          color="error"
-          style="user-select: none;"
-          :style="{width:size * 0.8+'px', height:size * 0.8+'px', 'margin-right': width / 2 - Math.min(size*4, width/2) + 'px'}"
-          @click="colord=false"
-        >
-          <v-icon :size="size * 0.5">close</v-icon>
-        </v-btn>
         <v-container
           fluid
           grid-list-md
@@ -213,43 +200,47 @@
           :style="{width:Math.min(size * 8, width) + 'px', 'padding-top': size * 0.5 + 'px', 'padding-bottom': size * 0.5 + 'px'}"
         >
           <v-layout row wrap>
-            <v-flex v-for="(item, index) in colors" :key="index" xs2 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
-                @click="color = index;"
-                :color="item"
+                @click="color = item;"
+                :color="colors[item]"
                 block
                 depressed
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
-                <v-icon :size="size * 0.8" v-show="color==index">colorize</v-icon>
+                <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+              <v-btn
+                @click="color = 'Core';"
+                block
+                depressed
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+                :height="size"
+              >
+                <v-icon :size="size * 0.8" v-show="color=='Core'">colorize</v-icon>
+                <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='Core'">
+                  底色
+                </div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="color = 'remove';"
                 block
-                outlined
-                text
+                depressed
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
                 <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
+                <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='remove'">
+                  移除
+                </div>
               </v-btn>
             </v-flex>
-            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="clear"
-                block
-                depressed
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-                color="error"
-              >
-                <v-icon :size="size * 0.8">delete</v-icon>
-              </v-btn>
-            </v-flex>
-            <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
+            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
               <v-btn
                 @click="reset"
                 block
@@ -258,7 +249,36 @@
                 :height="size"
                 color="success"
               >
-                <v-icon :size="size * 0.8">replay</v-icon>
+                <div :style="{'font-size':size * 0.4+'px'}">
+                  重置
+                </div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+              <v-btn
+                @click="clear"
+                block
+                depressed
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
+                :height="size"
+                color="error"
+              >
+                <div :style="{'font-size':size * 0.4+'px'}">
+                  清空
+                </div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs12 :style="{padding:size * 0.06 + 'px'}" style="display: flex;">
+              <v-btn
+                @click="colord=false"
+                block
+                text
+                color="primary"
+                style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8"
+                :style="{'font-size':size * 0.4 + 'px'}"
+              >
+                确定
               </v-btn>
             </v-flex>
           </v-layout>

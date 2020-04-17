@@ -23,7 +23,7 @@
       { "name": "F2L-12", "default": "(RU'R'U) (RU'R'U2) (RU'R')" },
       { "name": "F2L-13", "default": "d(R'URU') (R'U'R)y" },
       { "name": "F2L-14", "default": "U'(RU'R'U) (RUR')" },
-      { "name": "F2L-15", "default": "(RUR'U2) (RU'R'U) (RU'R')" },
+      { "name": "F2L-15", "default": "(R'D'RU') (R'DRU) (RU'R')" },
       { "name": "F2L-16", "default": "(RU'R'U) d(R'U'R)y" },
       { "name": "F2L-17", "default": "(RU'2R'U') (RUR')" },
       { "name": "F2L-18", "default": "y'(R'U2RU) (R'U'R)y" },
@@ -39,17 +39,17 @@
       { "name": "F2L-28", "default": "y'(R'URU') (R'UR)y" },
       { "name": "F2L-29", "default": "y'(R'U'RU) (R'U'R)y" },
       { "name": "F2L-30", "default": "(RUR'U') (RUR')" },
-      { "name": "F2L-31", "default": "(RU'R'd) (R'UR)y" },
-      { "name": "F2L-32", "default": "(RUR'U')2 (RUR')" },
+      { "name": "F2L-31", "default": "U'(R'FRF') (RU'R')" },
+      { "name": "F2L-32", "default": "(URU'R')3" },
       { "name": "F2L-33", "default": "U'(RU'R'U2) (RU'R')" },
       { "name": "F2L-34", "default": "U'(RU2'R'U) (RUR')" },
-      { "name": "F2L-35", "default": "U'(RUR'd) (R'U'R)y" },
+      { "name": "F2L-35", "default": "U2(RU'R'U') y'(R'U'R)y" },
       { "name": "F2L-36", "default": "U2(R'FRF') U2(RUR')" },
       { "name": "F2L-37", "default": "(R'FRF') (RU'R'URU'R'U2RU'R')" },
-      { "name": "F2L-38", "default": "(RUR'U') (RU2R'U') (RUR')" },
+      { "name": "F2L-38", "default": "(RU'R'U') (RUR'U2) (RU'R')" },
       { "name": "F2L-39", "default": "(RU'R'U) (RU'2R'U) (RU'R')" },
-      { "name": "F2L-40", "default": "(RU'R'F) (RUR'U') (F'RU'R')" },
-      { "name": "F2L-41", "default": "(RUR'U') (RU'R'U2) y'(R'U'R)y" }
+      { "name": "F2L-40", "default": "(rU'r'U2rUr') (RUR')" },
+      { "name": "F2L-41", "default": "(RU'R') (rU'r'U2rUr')" }
     ]
   },
   {

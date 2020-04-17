@@ -263,7 +263,8 @@ export class TwistNode {
   }
 
   constructor(exp: string, reverse = false, times = 1) {
-    // 合法性校验
+    // '符号处理
+    exp = exp.replace(/[‘＇’]/g, "'");
     this.children = [];
     this.twist = new TwistAction(exp, reverse, times);
     // 不用解析场景

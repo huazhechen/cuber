@@ -50,6 +50,7 @@ export default class Director extends Vue {
   gif: GIF;
   apng: APNG;
   zip: ZIP;
+  colort: string[];
   colors: { [key: string]: string };
 
   constructor() {
@@ -62,6 +63,7 @@ export default class Director extends Vue {
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
     this.colors = COLORS;
+    this.colort = ["R", "L", "F", "B", "U", "D", "High", "Gray"];
   }
 
   resize() {
