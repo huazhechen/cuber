@@ -191,7 +191,7 @@
         </v-container>
       </v-card>
     </v-bottom-sheet>
-    <v-bottom-sheet v-model="colord" hide-overlay persistent no-click-animation>
+    <v-bottom-sheet v-model="colord" hide-overlay persistent no-click-animation :retain-focus="false">
       <v-card flat style="margin: auto; touch-action: none; user-select: none;">
         <v-container
           fluid
@@ -206,6 +206,7 @@
                 :color="colors[item]"
                 block
                 depressed
+                :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
@@ -217,10 +218,11 @@
                 @click="color = 'Core';"
                 block
                 depressed
+                :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
-                <v-icon :size="size * 0.8" v-show="color=='Core'">colorize</v-icon>
+                <v-icon :size="size * 0.8" v-show="color=='Core'">crop_din</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='Core'">
                   底色
                 </div>
@@ -231,6 +233,7 @@
                 @click="color = 'remove';"
                 block
                 depressed
+                :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
               >
@@ -245,6 +248,7 @@
                 @click="reset"
                 block
                 depressed
+                :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
                 color="success"
@@ -259,6 +263,7 @@
                 @click="clear"
                 block
                 depressed
+                :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
                 :height="size"
                 color="error"
@@ -274,6 +279,7 @@
                 block
                 text
                 color="primary"
+                :ripple="false"
                 style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8"
                 :style="{'font-size':size * 0.4 + 'px'}"
