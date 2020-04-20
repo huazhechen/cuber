@@ -41,8 +41,8 @@ export class Preferance {
   }
 
   refresh(): void {
-    const self = this as { [key: string]: any };
-    const data = this.data as { [key: string]: any };
+    const self = (this as unknown) as { [key: string]: string | number | boolean };
+    const data = this.data as { [key: string]: string | number | boolean };
     for (const key in data) {
       self[key] = data[key];
     }
@@ -250,7 +250,7 @@ export default class Database {
     this.theme.load();
 
     let save;
-    const self = this as { [key: string]: any };
+    const self = (this as unknown) as { [key: string]: { [key: string]: string | number | boolean } };
     if (self[this.mode]) {
       save = this.storage.getItem(this.mode);
       if (save) {
@@ -261,7 +261,8 @@ export default class Database {
           this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));
         }
       }
-      this.world.order = self[this.mode].order;
+      const order = self[this.mode].order as number;
+      this.world.order = order;
     }
   }
 
@@ -305,7 +306,7 @@ export default class Database {
   }
 
   save(): void {
-    const self = this as { [key: string]: any };
+    const self = (this as unknown) as { [key: string]: {} };
     if (self[this.mode]) {
       this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));
     }

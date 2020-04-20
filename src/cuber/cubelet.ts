@@ -87,12 +87,12 @@ class Frame extends THREE.Geometry {
     ];
 
     for (let i = 0; i < _verts.length; i++) {
-      let _vert = _verts[i];
+      const _vert = _verts[i];
       this.vertices.push(new THREE.Vector3(_vert[0], _vert[1], _vert[2]));
     }
     for (let i = 0; i < Frame._INDICES.length; i++) {
-      let _indice = Frame._INDICES[i];
-      let _face = new THREE.Face3(_indice[0], _indice[1], _indice[2]);
+      const _indice = Frame._INDICES[i];
+      const _face = new THREE.Face3(_indice[0], _indice[1], _indice[2]);
       this.faces.push(_face);
     }
     this.computeFaceNormals();
@@ -102,13 +102,13 @@ class Frame extends THREE.Geometry {
 class Sticker extends THREE.ExtrudeGeometry {
   constructor(size: number, depth: number) {
     size = size / 2;
-    let left = -size;
-    let bottom = size;
-    let top = -size;
-    let right = size;
-    let radius = size / 4;
+    const left = -size;
+    const bottom = size;
+    const top = -size;
+    const right = size;
+    const radius = size / 4;
 
-    let shape = new THREE.Shape();
+    const shape = new THREE.Shape();
     shape.moveTo(left, top + radius);
     shape.lineTo(left, bottom - radius);
     shape.quadraticCurveTo(left, bottom, left + radius, bottom);
@@ -127,13 +127,13 @@ class Sticker extends THREE.ExtrudeGeometry {
 class Mirror extends THREE.ShapeGeometry {
   constructor(size: number) {
     size = size / 2;
-    let left = -size;
-    let bottom = size;
-    let top = -size;
-    let right = size;
-    let radius = size / 4;
+    const left = -size;
+    const bottom = size;
+    const top = -size;
+    const right = size;
+    const radius = size / 4;
 
-    let shape = new THREE.Shape();
+    const shape = new THREE.Shape();
     shape.moveTo(left, top + radius);
     shape.lineTo(left, bottom - radius);
     shape.quadraticCurveTo(left, bottom, left + radius, bottom);
@@ -162,10 +162,10 @@ export default class Cubelet extends THREE.Group {
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH
   );
 
-  public static LAMBERS = (() => {
-    let result: { [key: string]: THREE.MeshLambertMaterial } = {};
+  public static LAMBERS = ((): { [key: string]: THREE.MeshLambertMaterial } => {
+    const result: { [key: string]: THREE.MeshLambertMaterial } = {};
     for (const key in COLORS) {
-      let color = COLORS[key];
+      const color = COLORS[key];
       result[key] = new THREE.MeshLambertMaterial({ color: color });
     }
     return result;
@@ -184,10 +184,10 @@ export default class Cubelet extends THREE.Group {
     depthWrite: false,
   });
 
-  public static BASICS = (() => {
-    let result: { [key: string]: THREE.MeshBasicMaterial } = {};
+  public static BASICS = ((): { [key: string]: THREE.MeshBasicMaterial } => {
+    const result: { [key: string]: THREE.MeshBasicMaterial } = {};
     for (const key in COLORS) {
-      let color = COLORS[key];
+      const color = COLORS[key];
       result[key] = new THREE.MeshBasicMaterial({ color: color });
     }
     return result;
@@ -196,7 +196,7 @@ export default class Cubelet extends THREE.Group {
   _vector: THREE.Vector3;
 
   set vector(vector) {
-    let half = (this.order - 1) / 2;
+    const half = (this.order - 1) / 2;
     let x = Math.round(vector.x * 2) / 2;
     let y = Math.round(vector.y * 2) / 2;
     let z = Math.round(vector.z * 2) / 2;
@@ -209,17 +209,17 @@ export default class Cubelet extends THREE.Group {
     this.position.y = Cubelet.SIZE * this._vector.y;
     this.position.z = Cubelet.SIZE * this._vector.z;
   }
-  get vector() {
+  get vector(): THREE.Vector3 {
     return this._vector;
   }
 
   _index: number;
 
   set index(index) {
-    let half = (this.order - 1) / 2;
-    let _x = (index % this.order) - half;
-    let _y = Math.floor((index % (this.order * this.order)) / this.order) - half;
-    let _z = Math.floor(index / (this.order * this.order)) - half;
+    const half = (this.order - 1) / 2;
+    const _x = (index % this.order) - half;
+    const _y = Math.floor((index % (this.order * this.order)) / this.order) - half;
+    const _z = Math.floor(index / (this.order * this.order)) - half;
     this.vector = new THREE.Vector3(_x, _y, _z);
   }
 
@@ -252,8 +252,8 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  getColor(face: FACE) {
-    let position = new THREE.Vector3(0, 0, 0);
+  getColor(face: FACE): number {
+    const position = new THREE.Vector3(0, 0, 0);
     switch (face) {
       case FACE.L:
         position.x = -1;
@@ -278,9 +278,9 @@ export default class Cubelet extends THREE.Group {
     }
     this._quaternion.copy(this.quaternion);
     position.applyQuaternion(this._quaternion.inverse());
-    let x = Math.round(position.x);
-    let y = Math.round(position.y);
-    let z = Math.round(position.z);
+    const x = Math.round(position.x);
+    const y = Math.round(position.y);
+    const z = Math.round(position.z);
     let color = 0;
     if (x < 0) {
       color = FACE.L;
@@ -314,15 +314,15 @@ export default class Cubelet extends THREE.Group {
     this._quaternion = new THREE.Quaternion();
     this.mirrors = [];
 
-    let xx = this.position.x * this.position.x;
-    let yy = this.position.y * this.position.y;
-    let zz = this.position.z * this.position.z;
+    const xx = this.position.x * this.position.x;
+    const yy = this.position.y * this.position.y;
+    const zz = this.position.z * this.position.z;
     let d = xx + yy + zz - Math.min(xx, yy, zz);
     d = Math.sqrt(d) + (Math.sqrt(2) * Cubelet.SIZE) / 2 - (order * Cubelet.SIZE) / 2;
     if (d < 0) {
       return;
     }
-    let half = (order - 1) / 2;
+    const half = (order - 1) / 2;
 
     this.lamberts = [
       this.vector.x == -half ? Cubelet.LAMBERS.L : undefined,
@@ -347,7 +347,7 @@ export default class Cubelet extends THREE.Group {
 
     for (let i = 0; i < 6; i++) {
       if (this.lamberts[i] != undefined) {
-        let _sticker = new THREE.Mesh(Cubelet._STICKER, this.lamberts[i]);
+        const _sticker = new THREE.Mesh(Cubelet._STICKER, this.lamberts[i]);
         _sticker.name = FACE[i];
         switch (i) {
           case FACE.L:
@@ -379,7 +379,7 @@ export default class Cubelet extends THREE.Group {
         }
         this.add(_sticker);
         this.stickers[i] = _sticker;
-        let _mirror = new THREE.Mesh(Cubelet._MIRROR, this.basics[i]);
+        const _mirror = new THREE.Mesh(Cubelet._MIRROR, this.basics[i]);
         _mirror.rotation.x = _sticker.rotation.x == 0 ? 0 : _sticker.rotation.x + Math.PI;
         _mirror.rotation.y = _sticker.rotation.y == 0 ? 0 : _sticker.rotation.y + Math.PI;
         _mirror.rotation.z = _sticker.rotation.z == 0 ? 0 : _sticker.rotation.z + Math.PI;
@@ -398,7 +398,7 @@ export default class Cubelet extends THREE.Group {
     this.updateMatrix();
   }
 
-  stick(face: number, value: string) {
+  stick(face: number, value: string): void {
     let lamber;
     let basic;
     if (this.stickers[face] === undefined) {

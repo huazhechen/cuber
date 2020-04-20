@@ -2,19 +2,18 @@ import { TwistAction } from "./twister";
 
 export default class History {
   list: TwistAction[] = [];
-  init: string = "";
-  exp: string = "";
-  constructor() {}
+  init = "";
+  exp = "";
 
-  record(action: TwistAction) {
+  record(action: TwistAction): void {
     if (this.list.length == 0) {
       action.times = action.times % 4;
       if (action.times != 0) {
         this.list.push(action);
-        this.exp = this.exp + " " + action.value;
+        this.exp = this.exp + " " + action.exp;
       }
     } else {
-      let last = this.list[this.list.length - 1];
+      const last = this.list[this.list.length - 1];
       if (last.group == action.group) {
         last.times = last.times + action.times * (last.reverse == action.reverse ? 1 : -1);
         last.times = last.times % 4;
@@ -22,30 +21,30 @@ export default class History {
         if (last.times == 0) {
           this.list.pop();
         } else {
-          this.exp = this.exp + " " + last.value;
+          this.exp = this.exp + " " + last.exp;
         }
       } else {
         this.list.push(action);
-        this.exp = this.exp + " " + action.value;
+        this.exp = this.exp + " " + action.exp;
       }
     }
   }
 
-  clear() {
+  clear(): void {
     this.list = [];
     this.init = "";
     this.exp = "";
   }
 
-  get last() {
+  get last(): TwistAction {
     return this.list[this.list.length - 1];
   }
 
-  get length() {
+  get length(): number {
     return this.list.length;
   }
 
-  get moves() {
+  get moves(): number {
     let length = this.length;
     for (const twist of this.list) {
       if (twist.group == "x" || twist.group == "y" || twist.group == "z") {

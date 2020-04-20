@@ -1,162 +1,19 @@
 import tweener from "./tweener";
 import World from "./world";
 
-export default class Twister {
-  world: World;
-  queue: TwistAction[];
-  constructor(world: World) {
-    this.world = world;
-    this.queue = [];
-    this.world.callbacks.push(() => {
-      this.update();
-    });
-  }
-
-  static shuffle(order: number) {
-    let result = "";
-    let exps = [];
-    let last = -1;
-    let actions = ["Uw", "Dw", "Rw", "Lw", "Fw", "Bw"];
-    let axis = -1;
-    for (let i = 0; i < 3 * 3 * order; i++) {
-      let exp = [];
-      while (axis == last) {
-        axis = Math.floor(Math.random() * 3);
-      }
-      let side = Math.floor(Math.random() * 2);
-      let action = actions[axis * 2 + side];
-      let prefix = Math.ceil(Math.random() * Math.floor(order / 2));
-      if (prefix === 1) {
-        action = action[0];
-      }
-      if (prefix > 2) {
-        exp.push(prefix);
-      }
-      exp.push(action);
-      let suffix = Math.random();
-      if (suffix < 0.2) {
-        exp.push("2");
-      } else if (suffix < 0.6) {
-        exp.push("'");
-      }
-      exps.push(exp.join(""));
-      last = axis;
-    }
-    result = exps.join(" ");
-    return result;
-  }
-
-  get length() {
-    return this.queue.length;
-  }
-
-  finish() {
-    for (const action of this.queue) {
-      action.fast = true;
-    }
-    tweener.finish();
-  }
-
-  twist(exp: string, reverse = false, times = 1, fast = false) {
-    if (this.queue.length > 0) {
-      tweener.finish();
-      this.update();
-    }
-    tweener.speedup();
-    let node = new TwistNode(exp, reverse, times);
-    let list = node.parse();
-    for (let element of list) {
-      element.fast = fast;
-      this.queue.push(element);
-    }
-    this.update();
-  }
-
-  push(action: TwistAction) {
-    this.queue.push(action);
-    this.update();
-  }
-
-  update() {
-    if (this.queue.length === 0) {
-      return;
-    }
-    if (this.world.cube.lock) {
-      return;
-    }
-    let twist = this.queue.shift();
-    if (undefined == twist) {
-      return;
-    }
-    this.start(twist);
-  }
-
-  start(action: TwistAction) {
-    if (action.group == "#") {
-      this.world.cube.reset();
-      this.world.cube.dirty = true;
-      this.world.cube.history.clear();
-      this.world.callback();
-      return;
-    }
-    if (action.group == "*") {
-      this.world.cube.reset();
-      this.world.cube.dirty = true;
-      let exp = Twister.shuffle(this.world.cube.order);
-      this.twist(exp, false, 1, true);
-      this.world.cube.history.clear();
-      this.world.cube.history.init = exp;
-      return;
-    }
-    let angle = -Math.PI / 2;
-    if (action.reverse) {
-      angle = -angle;
-    }
-    if (action.times) {
-      angle = angle * action.times;
-    }
-    let part = this.world.cube.groups.get(action.group);
-    if (part === undefined) {
-      this.update();
-      return;
-    }
-    part.angle = 0;
-    part.hold();
-
-    if (action.fast) {
-      part.angle = angle;
-    }
-    part.twist(angle);
-    return;
-  }
-
-  undo() {
-    if (this.world.cube.history.length == 0) {
-      return;
-    }
-    this.finish();
-    if (this.world.cube.history.length == 0) {
-      return;
-    }
-    let last = this.world.cube.history.last;
-    let action = new TwistAction(last.group, !last.reverse, last.times);
-    this.push(action);
-  }
-}
-
 export class TwistAction {
   group: string;
   reverse: boolean;
   times: number;
   fast: boolean;
-  constructor(exp: string, reverse: boolean = false, times: number = 1, fast: boolean = false) {
+  constructor(exp: string, reverse = false, times = 1, fast = false) {
     this.group = exp;
     this.reverse = reverse;
     this.times = times;
     this.fast = fast;
   }
 
-  get value() {
+  get exp(): string {
     let times = this.times;
     let reverse = this.reverse;
     if (times === 3) {
@@ -174,14 +31,14 @@ export class TwistNode {
   static AFFIX = "'Ww0123456789-";
   children: TwistNode[];
   twist: TwistAction;
-  static SPLIT_SEGMENT(exp: string) {
-    let list = [];
+  static SPLIT_SEGMENT(exp: string): string[] {
+    const list = [];
     let buffer = "";
     let stack = 0;
     let ready = false;
     let note = false;
     for (let i = 0; i < exp.length; i++) {
-      let c = exp.charAt(i);
+      const c = exp.charAt(i);
       if (c === " " && buffer.length == 0) {
         continue;
       }
@@ -230,12 +87,12 @@ export class TwistNode {
     return list;
   }
 
-  static SPLIT_BRACKET(exp: string) {
-    let list = [];
+  static SPLIT_BRACKET(exp: string): string[] {
+    const list = [];
     let buffer = "";
     let stack = 0;
     for (let i = 0; i < exp.length; i++) {
-      let c = exp.charAt(i);
+      const c = exp.charAt(i);
       // 非后缀检查是否可以中断
       if (stack == 0 && (c === "," || c === ":")) {
         list.push(buffer);
@@ -277,8 +134,8 @@ export class TwistNode {
       }
       return;
     }
-    let list = TwistNode.SPLIT_SEGMENT(exp);
-    for (let item of list) {
+    const list = TwistNode.SPLIT_SEGMENT(exp);
+    for (const item of list) {
       let values;
       // 只有[]
       values = item.match(/^\[(.+[:|,].+)\]$/i);
@@ -315,38 +172,181 @@ export class TwistNode {
       if (null === values) {
         continue;
       }
-      let reverse = (values[2] + values[4]).length == 1;
-      let times = values[3].length == 0 ? 1 : parseInt(values[3]);
+      const reverse = (values[2] + values[4]).length == 1;
+      const times = values[3].length == 0 ? 1 : parseInt(values[3]);
       this.children.push(new TwistNode(values[1], reverse, times));
     }
   }
 
-  parse(reverse = false) {
+  parse(reverse = false): TwistAction[] {
     reverse = this.twist.reverse !== reverse;
-    let result: TwistAction[] = [];
+    const result: TwistAction[] = [];
     if (0 !== this.children.length) {
-      for (var i = 0; i < this.twist.times; i++) {
-        for (var j = 0; j < this.children.length; j++) {
-          var n;
+      for (let i = 0; i < this.twist.times; i++) {
+        for (let j = 0; j < this.children.length; j++) {
+          let n;
           if (reverse) {
             n = this.children[this.children.length - j - 1];
           } else {
             n = this.children[j];
           }
-          var list = n.parse(reverse);
-          for (let element of list) {
+          const list = n.parse(reverse);
+          for (const element of list) {
             result.push(element);
           }
         }
       }
     } else if (this.twist.group != "") {
-      let action = new TwistAction(this.twist.group, reverse, this.twist.times);
+      const action = new TwistAction(this.twist.group, reverse, this.twist.times);
       result.push(action);
     }
     return result;
   }
 
-  get value() {
-    return this.twist.value;
+  get exp(): string {
+    return this.twist.exp;
+  }
+}
+
+export default class Twister {
+  world: World;
+  queue: TwistAction[];
+  constructor(world: World) {
+    this.world = world;
+    this.queue = [];
+    this.world.callbacks.push(() => {
+      this.update();
+    });
+  }
+
+  static shuffle(order: number): string {
+    let result = "";
+    const exps = [];
+    let last = -1;
+    const actions = ["Uw", "Dw", "Rw", "Lw", "Fw", "Bw"];
+    let axis = -1;
+    for (let i = 0; i < 3 * 3 * order; i++) {
+      const exp = [];
+      while (axis == last) {
+        axis = Math.floor(Math.random() * 3);
+      }
+      const side = Math.floor(Math.random() * 2);
+      let action = actions[axis * 2 + side];
+      const prefix = Math.ceil(Math.random() * Math.floor(order / 2));
+      if (prefix === 1) {
+        action = action[0];
+      }
+      if (prefix > 2) {
+        exp.push(prefix);
+      }
+      exp.push(action);
+      const suffix = Math.random();
+      if (suffix < 0.2) {
+        exp.push("2");
+      } else if (suffix < 0.6) {
+        exp.push("'");
+      }
+      exps.push(exp.join(""));
+      last = axis;
+    }
+    result = exps.join(" ");
+    return result;
+  }
+
+  get length(): number {
+    return this.queue.length;
+  }
+
+  finish(): void {
+    for (const action of this.queue) {
+      action.fast = true;
+    }
+    tweener.finish();
+  }
+
+  twist(exp: string, reverse = false, times = 1, fast = false): void {
+    if (this.queue.length > 0) {
+      tweener.finish();
+      this.update();
+    }
+    tweener.speedup();
+    const node = new TwistNode(exp, reverse, times);
+    const list = node.parse();
+    for (const element of list) {
+      element.fast = fast;
+      this.queue.push(element);
+    }
+    this.update();
+  }
+
+  push(action: TwistAction): void {
+    this.queue.push(action);
+    this.update();
+  }
+
+  update(): void {
+    if (this.queue.length === 0) {
+      return;
+    }
+    if (this.world.cube.lock) {
+      return;
+    }
+    const twist = this.queue.shift();
+    if (undefined == twist) {
+      return;
+    }
+    this.start(twist);
+  }
+
+  start(action: TwistAction): void {
+    if (action.group == "#") {
+      this.world.cube.reset();
+      this.world.cube.dirty = true;
+      this.world.cube.history.clear();
+      this.world.callback();
+      return;
+    }
+    if (action.group == "*") {
+      this.world.cube.reset();
+      this.world.cube.dirty = true;
+      const exp = Twister.shuffle(this.world.cube.order);
+      this.twist(exp, false, 1, true);
+      this.world.cube.history.clear();
+      this.world.cube.history.init = exp;
+      return;
+    }
+    let angle = -Math.PI / 2;
+    if (action.reverse) {
+      angle = -angle;
+    }
+    if (action.times) {
+      angle = angle * action.times;
+    }
+    const part = this.world.cube.groups.get(action.group);
+    if (part === undefined) {
+      this.update();
+      return;
+    }
+    part.angle = 0;
+    part.hold();
+
+    if (action.fast) {
+      part.angle = angle;
+    }
+    part.twist(angle);
+    return;
+  }
+
+  undo(): void {
+    if (this.world.cube.history.length == 0) {
+      return;
+    }
+    this.finish();
+    if (this.world.cube.history.length == 0) {
+      return;
+    }
+    const last = this.world.cube.history.last;
+    const action = new TwistAction(last.group, !last.reverse, last.times);
+    this.push(action);
   }
 }

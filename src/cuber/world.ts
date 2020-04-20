@@ -3,12 +3,11 @@ import Cubelet from "./cubelet";
 import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
 import Twister from "./twister";
 import Controller from "./controller";
-import { COLORS } from "./define";
 
 export default class World {
-  public width: number = 1;
-  public height: number = 1;
-  public dirty: boolean = false;
+  public width = 1;
+  public height = 1;
+  public dirty = false;
 
   public scene: Scene;
   public camera: PerspectiveCamera;
@@ -55,25 +54,25 @@ export default class World {
     this.dirty = true;
   }
 
-  get order() {
+  get order(): number {
     return this.cube.order;
   }
 
-  callback = () => {
-    for (let callback of this.callbacks) {
+  callback = (): void => {
+    for (const callback of this.callbacks) {
       callback();
     }
   };
 
-  scale: number = 1;
-  perspective: number = 5;
-  resize() {
-    let min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
-    let fov = (2 * Math.atan(min) * 180) / Math.PI;
+  scale = 1;
+  perspective = 5;
+  resize(): void {
+    const min = this.height / Math.min(this.width, this.height) / this.scale / this.perspective;
+    const fov = (2 * Math.atan(min) * 180) / Math.PI;
 
     this.camera.aspect = this.width / this.height;
     this.camera.fov = fov;
-    let distance = Cubelet.SIZE * 3 * this.perspective;
+    const distance = Cubelet.SIZE * 3 * this.perspective;
     this.camera.position.z = distance;
     this.camera.near = distance - Cubelet.SIZE * 3;
     this.camera.far = distance + Cubelet.SIZE * 8;

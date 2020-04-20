@@ -5,7 +5,7 @@ import * as THREE from "three";
 import tweener from "./tweener";
 
 export default class CubeGroup extends THREE.Group {
-  public static frames: number = 30;
+  public static frames = 30;
   cube: Cube;
   cubelets: Cubelet[];
   name: string;
@@ -19,7 +19,7 @@ export default class CubeGroup extends THREE.Group {
     this.updateMatrix();
     this.cube.dirty = true;
   }
-  get angle() {
+  get angle(): number {
     return this._angle;
   }
 
@@ -53,14 +53,14 @@ export default class CubeGroup extends THREE.Group {
     B: "S'",
   };
 
-  exp(reverse: boolean, times: number) {
+  action(reverse: boolean, times: number): TwistAction {
     let group = this.name;
-    let values = this.name.match(/(^-?[xyz]):(\d*):(\d*$)/i);
+    const values = this.name.match(/(^-?[xyz]):(\d*):(\d*$)/i);
     if (values?.length == 4) {
       let axis = values[1];
       let from = Number(values[2]);
       let to = Number(values[3]);
-      let half = (this.cube.order + 1) / 2;
+      const half = (this.cube.order + 1) / 2;
 
       // 找到哪个离得远
       if (Math.abs(from - half) < Math.abs(to - half)) {
@@ -113,10 +113,10 @@ export default class CubeGroup extends THREE.Group {
     return new TwistAction(group, reverse, times);
   }
 
-  hold() {
+  hold(): void {
     this.angle = 0;
-    for (let i of this.indices) {
-      let cubelet = this.cube.cubelets[i];
+    for (const i of this.indices) {
+      const cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
       this.cube.remove(cubelet);
       this.add(cubelet);
@@ -124,10 +124,10 @@ export default class CubeGroup extends THREE.Group {
     this.cube.lock = true;
   }
 
-  drop() {
+  drop(): void {
     this.angle = Math.round(this.angle / (Math.PI / 2)) * (Math.PI / 2);
     while (true) {
-      let cubelet = this.cubelets.pop();
+      const cubelet = this.cubelets.pop();
       if (undefined === cubelet) {
         break;
       }
@@ -143,19 +143,19 @@ export default class CubeGroup extends THREE.Group {
     this.angle = 0;
   }
 
-  twist(angle = this.angle) {
+  twist(angle = this.angle): void {
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    let reverse = angle > 0;
-    let times = Math.round(Math.abs(angle) / (Math.PI / 2));
+    const reverse = angle > 0;
+    const times = Math.round(Math.abs(angle) / (Math.PI / 2));
     if (times != 0) {
-      this.cube.record(this.exp(reverse, times));
+      this.cube.record(this.action(reverse, times));
     }
-    let delta = angle - this.angle;
+    const delta = angle - this.angle;
     if (delta === 0) {
       this.drop();
     } else {
-      let d = Math.abs(delta) / (Math.PI / 2);
-      var duration = CubeGroup.frames * (2 - 2 / (d + 1));
+      const d = Math.abs(delta) / (Math.PI / 2);
+      const duration = CubeGroup.frames * (2 - 2 / (d + 1));
       tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (Math.abs(this.angle - angle) < 1e-6) {
@@ -165,7 +165,7 @@ export default class CubeGroup extends THREE.Group {
     }
   }
 
-  rotate(cubelet: Cubelet) {
+  rotate(cubelet: Cubelet): void {
     cubelet.rotateOnWorldAxis(this.axis, this.angle);
     cubelet.vector = cubelet.vector.applyAxisAngle(this.axis, this.angle);
     cubelet.updateMatrix();
@@ -176,7 +176,7 @@ export class GroupTable {
   private order: number;
   private groups: Map<string, CubeGroup> = new Map();
 
-  public static FORMAT(axis: string, from: number, to: number) {
+  public static FORMAT(axis: string, from: number, to: number): string {
     return axis + ":" + from + ":" + to;
   }
 
@@ -192,21 +192,21 @@ export class GroupTable {
   constructor(cube: Cube) {
     this.order = cube.order;
     // 根据魔方阶数生成所有正向group
-    for (let axis of ["x", "y", "z"]) {
+    for (const axis of ["x", "y", "z"]) {
       for (let from = 1; from <= this.order; from++) {
         for (let to = from; to <= this.order; to++) {
-          let name = GroupTable.FORMAT(axis, from, to);
+          const name = GroupTable.FORMAT(axis, from, to);
           this.groups.set(name, new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]));
         }
       }
     }
     // 块类型group
-    for (let type of ["center", "edge", "corner"]) {
+    for (const type of ["center", "edge", "corner"]) {
       this.groups.set(type, new CubeGroup(cube, type, [], GroupTable.AXIS_VECTOR["a"]));
     }
     // 将每个块索引放入x y z的每层中
     for (const cubelet of cube.initials) {
-      let index = cubelet.initial;
+      const index = cubelet.initial;
       let axis;
       let layer;
       let group;
@@ -250,15 +250,15 @@ export class GroupTable {
       }
     }
     // x y z的多层
-    for (let axis of ["x", "y", "z"]) {
+    for (const axis of ["x", "y", "z"]) {
       for (let from = 1; from <= this.order; from++) {
         for (let to = from + 1; to <= this.order; to++) {
-          let dst = this.groups.get(GroupTable.FORMAT(axis, from, to));
+          const dst = this.groups.get(GroupTable.FORMAT(axis, from, to));
           if (!dst) {
             throw Error();
           }
           for (let i = from; i <= to; i++) {
-            let src = this.groups.get(GroupTable.FORMAT(axis, i, i));
+            const src = this.groups.get(GroupTable.FORMAT(axis, i, i));
             if (!src) {
               throw Error();
             }
@@ -268,21 +268,21 @@ export class GroupTable {
       }
     }
     // 通过正向group拷贝反向group
-    for (let axis of ["-x", "-y", "-z"]) {
+    for (const axis of ["-x", "-y", "-z"]) {
       for (let from = 1; from <= this.order; from++) {
         for (let to = from; to <= this.order; to++) {
-          let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), from, to));
+          const template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), from, to));
           if (!template) {
             throw Error();
           }
-          let name = GroupTable.FORMAT(axis, from, to);
+          const name = GroupTable.FORMAT(axis, from, to);
           this.groups.set(name, new CubeGroup(cube, name, template.indices, GroupTable.AXIS_VECTOR[axis]));
         }
       }
     }
     // 特殊处理整体旋转
-    for (let axis of ["x", "y", "z"]) {
-      let template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), 1, this.order));
+    for (const axis of ["x", "y", "z"]) {
+      const template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), 1, this.order));
       if (!template) {
         throw Error();
       }
@@ -307,10 +307,10 @@ export class GroupTable {
     S: "z",
   };
 
-  get(name: string) {
-    let axis: string = "";
-    let from: number = 0;
-    let to: number = 0;
+  get(name: string): CubeGroup | undefined {
+    let axis = "";
+    let from = 0;
+    let to = 0;
     if (this.groups.get(name)) {
       return this.groups.get(name);
     }
@@ -362,7 +362,7 @@ export class GroupTable {
           break;
       }
     } else {
-      let list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
+      const list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
       if (list == null) {
         return undefined;
       }

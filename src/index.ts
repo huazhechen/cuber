@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { VNode } from "vue";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.css";
 import "material-design-icons/iconfont/material-icons.css";
@@ -9,6 +9,7 @@ import Algs from "./vue/Algs";
 import Player from "./vue/Player";
 import { VueConstructor } from "vue/types/umd";
 
+/* eslint-disable */
 var _hmt: any = _hmt || [];
 (function () {
   var hm = document.createElement("script");
@@ -16,6 +17,7 @@ var _hmt: any = _hmt || [];
   var s = document.getElementsByTagName("script")[0];
   s.parentNode?.insertBefore(hm, s);
 })();
+/* eslint-disable */
 
 if (navigator.serviceWorker != null) {
   navigator.serviceWorker.register("./service-worker.js");
@@ -49,6 +51,6 @@ switch (mode) {
 const vm = new Vue({
   vuetify,
   el: "#app",
-  render: (h) => h(app),
+  render: (h): VNode => h(app),
 });
 export default vm;

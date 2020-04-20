@@ -14,21 +14,21 @@ export class Tween {
     this.delta = 1;
   }
 
-  speedup() {
+  speedup(): void {
     this.delta = 4;
   }
 
-  finish() {
+  finish(): void {
     this.callback(this.end);
   }
 
-  update() {
+  update(): boolean {
     this.value = this.value + this.delta;
     let elapsed = this.value / this.duration;
     elapsed = elapsed > 1 ? 1 : elapsed;
     elapsed = elapsed < 0 ? 0 : elapsed;
     elapsed = elapsed - 1;
-    let value = 1 - elapsed * elapsed;
+    const value = 1 - elapsed * elapsed;
     if (value == 1) {
       this.callback(this.end);
       return false;
@@ -41,7 +41,7 @@ export class Tween {
 export class Tweener {
   tweens: Tween[];
 
-  get length() {
+  get length(): number {
     return this.tweens.length;
   }
 
@@ -50,18 +50,18 @@ export class Tweener {
     this.loop();
   }
 
-  loop() {
+  loop(): void {
     requestAnimationFrame(this.loop.bind(this));
     this.update();
   }
 
-  tween(begin: number, end: number, duration: number, update: Function) {
+  tween(begin: number, end: number, duration: number, update: Function): void {
     this.tweens.push(new Tween(begin, end, duration, update));
   }
 
-  update() {
+  update(): boolean {
     if (this.tweens.length === 0) return false;
-    var i = 0;
+    let i = 0;
     while (i < this.tweens.length) {
       if (this.tweens[i].update()) {
         i++;
@@ -72,19 +72,19 @@ export class Tweener {
     return true;
   }
 
-  speedup() {
+  speedup(): void {
     for (const tween of this.tweens) {
       tween.speedup();
     }
   }
 
-  finish() {
-    let tweens = this.tweens.splice(0, this.tweens.length);
+  finish(): void {
+    const tweens = this.tweens.splice(0, this.tweens.length);
     for (const tween of tweens) {
       tween.finish();
     }
   }
 }
 
-let tweener = new Tweener();
+const tweener = new Tweener();
 export default tweener;

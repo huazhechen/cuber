@@ -7,7 +7,7 @@ export enum FACE {
   F,
 }
 
-export var COLORS: { [key: string]: string } = {
+export const COLORS: { [key: string]: string } = {
   R: "#B71C1C",
   L: "#FF6D00",
   U: "#F0F0F0",
