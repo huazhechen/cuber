@@ -406,9 +406,11 @@ export default class Cubelet extends THREE.Group {
     }
     if (value == "remove") {
       this.stickers[face].visible = false;
+      this.mirrors[face].visible = false;
       return;
     }
     this.stickers[face].visible = true;
+    this.mirrors[face].visible = true;
     if (value && value.length > 0) {
       lamber = Cubelet.LAMBERS[value];
       basic = Cubelet.BASICS[value];
