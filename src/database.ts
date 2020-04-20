@@ -25,10 +25,10 @@ export class Preferance {
     shadow: true,
   };
 
-  load() {
-    let string = window.localStorage.getItem("preferance");
+  load(): void {
+    const string = window.localStorage.getItem("preferance");
     if (string) {
-      let data = JSON.parse(string);
+      const data = JSON.parse(string);
       if (data.version === this.data.version) {
         this.data = data;
       } else {
@@ -36,19 +36,19 @@ export class Preferance {
       }
     }
   }
-  save() {
+  save(): void {
     window.localStorage.setItem("preferance", JSON.stringify(this.data));
   }
 
-  refresh() {
-    let self = this as { [key: string]: any };
-    let data = this.data as { [key: string]: any };
+  refresh(): void {
+    const self = this as { [key: string]: any };
+    const data = this.data as { [key: string]: any };
     for (const key in data) {
       self[key] = data[key];
     }
   }
 
-  get scale() {
+  get scale(): number {
     return this.data.scale;
   }
   set scale(value) {
@@ -59,7 +59,7 @@ export class Preferance {
     this.world.resize();
   }
 
-  get perspective() {
+  get perspective(): number {
     return this.data.perspective;
   }
   set perspective(value) {
@@ -70,7 +70,7 @@ export class Preferance {
     this.world.resize();
   }
 
-  get angle() {
+  get angle(): number {
     return this.data.angle;
   }
   set angle(value) {
@@ -81,7 +81,7 @@ export class Preferance {
     this.world.dirty = true;
   }
 
-  get gradient() {
+  get gradient(): number {
     return this.data.gradient;
   }
   set gradient(value) {
@@ -92,7 +92,7 @@ export class Preferance {
     this.world.dirty = true;
   }
 
-  get shadow() {
+  get shadow(): boolean {
     return this.data.shadow;
   }
   set shadow(value) {
@@ -109,7 +109,7 @@ export class Preferance {
     this.world.dirty = true;
   }
 
-  get frames() {
+  get frames(): number {
     return this.data.frames;
   }
   set frames(value) {
@@ -119,7 +119,7 @@ export class Preferance {
     CubeGroup.frames = value;
   }
 
-  get sensitivity() {
+  get sensitivity(): number {
     return this.data.sensitivity;
   }
   set sensitivity(value) {
@@ -131,27 +131,27 @@ export class Preferance {
     this.world.controller.sensitivity = i;
   }
 
-  get mirror() {
+  get mirror(): boolean {
     return this.data.mirror;
   }
   set mirror(value) {
     if (this.data.mirror != value) {
       this.data.mirror = value;
     }
-    for (let cubelet of this.world.cube.cubelets) {
+    for (const cubelet of this.world.cube.cubelets) {
       cubelet.mirror = value;
     }
     this.world.dirty = true;
   }
 
-  get hollow() {
+  get hollow(): boolean {
     return this.data.hollow;
   }
   set hollow(value: boolean) {
     if (this.data.hollow != value) {
       this.data.hollow = value;
     }
-    for (let cubelet of this.world.cube.cubelets) {
+    for (const cubelet of this.world.cube.cubelets) {
       cubelet.hollow = value;
     }
     this.world.dirty = true;
@@ -171,10 +171,10 @@ export class Theme {
     colors: {},
   };
 
-  load() {
-    let string = window.localStorage.getItem("theme");
+  load(): void {
+    const string = window.localStorage.getItem("theme");
     if (string) {
-      let data = JSON.parse(string);
+      const data = JSON.parse(string);
       if (data.version === this.data.version) {
         this.data = data;
       } else {
@@ -182,14 +182,14 @@ export class Theme {
       }
     }
   }
-  save() {
+  save(): void {
     window.localStorage.setItem("theme", JSON.stringify(this.data));
   }
 
-  refresh() {
+  refresh(): void {
     this.dark = this.data.dark;
     for (const key in this.data.colors) {
-      let value = this.data.colors[key];
+      const value = this.data.colors[key];
       if (value) {
         COLORS[key] = value;
         Cubelet.LAMBERS[key].color.set(value);
@@ -202,7 +202,7 @@ export class Theme {
     this.world.dirty = true;
   }
 
-  color(key: string, value: string) {
+  color(key: string, value: string): void {
     this.data.colors[key] = value;
     COLORS[key] = value;
     Cubelet.LAMBERS[key].color.set(value);
@@ -213,13 +213,13 @@ export class Theme {
     this.world.dirty = true;
   }
 
-  reset() {
+  reset(): void {
     this.data.colors = JSON.parse(this.default);
     this.refresh();
     this.data.colors = {};
   }
 
-  get dark() {
+  get dark(): boolean {
     return this.data.dark;
   }
   set dark(value) {
@@ -241,7 +241,7 @@ export default class Database {
     this.world = world;
     this.preferance = new Preferance(this.world);
     this.theme = new Theme(this.world);
-    let version = "0.1";
+    const version = "0.1";
     if (this.storage.getItem("version") != version) {
       this.storage.clear();
       this.storage.setItem("version", version);
@@ -250,11 +250,11 @@ export default class Database {
     this.theme.load();
 
     let save;
-    let self = this as { [key: string]: any };
+    const self = this as { [key: string]: any };
     if (self[this.mode]) {
       save = this.storage.getItem(this.mode);
       if (save) {
-        let data = JSON.parse(save);
+        const data = JSON.parse(save);
         if (data.version === self[this.mode].version) {
           self[this.mode] = data;
         } else {
@@ -299,13 +299,13 @@ export default class Database {
     dramas: [],
   };
 
-  refresh() {
+  refresh(): void {
     this.preferance.refresh();
     this.theme.refresh();
   }
 
-  save() {
-    let self = this as { [key: string]: any };
+  save(): void {
+    const self = this as { [key: string]: any };
     if (self[this.mode]) {
       this.storage.setItem(this.mode, JSON.stringify(self[this.mode]));
     }

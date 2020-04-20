@@ -26,9 +26,9 @@ const opts = {};
 const vuetify = new Vuetify(opts);
 Vue.prototype.vuetify = vuetify;
 
-let search = location.search || "";
-let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
-let mode = list ? list[2] : "playground";
+const search = location.search || "";
+const list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
+const mode = list ? list[2] : "playground";
 Vue.prototype.mode = mode;
 
 let app: VueConstructor;
@@ -46,7 +46,7 @@ switch (mode) {
     app = Playground;
     break;
 }
-let vm = new Vue({
+const vm = new Vue({
   vuetify,
   el: "#app",
   render: (h) => h(app),
