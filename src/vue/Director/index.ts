@@ -218,6 +218,7 @@ export default class Director extends Vue {
   stickers: { [face: string]: { [index: number]: string } | undefined };
   stick(index: number, face: number) {
     if (index < 0 || !this.colord) {
+      this.colord = false;
       return;
     }
     let cubelet: Cubelet = this.world.cube.cubelets[index];

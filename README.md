@@ -105,4 +105,4 @@
 
 ## 赞赏
 
-  <img width="320px" src="https://gitee.com/huazhechen/cuber/raw/master/appreciation.jpg"  alt="赞赏" />
+  <img width="320px" src="https://gitee.com/huazhechen/cuber/raw/master/screenshot/appreciation.jpg"  alt="赞赏" />

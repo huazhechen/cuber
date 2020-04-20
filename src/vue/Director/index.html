@@ -197,7 +197,7 @@
           fluid
           grid-list-md
           text-xs-center
-          :style="{width:Math.min(size * 8, width) + 'px', 'padding-top': size * 0.5 + 'px', 'padding-bottom': size * 0.5 + 'px'}"
+          :style="{width:Math.min(size * 8, width) + 'px', height:size * 4.4 + 32 + 'px', 'padding-top': size * 0.5 + 'px'}"
         >
           <v-layout row wrap>
             <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
@@ -208,7 +208,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
+                :height="size * 1.2"
               >
                 <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
               </v-btn>
@@ -220,7 +220,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
+                :height="size * 1.2"
               >
                 <v-icon :size="size * 0.8" v-show="color=='Core'">crop_din</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='Core'">
@@ -235,7 +235,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
+                :height="size * 1.2"
               >
                 <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='remove'">
@@ -250,7 +250,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
+                :height="size * 1.2"
                 color="success"
               >
                 <div :style="{'font-size':size * 0.4+'px'}">
@@ -265,26 +265,12 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
+                :height="size * 1.2"
                 color="error"
               >
                 <div :style="{'font-size':size * 0.4+'px'}">
                   清空
                 </div>
-              </v-btn>
-            </v-flex>
-            <v-flex xs12 :style="{padding:size * 0.06 + 'px'}" style="display: flex;">
-              <v-btn
-                @click="colord=false"
-                block
-                text
-                color="primary"
-                :ripple="false"
-                style="text-transform: none; min-width: 0%; flex: 1;"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.4 + 'px'}"
-              >
-                确定
               </v-btn>
             </v-flex>
           </v-layout>
