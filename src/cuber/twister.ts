@@ -263,10 +263,13 @@ export class TwistNode {
   }
 
   constructor(exp: string, reverse = false, times = 1) {
-    // '符号处理
-    exp = exp.replace(/[‘＇’]/g, "'");
     this.children = [];
     this.twist = new TwistAction(exp, reverse, times);
+    if (exp.length == 0) {
+      return;
+    }
+    // '符号处理
+    exp = exp.replace(/[‘＇’]/g, "'");
     // 不用解析场景
     if (exp.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
       if (/[XYZ]/.test(this.twist.group)) {
@@ -310,7 +313,7 @@ export class TwistNode {
       }
       // 异常情况
       if (null === values) {
-        return;
+        continue;
       }
       let reverse = (values[2] + values[4]).length == 1;
       let times = values[3].length == 0 ? 1 : parseInt(values[3]);
@@ -320,7 +323,7 @@ export class TwistNode {
 
   parse(reverse = false) {
     reverse = this.twist.reverse !== reverse;
-    let _result: TwistAction[] = [];
+    let result: TwistAction[] = [];
     if (0 !== this.children.length) {
       for (var i = 0; i < this.twist.times; i++) {
         for (var j = 0; j < this.children.length; j++) {
@@ -332,15 +335,15 @@ export class TwistNode {
           }
           var list = n.parse(reverse);
           for (let element of list) {
-            _result.push(element);
+            result.push(element);
           }
         }
       }
     } else if (this.twist.group != "") {
       let action = new TwistAction(this.twist.group, reverse, this.twist.times);
-      _result.push(action);
+      result.push(action);
     }
-    return _result;
+    return result;
   }
 
   get value() {
