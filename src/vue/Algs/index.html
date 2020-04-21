@@ -1,5 +1,5 @@
 <v-app>
-  <div v-show="!listd" v-resize="resize" style="user-select: none;touch-action: none;">
+  <div v-show="!listd" v-resize="resize" style="user-select: none; touch-action: none;">
     <setting v-show="!listd" ref="setting"> </setting>
     <viewport ref="viewport"></viewport>
     <v-btn
@@ -8,7 +8,7 @@
       top
       text
       color="primary"
-      style="user-select: none;margin:0%;padding:0%;"
+      style="user-select: none; margin: 0%; padding: 0%;"
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
       @click="tap('list')"
     >
@@ -19,12 +19,12 @@
       grid-list-md
       text-xs-center
       :style="{width:Math.min(size * 8, width) + 'px', height:size * 2.6 + 32 + 'px'}"
-      style="padding:0%;touch-action: none;"
+      style="padding: 0%; touch-action: none;"
     >
       <v-layout row wrap>
         <v-flex xs12>
           <v-text-field
-            style="text-transform:none;"
+            style="text-transform: none;"
             :height="size * 0.8"
             :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
             dense
@@ -36,16 +36,16 @@
             <v-btn
               slot="label"
               text
-              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
             >
-              <v-icon :size="size * 0.4" style="vertical-align: middle">theaters</v-icon>
+              <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
             </v-btn>
             <v-btn
               slot="append"
               text
               v-show="action!=origin"
-              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
               @click="action=origin"
             >
@@ -57,43 +57,46 @@
       <playbar ref="playbar"></playbar>
     </v-container>
   </div>
-  <div v-show="listd" style="margin:0;display: flex;flex-flow: column;height: 100%;">
-    <div style="margin: auto;" :style="{width:grid+'px'}">
+  <div v-show="listd" style="margin: 0; display: flex; flex-flow: column; height: 100%;">
+    <div style="margin: auto; width: 100%;">
       <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
         <v-tab v-for="(group,i) in algs" :key="i" :href="`#tab-${i}`">
-          <p :style="{'font-size':size * 0.2+'px'}" style="text-align:center;margin: 0%;padding: 0%;">
+          <p :style="{'font-size':size * 0.3+'px'}" style="text-align: center; margin: 0%; padding: 0%;">
             {{ group.name}}
           </p>
         </v-tab>
       </v-tabs>
     </div>
-    <div style="flex: 1;overflow: auto;margin: auto;" :style="{width:grid+'px'}">
+    <div style="flex: 1; overflow: auto; margin: auto;">
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(group,i) in pics" :key="i" :value="'tab-' + i" style="height: 100%;">
-          <v-layout row wrap style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;align-items: stretch;">
-            <v-flex
-              d-flex
-              style="margin: 0%; padding:0%; min-width: 0%; min-height: 0%;"
+          <v-layout
+            row
+            wrap
+            style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%; align-items: stretch;"
+            class="justify-space-around"
+          >
+            <v-card
+              outlined
+              style="margin: 0%; padding: 0%;"
+              :style="{'width':grid + 'px'}"
               v-for="(pic, j) in group"
               :key="j"
-              xs3
             >
-              <v-card outlined style="margin: 0%; padding:0%;">
-                <p
-                  :style="{'font-size':size/3+'px'}"
-                  style="text-align:center;margin: 0%;padding: 0%;color: indianred;"
-                >
-                  {{algs[i].algs[j].name}}
-                </p>
-                <img :src="pic" style="width: 100%;margin: 0%; padding:0%;" @click="select(i, j)" />
-                <p
-                  :style="{'font-size':size/4+'px'}"
-                  style="text-align:center;word-wrap:break-word;margin: 0%;padding: 0%;"
-                >
-                  {{algs[i].algs[j].exp}}
-                </p>
-              </v-card>
-            </v-flex>
+              <p
+                :style="{'font-size':size/3+'px'}"
+                style="text-align: center; margin: 0%; padding: 0%; color: indianred;"
+              >
+                {{algs[i].algs[j].name}}
+              </p>
+              <img :src="pic" style="margin: 0%; padding: 0%;" :style="{'width':grid + 'px'}" @click="select(i, j)" />
+              <p
+                :style="{'font-size':size/4+'px'}"
+                style="text-align: center; word-wrap: break-word; margin: 0%; padding: 0%;"
+              >
+                {{algs[i].algs[j].exp}}
+              </p>
+            </v-card>
           </v-layout>
         </v-tab-item>
       </v-tabs-items>

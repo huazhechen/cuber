@@ -96,8 +96,7 @@ export default class Algs extends Vue {
   }
 
   get grid(): number {
-    const width = this.size * 8;
-    return Math.min(this.width, width);
+    return Math.min(this.width / 4 - 2, this.height / 6);
   }
 
   get style(): {} {
@@ -115,7 +114,6 @@ export default class Algs extends Vue {
   tap(key: string): void {
     switch (key) {
       case "list":
-        this.tab = "tab-" + this.index.group;
         this.listd = true;
         break;
       default:
