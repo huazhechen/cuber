@@ -10,7 +10,7 @@ export class TouchAction {
 }
 
 export default class Toucher {
-  init(dom: HTMLElement, callback: Function) {
+  init(dom: HTMLElement, callback: Function): void {
     this.dom = dom;
     this.callback = callback;
     document.addEventListener("touchstart", this.touch);
@@ -25,7 +25,7 @@ export default class Toucher {
   callback: Function;
   target: EventTarget | null;
 
-  mouse = (event: MouseEvent) => {
+  mouse = (event: MouseEvent): boolean => {
     if (event.type === "mousedown") {
       this.target = event.target;
     }
@@ -34,7 +34,7 @@ export default class Toucher {
     }
     this.dom.tabIndex = 1;
     this.dom.focus();
-    let action = new TouchAction(event.type, event.clientX, event.clientY);
+    const action = new TouchAction(event.type, event.clientX, event.clientY);
     this.callback(action);
     event.returnValue = false;
     if (event.type === "mouseup") {
@@ -43,7 +43,7 @@ export default class Toucher {
     return false;
   };
 
-  touch = (event: TouchEvent) => {
+  touch = (event: TouchEvent): boolean => {
     if (event.type === "touchstart") {
       this.target = event.target;
     }
@@ -52,9 +52,9 @@ export default class Toucher {
     }
     this.dom.tabIndex = 1;
     this.dom.focus();
-    let touches = event.changedTouches;
-    let first = touches[0];
-    let action = new TouchAction(
+    const touches = event.changedTouches;
+    const first = touches[0];
+    const action = new TouchAction(
       event.type,
       first.clientX - this.dom.getBoundingClientRect().left,
       first.clientY - this.dom.getBoundingClientRect().top

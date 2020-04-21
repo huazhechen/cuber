@@ -32,9 +32,9 @@ export default class Director extends Vue {
   @Provide("database")
   database: Database = new Database("director", this.world);
 
-  width: number = 0;
-  height: number = 0;
-  size: number = 0;
+  width = 0;
+  height = 0;
+  size = 0;
 
   @Ref("viewport")
   viewport: Viewport;
@@ -66,7 +66,7 @@ export default class Director extends Vue {
     this.colort = ["R", "L", "F", "B", "U", "D", "High", "Gray"];
   }
 
-  resize() {
+  resize(): void {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
@@ -74,7 +74,7 @@ export default class Director extends Vue {
     this.playbar?.resize(this.size);
   }
 
-  mounted() {
+  mounted(): void {
     new ClipboardJS(this.copy.$el);
 
     this.reload();
@@ -92,15 +92,15 @@ export default class Director extends Vue {
     this.loop();
   }
 
-  callback() {
+  callback(): void {
     if (this.recording && this.playbar.playing == false) {
       this.finish();
     }
   }
 
-  reload() {
+  reload(): void {
     let save;
-    let order = this.world.order;
+    const order = this.world.order;
     save = this.database.director.dramas[order];
     if (!save) {
       save = { scene: "^", action: "RUR'U'~", stickers: {} };
@@ -111,19 +111,19 @@ export default class Director extends Vue {
     this.stickers = save.stickers;
     this.world.cube.strip({});
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-      let list = this.stickers[FACE[face]];
+      const list = this.stickers[FACE[face]];
       if (!list) {
         continue;
       }
       for (const sticker in list) {
-        let index = Number(sticker);
-        let value = list[index];
+        const index = Number(sticker);
+        const value = list[index];
         this.world.cube.stick(index, face, value);
       }
     }
   }
 
-  loop() {
+  loop(): void {
     requestAnimationFrame(this.loop.bind(this));
     this.viewport.draw();
     if (this.recording) {
@@ -131,7 +131,7 @@ export default class Director extends Vue {
     }
   }
 
-  get style() {
+  get style(): {} {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -142,9 +142,9 @@ export default class Director extends Vue {
     };
   }
 
-  colord: boolean = false;
-  outputd: boolean = false;
-  tap(key: string) {
+  colord = false;
+  outputd = false;
+  tap(key: string): void {
     switch (key) {
       case "color":
         this.colord = true;
@@ -153,7 +153,7 @@ export default class Director extends Vue {
         this.outputd = true;
         break;
       case "snap":
-        let snapt = this.database.director.snapt;
+        const snapt = this.database.director.snapt;
         if (snapt == "png") {
           this.png();
         } else if (snapt == "svg") {
@@ -174,54 +174,54 @@ export default class Director extends Vue {
     }
   }
 
-  shared: boolean = false;
-  link: string = "";
-  share() {
-    let data: { [key: string]: {} } = {};
-    let order = this.world.order;
+  shared = false;
+  link = "";
+  share(): void {
+    const data: { [key: string]: {} } = {};
+    const order = this.world.order;
     data["order"] = order;
     data["drama"] = this.database.director.dramas[order];
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
-    let search = "mode=player&data=" + string;
+    const search = "mode=player&data=" + string;
     this.link = window.location.origin + window.location.pathname + "?" + search;
     this.shared = true;
   }
 
-  order() {
+  order(): void {
     this.database.director.order = this.world.order;
     this.database.save();
     this.reload();
     this.playbar.init();
   }
 
-  scene: string = "";
+  scene = "";
   @Watch("scene")
-  onSceneChange() {
+  onSceneChange(): void {
     this.playbar.scene = this.scene;
     this.database.director.dramas[this.world.order].scene = this.scene;
     this.database.save();
   }
 
-  action: string = "";
+  action = "";
   @Watch("action")
-  onActionChange() {
+  onActionChange(): void {
     this.playbar.action = this.action;
     this.database.director.dramas[this.world.order].action = this.action;
     this.database.save();
   }
 
-  recording: boolean = false;
+  recording = false;
 
   color = "High";
   stickers: { [face: string]: { [index: number]: string } | undefined };
-  stick(index: number, face: number) {
+  stick(index: number, face: number): void {
     if (index < 0 || !this.colord) {
       this.colord = false;
       return;
     }
-    let cubelet: Cubelet = this.world.cube.cubelets[index];
+    const cubelet: Cubelet = this.world.cube.cubelets[index];
     index = cubelet.initial;
     face = cubelet.getColor(face);
     let arr = this.stickers[FACE[face]];
@@ -240,18 +240,18 @@ export default class Director extends Vue {
     this.database.save();
   }
 
-  reset() {
+  reset(): void {
     this.stickers = {};
     this.world.cube.strip({});
     this.database.director.dramas[this.world.order].stickers = this.stickers;
     this.database.save();
   }
 
-  clear() {
-    let strip: { [face: string]: number[] | undefined } = {};
+  clear(): void {
+    const strip: { [face: string]: number[] | undefined } = {};
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-      let key = FACE[face];
-      let group = this.world.cube.groups.get(key);
+      const key = FACE[face];
+      const group = this.world.cube.groups.get(key);
       if (!group) {
         throw Error();
       }
@@ -271,7 +271,7 @@ export default class Director extends Vue {
   }
 
   pixels: Uint8Array;
-  film() {
+  film(): void {
     if (this.recording) {
       this.recording = false;
       this.world.controller.disable = false;
@@ -279,16 +279,16 @@ export default class Director extends Vue {
       return;
     }
     this.world.controller.disable = true;
-    let pixel = this.database.director.pixel;
-    let filmt = this.database.director.filmt;
-    let delay = this.database.director.delay;
+    const pixel = this.database.director.pixel;
+    const filmt = this.database.director.filmt;
+    const delay = this.database.director.delay;
     this.filmer.setSize(pixel, pixel, true);
     if (filmt == "gif") {
       this.pixels = new Uint8Array(pixel * pixel * 4);
       this.gif.start(pixel, pixel, delay);
       this.filmer.setClearColor(0xffffff, 1);
     } else if (filmt == "apng") {
-      this.apng.delay_num = delay;
+      this.apng.delayNum = delay;
       this.apng.start();
       this.filmer.setClearColor(0xffffff, 0);
     } else if (filmt == "pngs") {
@@ -301,10 +301,10 @@ export default class Director extends Vue {
     this.recording = true;
   }
 
-  png() {
-    let pixel = this.database.director.pixel;
-    let width = this.world.width;
-    let height = this.world.height;
+  png(): void {
+    const pixel = this.database.director.pixel;
+    const width = this.world.width;
+    const height = this.world.height;
     this.world.width = pixel;
     this.world.height = pixel;
     this.world.resize();
@@ -314,22 +314,22 @@ export default class Director extends Vue {
     this.world.width = width;
     this.world.height = height;
     this.world.resize();
-    let content = this.filmer.domElement.toDataURL("image/png");
-    let parts = content.split(";base64,");
-    let type = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let length = raw.length;
-    let data = new Uint8Array(length);
+    const content = this.filmer.domElement.toDataURL("image/png");
+    const parts = content.split(";base64,");
+    const type = parts[0].split(":")[1];
+    const raw = window.atob(parts[1]);
+    const length = raw.length;
+    const data = new Uint8Array(length);
     for (let i = 0; i < length; ++i) {
       data[i] = raw.charCodeAt(i);
     }
-    let blob = new Blob([data], { type: type });
-    let url = URL.createObjectURL(blob);
+    const blob = new Blob([data], { type: type });
+    const url = URL.createObjectURL(blob);
     Util.DOWNLOAD("cuber", "png", url);
   }
 
-  svg() {
-    let position: Vector3 = new Vector3();
+  svg(): void {
+    const position: Vector3 = new Vector3();
     let distance;
     for (const cubelet of this.world.cube.cubelets) {
       if (cubelet === undefined || cubelet.frame === undefined) {
@@ -354,40 +354,40 @@ export default class Director extends Vue {
     }
     this.world.camera.aspect = 1;
     this.world.camera.updateProjectionMatrix();
-    let pixel = this.database.director.pixel;
+    const pixel = this.database.director.pixel;
     this.svger.setSize(pixel, pixel);
     this.svger.clear();
     this.svger.overdraw = 0;
     this.svger.render(this.world.scene, this.world.camera);
     this.world.resize();
-    var serializer = new XMLSerializer();
-    var content = serializer.serializeToString(this.svger.domElement);
-    let url = "data:image/svg+xml;base64," + btoa(content);
+    const serializer = new XMLSerializer();
+    const content = serializer.serializeToString(this.svger.domElement);
+    const url = "data:image/svg+xml;base64," + btoa(content);
     Util.DOWNLOAD("cuber", "svg", url);
   }
 
-  record() {
-    let pixel = this.database.director.pixel;
-    let filmt = this.database.director.filmt;
-    let width = this.world.width;
-    let height = this.world.height;
+  record(): void {
+    const pixel = this.database.director.pixel;
+    const filmt = this.database.director.filmt;
+    const width = this.world.width;
+    const height = this.world.height;
     this.world.width = pixel;
     this.world.height = pixel;
     this.world.resize();
     this.filmer.clear();
     this.filmer.render(this.world.scene, this.world.camera);
     if (filmt == "gif") {
-      let content = this.filmer.getContext();
+      const content = this.filmer.getContext();
       content.readPixels(0, 0, pixel, pixel, content.RGBA, content.UNSIGNED_BYTE, this.pixels);
       this.gif.add(this.pixels);
     } else if (filmt == "apng") {
       this.apng.addFrame();
     } else if (filmt == "pngs") {
-      let content = this.filmer.domElement.toDataURL("image/png");
-      let parts = content.split(";base64,");
-      let raw = window.atob(parts[1]);
-      let length = raw.length;
-      let data = new Uint8Array(length);
+      const content = this.filmer.domElement.toDataURL("image/png");
+      const parts = content.split(";base64,");
+      const raw = window.atob(parts[1]);
+      const length = raw.length;
+      const data = new Uint8Array(length);
       for (let i = 0; i < length; ++i) {
         data[i] = raw.charCodeAt(i);
       }
@@ -398,8 +398,8 @@ export default class Director extends Vue {
     this.world.resize();
   }
 
-  finish() {
-    let filmt = this.database.director.filmt;
+  finish(): void {
+    const filmt = this.database.director.filmt;
     this.recording = false;
     this.world.controller.disable = false;
     let data;
@@ -420,12 +420,12 @@ export default class Director extends Vue {
     } else if (filmt == "pngs") {
       this.zip.finish();
       data = this.zip.out.getData();
-      let blob = new Blob([data], { type: "application/zip" });
-      let url = URL.createObjectURL(blob);
+      const blob = new Blob([data], { type: "application/zip" });
+      const url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber", "zip", url);
     }
   }
 
-  scened: boolean = false;
-  actiond: boolean = false;
+  scened = false;
+  actiond = false;
 }

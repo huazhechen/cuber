@@ -3,7 +3,7 @@ import { COLORS } from "../cuber/define";
 import ByteArray from "./bytes";
 
 export class LZW {
-  static MAXCODE(bits: number) {
+  static MAXCODE(bits: number): number {
     return (1 << bits) - 1;
   }
   static EOF = -1;
@@ -43,97 +43,96 @@ export class LZW {
 
   pixels: Uint8Array;
   outs: ByteArray;
-  cur_accum: number;
-  cur_bits: number;
-  a_count: number;
-  free_ent: number;
+  curAccum: number;
+  curBits: number;
+  aCount: number;
+  freeEnt: number;
   maxcode: number;
-  clear_flg: boolean;
-  g_init_bits: number;
-  n_bits: number;
+  clearFlag: boolean;
+  initBits: number;
+  nBits: number;
   ClearCode: number;
   EOFCode: number;
   remaining: number;
   curPixel: number;
 
-  flush_char() {
-    if (this.a_count > 0) {
-      this.outs.writeByte(this.a_count);
-      this.outs.writeBytes(this.accum, this.a_count);
-      this.a_count = 0;
+  flushChar(): void {
+    if (this.aCount > 0) {
+      this.outs.writeByte(this.aCount);
+      this.outs.writeBytes(this.accum, this.aCount);
+      this.aCount = 0;
     }
   }
 
-  char_out(c: number) {
-    this.accum[this.a_count++] = c;
-    if (this.a_count >= 254) this.flush_char();
+  pushChar(c: number): void {
+    this.accum[this.aCount++] = c;
+    if (this.aCount >= 254) this.flushChar();
   }
 
-  cl_block() {
-    this.cl_hash(LZW.HSIZE);
-    this.free_ent = this.ClearCode + 2;
-    this.clear_flg = true;
+  clearBlock(): void {
+    this.clearHash(LZW.HSIZE);
+    this.freeEnt = this.ClearCode + 2;
+    this.clearFlag = true;
     this.output(this.ClearCode);
   }
 
-  cl_hash(hsize: number) {
-    for (var i = 0; i < hsize; ++i) this.htab[i] = -1;
+  clearHash(hsize: number): void {
+    for (let i = 0; i < hsize; ++i) this.htab[i] = -1;
   }
 
-  nextPixel() {
+  nextPixel(): number {
     if (this.remaining === 0) return LZW.EOF;
     --this.remaining;
-    var pix = this.pixels[this.curPixel++];
+    const pix = this.pixels[this.curPixel++];
     return pix & 0xff;
   }
 
-  compress(init_bits: number) {
-    var fcode, c, i, ent, disp, hsize_reg, hshift;
-    this.g_init_bits = init_bits;
-    this.n_bits = this.g_init_bits;
-    this.clear_flg = false;
-    this.maxcode = LZW.MAXCODE(this.n_bits);
+  compress(bits: number): void {
+    let fcode, c, i, ent, disp, hshift;
+    this.initBits = bits;
+    this.nBits = this.initBits;
+    this.clearFlag = false;
+    this.maxcode = LZW.MAXCODE(this.nBits);
 
-    this.ClearCode = 1 << (init_bits - 1);
+    this.ClearCode = 1 << (bits - 1);
     this.EOFCode = this.ClearCode + 1;
-    this.free_ent = this.ClearCode + 2;
+    this.freeEnt = this.ClearCode + 2;
 
-    this.a_count = 0;
+    this.aCount = 0;
 
     ent = this.nextPixel();
 
     hshift = 0;
     for (fcode = LZW.HSIZE; fcode < 65536; fcode *= 2) ++hshift;
     hshift = 8 - hshift;
-    hsize_reg = LZW.HSIZE;
-    this.cl_hash(hsize_reg);
+    this.clearHash(LZW.HSIZE);
 
     this.output(this.ClearCode);
 
-    outer_loop: while ((c = this.nextPixel()) != LZW.EOF) {
+    oloop: while ((c = this.nextPixel()) != LZW.EOF) {
       fcode = (c << LZW.BITS) + ent;
       i = (c << hshift) ^ ent;
       if (this.htab[i] === fcode) {
         ent = this.codetab[i];
         continue;
       } else if (this.htab[i] >= 0) {
-        disp = hsize_reg - i;
+        disp = LZW.HSIZE - i;
         if (i === 0) disp = 1;
         do {
-          if ((i -= disp) < 0) i += hsize_reg;
+          if ((i -= disp) < 0) i += LZW.HSIZE;
           if (this.htab[i] === fcode) {
             ent = this.codetab[i];
-            continue outer_loop;
+            continue oloop;
           }
         } while (this.htab[i] >= 0);
       }
       this.output(ent);
       ent = c;
-      if (this.free_ent < 1 << LZW.BITS) {
-        this.codetab[i] = this.free_ent++;
+      if (this.freeEnt < 1 << LZW.BITS) {
+        this.codetab[i] = this.freeEnt++;
         this.htab[i] = fcode;
       } else {
-        this.cl_block();
+        this.clearBlock();
       }
     }
 
@@ -141,51 +140,51 @@ export class LZW {
     this.output(this.EOFCode);
   }
 
-  output(code: number) {
-    this.cur_accum &= LZW.MASKS[this.cur_bits];
+  output(code: number): void {
+    this.curAccum &= LZW.MASKS[this.curBits];
 
-    if (this.cur_bits > 0) this.cur_accum |= code << this.cur_bits;
-    else this.cur_accum = code;
+    if (this.curBits > 0) this.curAccum |= code << this.curBits;
+    else this.curAccum = code;
 
-    this.cur_bits += this.n_bits;
+    this.curBits += this.nBits;
 
-    while (this.cur_bits >= 8) {
-      this.char_out(this.cur_accum & 0xff);
-      this.cur_accum >>= 8;
-      this.cur_bits -= 8;
+    while (this.curBits >= 8) {
+      this.pushChar(this.curAccum & 0xff);
+      this.curAccum >>= 8;
+      this.curBits -= 8;
     }
 
-    if (this.free_ent > this.maxcode || this.clear_flg) {
-      if (this.clear_flg) {
-        this.maxcode = LZW.MAXCODE((this.n_bits = this.g_init_bits));
-        this.clear_flg = false;
+    if (this.freeEnt > this.maxcode || this.clearFlag) {
+      if (this.clearFlag) {
+        this.maxcode = LZW.MAXCODE((this.nBits = this.initBits));
+        this.clearFlag = false;
       } else {
-        ++this.n_bits;
-        if (this.n_bits == LZW.BITS) this.maxcode = 1 << LZW.BITS;
-        else this.maxcode = LZW.MAXCODE(this.n_bits);
+        ++this.nBits;
+        if (this.nBits == LZW.BITS) this.maxcode = 1 << LZW.BITS;
+        else this.maxcode = LZW.MAXCODE(this.nBits);
       }
     }
 
     if (code == this.EOFCode) {
-      while (this.cur_bits > 0) {
-        this.char_out(this.cur_accum & 0xff);
-        this.cur_accum >>= 8;
-        this.cur_bits -= 8;
+      while (this.curBits > 0) {
+        this.pushChar(this.curAccum & 0xff);
+        this.curAccum >>= 8;
+        this.curBits -= 8;
       }
-      this.flush_char();
+      this.flushChar();
     }
   }
 
-  encode(pixels: Uint8Array, outs: ByteArray) {
+  encode(pixels: Uint8Array, outs: ByteArray): void {
     this.pixels = pixels;
     this.outs = outs;
-    this.cur_accum = 0;
-    this.cur_bits = 0;
-    this.a_count = 0;
-    this.free_ent = 0;
+    this.curAccum = 0;
+    this.curBits = 0;
+    this.aCount = 0;
+    this.freeEnt = 0;
     this.maxcode = 0;
-    this.clear_flg = false;
-    this.g_init_bits = 0;
+    this.clearFlag = false;
+    this.initBits = 0;
     this.ClearCode = 0;
     this.EOFCode = 0;
     this.outs.writeByte(this.depth);
@@ -205,7 +204,7 @@ export default class GIF {
   last: Uint8Array;
   dispose: number;
   out: ByteArray;
-  transparent: boolean = true;
+  transparent = true;
 
   private static DEEP = 8;
   private static HASH_SIZE = 12;
@@ -222,7 +221,7 @@ export default class GIF {
 
   frames: number;
   enc: LZW;
-  start(width: number, height: number, delay: number) {
+  start(width: number, height: number, delay: number): void {
     this.width = ~~width;
     this.height = ~~height;
     this.enc = new LZW(this.width, this.height, GIF.DEEP);
@@ -238,7 +237,7 @@ export default class GIF {
     this.writeNetscapeExt();
   }
 
-  genColorTable() {
+  genColorTable(): Uint8Array {
     this.colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
     let i = 0;
     // TRANSPARENT
@@ -256,20 +255,20 @@ export default class GIF {
     }
     // LIGHT
     for (const key in COLORS) {
-      let rgb = Color.HEX2RGB(COLORS[key]);
-      let hsl = Color.RGB2HSL(rgb);
+      const rgb = Color.HEX2RGB(COLORS[key]);
+      const hsl = Color.RGB2HSL(rgb);
       if (hsl[1] === 0 || hsl[2] === 1 || hsl[2] === 0) {
         continue;
       }
-      let gray = Math.round(hsl[2] / 5);
+      const gray = Math.round(hsl[2] / 5);
       let start, end, delta;
       start = hsl[2] - gray;
       end = start;
       start = (start % 6) + 5;
       delta = 6;
       for (let l = start; l < end; l = l + delta) {
-        let dhsv = [hsl[0], hsl[1], l];
-        let drgb = Color.HSL2RGB(dhsv);
+        const dhsv = [hsl[0], hsl[1], l];
+        const drgb = Color.HSL2RGB(dhsv);
         this.colors[i++] = drgb[0];
         this.colors[i++] = drgb[1];
         this.colors[i++] = drgb[2];
@@ -278,8 +277,8 @@ export default class GIF {
       end = hsl[2];
       delta = 1;
       for (let l = start; l < end; l = l + delta) {
-        let dhsv = [hsl[0], hsl[1], l];
-        let drgb = Color.HSL2RGB(dhsv);        
+        const dhsv = [hsl[0], hsl[1], l];
+        const drgb = Color.HSL2RGB(dhsv);
         this.colors[i++] = drgb[0];
         this.colors[i++] = drgb[1];
         this.colors[i++] = drgb[2];
@@ -288,8 +287,8 @@ export default class GIF {
       end = 95;
       delta = 6;
       for (let l = start; l < end; l = l + delta) {
-        let dhsv = [hsl[0], hsl[1], l];
-        let drgb = Color.HSL2RGB(dhsv);
+        const dhsv = [hsl[0], hsl[1], l];
+        const drgb = Color.HSL2RGB(dhsv);
         this.colors[i++] = drgb[0];
         this.colors[i++] = drgb[1];
         this.colors[i++] = drgb[2];
@@ -302,15 +301,15 @@ export default class GIF {
     return this.colors;
   }
 
-  getColor(r: number, g: number, b: number) {
+  getColor(r: number, g: number, b: number): number {
     let index = 1;
     let dmin = 256 * 256 * 256;
     let best = 0;
     for (let i = 3; i < this.colorn; index++) {
-      let cr = this.colors[i++];
-      let cg = this.colors[i++];
-      let cb = this.colors[i++];
-      let d = Color.RGBD([r, g, b], [cr, cg, cb]);
+      const cr = this.colors[i++];
+      const cg = this.colors[i++];
+      const cb = this.colors[i++];
+      const d = Color.RGBD([r, g, b], [cr, cg, cb]);
       if (d == 0) {
         return index;
       }
@@ -322,10 +321,9 @@ export default class GIF {
     return best;
   }
 
-  getPixels() {
-    let w = this.width;
-    let h = this.height;
-    let a;
+  getPixels(): void {
+    const w = this.width;
+    const h = this.height;
     let r;
     let g;
     let b;
@@ -365,7 +363,7 @@ export default class GIF {
     }
   }
 
-  add(image: Uint8Array) {
+  add(image: Uint8Array): void {
     this.image = image;
     this.getPixels();
     this.writeGraphicCtrlExt();
@@ -374,20 +372,20 @@ export default class GIF {
     this.frames++;
   }
 
-  finish() {
+  finish(): void {
     this.out.writeByte(0x3b);
   }
 
-  writeHeader() {
+  writeHeader(): void {
     this.out.writeString("GIF89a");
   }
 
-  writeGraphicCtrlExt() {
+  writeGraphicCtrlExt(): void {
     this.out.writeByte(0x21); // extension introducer
     this.out.writeByte(0xf9); // GCE label
     this.out.writeByte(4); // data block size
 
-    var transp = this.transparent ? 1 : 0;
+    const transp = this.transparent ? 1 : 0;
     let disp = this.dispose & 7;
     disp <<= 2;
 
@@ -404,7 +402,7 @@ export default class GIF {
     this.out.writeByte(0); // block terminator
   }
 
-  writeImageDesc() {
+  writeImageDesc(): void {
     this.out.writeByte(0x2c); // image separator
     this.out.writeShort(0); // image position x,y = 0,0
     this.out.writeShort(0);
@@ -413,7 +411,7 @@ export default class GIF {
     this.out.writeByte(0);
   }
 
-  writeLSD() {
+  writeLSD(): void {
     // logical screen size
     this.out.writeShort(this.width);
     this.out.writeShort(this.height);
@@ -430,7 +428,7 @@ export default class GIF {
     this.out.writeByte(0); // pixel aspect ratio - assume 1:1
   }
 
-  writeNetscapeExt() {
+  writeNetscapeExt(): void {
     this.out.writeByte(0x21); // extension introducer
     this.out.writeByte(0xff); // app extension label
     this.out.writeByte(11); // block size
@@ -441,11 +439,11 @@ export default class GIF {
     this.out.writeByte(0); // block terminator
   }
 
-  writePalette() {
+  writePalette(): void {
     this.out.writeBytes(this.colors);
   }
 
-  writePixels() {
+  writePixels(): void {
     this.enc.encode(this.data, this.out);
   }
 }

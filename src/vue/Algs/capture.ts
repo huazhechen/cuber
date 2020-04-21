@@ -11,8 +11,8 @@ export default class Capture {
   public cube: Cube;
 
   constructor() {
-    this.cube = new Cube(3, () => {});
-    for (let cubelet of this.cube.cubelets) {
+    this.cube = new Cube(3);
+    for (const cubelet of this.cube.cubelets) {
       cubelet.mirror = false;
     }
     this.renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
@@ -26,21 +26,21 @@ export default class Capture {
     this.scene.add(this.cube);
 
     this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
-    let fov = (2 * Math.atan(1 / 4) * 180) / Math.PI;
+    const fov = (2 * Math.atan(1 / 4) * 180) / Math.PI;
     this.camera.aspect = 1;
     this.camera.fov = fov;
     this.camera.position.z = Cubelet.SIZE * 3 * 4;
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
 
-    let ambient = new AmbientLight(0xffffff, 0.8);
+    const ambient = new AmbientLight(0xffffff, 0.8);
     this.scene.add(ambient);
-    let directional = new DirectionalLight(0xffffff, 0.2);
+    const directional = new DirectionalLight(0xffffff, 0.2);
     directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(directional);
   }
 
-  snap(strip: { [face: string]: number[] | undefined }, exp: string) {
+  snap(strip: { [face: string]: number[] | undefined }, exp: string): string {
     this.cube.strip(strip);
     this.cube.reset();
 
@@ -50,13 +50,13 @@ export default class Capture {
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();
     this.renderer.render(this.scene, this.camera);
-    let content = this.renderer.domElement.toDataURL("image/png");
+    const content = this.renderer.domElement.toDataURL("image/png");
     return content;
   }
 
-  twist(exp: string, reverse: boolean) {
-    let list = new TwistNode(exp, reverse, 1).parse();
-    for (let action of list) {
+  twist(exp: string, reverse: boolean): void {
+    const list = new TwistNode(exp, reverse, 1).parse();
+    for (const action of list) {
       let angle = -Math.PI / 2;
       if (action.reverse) {
         angle = -angle;
@@ -64,7 +64,7 @@ export default class Capture {
       if (action.times) {
         angle = angle * action.times;
       }
-      let part = this.cube.groups.get(action.group);
+      const part = this.cube.groups.get(action.group);
       if (part === undefined) {
         continue;
       }

@@ -13,10 +13,10 @@ export default class Cube extends Group {
   public groups: GroupTable;
   public complete = false;
   public order: number;
-  public callback: Function;
+  public callback: Function | undefined;
   public history: History;
 
-  constructor(order: number, callback: Function) {
+  constructor(order: number, callback: Function | undefined = undefined) {
     super();
     this.order = order;
     this.callback = callback;
@@ -50,7 +50,9 @@ export default class Cube extends Group {
       return same;
     });
     this.complete = complete;
-    this.callback();
+    if (this.callback) {
+      this.callback();
+    }
   }
 
   index(value: number): number {

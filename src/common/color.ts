@@ -1,33 +1,33 @@
 export default class Color {
-  static RGB2HEX(rgb: number[]) {
-    var r = rgb[0];
-    var g = rgb[1];
-    var b = rgb[2];
-    var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  static RGB2HEX(rgb: number[]): string {
+    const r = rgb[0];
+    const g = rgb[1];
+    const b = rgb[2];
+    const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     return hex;
   }
 
-  static HEX2RGB(value: string) {
+  static HEX2RGB(value: string): number[] {
     value = value.toLowerCase();
-    var result = [];
-    for (var i = 1; i < 7; i += 2) {
+    const result = [];
+    for (let i = 1; i < 7; i += 2) {
       result.push(parseInt("0x" + value.slice(i, i + 2)));
     }
     return result;
   }
 
-  static RGB2HSV(rgb: number[]) {
-    var h = 0,
+  static RGB2HSV(rgb: number[]): number[] {
+    let h = 0,
       s = 0,
       v = 0;
-    var r = rgb[0],
+    const r = rgb[0],
       g = rgb[1],
       b = rgb[2];
     rgb.sort(function (a, b) {
       return a - b;
     });
-    var max = rgb[2];
-    var min = rgb[0];
+    const max = rgb[2];
+    const min = rgb[0];
     v = max / 255;
     if (max === 0) {
       s = 0;
@@ -51,20 +51,18 @@ export default class Color {
     return [h, s, v];
   }
 
-  static HSV2RGB(hsv: number[]) {
-    var h = hsv[0],
-      s = hsv[1],
-      v = hsv[2];
-    s = s / 100;
-    v = v / 100;
-    var r = 0,
+  static HSV2RGB(hsv: number[]): number[] {
+    const h = hsv[0],
+      s = hsv[1] / 100,
+      v = hsv[2] / 100;
+    let r = 0,
       g = 0,
       b = 0;
-    var i = Math.round((h / 60) % 6);
-    var f = h / 60 - i;
-    var p = v * (1 - s);
-    var q = v * (1 - f * s);
-    var t = v * (1 - (1 - f) * s);
+    const i = Math.round((h / 60) % 6);
+    const f = h / 60 - i;
+    const p = v * (1 - s);
+    const q = v * (1 - f * s);
+    const t = v * (1 - (1 - f) * s);
     switch (i) {
       case 0:
         r = v;
@@ -105,13 +103,13 @@ export default class Color {
     return [r, g, b];
   }
 
-  static RGB2HSL(rgb: number[]) {
-    var r = rgb[0] / 255,
+  static RGB2HSL(rgb: number[]): number[] {
+    const r = rgb[0] / 255,
       g = rgb[1] / 255,
       b = rgb[2] / 255;
-    let max = Math.max(r, g, b);
-    let min = Math.min(r, g, b);
-    let v = max - min;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const v = max - min;
 
     let h = 0;
     if (v === 0) {
@@ -136,14 +134,14 @@ export default class Color {
     return [h, s, l];
   }
 
-  static HSL2RGB(hsl: number[]) {
-    var h = hsl[0],
+  static HSL2RGB(hsl: number[]): number[] {
+    const h = hsl[0],
       s = hsl[1] / 100,
       l = hsl[2] / 100;
-    let c = (1 - Math.abs(2 * l - 1)) * s;
-    let x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-    let m = l - c / 2;
-    let rgb = [];
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = l - c / 2;
+    const rgb = [];
     if (h >= 0 && h < 60) {
       rgb.push(c, x, 0);
     } else if (h >= 60 && h < 120) {
@@ -164,26 +162,26 @@ export default class Color {
     return [r, g, b];
   }
 
-  static HSVD(hsv1: number[], hsv2: number[]) {
-    let r = 50;
-    let h = 90;
-    let x1 = r * hsv1[2] * hsv1[1] * Math.cos((hsv1[0] / 180) * Math.PI);
-    let y1 = r * hsv1[2] * hsv1[1] * Math.sin((hsv1[0] / 180) * Math.PI);
-    let z1 = h * (1 - hsv1[2]);
-    let x2 = r * hsv2[2] * hsv2[1] * Math.cos((hsv2[0] / 180) * Math.PI);
-    let y2 = r * hsv2[2] * hsv2[1] * Math.sin((hsv2[0] / 180) * Math.PI);
-    let z2 = h * (1 - hsv2[2]);
-    let dx = x1 - x2;
-    let dy = y1 - y2;
-    let dz = z1 - z2;
+  static HSVD(hsv1: number[], hsv2: number[]): number {
+    const r = 50;
+    const h = 90;
+    const x1 = r * hsv1[2] * hsv1[1] * Math.cos((hsv1[0] / 180) * Math.PI);
+    const y1 = r * hsv1[2] * hsv1[1] * Math.sin((hsv1[0] / 180) * Math.PI);
+    const z1 = h * (1 - hsv1[2]);
+    const x2 = r * hsv2[2] * hsv2[1] * Math.cos((hsv2[0] / 180) * Math.PI);
+    const y2 = r * hsv2[2] * hsv2[1] * Math.sin((hsv2[0] / 180) * Math.PI);
+    const z2 = h * (1 - hsv2[2]);
+    const dx = x1 - x2;
+    const dy = y1 - y2;
+    const dz = z1 - z2;
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
-  static RGBD(rgb1: number[], rgb2: number[]) {
-    let rmean = (rgb1[0] + rgb2[0]) / 2;
-    let r = rgb1[0] - rgb2[0];
-    let g = rgb1[1] - rgb2[1];
-    let b = rgb1[2] - rgb2[2];
+  static RGBD(rgb1: number[], rgb2: number[]): number {
+    const rmean = (rgb1[0] + rgb2[0]) / 2;
+    const r = rgb1[0] - rgb2[0];
+    const g = rgb1[1] - rgb2[1];
+    const b = rgb1[2] - rgb2[2];
     return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
   }
 }

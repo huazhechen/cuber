@@ -4,7 +4,6 @@ import { WebGLRenderer } from "three";
 import { COLORS } from "../../cuber/define";
 import Toucher from "../../common/toucher";
 import World from "../../cuber/world";
-import Playbar from "../Playbar";
 
 @Component({
   template: require("./index.html"),
@@ -20,7 +19,7 @@ export default class Viewport extends Vue {
   renderer: WebGLRenderer;
   constructor() {
     super();
-    let canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     canvas.style.outline = "none";
     this.renderer = new WebGLRenderer({
       canvas: canvas,
@@ -30,11 +29,11 @@ export default class Viewport extends Vue {
     this.renderer.autoClear = false;
     this.renderer.setClearColor(COLORS.WHITE, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    let toucher = new Toucher();
+    const toucher = new Toucher();
     toucher.init(canvas, this.world.controller.touch);
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number): void {
     this.world.width = width;
     this.world.height = height;
     this.world.resize();
@@ -42,11 +41,11 @@ export default class Viewport extends Vue {
     this.world.dirty = true;
   }
 
-  mounted() {
+  mounted(): void {
     this.canvas.appendChild(this.renderer.domElement);
   }
 
-  draw() {
+  draw(): boolean {
     if (this.world.dirty || this.world.cube.dirty) {
       this.renderer.clear();
       this.renderer.render(this.world.scene, this.world.camera);

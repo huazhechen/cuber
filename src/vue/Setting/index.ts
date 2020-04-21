@@ -31,7 +31,7 @@ export class SettingItem {
   },
 })
 export default class Setting extends Vue {
-  menu: boolean = false;
+  menu = false;
 
   items: { [key: string]: SettingItem } = {};
 
@@ -42,38 +42,38 @@ export default class Setting extends Vue {
     this.items["appear"] = new SettingItem("外观设置");
     this.items["theme"] = new SettingItem("主题设置");
   }
-  mounted() {
+  mounted(): void {
     this.resize();
   }
 
-  width: number = 0;
-  height: number = 0;
-  size: number = 0;
+  width = 0;
+  height = 0;
+  size = 0;
 
-  resize() {
+  resize(): void {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
 
-  reset() {
-    let database = window.localStorage;
+  reset(): void {
+    const database = window.localStorage;
     database.clear();
     window.location.reload();
   }
 
-  resetd: boolean = false;
-  tap(key: string | SettingItem) {
+  resetd = false;
+  tap(key: string | SettingItem): void {
     switch (key) {
       case "playground":
       case "director":
       case "algs":
         let search = location.search || "";
-        let list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
-        let mode = list ? list[2] : "playground";
+        const list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
+        const mode = list ? list[2] : "playground";
         if (mode != key) {
           search = key === "playground" ? "" : "?mode=" + key;
-          let link = window.location.origin + window.location.pathname + search;
+          const link = window.location.origin + window.location.pathname + search;
           window.location.replace(link);
         }
         break;

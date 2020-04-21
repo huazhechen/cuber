@@ -14,22 +14,22 @@ export default class Playbar extends Vue {
   @Prop({ required: false, default: false })
   disable: boolean;
 
-  size: number = 0;
+  size = 0;
   constructor() {
     super();
   }
 
-  mounted() {
+  mounted(): void {
     this.world.callbacks.push(() => {
       this.callback();
     });
   }
 
-  resize(size: number) {
+  resize(size: number): void {
     this.size = size;
   }
 
-  get style() {
+  get style(): {} {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -40,58 +40,58 @@ export default class Playbar extends Vue {
     };
   }
 
-  playing: boolean = false;
-  pprogress: number = 0;
+  playing = false;
+  pprogress = 0;
 
-  get progress() {
+  get progress(): number {
     return this.pprogress;
   }
   set progress(value) {
     this.init();
     for (let i = 0; i < value; i++) {
-      let action = this.actions[i];
+      const action = this.actions[i];
       this.world.twister.twist(action.group, action.reverse, action.times, true);
     }
     this.pprogress = value;
   }
 
   @Watch("progress")
-  onProgressChange() {
+  onProgressChange(): void {
     this.world.controller.lock = this.progress > 0;
   }
 
-  scene: string = "";
+  scene = "";
   @Watch("scene")
-  onSceneChange() {
+  onSceneChange(): void {
     this.init();
   }
 
-  action: string = "";
+  action = "";
   actions: TwistAction[] = [];
   @Watch("action")
-  onActionChange() {
+  onActionChange(): void {
     this.actions = new TwistNode(this.action).parse();
     this.init();
   }
 
-  init() {
+  init(): void {
     this.world.controller.lock = false;
     this.playing = false;
     this.pprogress = 0;
     this.world.twister.finish();
     this.world.twister.twist("#");
-    let scene = this.scene.replace("^", "(" + this.action + ")'");
+    const scene = this.scene.replace("^", "(" + this.action + ")'");
     this.world.twister.twist(scene, false, 1, true);
     this.world.cube.history.clear();
   }
 
-  finish() {
+  finish(): void {
     this.init();
     this.world.twister.twist(this.action, false, 1, true);
     this.pprogress = this.actions.length;
   }
 
-  callback() {
+  callback(): void {
     if (this.playing) {
       if (this.pprogress == this.actions.length) {
         if (this.playing) {
@@ -99,13 +99,13 @@ export default class Playbar extends Vue {
         }
         return;
       }
-      let action = this.actions[this.pprogress];
+      const action = this.actions[this.pprogress];
       this.pprogress++;
       this.world.twister.twist(action.group, action.reverse, action.times, false);
     }
   }
 
-  toggle() {
+  toggle(): void {
     if (this.playing) {
       this.playing = false;
     } else {
@@ -117,7 +117,7 @@ export default class Playbar extends Vue {
     }
   }
 
-  forward() {
+  forward(): void {
     if (this.pprogress == this.actions.length) {
       return;
     }
@@ -125,22 +125,22 @@ export default class Playbar extends Vue {
       this.init();
     }
     this.playing = false;
-    let action = this.actions[this.pprogress];
+    const action = this.actions[this.pprogress];
     this.pprogress++;
     this.world.twister.twist(action.group, action.reverse, action.times);
   }
 
-  backward() {
+  backward(): void {
     if (this.pprogress == 0) {
       return;
     }
     this.playing = false;
     this.pprogress--;
-    let action = this.actions[this.pprogress];
+    const action = this.actions[this.pprogress];
     this.world.twister.twist(action.group, !action.reverse, action.times);
   }
 
-  get chaos() {
+  get chaos(): boolean {
     return this.progress == 0 && this.world.cube.history.length != 0;
   }
 }

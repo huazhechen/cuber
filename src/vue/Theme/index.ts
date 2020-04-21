@@ -16,41 +16,41 @@ export default class Theme extends Vue {
 
   @Prop({ required: true })
   value: boolean;
-  get show() {
+  get show(): boolean {
     return this.value;
   }
   set show(value) {
     this.$emit("input", value);
   }
 
-  width: number = 0;
-  height: number = 0;
-  size: number = 0;
+  width = 0;
+  height = 0;
+  size = 0;
 
-  colors: { [key: string]: string }
+  colors: { [key: string]: string };
   constructor() {
     super();
     this.colors = COLORS;
   }
 
-  mounted() {
+  mounted(): void {
     this.resize();
   }
 
-  resize() {
+  resize(): void {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
 
-  colord: boolean = false;
+  colord = false;
   face: string;
-  tap(face: string) {
+  tap(face: string): void {
     this.face = face;
     this.colord = true;
   }
 
-  color(color: string) {
+  color(color: string): void {
     this.colord = false;
     this.database.theme.color(this.face, color);
     this.database.theme.save();
@@ -108,7 +108,7 @@ export default class Theme extends Vue {
     "#F0F0F0",
   ];
 
-  reset() {
+  reset(): void {
     this.database.theme.reset();
     this.database.theme.save();
   }

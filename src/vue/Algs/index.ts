@@ -26,9 +26,9 @@ export default class Algs extends Vue {
 
   algs = require("./algs.json");
 
-  width: number = 0;
-  height: number = 0;
-  size: number = 0;
+  width = 0;
+  height = 0;
+  size = 0;
 
   @Ref("viewport")
   viewport: Viewport;
@@ -46,15 +46,15 @@ export default class Algs extends Vue {
   tab = "tab-0";
   pics: string[][] = [];
 
-  mounted() {
+  mounted(): void {
     this.setting.items["order"].disable = true;
     for (let i = 0; i < this.algs.length; i++) {
       this.pics.push([]);
     }
-    let index = window.localStorage.getItem("algs.index");
+    const index = window.localStorage.getItem("algs.index");
     if (index) {
       try {
-        let data = JSON.parse(index);
+        const data = JSON.parse(index);
         this.index = { group: data.group, index: data.index };
       } catch (error) {
         this.index = { group: 0, index: 0 };
@@ -69,7 +69,7 @@ export default class Algs extends Vue {
     this.loop();
   }
 
-  loop() {
+  loop(): void {
     requestAnimationFrame(this.loop.bind(this));
     if (this.viewport?.draw()) {
       return;
@@ -78,16 +78,16 @@ export default class Algs extends Vue {
       if (this.algs[idx].algs.length == group.length) {
         return false;
       }
-      let save = window.localStorage.getItem("algs.exp." + this.algs[idx].algs[group.length].name);
-      let origin = this.algs[idx].algs[group.length].default;
-      let exp = save ? save : origin;
+      const save = window.localStorage.getItem("algs.exp." + this.algs[idx].algs[group.length].name);
+      const origin = this.algs[idx].algs[group.length].default;
+      const exp = save ? save : origin;
       this.algs[idx].algs[group.length].exp = exp;
       group.push(this.capture.snap(this.algs[idx].strip, exp));
       return true;
     });
   }
 
-  resize() {
+  resize(): void {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
@@ -95,12 +95,12 @@ export default class Algs extends Vue {
     this.playbar?.resize(this.size);
   }
 
-  get grid() {
-    let width = this.size * 8;
+  get grid(): number {
+    const width = this.size * 8;
     return Math.min(this.width, width);
   }
 
-  get style() {
+  get style(): {} {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -111,8 +111,8 @@ export default class Algs extends Vue {
     };
   }
 
-  listd: boolean = false;
-  tap(key: string) {
+  listd = false;
+  tap(key: string): void {
     switch (key) {
       case "list":
         this.tab = "tab-" + this.index.group;
@@ -125,12 +125,12 @@ export default class Algs extends Vue {
 
   index: { group: number; index: number } = { group: 0, index: 0 };
   @Watch("index")
-  onIndexChange() {
-    let strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
+  onIndexChange(): void {
+    const strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
     this.world.cube.strip(strip);
     this.name = this.algs[this.index.group].algs[this.index.index].name;
     this.origin = this.algs[this.index.group].algs[this.index.index].default;
-    let action = window.localStorage.getItem("algs.exp." + this.name);
+    const action = window.localStorage.getItem("algs.exp." + this.name);
     if (action) {
       this.action = action;
     } else {
@@ -140,11 +140,11 @@ export default class Algs extends Vue {
     window.localStorage.setItem("algs.index", JSON.stringify(this.index));
   }
 
-  name: string = "";
-  origin: string = "";
-  action: string = "";
+  name = "";
+  origin = "";
+  action = "";
   @Watch("action")
-  onActionChange() {
+  onActionChange(): void {
     window.localStorage.setItem("algs.exp." + this.name, this.action);
     if (this.pics[this.index.group][this.index.index]) {
       this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.action);
@@ -153,7 +153,7 @@ export default class Algs extends Vue {
     this.playbar.action = this.action;
   }
 
-  select(i: number, j: number) {
+  select(i: number, j: number): void {
     this.index = { group: i, index: j };
     this.listd = false;
   }
