@@ -142,7 +142,10 @@ export default class Algs extends Vue {
   onIndexChange(): void {
     const alg = this.algs[this.index.group].items[this.index.index];
     const order = alg.order ? alg.order : 3;
-    this.world.order = order;
+    if (order != this.world.order) {
+      this.world.order = order;
+      this.preferance.refresh();
+    }
     const strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
     this.world.cube.strip(strip);
     this.name = alg.name;

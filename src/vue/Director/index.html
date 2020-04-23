@@ -7,7 +7,7 @@
       fluid
       grid-list-md
       text-xs-center
-      :style="{width:Math.min(size * 8, width) + 'px', height:size * 4.4 + 32 + 'px'}"
+      :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px'}"
       style="padding: 0%; touch-action: none;"
     >
       <v-layout row wrap>
@@ -36,40 +36,6 @@
           <v-text-field
             style="text-transform: none;"
             :height="size * 0.8"
-            :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'font-size':size*0.4+'px'}"
-            dense
-            single-line
-            hide-details
-            outlined
-            :disabled="recording"
-            v-model="scene"
-          >
-            <v-btn
-              tabindex="-1"
-              slot="label"
-              text
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-            >
-              <v-icon :size="size * 0.4" style="vertical-align: middle;">terrain</v-icon>
-            </v-btn>
-            <v-btn
-              tabindex="-1"
-              slot="append"
-              text
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
-              @click="scened=true"
-              :disabled="recording"
-            >
-              <v-icon :size="size * 0.4">edit</v-icon>
-            </v-btn>
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12>
-          <v-text-field
-            style="text-transform: none;"
-            :height="size * 0.8"
             :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
             dense
             single-line
@@ -93,7 +59,7 @@
               text
               style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
-              @click="actiond=true"
+              @click="scriptd=true"
               :disabled="recording"
             >
               <v-icon :size="size * 0.4">edit</v-icon>
@@ -197,7 +163,7 @@
           fluid
           grid-list-md
           text-xs-center
-          :style="{width:Math.min(size * 8, width) + 'px', height:size * 4.4 + 32 + 'px', 'padding-top': size * 0.5 + 'px'}"
+          :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}"
         >
           <v-layout row wrap>
             <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
@@ -208,7 +174,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size * 1.2"
+                :height="size"
               >
                 <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
               </v-btn>
@@ -220,7 +186,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size * 1.2"
+                :height="size"
               >
                 <v-icon :size="size * 0.8" v-show="color=='Core'">crop_din</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='Core'">
@@ -235,7 +201,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size * 1.2"
+                :height="size"
               >
                 <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='remove'">
@@ -250,7 +216,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size * 1.2"
+                :height="size"
                 color="success"
               >
                 <div :style="{'font-size':size * 0.4+'px'}">
@@ -265,7 +231,7 @@
                 depressed
                 :ripple="false"
                 style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size * 1.2"
+                :height="size"
                 color="error"
               >
                 <div :style="{'font-size':size * 0.4+'px'}">
@@ -277,17 +243,17 @@
         </v-container>
       </v-card>
     </v-bottom-sheet>
-    <v-dialog v-model="scened" :width="Math.min(size * 8, width)">
+    <v-dialog v-model="scriptd" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform: none;">
-          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size * 0.4+'px'}">
             场景:
           </div>
         </v-card-title>
-        <v-card-text style="text-transform: none;">
+        <v-card-text style="text-transform: none; padding-bottom: 0%;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="12"
+            rows="3"
             no-resize
             solo
             flat
@@ -297,19 +263,15 @@
           >
           </v-textarea>
         </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="actiond" :width="Math.min(size * 8, width)">
-      <v-card>
         <v-card-title style="text-transform: none;">
-          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+          <div :style="{'font-size':size * 0.4+'px'}">
             动作:
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="12"
+            rows="8"
             no-resize
             solo
             flat
@@ -318,6 +280,13 @@
             v-model="action"
           >
           </v-textarea>
+          <v-layout row wrap style="margin: 0%;">
+            <v-flex xs12 d-flex>
+              <v-btn block text @click="scriptd = false;" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">确定</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
         </v-card-text>
       </v-card>
     </v-dialog>

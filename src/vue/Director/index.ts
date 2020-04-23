@@ -19,7 +19,7 @@ import { PreferanceData, ThemeData } from "../../data";
 
 export class DirectorData {
   private values = {
-    version: "0.1",
+    version: "0.2",
     order: 3,
     delay: 4,
     pixel: 512,
@@ -150,7 +150,7 @@ export default class Director extends Vue {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 4.4 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 3.6 - 32);
     this.playbar?.resize(this.size);
   }
 
@@ -184,7 +184,7 @@ export default class Director extends Vue {
     const order = this.world.order;
     save = this.data.dramas[order];
     if (!save) {
-      save = { scene: "^", action: "RUR'U'~", stickers: {} };
+      save = { scene: "x2^", action: "RUR'U'~", stickers: {} };
       this.data.dramas[order] = save;
     }
     this.scene = save.scene;
@@ -249,6 +249,7 @@ export default class Director extends Vue {
         break;
       case "open":
         window.open(this.link);
+        this.shared = false;
         break;
       default:
         break;
@@ -507,6 +508,5 @@ export default class Director extends Vue {
     }
   }
 
-  scened = false;
-  actiond = false;
+  scriptd = false;
 }

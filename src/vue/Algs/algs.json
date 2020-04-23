@@ -151,6 +151,9 @@
   {
     "name": "MORE",
     "strip": {},
-    "items": [{ "name": "4OP", "default": "r2 R2' U2 2R2 u2 2R2 u2 U2", "order": 4 }]
+    "items": [
+      { "name": "4OP", "default": "r U2 x r U2 (r U2' r' U2) l U2 (r' U2' r U2) r' U2' r'", "order": 4 },
+      { "name": "4PP", "default": "2R2 U2 2R2 u2 2R2 2U2", "order": 4 }
+    ]
   }
 ]
