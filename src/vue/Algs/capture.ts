@@ -8,13 +8,10 @@ export default class Capture {
   public renderer: WebGLRenderer;
   public scene: Scene;
   public camera: PerspectiveCamera;
-  public cube: Cube;
+  private cubes: Cube[] = [];
+  private cube: Cube;
 
   constructor() {
-    this.cube = new Cube(3);
-    for (const cubelet of this.cube.cubelets) {
-      cubelet.mirror = false;
-    }
     this.renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
@@ -23,7 +20,6 @@ export default class Capture {
     this.scene = new Scene();
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = Math.PI / 16 - Math.PI / 4;
-    this.scene.add(this.cube);
 
     this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     const fov = (2 * Math.atan(1 / 4) * 180) / Math.PI;
@@ -40,12 +36,28 @@ export default class Capture {
     this.scene.add(directional);
   }
 
-  snap(strip: { [face: string]: number[] | undefined }, exp: string): string {
+  set order(value: number) {
+    this.scene.remove(this.cube);
+    if (this.cubes[value] == undefined) {
+      this.cubes[value] = new Cube(value);
+      for (const cubelet of this.cubes[value].cubelets) {
+        cubelet.mirror = false;
+      }
+    }
+    this.cube = this.cubes[value];
+    this.scene.add(this.cube);
+  }
+
+  get order(): number {
+    return this.cube.order;
+  }
+
+  snap(strip: { [face: string]: number[] | undefined }, exp: string, order: number): string {
+    this.order = order;
     this.cube.strip(strip);
     this.cube.reset();
 
-    this.twist("x2", false);
-    this.twist(exp, true);
+    this.twist(exp);
 
     this.camera.aspect = 1;
     this.camera.updateProjectionMatrix();
@@ -54,8 +66,8 @@ export default class Capture {
     return content;
   }
 
-  twist(exp: string, reverse: boolean): void {
-    const list = new TwistNode(exp, reverse, 1).parse();
+  twist(exp: string): void {
+    const list = new TwistNode(exp).parse();
     for (const action of list) {
       let angle = -Math.PI / 2;
       if (action.reverse) {

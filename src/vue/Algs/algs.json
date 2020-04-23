@@ -8,7 +8,7 @@
       "B": [0, 1, 2],
       "L": [0, 9, 18]
     },
-    "algs": [
+    "items": [
       { "name": "F2L-01", "default": "U(RU'R')" },
       { "name": "F2L-02", "default": "y'U'(R'UR)y" },
       { "name": "F2L-03", "default": "y'(R'U'R)y" },
@@ -61,7 +61,7 @@
       "L": [0, 3, 6, 9, 12, 15, 18, 21, 24],
       "U": [6, 7, 8, 15, 16, 17, 24, 25, 26]
     },
-    "algs": [
+    "items": [
       { "name": "OLL-01", "default": "(RU'2) (R2'FRF') U2(R'FRF')" },
       { "name": "OLL-02", "default": "(FRUR'U'F') (fRUR'U'f')" },
       { "name": "OLL-03", "default": "f(RUR'U') f'U'F(RUR'U')F'" },
@@ -124,7 +124,7 @@
   {
     "name": "PLL",
     "strip": {},
-    "algs": [
+    "items": [
       { "name": "PLL-Aa", "default": "x(R2U'2)(R'D') (RU'2)(R'DR')x'" },
       { "name": "PLL-Ab", "default": "x(RD'R)(U2R'D) (RU2R'2)x'" },
       { "name": "PLL-E", "default": "x'(RU'R'D)(RUR') u2'(R'URD)(R'U'R)x'y2" },
@@ -147,5 +147,10 @@
       { "name": "PLL-Y", "default": "F(RU'R'U')(RUR'F') (RUR'U')(R'FRF')" },
       { "name": "PLL-Z", "default": "(R'U'RU'R) (URU'R'UR) (UR2U'R')" }
     ]
+  },
+  {
+    "name": "MORE",
+    "strip": {},
+    "items": [{ "name": "4OP", "default": "r2 R2' U2 2R2 u2 2R2 u2 U2", "order": 4 }]
   }
 ]

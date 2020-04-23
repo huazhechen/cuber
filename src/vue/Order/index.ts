@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Prop, Inject } from "vue-property-decorator";
 import World from "../../cuber/world";
-import Database from "../../database";
+import { PreferanceData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -10,8 +10,8 @@ export default class Order extends Vue {
   @Inject("world")
   world: World;
 
-  @Inject("database")
-  database: Database;
+  @Inject("preferance")
+  preferance: PreferanceData;
 
   @Prop({ required: true })
   value: boolean;
@@ -42,7 +42,7 @@ export default class Order extends Vue {
   order(order: number): void {
     if (this.world.order != order) {
       this.world.order = order;
-      this.database.preferance.refresh();
+      this.preferance.refresh();
       this.$emit("order");
       this.show = false;
     }

@@ -7,8 +7,8 @@
           <v-btn
             v-for="frames in [5, 10, 20, 30, 45, 60]"
             :key="frames"
-            @click="database.preferance.frames = frames"
-            :color="database.preferance.frames == frames?'primary':''"
+            @click="preferance.frames = frames"
+            :color="preferance.frames == frames?'primary':''"
             depressed
             style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"
@@ -30,8 +30,8 @@
           <v-btn
             v-for="i in [1, 2, 3, 4, 5, 6]"
             :key="i"
-            @click="database.preferance.sensitivity = i"
-            :color="database.preferance.sensitivity == i?'primary':''"
+            @click="preferance.sensitivity = i"
+            :color="preferance.sensitivity == i?'primary':''"
             depressed
             style="text-transform: none; min-width: 0%; flex: 1;"
             :height="size * 0.8"

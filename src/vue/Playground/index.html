@@ -1,5 +1,5 @@
 <v-app>
-  <div v-resize="resize" style="user-select: none;touch-action: none;">
+  <div v-resize="resize" style="user-select: none; touch-action: none;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-btn
@@ -36,7 +36,7 @@
     >
       <v-layout row wrap>
         <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
-          <v-btn @click="tap('shuffle')" :style="style" text :ripple="false">
+          <v-btn @click="tap('scramble')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">casino</v-icon>
           </v-btn>
           <v-btn @click="tap('history')" :style="style" text :ripple="false">
@@ -48,7 +48,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-dialog v-model="shuffled" :width="Math.min(size * 8, width)">
+    <v-dialog v-model="scrambled" :width="Math.min(size * 8, width)">
       <v-card>
         <v-card-title style="text-transform: none;">
           <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
@@ -61,22 +61,22 @@
               <v-textarea
                 :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
                 auto-grow
-                rows=1
+                rows="1"
                 solo
                 flat
                 outlined
                 hide-details
-                v-model="database.playground.shuffler"
+                v-model="data.scrambler"
               >
               </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="error" text @click="shuffled = false;shuffle();" :height="size * 0.8">
+              <v-btn block color="error" text @click="scrambled = false;scramble();" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block text @click="shuffled = false" :height="size * 0.8">
+              <v-btn block text @click="scrambled = false" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">取消</div>
               </v-btn>
             </v-flex>
@@ -124,7 +124,7 @@
             outlined
             hide-details
             readonly
-            v-model="database.playground.scene"
+            v-model="data.scene"
           >
           </v-textarea>
         </v-card-text>
@@ -143,7 +143,7 @@
             outlined
             hide-details
             readonly
-            v-model="database.playground.history"
+            v-model="data.history"
           >
           </v-textarea>
         </v-card-text>

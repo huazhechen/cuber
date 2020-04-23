@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Prop, Inject } from "vue-property-decorator";
-import Database from "../../database";
 import World from "../../cuber/world";
+import { PreferanceData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -9,8 +9,9 @@ import World from "../../cuber/world";
 export default class Appear extends Vue {
   @Inject("world")
   world: World;
-  @Inject("database")
-  database: Database;
+
+  @Inject("preferance")
+  preferance: PreferanceData;
 
   @Prop({ required: true })
   value: boolean;
@@ -21,7 +22,7 @@ export default class Appear extends Vue {
 
   set show(value) {
     if (!value) {
-      this.database.preferance.save();
+      this.preferance.save();
     }
     this.$emit("input", value);
   }
@@ -44,12 +45,12 @@ export default class Appear extends Vue {
   }
 
   reset(): void {
-    this.database.preferance.scale = 50;
-    this.database.preferance.perspective = 50;
-    this.database.preferance.angle = 60;
-    this.database.preferance.gradient = 65;
-    this.database.preferance.mirror = false;
-    this.database.preferance.hollow = false;
-    this.database.preferance.shadow = true;
+    this.preferance.scale = 50;
+    this.preferance.perspective = 50;
+    this.preferance.angle = 60;
+    this.preferance.gradient = 65;
+    this.preferance.mirror = false;
+    this.preferance.hollow = false;
+    this.preferance.shadow = true;
   }
 }

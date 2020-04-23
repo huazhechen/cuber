@@ -3,10 +3,10 @@ import { Component, Provide, Ref } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
-import Database from "../../database";
 import { FACE } from "../../cuber/define";
 import pako from "pako";
 import Setting from "../Setting";
+import { PreferanceData, ThemeData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -20,8 +20,11 @@ export default class Algs extends Vue {
   @Provide("world")
   world: World = new World();
 
-  @Provide("database")
-  database: Database = new Database("playground", this.world);
+  @Provide("preferance")
+  preferance: PreferanceData = new PreferanceData(this.world);
+
+  @Provide("theme")
+  theme: ThemeData = new ThemeData(this.world);
 
   width = 0;
   height = 0;
@@ -76,7 +79,8 @@ export default class Algs extends Vue {
     }
     this.$nextTick(this.resize);
     this.$nextTick(() => {
-      this.database.refresh();
+      this.preferance.refresh();
+      this.theme.refresh();
     });
     this.loop();
   }

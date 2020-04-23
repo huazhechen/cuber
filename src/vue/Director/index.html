@@ -20,7 +20,7 @@
             <v-icon :size="size * 0.8">colorize</v-icon>
           </v-btn>
           <v-btn @click="tap('output')" :style="style" text :ripple="false" :disabled="recording">
-            <v-icon :size="size * 0.8">save</v-icon>
+            <v-icon :size="size * 0.8">style</v-icon>
           </v-btn>
           <v-btn @click="tap('snap')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">camera_alt</v-icon>
@@ -114,8 +114,8 @@
               <v-btn
                 v-for="i in [128, 256, 512, 1024, 2048]"
                 :key="i"
-                @click="database.director.pixel=i;database.save();"
-                :color="database.director.pixel == i?'primary':''"
+                @click="data.pixel=i;data.save();"
+                :color="data.pixel == i?'primary':''"
                 depressed
                 style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8"
@@ -133,8 +133,8 @@
               <v-btn
                 v-for="i in ['png', 'svg']"
                 :key="i"
-                @click="database.director.snapt=i;database.save();"
-                :color="database.director.snapt == i?'primary':''"
+                @click="data.snapt=i;data.save();"
+                :color="data.snapt == i?'primary':''"
                 depressed
                 style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8"
@@ -152,8 +152,8 @@
               <v-btn
                 v-for="i in ['gif', 'apng', 'pngs']"
                 :key="i"
-                @click="database.director.filmt=i;database.save();"
-                :color="database.director.filmt == i?'primary':''"
+                @click="data.filmt=i;data.save();"
+                :color="data.filmt == i?'primary':''"
                 depressed
                 style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8"
@@ -177,8 +177,8 @@
               <v-btn
                 v-for="i in [2, 3, 4, 5, 6, 10]"
                 :key="i"
-                @click="database.director.delay=i;database.save();"
-                :color="database.director.delay == i?'primary':''"
+                @click="data.delay=i;data.save();"
+                :color="data.delay == i?'primary':''"
                 depressed
                 style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8"

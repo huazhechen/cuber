@@ -57,8 +57,7 @@ export default class Setting extends Vue {
   }
 
   reset(): void {
-    const database = window.localStorage;
-    database.clear();
+    window.localStorage.clear();
     window.location.reload();
   }
 

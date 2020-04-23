@@ -13,10 +13,85 @@ import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
 import Setting from "../Setting";
 import World from "../../cuber/world";
-import Database from "../../database";
 import pako from "pako";
 import ClipboardJS from "clipboard";
+import { PreferanceData, ThemeData } from "../../data";
 
+export class DirectorData {
+  private values = {
+    version: "0.1",
+    order: 3,
+    delay: 4,
+    pixel: 512,
+    filmt: "gif",
+    snapt: "png",
+    dramas: [],
+  };
+
+  constructor() {
+    this.load();
+  }
+
+  load(): void {
+    const save = window.localStorage.getItem("director");
+    if (save) {
+      const data = JSON.parse(save);
+      if (data.version != this.values.version) {
+        this.save();
+        return;
+      }
+      this.values = data;
+    }
+  }
+
+  save(): void {
+    window.localStorage.setItem("director", JSON.stringify(this.values));
+  }
+
+  get order(): number {
+    return this.values.order;
+  }
+
+  set order(value) {
+    this.values.order = value;
+  }
+
+  get delay(): number {
+    return this.values.delay;
+  }
+
+  set delay(value) {
+    this.values.delay = value;
+  }
+
+  get pixel(): number {
+    return this.values.pixel;
+  }
+
+  set pixel(value) {
+    this.values.pixel = value;
+  }
+
+  get filmt(): string {
+    return this.values.filmt;
+  }
+
+  set filmt(value) {
+    this.values.filmt = value;
+  }
+
+  get snapt(): string {
+    return this.values.snapt;
+  }
+
+  set snapt(value) {
+    this.values.snapt = value;
+  }
+
+  get dramas(): { scene: string; action: string; stickers: {} }[] {
+    return this.values.dramas;
+  }
+}
 @Component({
   template: require("./index.html"),
   components: {
@@ -29,8 +104,13 @@ export default class Director extends Vue {
   @Provide("world")
   world: World = new World();
 
-  @Provide("database")
-  database: Database = new Database("director", this.world);
+  @Provide("preferance")
+  preferance: PreferanceData = new PreferanceData(this.world);
+
+  @Provide("theme")
+  theme: ThemeData = new ThemeData(this.world);
+
+  data: DirectorData = new DirectorData();
 
   width = 0;
   height = 0;
@@ -87,7 +167,8 @@ export default class Director extends Vue {
     });
     this.$nextTick(this.resize);
     this.$nextTick(() => {
-      this.database.refresh();
+      this.preferance.refresh();
+      this.theme.refresh();
     });
     this.loop();
   }
@@ -101,10 +182,10 @@ export default class Director extends Vue {
   reload(): void {
     let save;
     const order = this.world.order;
-    save = this.database.director.dramas[order];
+    save = this.data.dramas[order];
     if (!save) {
       save = { scene: "^", action: "RUR'U'~", stickers: {} };
-      this.database.director.dramas[order] = save;
+      this.data.dramas[order] = save;
     }
     this.scene = save.scene;
     this.action = save.action;
@@ -153,7 +234,7 @@ export default class Director extends Vue {
         this.outputd = true;
         break;
       case "snap":
-        const snapt = this.database.director.snapt;
+        const snapt = this.data.snapt;
         if (snapt == "png") {
           this.png();
         } else if (snapt == "svg") {
@@ -180,7 +261,7 @@ export default class Director extends Vue {
     const data: { [key: string]: {} } = {};
     const order = this.world.order;
     data["order"] = order;
-    data["drama"] = this.database.director.dramas[order];
+    data["drama"] = this.data.dramas[order];
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
@@ -190,8 +271,8 @@ export default class Director extends Vue {
   }
 
   order(): void {
-    this.database.director.order = this.world.order;
-    this.database.save();
+    this.data.order = this.world.order;
+    this.data.save();
     this.reload();
     this.playbar.init();
   }
@@ -200,16 +281,16 @@ export default class Director extends Vue {
   @Watch("scene")
   onSceneChange(): void {
     this.playbar.scene = this.scene;
-    this.database.director.dramas[this.world.order].scene = this.scene;
-    this.database.save();
+    this.data.dramas[this.world.order].scene = this.scene;
+    this.data.save();
   }
 
   action = "";
   @Watch("action")
   onActionChange(): void {
     this.playbar.action = this.action;
-    this.database.director.dramas[this.world.order].action = this.action;
-    this.database.save();
+    this.data.dramas[this.world.order].action = this.action;
+    this.data.save();
   }
 
   recording = false;
@@ -236,15 +317,15 @@ export default class Director extends Vue {
       arr[index] = this.color;
       this.world.cube.stick(index, face, this.color);
     }
-    this.database.director.dramas[this.world.order].stickers = this.stickers;
-    this.database.save();
+    this.data.dramas[this.world.order].stickers = this.stickers;
+    this.data.save();
   }
 
   reset(): void {
     this.stickers = {};
     this.world.cube.strip({});
-    this.database.director.dramas[this.world.order].stickers = this.stickers;
-    this.database.save();
+    this.data.dramas[this.world.order].stickers = this.stickers;
+    this.data.save();
   }
 
   clear(): void {
@@ -266,8 +347,8 @@ export default class Director extends Vue {
       }
     }
     this.world.cube.strip(strip);
-    this.database.director.dramas[this.world.order].stickers = this.stickers;
-    this.database.save();
+    this.data.dramas[this.world.order].stickers = this.stickers;
+    this.data.save();
   }
 
   pixels: Uint8Array;
@@ -279,9 +360,9 @@ export default class Director extends Vue {
       return;
     }
     this.world.controller.disable = true;
-    const pixel = this.database.director.pixel;
-    const filmt = this.database.director.filmt;
-    const delay = this.database.director.delay;
+    const pixel = this.data.pixel;
+    const filmt = this.data.filmt;
+    const delay = this.data.delay;
     this.filmer.setSize(pixel, pixel, true);
     if (filmt == "gif") {
       this.pixels = new Uint8Array(pixel * pixel * 4);
@@ -302,7 +383,7 @@ export default class Director extends Vue {
   }
 
   png(): void {
-    const pixel = this.database.director.pixel;
+    const pixel = this.data.pixel;
     const width = this.world.width;
     const height = this.world.height;
     this.world.width = pixel;
@@ -354,7 +435,7 @@ export default class Director extends Vue {
     }
     this.world.camera.aspect = 1;
     this.world.camera.updateProjectionMatrix();
-    const pixel = this.database.director.pixel;
+    const pixel = this.data.pixel;
     this.svger.setSize(pixel, pixel);
     this.svger.clear();
     this.svger.overdraw = 0;
@@ -367,8 +448,8 @@ export default class Director extends Vue {
   }
 
   record(): void {
-    const pixel = this.database.director.pixel;
-    const filmt = this.database.director.filmt;
+    const pixel = this.data.pixel;
+    const filmt = this.data.filmt;
     const width = this.world.width;
     const height = this.world.height;
     this.world.width = pixel;
@@ -399,7 +480,7 @@ export default class Director extends Vue {
   }
 
   finish(): void {
-    const filmt = this.database.director.filmt;
+    const filmt = this.data.filmt;
     this.recording = false;
     this.world.controller.disable = false;
     let data;

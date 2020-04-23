@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Component, Prop, Inject } from "vue-property-decorator";
 import World from "../../cuber/world";
-import Database from "../../database";
+import { PreferanceData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -10,8 +10,8 @@ export default class Control extends Vue {
   @Inject("world")
   world: World;
 
-  @Inject("database")
-  database: Database;
+  @Inject("preferance")
+  preferance: PreferanceData;
 
   @Prop({ required: true })
   value: boolean;
@@ -20,7 +20,7 @@ export default class Control extends Vue {
   }
   set show(value) {
     if (!value) {
-      this.database.preferance.save();
+      this.preferance.save();
     }
     this.$emit("input", value);
   }

@@ -219,7 +219,7 @@ export default class Twister {
     });
   }
 
-  static shuffle(order: number): string {
+  static scramble(order: number): string {
     let result = "";
     const exps = [];
     let last = -1;
@@ -309,7 +309,7 @@ export default class Twister {
     if (action.group == "*") {
       this.world.cube.reset();
       this.world.cube.dirty = true;
-      const exp = Twister.shuffle(this.world.cube.order);
+      const exp = Twister.scramble(this.world.cube.order);
       this.twist(exp, false, 1, true);
       this.world.cube.history.clear();
       this.world.cube.history.init = exp;

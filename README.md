@@ -31,7 +31,7 @@
 
 - 自定义打乱
 
-  ![shuffle](https://gitee.com/huazhechen/cuber/raw/master/screenshot/shuffle.gif)
+  ![scramble](https://gitee.com/huazhechen/cuber/raw/master/screenshot/scramble.gif)
 
 - 复盘
 

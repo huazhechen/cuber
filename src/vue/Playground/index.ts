@@ -5,8 +5,8 @@ import Viewport from "../Viewport";
 import Setting from "../Setting";
 import Cubelet from "../../cuber/cubelet";
 import World from "../../cuber/world";
-import Database from "../../database";
 import pako from "pako";
+import { ThemeData, PreferanceData } from "../../data";
 
 class KeyHandle {
   reverse = false;
@@ -78,6 +78,95 @@ class KeyHandle {
   };
 }
 
+export class PlaygroundData {
+  private values = {
+    version: "0.3",
+    order: 3,
+    scrambler: "*",
+    history: "",
+    scene: "*",
+    start: 0,
+    now: 0,
+    complete: false,
+  };
+
+  constructor() {
+    this.load();
+  }
+
+  load(): void {
+    const save = window.localStorage.getItem("playground");
+    if (save) {
+      const data = JSON.parse(save);
+      if (data.version != this.values.version) {
+        this.save();
+        return;
+      }
+      this.values = data;
+    }
+  }
+
+  save(): void {
+    window.localStorage.setItem("playground", JSON.stringify(this.values));
+  }
+
+  get order(): number {
+    return this.values.order;
+  }
+
+  set order(value: number) {
+    this.values.order = value;
+  }
+
+  get scrambler(): string {
+    return this.values.scrambler;
+  }
+
+  set scrambler(value: string) {
+    this.values.scrambler = value;
+  }
+
+  get history(): string {
+    return this.values.history;
+  }
+
+  set history(value: string) {
+    this.values.history = value;
+  }
+
+  get scene(): string {
+    return this.values.scene;
+  }
+
+  set scene(value: string) {
+    this.values.scene = value;
+  }
+
+  get start(): number {
+    return this.values.start;
+  }
+
+  set start(value: number) {
+    this.values.start = value;
+  }
+
+  get now(): number {
+    return this.values.now;
+  }
+
+  set now(value: number) {
+    this.values.now = value;
+  }
+
+  get complete(): boolean {
+    return this.values.complete;
+  }
+
+  set complete(value: boolean) {
+    this.values.complete = value;
+  }
+}
+
 @Component({
   template: require("./index.html"),
   components: {
@@ -89,8 +178,13 @@ export default class Playground extends Vue {
   @Provide("world")
   world: World = new World();
 
-  @Provide("database")
-  database: Database = new Database("playground", this.world);
+  @Provide("preferance")
+  preferance: PreferanceData = new PreferanceData(this.world);
+
+  @Provide("theme")
+  theme: ThemeData = new ThemeData(this.world);
+
+  data: PlaygroundData = new PlaygroundData();
 
   width = 0;
   height = 0;
@@ -122,7 +216,8 @@ export default class Playground extends Vue {
     this.load();
     this.$nextTick(this.resize);
     this.$nextTick(() => {
-      this.database.refresh();
+      this.preferance.refresh();
+      this.theme.refresh();
     });
     this.world.callbacks.push(() => {
       this.callback();
@@ -131,7 +226,7 @@ export default class Playground extends Vue {
   }
 
   get score(): string {
-    let diff = this.database.playground.now - this.database.playground.start;
+    let diff = this.data.now - this.data.start;
     const hour = Math.floor(diff / 1000 / 60 / 60);
     diff = diff % (1000 * 60 * 60);
     const minute = Math.floor(diff / 1000 / 60);
@@ -161,15 +256,15 @@ export default class Playground extends Vue {
 
   completed = false;
   callback(): void {
-    this.database.playground.scene = this.world.cube.history.init;
-    this.database.playground.history = this.world.cube.history.exp.substring(1);
-    if (this.database.playground.complete) {
-      this.database.save();
+    this.data.scene = this.world.cube.history.init;
+    this.data.history = this.world.cube.history.exp.substring(1);
+    if (this.data.complete) {
+      this.data.save();
       return;
     }
-    this.database.playground.complete = this.world.cube.complete;
-    this.database.save();
-    if (this.database.playground.complete) {
+    this.data.complete = this.world.cube.complete;
+    this.data.save();
+    if (this.data.complete) {
       this.completed = true;
     }
   }
@@ -184,56 +279,57 @@ export default class Playground extends Vue {
     this.world.cube.updateMatrix();
     this.world.cube.dirty = true;
     this.viewport.draw();
-    if (this.database.playground.complete) {
+    if (this.data.complete) {
       return;
     }
     if (this.world.cube.history.moves == 0) {
-      this.database.playground.start = 0;
-      this.database.playground.now = 0;
-      this.database.save();
+      this.data.start = 0;
+      this.data.now = 0;
+      this.data.save();
     } else {
-      if (this.database.playground.start == 0) {
-        this.database.playground.start = new Date().getTime();
-        this.database.save();
+      if (this.data.start == 0) {
+        this.data.start = new Date().getTime();
+        this.data.save();
       }
-      if (!this.database.playground.complete) {
-        this.database.playground.now = new Date().getTime();
+      if (!this.data.complete) {
+        this.data.now = new Date().getTime();
       }
     }
   }
 
   load(): void {
     // 未初始化
-    if (this.database.playground.scene === "*") {
-      this.shuffle();
+    if (this.data.scene === "*") {
+      this.scramble();
       return;
     }
-    this.world.twister.twist("# " + this.database.playground.scene, false, 1, true);
+    this.world.order = this.data.order;
+    this.world.twister.twist("# " + this.data.scene, false, 1, true);
     this.world.cube.history.clear();
-    this.world.cube.history.init = this.database.playground.scene;
-    this.world.twister.twist(this.database.playground.history, false, 1, true);
+    this.world.cube.history.init = this.data.scene;
+    this.world.twister.twist(this.data.history, false, 1, true);
     this.callback();
   }
 
-  shuffle(): void {
-    if (this.database.playground.shuffler === "*") {
+  scramble(): void {
+    if (this.data.scrambler === "*") {
       this.world.twister.twist("*");
     } else {
-      this.world.twister.twist("# " + this.database.playground.shuffler, false, 1, true);
+      this.world.twister.twist("# " + this.data.scrambler, false, 1, true);
       this.world.cube.history.clear();
-      this.world.cube.history.init = this.database.playground.shuffler;
+      this.world.cube.history.init = this.data.scrambler;
     }
+    this.data.complete = this.world.cube.complete;
     this.callback();
-    this.database.playground.complete = this.world.cube.complete;
-    this.database.playground.start = 0;
-    this.database.playground.now = 0;
-    this.database.save();
+    this.data.start = 0;
+    this.data.now = 0;
+    this.data.save();
   }
 
   order(): void {
-    this.database.playground.order = this.world.order;
-    this.database.save();
-    this.shuffle();
+    this.data.order = this.world.order;
+    this.data.save();
+    this.scramble();
   }
 
   get style(): {} {
@@ -247,20 +343,20 @@ export default class Playground extends Vue {
     };
   }
 
-  shuffled = false;
-  @Watch("shuffled")
-  onShuffledChange(): void {
-    this.keyboard.disable = this.shuffled;
-    if (this.shuffled === false) {
-      this.database.save();
+  scrambled = false;
+  @Watch("scrambled")
+  onscrambledChange(): void {
+    this.keyboard.disable = this.scrambled;
+    if (this.scrambled === false) {
+      this.data.save();
     }
   }
 
   historyd = false;
   tap(key: string): void {
     switch (key) {
-      case "shuffle":
-        this.shuffled = true;
+      case "scramble":
+        this.scrambled = true;
         break;
       case "undo":
         this.world.twister.undo();
@@ -277,7 +373,7 @@ export default class Playground extends Vue {
     const data: { [key: string]: {} } = {};
     const order = this.world.order;
     data["order"] = order;
-    const drama = { scene: this.database.playground.scene, action: this.database.playground.history };
+    const drama = { scene: this.data.scene, action: this.data.history };
     data["drama"] = drama;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });

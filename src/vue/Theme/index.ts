@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { Component, Prop, Inject } from "vue-property-decorator";
 import World from "../../cuber/world";
-import Database from "../../database";
 import { COLORS } from "../../cuber/define";
+import { ThemeData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -11,8 +11,8 @@ export default class Theme extends Vue {
   @Inject("world")
   world: World;
 
-  @Inject("database")
-  database: Database;
+  @Inject("theme")
+  theme: ThemeData;
 
   @Prop({ required: true })
   value: boolean;
@@ -52,8 +52,8 @@ export default class Theme extends Vue {
 
   color(color: string): void {
     this.colord = false;
-    this.database.theme.color(this.face, color);
-    this.database.theme.save();
+    this.theme.color(this.face, color);
+    this.theme.save();
   }
 
   palette: string[] = [
@@ -109,7 +109,7 @@ export default class Theme extends Vue {
   ];
 
   reset(): void {
-    this.database.theme.reset();
-    this.database.theme.save();
+    this.theme.reset();
+    this.theme.save();
   }
 }
