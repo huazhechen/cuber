@@ -11,8 +11,8 @@ export default class Theme extends Vue {
   @Inject("world")
   world: World;
 
-  @Inject("theme")
-  theme: ThemeData;
+  @Inject("themes")
+  data: ThemeData;
 
   @Prop({ required: true })
   value: boolean;
@@ -52,8 +52,8 @@ export default class Theme extends Vue {
 
   color(color: string): void {
     this.colord = false;
-    this.theme.color(this.face, color);
-    this.theme.save();
+    this.data.color(this.face, color);
+    this.data.save();
   }
 
   palette: string[] = [
@@ -109,7 +109,7 @@ export default class Theme extends Vue {
   ];
 
   reset(): void {
-    this.theme.reset();
-    this.theme.save();
+    this.data.reset();
+    this.data.save();
   }
 }

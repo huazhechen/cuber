@@ -107,7 +107,7 @@ export default class Director extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("theme")
+  @Provide("themes")
   theme: ThemeData = new ThemeData(this.world);
 
   data: DirectorData = new DirectorData();

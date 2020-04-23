@@ -181,7 +181,7 @@ export default class Playground extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("theme")
+  @Provide("themes")
   theme: ThemeData = new ThemeData(this.world);
 
   data: PlaygroundData = new PlaygroundData();

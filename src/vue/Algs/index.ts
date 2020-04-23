@@ -22,7 +22,7 @@ export default class Algs extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("theme")
+  @Provide("themes")
   theme: ThemeData = new ThemeData(this.world);
 
   capture: Capture = new Capture();
