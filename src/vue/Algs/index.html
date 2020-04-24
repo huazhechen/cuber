@@ -102,7 +102,7 @@
                 :style="{'font-size':size/4+'px'}"
                 style="text-align: center; word-wrap: break-word; margin: 0%; padding: 1%;"
               >
-                {{data.algs[i].items[j].exp}}
+                {{data.algs[i].items[j].exp.substring(0, 60)}}
               </p>
             </v-card>
             <v-card
@@ -115,11 +115,12 @@
                 block
                 depressed
                 color="primary"
-                :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
+                :style="{'font-size':size/3+'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
                 @click="addd=true"
+                :height="grid"
               >
-                <v-icon :size="size * 0.5" style="vertical-align: middle;">add</v-icon>
+                <v-icon :size="grid * 0.5" style="vertical-align: middle;">add</v-icon>
               </v-btn>
             </v-card>
           </v-layout>
