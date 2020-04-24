@@ -28,9 +28,9 @@
             :height="size * 0.8"
             :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
             dense
-            single-line
             hide-details
             outlined
+            single-line
             v-model="action"
           >
             <v-btn
@@ -117,7 +117,7 @@
                 color="primary"
                 :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
-                @click=""
+                @click="addd=true"
               >
                 <v-icon :size="size * 0.5" style="vertical-align: middle;">add</v-icon>
               </v-btn>
@@ -126,5 +126,121 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <v-dialog v-model="addd" :width="Math.min(size * 8, width)">
+      <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.3+'px'}">
+            名称:
+          </div>
+        </v-card-title>
+        <v-card-text style="text-transform: none;">
+          <v-text-field
+            style="text-transform: none;"
+            :height="size * 0.8"
+            :style="{'font-size':size * 0.3 + 'px', 'line-height':size / 2 + 'px'}"
+            dense
+            hide-details
+            outlined
+            v-model="addi.name"
+          >
+          </v-text-field>
+        </v-card-text>
+        <v-card-title style="text-transform: none;">
+          <v-layout row wrap style="margin: 0%;">
+            <v-flex xs6 d-flex>
+              <v-btn
+                block
+                depressed
+                @click="addi.scramble = false"
+                :color="addi.scramble?'':'primary'"
+                :height="size * 0.8"
+              >
+                <div :style="{'font-size':size * 0.3+'px'}">复原公式</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs6 d-flex>
+              <v-btn
+                block
+                depressed
+                @click="addi.scramble = true"
+                :color="addi.scramble?'primary':''"
+                :height="size * 0.8"
+              >
+                <div :style="{'font-size':size * 0.3+'px'}">打乱公式</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.3+'px'}">
+            阶数:
+          </div>
+        </v-card-title>
+        <v-card-text style="text-transform: none;">
+          <v-layout row wrap justify-center align-center>
+            <v-flex xs12 style="display: flex;">
+              <v-btn
+                v-for="i in [1,2,3,4,5]"
+                :key="i"
+                @click="addi.order = i"
+                :color="addi.order == i?'primary':''"
+                depressed
+                style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8"
+                :style="{'font-size':size * 0.3 + 'px', margin:size/20 + 'px'}"
+              >
+                <div>{{i}}</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs12 style="display: flex;">
+              <v-btn
+                v-for="i in [6,7,8,9,10]"
+                :key="i"
+                @click="addi.order = i"
+                :color="addi.order == i?'primary':''"
+                depressed
+                style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8"
+                :style="{'font-size':size * 0.3 + 'px', margin:size/20 + 'px'}"
+              >
+                <div>{{i}}</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.3+'px'}">
+            公式:
+          </div>
+        </v-card-title>
+        <v-card-text style="text-transform: none;">
+          <v-textarea
+            :style="{'font-size':size * 0.3 + 'px', 'line-height':size / 2 + 'px'}"
+            rows="3"
+            no-resize
+            solo
+            flat
+            outlined
+            hide-details
+            v-model="addi.exp"
+          >
+          </v-textarea>
+        </v-card-text>
+        <v-card-actions>
+          <v-layout row wrap style="margin: 0%;">
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="addd = false;data.add(addi)" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">确定</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="addd = false" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">取消</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </v-app>

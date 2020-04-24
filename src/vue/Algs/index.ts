@@ -272,4 +272,7 @@ export default class Algs extends Vue {
     this.data.save();
     this.pics[i].splice(j);
   }
+
+  addd = false;
+  addi: AlgItem = { name: "", order: 3, scramble: false, exp: "", origin: "" };
 }

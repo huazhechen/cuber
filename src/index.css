@@ -23,3 +23,6 @@
   line-height: inherit;
   margin-top: 0 !important;
 }
+.v-card__text {
+  padding-bottom: 0 !important;
+}
