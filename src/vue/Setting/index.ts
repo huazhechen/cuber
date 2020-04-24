@@ -58,7 +58,7 @@ export default class Setting extends Vue {
 
   reset(): void {
     window.localStorage.clear();
-    window.location.reload();
+    window.location.reload(true);
   }
 
   resetd = false;
