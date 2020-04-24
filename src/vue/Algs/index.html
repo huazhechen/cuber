@@ -12,7 +12,7 @@
       :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
       @click="tap('list')"
     >
-      <div :style="{'font-size':(size * 0.5)+'px'}">{{name}}</div>
+      <div :style="{'font-size':(size * 0.5)+'px'}" style="text-transform: none;">{{name}}</div>
     </v-btn>
     <v-container
       fluid
@@ -44,7 +44,7 @@
             <v-btn
               slot="append"
               text
-              v-show="action!=origin"
+              v-show="origin&&origin.length>0&&action!=origin"
               style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
               :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
               @click="action=origin"
@@ -63,7 +63,7 @@
   >
     <div style="margin: auto; width: 100%;">
       <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
-        <v-tab v-for="(group,i) in algs" :key="i" :href="`#tab-${i}`">
+        <v-tab v-for="(group,i) in data.algs" :key="i" :href="`#tab-${i}`">
           <p :style="{'font-size':size * 0.3+'px'}" style="text-align: center; margin: 0%; padding: 0%;">
             {{ group.name}}
           </p>
@@ -81,18 +81,28 @@
               v-for="(pic, j) in group"
               :key="j"
             >
+              <v-btn
+                v-if="data.algs[i].mutable"
+                block
+                depressed
+                color="error"
+                :style="{'font-size':size/3+'px'}"
+                style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
+                @click="remove(i, j)"
+                >删除
+              </v-btn>
               <p
                 :style="{'font-size':size/3+'px'}"
-                style="text-align: center; margin: 0%; padding: 0%; color: indianred;"
+                style="text-transform: none; text-align: center; margin: 0%; padding: 0%; color: indianred;"
               >
-                {{algs[i].items[j].name}}
+                {{data.algs[i].items[j].name}}
               </p>
               <img :src="pic" style="margin: 0%; padding: 0%;" :style="{'width':grid + 'px'}" @click="select(i, j)" />
               <p
                 :style="{'font-size':size/4+'px'}"
                 style="text-align: center; word-wrap: break-word; margin: 0%; padding: 1%;"
               >
-                {{algs[i].items[j].exp}}
+                {{data.algs[i].items[j].exp}}
               </p>
             </v-card>
           </v-layout>

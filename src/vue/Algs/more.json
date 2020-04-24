@@ -1,0 +1,10 @@
+{
+  "name": "MORE",
+  "strip": {},
+  "mutable": true,
+  "items": [
+    { "name": "4OP", "exp": "rU2 x rU2 (rU2'r'U2) lU2 (r'U2'rU2) r'U2'r'", "order": 4 },
+    { "name": "4PP", "exp": "2R2 U2 2R2 u2 2R2 2U2", "order": 4 },
+    { "name": "大小", "exp": "U2F2R2 U'L2D BR'BR'BR' D'L2U'", "scramble": true, "order": 3 }
+  ]
+}

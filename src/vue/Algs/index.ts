@@ -7,6 +7,99 @@ import World from "../../cuber/world";
 import Capture from "./capture";
 import { PreferanceData, ThemeData } from "../../data";
 
+export class AlgItem {
+  name: string;
+  order: number;
+  origin: string;
+  exp: string;
+  scramble: boolean;
+}
+
+export class AlgGroup {
+  name: string;
+  strip: { [face: string]: number[] | undefined };
+  mutable: boolean;
+  items: AlgItem[];
+}
+
+export class AlgsData {
+  algs: AlgGroup[] = require("./algs.json");
+  private values: {
+    version: string;
+    position: { group: number; index: number };
+    modify: string[][];
+    more: AlgGroup;
+  } = {
+    version: "0.4",
+    position: { group: 0, index: 0 },
+    modify: [[], [], []],
+    more: require("./more.json"),
+  };
+
+  constructor() {
+    this.load();
+  }
+
+  load(): void {
+    const save = window.localStorage.getItem("algs");
+    if (save) {
+      const data = JSON.parse(save);
+      if (data.version != this.values.version) {
+        this.save();
+      } else {
+        this.values = data;
+      }
+    }
+    for (let i = 0; i < this.algs.length; i++) {
+      const group = this.algs[i];
+      const modify = this.values.modify[i];
+      for (let j = 0; j < group.items.length; j++) {
+        const alg = group.items[j];
+        const exp = modify[j];
+        if (exp && exp.length > 0) {
+          alg.exp = exp;
+        } else {
+          alg.exp = alg.origin;
+        }
+      }
+    }
+    this.algs.push(this.values.more);
+  }
+
+  modify(i: number, j: number, exp: string): void {
+    const alg = this.algs[i].items[j];
+    if (i < 3) {
+      if (exp == alg.origin) {
+        this.values.modify[i][j] = "";
+      } else {
+        this.values.modify[i][j] = exp;
+      }
+    } else {
+      this.values.more.items[j].exp = exp;
+    }
+    alg.exp = exp;
+  }
+
+  add(item: AlgItem): void {
+    this.values.more.items.push(item);
+  }
+
+  remove(index: number): void {
+    this.values.more.items.splice(index);
+  }
+
+  save(): void {
+    window.localStorage.setItem("algs", JSON.stringify(this.values));
+  }
+
+  get position(): { group: number; index: number } {
+    return this.values.position;
+  }
+
+  get more(): AlgGroup {
+    return this.values.more;
+  }
+}
 @Component({
   template: require("./index.html"),
   components: {
@@ -25,9 +118,9 @@ export default class Algs extends Vue {
   @Provide("themes")
   theme: ThemeData = new ThemeData(this.world);
 
-  capture: Capture = new Capture();
+  data: AlgsData = new AlgsData();
 
-  algs = require("./algs.json");
+  capture: Capture = new Capture();
 
   width = 0;
   height = 0;
@@ -51,51 +144,45 @@ export default class Algs extends Vue {
 
   mounted(): void {
     this.setting.items["order"].disable = true;
-    for (let i = 0; i < this.algs.length; i++) {
+    for (let i = 0; i < this.data.algs.length; i++) {
       this.pics.push([]);
-    }
-    const index = window.localStorage.getItem("algs.index");
-    if (index) {
-      try {
-        const data = JSON.parse(index);
-        this.index = { group: data.group, index: data.index };
-      } catch (error) {
-        this.index = { group: 0, index: 0 };
-      }
-    } else {
-      this.index = { group: 0, index: 0 };
     }
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.preferance.refresh();
       this.theme.refresh();
     });
+    this.reload();
     this.loop();
+  }
+
+  snap(i: number, j: number): string {
+    const group = this.data.algs[i];
+    const alg = group.items[j];
+    const origin = alg.origin;
+    const scramble = alg.scramble;
+    let exp = alg.exp ? alg.exp : origin;
+    if (scramble) {
+      exp = "x2 " + exp;
+    } else {
+      exp = "x2 " + "(" + exp + ")'";
+    }
+    const order = alg.order ? alg.order : 3;
+    return this.capture.snap(group.strip, exp, order);
   }
 
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
-    if (this.viewport?.draw()) {
+    if (this.viewport.draw()) {
       return;
     }
-    this.pics.some((group, idx) => {
-      if (this.algs[idx].items.length == group.length) {
+    this.pics.some((pics, i) => {
+      const group = this.data.algs[i];
+      if (pics.length >= group.items.length) {
         return false;
       }
-      const i = group.length;
-      const alg = this.algs[idx].items[i];
-      const save = window.localStorage.getItem("algs.exp." + alg.name);
-      const origin = alg.default;
-      const reverse = alg.reverse;
-      let exp = save ? save : origin;
-      alg.exp = exp;
-      if (reverse) {
-        exp = "x2 " + exp;
-      } else {
-        exp = "x2 " + "(" + exp + ")'";
-      }
-      const order = alg.order ? alg.order : 3;
-      group.push(this.capture.snap(this.algs[idx].strip, exp, order));
+      const j = pics.length;
+      pics.push(this.snap(i, j));
       return true;
     });
   }
@@ -137,27 +224,22 @@ export default class Algs extends Vue {
     }
   }
 
-  index: { group: number; index: number } = { group: 0, index: 0 };
-  @Watch("index")
-  onIndexChange(): void {
-    const alg = this.algs[this.index.group].items[this.index.index];
+  reload(): void {
+    this.data.save();
+    const group = this.data.algs[this.data.position.group];
+    const alg = group.items[this.data.position.index];
     const order = alg.order ? alg.order : 3;
     if (order != this.world.order) {
       this.world.order = order;
       this.preferance.refresh();
     }
-    const strip: { [face: string]: number[] | undefined } = this.algs[this.index.group].strip;
+    const strip = group.strip;
     this.world.cube.strip(strip);
     this.name = alg.name;
-    this.origin = alg.default;
-    const action = window.localStorage.getItem("algs.exp." + this.name);
-    if (action) {
-      this.action = action;
-    } else {
-      this.action = this.origin;
-    }
-    this.playbar.scene = "x2^";
-    window.localStorage.setItem("algs.index", JSON.stringify(this.index));
+    this.origin = alg.origin;
+    this.action = alg.exp;
+    const exp = "x2" + (alg.scramble ? "" : "^");
+    this.playbar.scene = exp;
   }
 
   name = "";
@@ -165,16 +247,29 @@ export default class Algs extends Vue {
   action = "";
   @Watch("action")
   onActionChange(): void {
-    window.localStorage.setItem("algs.exp." + this.name, this.action);
-    if (this.pics[this.index.group][this.index.index]) {
-      // this.pics[this.index.group][this.index.index] = this.capture.snap(this.algs[this.index.group].strip, this.action);
+    const pos = this.data.position;
+    this.data.modify(pos.group, pos.index, this.action);
+    this.data.save();
+    if (this.pics[pos.group][pos.index]) {
+      this.pics[pos.group][pos.index] = this.snap(pos.group, pos.index);
     }
-    this.algs[this.index.group].items[this.index.index].exp = this.action;
     this.playbar.action = this.action;
   }
 
   select(i: number, j: number): void {
-    this.index = { group: i, index: j };
+    this.data.position.group = i;
+    this.data.position.index = j;
+    this.reload();
     this.listd = false;
+  }
+
+  remove(i: number, j: number): void {
+    this.data.remove(j);
+    if (this.data.position.group == i && this.data.position.index == j) {
+      this.data.position.group = 0;
+      this.data.position.index = 0;
+    }
+    this.data.save();
+    this.pics[i].splice(j);
   }
 }
