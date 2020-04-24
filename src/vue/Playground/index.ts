@@ -285,11 +285,9 @@ export default class Playground extends Vue {
     if (this.world.cube.history.moves == 0) {
       this.data.start = 0;
       this.data.now = 0;
-      this.data.save();
     } else {
       if (this.data.start == 0) {
         this.data.start = new Date().getTime();
-        this.data.save();
       }
       if (!this.data.complete) {
         this.data.now = new Date().getTime();
