@@ -253,7 +253,7 @@
         <v-card-text style="text-transform: none; padding-bottom: 0%;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="3"
+            rows="2"
             no-resize
             solo
             flat
@@ -271,7 +271,7 @@
         <v-card-text style="text-transform: none;">
           <v-textarea
             :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="8"
+            rows="6"
             no-resize
             solo
             flat
@@ -280,6 +280,8 @@
             v-model="action"
           >
           </v-textarea>
+        </v-card-text>
+        <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs12 d-flex>
               <v-btn block text @click="scriptd = false;" :height="size * 0.8">
@@ -287,7 +289,7 @@
               </v-btn>
             </v-flex>
           </v-layout>
-        </v-card-text>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog v-model="shared" :width="Math.min(size * 8, width)" eager>
