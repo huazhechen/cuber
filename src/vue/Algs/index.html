@@ -86,7 +86,7 @@
                 block
                 depressed
                 color="error"
-                :style="{'font-size':size/3+'px'}"
+                :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
                 @click="remove(i, j)"
                 >删除
@@ -104,6 +104,23 @@
               >
                 {{data.algs[i].items[j].exp}}
               </p>
+            </v-card>
+            <v-card
+              outlined
+              style="margin: 0%; padding: 0%;"
+              :style="{'width':grid + 'px'}"
+              v-if="data.algs[i].mutable"
+            >
+              <v-btn
+                block
+                depressed
+                color="primary"
+                :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
+                style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
+                @click=""
+              >
+                <v-icon :size="size * 0.5" style="vertical-align: middle;">add</v-icon>
+              </v-btn>
             </v-card>
           </v-layout>
         </v-tab-item>
