@@ -49,6 +49,7 @@ export default class Appear extends Vue {
     this.preferance.perspective = 50;
     this.preferance.angle = 60;
     this.preferance.gradient = 65;
+    this.preferance.thickness = 32;
     this.preferance.mirror = false;
     this.preferance.hollow = false;
     this.preferance.shadow = true;

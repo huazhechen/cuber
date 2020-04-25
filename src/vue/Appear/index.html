@@ -46,6 +46,17 @@
         ></v-slider>
       </v-layout>
       <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.thickness"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="0"
+          label="贴纸"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
         <v-flex xs12 style="display: flex;">
           <v-btn
             @click="preferance.mirror=!preferance.mirror"

@@ -14,6 +14,7 @@ export class PreferanceData {
     gradient: 65,
     frames: 20,
     sensitivity: 3,
+    thickness: 32,
     mirror: false,
     hollow: false,
     cloud: false,
@@ -34,7 +35,10 @@ export class PreferanceData {
         this.save();
         return;
       }
-      this.values = data;
+      const values = this.values as { [key: string]: string | number | boolean };
+      for (const key in values) {
+        values[key] = data[key];
+      }
     }
   }
 
@@ -155,6 +159,23 @@ export class PreferanceData {
     }
     for (const cubelet of this.world.cube.cubelets) {
       cubelet.hollow = value;
+    }
+    this.world.dirty = true;
+  }
+
+  get thickness(): number {
+    return this.values.thickness;
+  }
+
+  set thickness(value) {
+    if (this.values.thickness != value) {
+      this.values.thickness = value;
+    }
+    let i = value / 20;
+    i = 2 ** i;
+    console.log(i)
+    for (const cubelet of this.world.cube.cubelets) {
+      cubelet.thickness = i;
     }
     this.world.dirty = true;
   }
