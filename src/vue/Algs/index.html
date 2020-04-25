@@ -70,7 +70,7 @@
         </v-tab>
       </v-tabs>
     </div>
-    <div style="flex: 1; overflow: auto; margin: auto;">
+    <div style="flex: 1; overflow: scroll; margin: auto;">
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(group,i) in data.algs" :key="i" :value="'tab-' + i" style="height: 100%;">
           <v-layout row wrap style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%; align-items: stretch;">

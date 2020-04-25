@@ -188,8 +188,8 @@ export default class Algs extends Vue {
   }
 
   resize(): void {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    this.width = document.documentElement.clientWidth;
+    this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
     this.viewport?.resize(this.width, this.height - this.size * 2.6 - 32);
     this.playbar?.resize(this.size);
@@ -198,8 +198,8 @@ export default class Algs extends Vue {
   get grid(): number {
     const min = Math.min(this.width / 4, this.height / 6);
     const num = ~~(this.width / min);
-    const width = this.width / num;
-    return ~~width;
+    const result = ~~(this.width / num);
+    return result;
   }
 
   get style(): {} {

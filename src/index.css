@@ -26,3 +26,7 @@
 .v-card__text {
   padding-bottom: 0 !important;
 }
+
+div::-webkit-scrollbar {
+  width: 0;
+}

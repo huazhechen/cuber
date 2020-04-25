@@ -38,8 +38,8 @@ export default class Theme extends Vue {
   }
 
   resize(): void {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    this.width = document.documentElement.clientWidth;
+    this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
   }
 
