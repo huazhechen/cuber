@@ -173,7 +173,6 @@ export class PreferanceData {
     }
     let i = value / 20;
     i = 2 ** i;
-    console.log(i)
     for (const cubelet of this.world.cube.cubelets) {
       cubelet.thickness = i;
     }
