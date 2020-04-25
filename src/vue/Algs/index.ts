@@ -122,8 +122,8 @@ export default class Algs extends Vue {
 
   capture: Capture = new Capture();
 
-  width = 0;
-  height = 0;
+  width = 320;
+  height = 640;
   size = 0;
 
   @Ref("viewport")
@@ -199,7 +199,7 @@ export default class Algs extends Vue {
     const min = Math.min(this.width / 4, this.height / 6);
     const num = ~~(this.width / min);
     const width = this.width / num;
-    return width;
+    return ~~width;
   }
 
   get style(): {} {

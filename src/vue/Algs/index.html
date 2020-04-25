@@ -72,17 +72,17 @@
     </div>
     <div style="flex: 1; overflow: auto; margin: auto;">
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="(group,i) in pics" :key="i" :value="'tab-' + i" style="height: 100%;">
+        <v-tab-item v-for="(group,i) in data.algs" :key="i" :value="'tab-' + i" style="height: 100%;">
           <v-layout row wrap style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%; align-items: stretch;">
             <v-card
               outlined
               style="margin: 0%; padding: 0%;"
               :style="{'width':grid + 'px'}"
-              v-for="(pic, j) in group"
+              v-for="(alg, j) in group.items"
               :key="j"
             >
               <v-btn
-                v-if="data.algs[i].mutable"
+                v-if="group.mutable"
                 block
                 depressed
                 color="error"
@@ -95,22 +95,29 @@
                 :style="{'font-size':size/3+'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%; color: indianred;"
               >
-                {{data.algs[i].items[j].name}}
+                {{alg.name}}
               </p>
-              <img :src="pic" style="margin: 0%; padding: 0%;" :style="{'width':grid + 'px'}" @click="select(i, j)" />
+              <img
+                v-if="pics[i] && pics[i][j]"
+                :src="pics[i][j]"
+                style="margin: 0%; padding: 0%;"
+                :style="{'width':grid + 'px'}"
+                @click="select(i, j)"
+              />
+              <v-progress-circular
+                v-if="!(pics[i] && pics[i][j])"
+                :size="grid"
+                :width="~~(grid * 0.15)"
+                indeterminate
+              ></v-progress-circular>
               <p
                 :style="{'font-size':size/4+'px'}"
                 style="text-align: center; word-wrap: break-word; margin: 0%; padding: 1%;"
               >
-                {{data.algs[i].items[j].exp.substring(0, 60)}}
+                {{alg.exp.substring(0, 60)}}
               </p>
             </v-card>
-            <v-card
-              outlined
-              style="margin: 0%; padding: 0%;"
-              :style="{'width':grid + 'px'}"
-              v-if="data.algs[i].mutable"
-            >
+            <v-card outlined style="margin: 0%; padding: 0%;" :style="{'width':grid + 'px'}" v-if="group.mutable">
               <v-btn
                 block
                 depressed
