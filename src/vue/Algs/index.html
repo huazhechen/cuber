@@ -88,7 +88,7 @@
                 color="error"
                 :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
-                @click="remove(i, j)"
+                @click="removei = j;removed = true;"
                 >删除
               </v-btn>
               <p
@@ -237,12 +237,35 @@
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs6 d-flex>
-              <v-btn block text @click="addd = false;data.add(addi)" :height="size * 0.8">
+              <v-btn block text @click="addd = false;add();" :height="size * 0.8">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
               <v-btn block text @click="addd = false" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">取消</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="removed" :width="Math.min(size * 8, width)">
+      <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            删除?
+          </div>
+        </v-card-title>
+        <v-card-actions>
+          <v-layout row wrap style="margin: 0%;">
+            <v-flex xs6 d-flex>
+              <v-btn block color="error" text @click="removed = false;remove();" :height="size">
+                <div :style="{'font-size':size/3+'px'}">确定</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="removed = false;removei = -1;" :height="size">
                 <div :style="{'font-size':size/3+'px'}">取消</div>
               </v-btn>
             </v-flex>

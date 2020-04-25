@@ -85,7 +85,7 @@ export class AlgsData {
   }
 
   remove(index: number): void {
-    this.values.more.items.splice(index);
+    this.values.more.items.splice(index, 1);
   }
 
   save(): void {
@@ -263,14 +263,24 @@ export default class Algs extends Vue {
     this.listd = false;
   }
 
-  remove(i: number, j: number): void {
-    this.data.remove(j);
-    if (this.data.position.group == i && this.data.position.index == j) {
+  removed = false;
+  removei = -1;
+  remove(): void {
+    if (this.removei < 0) {
+      return;
+    }
+    this.data.remove(this.removei);
+    if (this.data.position.group == this.data.algs.length - 1 && this.data.position.index == this.removei) {
       this.data.position.group = 0;
       this.data.position.index = 0;
     }
     this.data.save();
-    this.pics[i].splice(j);
+    this.pics[this.data.algs.length - 1].splice(this.removei, 1);
+  }
+
+  add(): void {
+    this.data.add(JSON.parse(JSON.stringify(this.addi)));
+    this.data.save();
   }
 
   addd = false;
