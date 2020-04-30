@@ -176,15 +176,17 @@ export default class Algs extends Vue {
     if (this.viewport.draw()) {
       return;
     }
-    this.pics.some((pics, i) => {
-      const group = this.data.algs[i];
-      if (pics.length >= group.items.length) {
-        return false;
-      }
-      const j = pics.length;
-      pics.push(this.snap(i, j));
-      return true;
-    });
+    for (let i = 0; i < 2; i++) {
+      this.pics.some((pics, i) => {
+        const group = this.data.algs[i];
+        if (pics.length >= group.items.length) {
+          return false;
+        }
+        const j = pics.length;
+        pics.push(this.snap(i, j));
+        return true;
+      });
+    }
   }
 
   resize(): void {
