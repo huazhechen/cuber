@@ -29,6 +29,10 @@
 
   ![history](https://gitee.com/huazhechen/cuber/raw/master/screenshot/history.gif)
 
+- NISS
+
+  ![niss](https://gitee.com/huazhechen/cuber/raw/master/screenshot/niss.gif)
+
 - 自定义打乱
 
   ![scramble](https://gitee.com/huazhechen/cuber/raw/master/screenshot/scramble.gif)
@@ -94,6 +98,18 @@
 - 主题设置
 
   ![theme](https://gitee.com/huazhechen/cuber/raw/master/screenshot/theme.gif)
+
+## 其他
+### 物理键盘
+  - U/r => U
+  - I/i => R
+  - O/o => B
+  - J/j => F
+  - K/k => D
+  - L/l => L
+  - `+R => R'
+  - 2+R => 2R
+  - 2+r => 2r
 
 ## 技术栈
 
