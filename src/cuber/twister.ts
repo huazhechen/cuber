@@ -202,10 +202,6 @@ export class TwistNode {
     }
     return result;
   }
-
-  get exp(): string {
-    return this.twist.exp;
-  }
 }
 
 export default class Twister {
@@ -241,9 +237,9 @@ export default class Twister {
       }
       exp.push(action);
       const suffix = Math.random();
-      if (suffix < 0.2) {
+      if (suffix < 0.4) {
         exp.push("2");
-      } else if (suffix < 0.6) {
+      } else if (suffix < 0.7) {
         exp.push("'");
       }
       exps.push(exp.join(""));

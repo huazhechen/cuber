@@ -7,6 +7,7 @@ import Cubelet from "../../cuber/cubelet";
 import World from "../../cuber/world";
 import pako from "pako";
 import { ThemeData, PreferanceData } from "../../data";
+import { TwistAction, TwistNode } from "../../cuber/twister";
 
 class KeyHandle {
   reverse = false;
@@ -301,11 +302,14 @@ export default class Playground extends Vue {
       this.scramble();
       return;
     }
-    this.world.order = this.data.order;
-    this.world.twister.twist("# " + this.data.scene, false, 1, true);
+    const order = this.data.order;
+    const scene = this.data.scene;
+    const history = this.data.history;
+    this.world.order = order;
+    this.world.twister.twist("# " + scene, false, 1, true);
     this.world.cube.history.clear();
-    this.world.cube.history.init = this.data.scene;
-    this.world.twister.twist(this.data.history, false, 1, true);
+    this.world.cube.history.init = scene;
+    this.world.twister.twist(history, false, 1, true);
     this.callback();
   }
 
@@ -379,5 +383,140 @@ export default class Playground extends Vue {
     const search = "mode=player&data=" + string;
     const link = window.location.origin + window.location.pathname + "?" + search;
     window.open(link);
+  }
+
+  adjust(): void {
+    // 高阶暂未实现
+    if (this.world.order > 3) {
+      return;
+    }
+    const om = ["U", "F", "R", "B", "L", "D"];
+    const tm = {
+      x: [1, 5, 2, 0, 4, 3],
+      y: [0, 2, 3, 4, 1, 5],
+      z: [4, 1, 0, 3, 5, 2],
+    };
+    const am: { [key: string]: string } = {
+      R: "x",
+      L: "x",
+      U: "y",
+      D: "y",
+      F: "z",
+      B: "z",
+    };
+    const o = om.slice();
+
+    // 第一步 清理MES
+    let origin = this.world.cube.history.exp;
+    origin = origin.replace("M", "(x' L' R)");
+    origin = origin.replace("E", "(y' D' U)");
+    origin = origin.replace("S", "(z' F' B)");
+    let temp: TwistAction[] = new TwistNode(origin).parse();
+
+    const list: TwistAction[] = [];
+    // 第二步 清理xyz
+    for (const item of temp) {
+      if (item.group == "x" || item.group == "y" || item.group == "z") {
+        const map = tm[item.group];
+        let times = item.times;
+        if (item.reverse) {
+          times = 4 - times;
+        }
+        for (let i = 0; i < times; i++) {
+          const last = o.slice();
+          o.length = 0;
+          for (const j of map) {
+            o.push(last[j]);
+          }
+        }
+        continue;
+      }
+      const index = om.indexOf(item.group);
+      item.group = o[index];
+      list.push(item);
+    }
+    // 第三步 清理R L R'
+    temp = list.slice();
+    list.length = 0;
+    for (const item of temp) {
+      let last: TwistAction | null = null;
+      for (let i = 0; i < list.length; i++) {
+        const prev = list[list.length - 1 - i];
+        if (prev.group == item.group) {
+          last = prev;
+          break;
+        }
+        if (am[prev.group] != am[item.group]) {
+          break;
+        }
+      }
+      if (last) {
+        last.times = last.times + item.times * (last.reverse == item.reverse ? 1 : -1);
+        last.times = last.times % 4;
+        if (last.times == 0) {
+          list.splice(list.indexOf(last), 1);
+        }
+      } else {
+        list.push(item);
+      }
+    }
+    // 第四步 生成string
+    let string = "";
+    for (const item of list) {
+      string = string + " " + item.exp;
+    }
+    this.data.history = string.substring(1);
+    this.data.save();
+    this.load();
+  }
+
+  niss(): void {
+    this.adjust();
+    const scene = this.data.scene;
+    const history = this.data.history;
+    const exp = "(" + scene + " " + history + ")'";
+    const list: TwistAction[] = new TwistNode(exp).parse();
+    // 清理R L R'
+    const am: { [key: string]: string } = {
+      R: "x",
+      L: "x",
+      U: "y",
+      D: "y",
+      F: "z",
+      B: "z",
+    };
+    const temp = list.slice();
+    list.length = 0;
+    for (const item of temp) {
+      let last: TwistAction | null = null;
+      for (let i = 0; i < list.length; i++) {
+        const prev = list[list.length - 1 - i];
+        if (prev.group == item.group) {
+          last = prev;
+          break;
+        }
+        if (am[prev.group] != am[item.group]) {
+          break;
+        }
+      }
+      if (last) {
+        last.times = last.times + item.times * (last.reverse == item.reverse ? 1 : -1);
+        last.times = last.times % 4;
+        if (last.times == 0) {
+          list.splice(list.indexOf(last), 1);
+        }
+      } else {
+        list.push(item);
+      }
+    }
+
+    let string = "";
+    for (const item of list) {
+      string = string + " " + item.exp;
+    }
+    this.data.scene = string;
+    this.data.history = "";
+    this.data.save();
+    this.load();
   }
 }
