@@ -470,52 +470,97 @@ export default class Playground extends Vue {
     this.load();
   }
 
+  split(exp: string): string[] {
+    const list = [];
+    let buffer = "";
+    let stack = 0;
+    for (let i = 0; i < exp.length; i++) {
+      const c = exp.charAt(i);
+      if (c === " " && buffer.length == 0) {
+        continue;
+      }
+      //  如果有括号 记录stack
+      if (c === "(") {
+        if (stack == 0 && buffer.length > 0) {
+          list.push(buffer);
+          buffer = "";
+          i--;
+        } else {
+          buffer = buffer.concat(c);
+          stack++;
+        }
+        continue;
+      }
+      if (c === ")") {
+        buffer = buffer.concat(c);
+        stack--;
+        if (stack == 0) {
+          list.push(buffer);
+          buffer = "";
+        }
+        continue;
+      }
+      buffer = buffer.concat(c);
+    }
+    if (buffer.length > 0) {
+      list.push(buffer);
+    }
+    return list;
+  }
+
   niss(): void {
     this.adjust();
     const scene = this.data.scene;
     const history = this.data.history;
-    const exp = "(" + scene + " " + history + ")'";
-    const list: TwistAction[] = new TwistNode(exp).parse();
-    // 清理R L R'
-    const am: { [key: string]: string } = {
-      R: "x",
-      L: "x",
-      U: "y",
-      D: "y",
-      F: "z",
-      B: "z",
-    };
-    const temp = list.slice();
-    list.length = 0;
-    for (const item of temp) {
-      let last: TwistAction | null = null;
-      for (let i = 0; i < list.length; i++) {
-        const prev = list[list.length - 1 - i];
-        if (prev.group == item.group) {
-          last = prev;
-          break;
-        }
-        if (am[prev.group] != am[item.group]) {
-          break;
-        }
+    let string = "";
+    let list: TwistAction[];
+
+    list = new TwistNode(history, true).parse();
+    const empty = list.length == 0;
+    if (!empty) {
+      string = string + "(";
+      for (const item of list) {
+        string = string + item.exp + " ";
       }
-      if (last) {
-        last.times = last.times + item.times * (last.reverse == item.reverse ? 1 : -1);
-        last.times = last.times % 4;
-        if (last.times == 0) {
-          list.splice(list.indexOf(last), 1);
+      string = string.substr(0, string.length - 1);
+      string = string + ") ";
+    }
+
+    const segments = this.split(scene).reverse();
+    this.data.history = "";
+    if (empty) {
+      const segment = segments.pop() as string;
+      if (segment.indexOf("(") >= 0) {
+        list = new TwistNode(segment, true).parse();
+        for (const item of list) {
+          this.data.history = this.data.history + item.exp + " ";
         }
       } else {
-        list.push(item);
+        segments.push(segment);
+      }
+    }
+    for (const segment of segments) {
+      list = new TwistNode(segment, true).parse();
+      if (list.length == 0) {
+        continue;
+      }
+      if (segment.indexOf("(") >= 0) {
+        string = string + "(";
+      }
+      for (const item of list) {
+        string = string + item.exp + " ";
+      }
+      if (segment.indexOf("(") >= 0) {
+        string = string.substr(0, string.length - 1);
+        string = string + ") ";
       }
     }
 
-    let string = "";
-    for (const item of list) {
-      string = string + " " + item.exp;
+    if (!scene.includes("// niss")) {
+      string = string + "// niss";
     }
+
     this.data.scene = string;
-    this.data.history = "";
     this.data.save();
     this.load();
   }

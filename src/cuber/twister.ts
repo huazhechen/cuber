@@ -196,7 +196,7 @@ export class TwistNode {
           }
         }
       }
-    } else if (this.twist.group != "") {
+    } else if (this.twist.group != "" && !this.twist.group.startsWith("//")) {
       const action = new TwistAction(this.twist.group, reverse, this.twist.times);
       result.push(action);
     }
