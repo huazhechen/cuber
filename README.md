@@ -100,16 +100,23 @@
   ![theme](https://gitee.com/huazhechen/cuber/raw/master/screenshot/theme.gif)
 
 ## 其他
+
 ### 物理键盘
-  - U/r => U
-  - I/i => R
-  - O/o => B
-  - J/j => F
-  - K/k => D
-  - L/l => L
-  - `+R => R'
-  - 2+R => 2R
-  - 2+r => 2r
+
+| affix   | key | twist |
+| ------- | --- | ----- |
+|         | U/r | U     |
+|         | I/i | R     |
+|         | O/o | B     |
+|         | J/j | F     |
+|         | K/k | D     |
+|         | L/l | L     |
+| \`      | R/r | R'    |
+| \` + \` | R/r | R     |
+| 2       | R   | 2R    |
+| 2       | r   | 2r    |
+| 2 + 1   | R/r | R     |
+| 2 + \`  | R   | 2R'   |
 
 ## 技术栈
 
