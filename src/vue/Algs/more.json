@@ -5,12 +5,6 @@
   "items": [
     { "name": "4O特", "exp": "(r U2' r' U2) (r U2' r U2) l' U2 (r U2' r' U2) x' U2' r2", "order": 4 },
     { "name": "4P特", "exp": "2R2 U2 2R2 u2 2R2 2U2", "order": 4 },
-    { "name": "嵌套", "exp": "U2F2R2 U'L2D BR'BR'BR' D'L2U'", "scramble": true, "order": 3 },
-    {
-      "name": "秀",
-      "exp": "B2 L R D' U' 2R' 5-6Uw 2R 5-6Uw' 3-6Rw' 6U 3-6Rw 6U' 6R' 4-5Uw 6R 4-5Uw' 2-3Uw 6R' 2-3Uw' 6R 2U 2-5Rw' 2U' 2-5Rw 3-4Uw 2R' 3-4Uw' 2R U D R' L' B2 F B' L' B2 L2 R U' 4R2 U R' L U' 4R2 U L B2' L B F' D R2 U' 4R U R U' 4R' U R D' 6u' R U 4R' U' R U 4R U' R2 6u",
-      "scramble": true,
-      "order": 7
-    }
+    { "name": "嵌套", "exp": "U2F2R2 U'L2D BR'BR'BR' D'L2U'", "scramble": true, "order": 3 }
   ]
 }
