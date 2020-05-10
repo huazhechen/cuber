@@ -91,12 +91,17 @@
                 @click="removei = j;removed = true;"
                 >删除
               </v-btn>
-              <p
-                :style="{'font-size':size/3+'px'}"
-                style="text-transform: none; text-align: center; margin: 0%; padding: 0%; color: indianred;"
+              <v-btn
+                block
+                depressed
+                :text="!alg.tag"
+                color="primary"
+                :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
+                style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
+                @click="data.tag(i, j);data.save();"
               >
                 {{alg.name}}
-              </p>
+              </v-btn>
               <img
                 v-if="pics[i] && pics[i][j]"
                 :src="pics[i][j]"
