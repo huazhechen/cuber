@@ -391,6 +391,7 @@ export default class Director extends Vue {
     this.world.height = pixel;
     this.world.resize();
     this.filmer.setSize(pixel, pixel, true);
+    this.filmer.setClearColor(0xffffff, 0);
     this.filmer.clear();
     this.filmer.render(this.world.scene, this.world.camera);
     this.world.width = width;
