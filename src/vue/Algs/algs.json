@@ -44,7 +44,7 @@
       { "name": "F2L-33", "origin": "U'(RU'R'U2) (RU'R')" },
       { "name": "F2L-34", "origin": "U'(RU2'R'U) (RUR')" },
       { "name": "F2L-35", "origin": "U2(RU'R'U') y'(R'U'R)y" },
-      { "name": "F2L-36", "origin": "U2(R'FRF') U2(RUR')" },
+      { "name": "F2L-36", "origin": "U(F'U'FU') (RUR')" },
       { "name": "F2L-37", "origin": "(R'FRF') (RU'R'URU'R'U2RU'R')" },
       { "name": "F2L-38", "origin": "(RU'R'U') (RUR'U2) (RU'R')" },
       { "name": "F2L-39", "origin": "(RU'R'U) (RU'2R'U) (RU'R')" },

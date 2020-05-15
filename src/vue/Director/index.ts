@@ -181,6 +181,7 @@ export default class Director extends Vue {
 
   reload(): void {
     let save;
+    this.world.order = this.data.order;
     const order = this.world.order;
     save = this.data.dramas[order];
     if (!save) {
