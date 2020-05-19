@@ -10,7 +10,7 @@
       >
         <v-flex xs12 style="display: flex;">
           <v-btn
-            v-for="i in [1,2,3,4,5]"
+            v-for="i in [1,2,3,4,5,6]"
             :key="i"
             @click="order(i)"
             :color="world.order == i?'primary':''"
@@ -24,7 +24,21 @@
         </v-flex>
         <v-flex xs12 style="display: flex;">
           <v-btn
-            v-for="i in [6,7,8,9,10]"
+            v-for="i in [7,8,9,10,11,12]"
+            :key="i"
+            @click="order(i)"
+            :color="world.order == i?'primary':''"
+            depressed
+            style="text-transform: none; min-width: 0%; flex: 1;"
+            :height="size"
+            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}"
+          >
+            <div>{{i}}</div>
+          </v-btn>
+        </v-flex>
+        <v-flex xs12 style="display: flex;">
+          <v-btn
+            v-for="i in [13,14,15,16,17,18]"
             :key="i"
             @click="order(i)"
             :color="world.order == i?'primary':''"
