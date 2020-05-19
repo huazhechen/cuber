@@ -119,8 +119,11 @@ export default class CubeGroup extends THREE.Group {
       const cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
       this.cube.remove(cubelet);
-      this.add(cubelet);
+      if (cubelet.exist) {
+        this.add(cubelet);
+      }
     }
+    this.cube.add(this);
     this.cube.lock = true;
   }
 
@@ -133,9 +136,12 @@ export default class CubeGroup extends THREE.Group {
       }
       this.rotate(cubelet);
       this.remove(cubelet);
-      this.cube.add(cubelet);
+      if (cubelet.exist) {
+        this.cube.add(cubelet);
+      }
       this.cube.cubelets[cubelet.index] = cubelet;
     }
+    this.cube.remove(this);
     this.cube.lock = false;
     if (this.angle != 0) {
       this.cube.update();
@@ -287,9 +293,6 @@ export class GroupTable {
         throw Error();
       }
       this.groups.set(axis, new CubeGroup(cube, axis, template.indices, GroupTable.AXIS_VECTOR[axis]));
-    }
-    for (const group of this.groups.values()) {
-      cube.add(group);
     }
     this.groups.set(".", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
     this.groups.set("~", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));

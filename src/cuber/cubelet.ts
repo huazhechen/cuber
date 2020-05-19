@@ -312,6 +312,7 @@ export default class Cubelet extends THREE.Group {
   _quaternion: THREE.Quaternion;
   frame: THREE.Mesh;
   order: number;
+  exist = false;
 
   constructor(order: number, index: number) {
     super();
@@ -331,6 +332,7 @@ export default class Cubelet extends THREE.Group {
     if (d < 0) {
       return;
     }
+    this.exist = true;
     const half = (order - 1) / 2;
 
     this.lamberts = [

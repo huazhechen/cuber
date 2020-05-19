@@ -25,7 +25,9 @@ export default class Cube extends Group {
       const cubelet = new Cubelet(order, i);
       this.cubelets.push(cubelet);
       this.initials.push(cubelet);
-      this.add(cubelet);
+      if (cubelet.exist) {
+        this.add(cubelet);
+      }
     }
     this.history = new History();
     this.groups = new GroupTable(this);

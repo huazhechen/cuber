@@ -84,6 +84,7 @@ export class PreferanceData {
       this.values.angle = value;
     }
     this.world.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
+    this.world.scene.updateMatrix();
     this.world.dirty = true;
   }
 
@@ -95,6 +96,7 @@ export class PreferanceData {
       this.values.gradient = value;
     }
     this.world.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
+    this.world.scene.updateMatrix();
     this.world.dirty = true;
   }
 

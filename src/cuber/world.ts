@@ -25,6 +25,7 @@ export default class World {
 
   constructor() {
     this.scene = new Scene();
+    this.scene.matrixAutoUpdate = false;
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
 
@@ -33,6 +34,7 @@ export default class World {
     this.directional = new DirectionalLight(0xffffff, 0.2);
     this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 3, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
+    this.scene.updateMatrix();
 
     this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;
