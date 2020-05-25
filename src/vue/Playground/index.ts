@@ -314,6 +314,7 @@ export default class Playground extends Vue {
   }
 
   scramble(): void {
+    this.data.complete = true;
     if (this.data.scrambler === "*") {
       this.world.twister.twist("*");
     } else {
@@ -366,12 +367,21 @@ export default class Playground extends Vue {
       case "history":
         this.historyd = true;
         break;
+      case "share":
+        this.share();
+        break;
+      case "open":
+        window.open(this.link);
+        this.shared = false;
+        break;
       default:
         break;
     }
   }
 
-  replay(): void {
+  shared = false;
+  link = "";
+  share(): void {
     const data: { [key: string]: {} } = {};
     const order = this.world.order;
     data["order"] = order;
@@ -381,8 +391,8 @@ export default class Playground extends Vue {
     string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     const search = "mode=player&data=" + string;
-    const link = window.location.origin + window.location.pathname + "?" + search;
-    window.open(link);
+    this.link = window.location.origin + window.location.pathname + "?" + search;
+    this.shared = true;
   }
 
   adjust(): void {

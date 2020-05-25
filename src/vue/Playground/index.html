@@ -99,8 +99,8 @@
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="error" text @click="replay" :height="size * 0.8">
-                <div :style="{'font-size':size/3+'px'}">复盘</div>
+              <v-btn block color="error" text @click="completed = false;scramble();" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">重试</div>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -160,6 +160,44 @@
             <v-flex xs12 style="display: flex;">
               <v-btn text @click="historyd = false;" :height="size * 0.8" style="flex: 1;">
                 <div :style="{'font-size':size/3+'px'}">确定</div>
+              </v-btn>
+              <v-btn text @click="historyd = false;tap('share');" :height="size * 0.8" style="flex: 1;">
+                <div :style="{'font-size':size/3+'px'}">分享</div>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="shared" :width="Math.min(size * 8, width)" eager>
+      <v-card>
+        <v-card-title style="text-transform: none;">
+          <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+            分享链接:
+          </div>
+        </v-card-title>
+        <v-card-actions>
+          <v-layout row wrap style="margin: 0%;">
+            <v-flex xs12 d-flex>
+              <v-textarea
+                id="link"
+                :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
+                solo
+                flat
+                outlined
+                hide-details
+                v-model="link"
+              >
+              </v-textarea>
+            </v-flex>
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="tap('open')" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">打开</div>
+              </v-btn>
+            </v-flex>
+            <v-flex xs6 d-flex>
+              <v-btn block text @click="shared = false;" :height="size * 0.8" data-clipboard-target="#link" ref="copy">
+                <div :style="{'font-size':size/3+'px'}">复制</div>
               </v-btn>
             </v-flex>
           </v-layout>
