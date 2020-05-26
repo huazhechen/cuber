@@ -53,5 +53,6 @@ export default class Appear extends Vue {
     this.preferance.mirror = false;
     this.preferance.hollow = false;
     this.preferance.shadow = true;
+    this.preferance.arrow = false;
   }
 }

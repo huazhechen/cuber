@@ -100,7 +100,7 @@ class Frame extends THREE.Geometry {
 }
 
 class Sticker extends THREE.ExtrudeGeometry {
-  constructor(size: number, depth: number) {
+  constructor(size: number, depth: number, arrow: boolean) {
     size = size / 2;
     const left = -size;
     const bottom = size;
@@ -119,6 +119,21 @@ class Sticker extends THREE.ExtrudeGeometry {
     shape.lineTo(left + radius, top);
     shape.quadraticCurveTo(left, top, left, top + radius);
     shape.closePath();
+
+    if (arrow) {
+      const h = size * 0.6;
+      const w = h * 0.8;
+      const arrow = new THREE.Path();
+      arrow.moveTo(0, h);
+      arrow.lineTo(-w, 0);
+      arrow.lineTo(-w / 2, 0);
+      arrow.lineTo(-w / 2, -h);
+      arrow.lineTo(w / 2, -h);
+      arrow.lineTo(w / 2, 0);
+      arrow.lineTo(w, 0);
+      arrow.closePath();
+      shape.holes.push(arrow);
+    }
 
     super(shape, { bevelEnabled: false, depth: depth });
   }
@@ -157,7 +172,13 @@ export default class Cubelet extends THREE.Group {
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._EDGE_WIDTH,
-    Cubelet._STICKER_DEPTH
+    Cubelet._STICKER_DEPTH,
+    false
+  );
+  private static readonly _ARROW: Sticker = new Sticker(
+    Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._EDGE_WIDTH,
+    Cubelet._STICKER_DEPTH,
+    true
   );
   private static readonly _MIRROR: Mirror = new Mirror(
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._STICKER_DEPTH
@@ -305,6 +326,14 @@ export default class Cubelet extends THREE.Group {
     for (const sticker of this.stickers) {
       if (sticker) {
         sticker.scale.z = value;
+      }
+    }
+  }
+
+  set arrow(value: boolean) {
+    for (const sticker of this.stickers) {
+      if (sticker) {
+        sticker.geometry = value ? Cubelet._ARROW : Cubelet._STICKER;
       }
     }
   }

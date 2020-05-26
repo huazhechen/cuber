@@ -17,6 +17,7 @@ export class PreferanceData {
     thickness: 32,
     mirror: false,
     hollow: false,
+    arrow: false,
     cloud: false,
     wireframe: false,
     shadow: true,
@@ -177,6 +178,20 @@ export class PreferanceData {
     i = 2 ** i;
     for (const cubelet of this.world.cube.cubelets) {
       cubelet.thickness = i;
+    }
+    this.world.dirty = true;
+  }
+
+  get arrow(): boolean {
+    return this.values.arrow;
+  }
+
+  set arrow(value) {
+    if (this.values.arrow != value) {
+      this.values.arrow = value;
+    }
+    for (const cubelet of this.world.cube.cubelets) {
+      cubelet.arrow = value;
     }
     this.world.dirty = true;
   }
