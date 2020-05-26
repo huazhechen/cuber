@@ -73,7 +73,7 @@ export class PreferanceData {
     if (this.values.perspective != value) {
       this.values.perspective = value;
     }
-    this.world.perspective = (100.1 / (value + 0.01)) * 4 - 3;
+    this.world.perspective = (101 / (value + 0.1)) * 4 - 3;
     this.world.resize();
   }
 
@@ -174,10 +174,8 @@ export class PreferanceData {
     if (this.values.thickness != value) {
       this.values.thickness = value;
     }
-    let i = value / 20;
-    i = 2 ** i;
     for (const cubelet of this.world.cube.cubelets) {
-      cubelet.thickness = i;
+      cubelet.thickness = value + 1;
     }
     this.world.dirty = true;
   }

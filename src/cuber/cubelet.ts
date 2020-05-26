@@ -168,7 +168,7 @@ export default class Cubelet extends THREE.Group {
   public static readonly SIZE: number = 64;
   private static readonly _BORDER_WIDTH: number = 3;
   private static readonly _EDGE_WIDTH: number = 2;
-  private static readonly _STICKER_DEPTH: number = 1;
+  private static readonly _STICKER_DEPTH: number = 0.1;
   private static readonly _FRAME: Frame = new Frame(Cubelet.SIZE, Cubelet._BORDER_WIDTH);
   private static readonly _STICKER: Sticker = new Sticker(
     Cubelet.SIZE - 2 * Cubelet._BORDER_WIDTH - Cubelet._EDGE_WIDTH,
