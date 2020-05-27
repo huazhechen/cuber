@@ -219,7 +219,7 @@ export default class Twister {
     let result = "";
     const exps = [];
     let last = -1;
-    const actions = ["Uw", "Dw", "Rw", "Lw", "Fw", "Bw"];
+    const actions = ["U", "D", "R", "L", "F", "B"];
     let axis = -1;
     for (let i = 0; i < 3 * 3 * order; i++) {
       const exp = [];

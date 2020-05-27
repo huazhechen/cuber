@@ -272,13 +272,6 @@ export default class Playground extends Vue {
 
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
-    let tick = new Date().getTime();
-    tick = (tick / 2000) * Math.PI;
-    tick = Math.sin(tick) / 64;
-    this.world.cube.position.y = tick * Cubelet.SIZE;
-    this.world.cube.rotation.y = (tick / 12) * Math.PI;
-    this.world.cube.updateMatrix();
-    this.world.cube.dirty = true;
     this.viewport.draw();
     if (this.data.complete) {
       return;

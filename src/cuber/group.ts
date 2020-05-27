@@ -212,6 +212,9 @@ export class GroupTable {
     }
     // 将每个块索引放入x y z的每层中
     for (const cubelet of cube.initials) {
+      if (!cubelet.exist) {
+        continue;
+      }
       const index = cubelet.initial;
       let axis;
       let layer;
