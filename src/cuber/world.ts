@@ -7,7 +7,6 @@ import Controller from "./controller";
 export default class World {
   public width = 1;
   public height = 1;
-  public dirty = false;
 
   public scene: Scene;
   public camera: PerspectiveCamera;
@@ -44,6 +43,15 @@ export default class World {
     this.twister = new Twister(this);
     this.controller = new Controller(this);
     this.order = 3;
+  }
+
+  set dirty(value: boolean) {
+    this.cube.dirty = value;
+    this.cube.container.dirty = value;
+  }
+
+  get dirty(): boolean {
+    return this.cube.dirty;
   }
 
   set order(value: number) {

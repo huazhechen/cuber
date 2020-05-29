@@ -5,6 +5,15 @@ import { Group, Euler } from "three";
 import { TwistAction } from "./twister";
 import History from "./history";
 
+class Container extends Group {
+  dirty = false;
+  updateMatrixWorld(force: boolean): void {
+    if (this.dirty) {
+      super.updateMatrixWorld(force);
+    }
+  }
+}
+
 export default class Cube extends Group {
   public dirty = true;
   public lock = false;
@@ -15,18 +24,21 @@ export default class Cube extends Group {
   public order: number;
   public callback: Function | undefined;
   public history: History;
+  public container: Container;
 
   constructor(order: number, callback: Function | undefined = undefined) {
     super();
     this.order = order;
     this.callback = callback;
+    this.container = new Container();
+    this.add(this.container);
     this.scale.set(3 / order, 3 / order, 3 / order);
     for (let i = 0; i < order * order * order; i++) {
       const cubelet = new Cubelet(order, i);
       this.cubelets.push(cubelet);
       this.initials.push(cubelet);
       if (cubelet.exist) {
-        this.add(cubelet);
+        this.container.add(cubelet);
       }
     }
     this.history = new History();
@@ -70,6 +82,7 @@ export default class Cube extends Group {
     this.cubelets.sort((left, right) => {
       return left.index - right.index;
     });
+    this.container.dirty = true;
   }
 
   stick(index: number, face: number, value: string): void {
@@ -78,6 +91,7 @@ export default class Cube extends Group {
       throw Error("invalid cubelet index: " + index);
     }
     cubelet.stick(face, value);
+    this.container.dirty = true;
     this.dirty = true;
   }
 
@@ -103,6 +117,7 @@ export default class Cube extends Group {
         cubelet.stick(face, "remove");
       }
     }
+    this.container.dirty = true;
     this.dirty = true;
   }
 }
