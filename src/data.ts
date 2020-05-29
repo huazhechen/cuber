@@ -62,7 +62,9 @@ export class PreferanceData {
     if (this.values.scale != value) {
       this.values.scale = value;
     }
-    this.world.scale = value / 100 + 0.5;
+    value = (5 - value / 25) / 3;
+    value = 1 / value;
+    this.world.scale = value;
     this.world.resize();
   }
 

@@ -4,6 +4,7 @@ import { WebGLRenderer } from "three";
 import { COLORS } from "../../cuber/define";
 import Toucher from "../../common/toucher";
 import World from "../../cuber/world";
+import { PreferanceData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -12,6 +13,9 @@ import World from "../../cuber/world";
 export default class Viewport extends Vue {
   @Inject("world")
   world: World;
+
+  @Inject("preferance")
+  preferance: PreferanceData;
 
   @Ref("canvas")
   canvas: HTMLElement;
@@ -31,6 +35,20 @@ export default class Viewport extends Vue {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     const toucher = new Toucher();
     toucher.init(canvas, this.world.controller.touch);
+    document.addEventListener("wheel", this.wheel, false);
+  }
+
+  wheel(e: WheelEvent): void {
+    let scale = this.preferance.scale;
+    if (e.deltaY > 0) {
+      scale = scale - 10;
+    } else if (e.deltaY < 0) {
+      scale = scale + 10;
+    }
+    scale = scale < 0 ? 0 : scale;
+    scale = scale > 100 ? 100 : scale;
+    this.preferance.scale = scale;
+    this.preferance.save();
   }
 
   resize(width: number, height: number): void {
