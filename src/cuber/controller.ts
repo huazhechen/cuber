@@ -261,8 +261,8 @@ export default class Controller {
         if (!this.lock) {
           if (Math.abs(this.angle) < Math.PI / 4) {
             const tick = new Date().getTime();
-            const speed = Math.abs(this.angle) / (tick - this.tick);
-            if (speed > 0.001) {
+            const speed = Math.abs(this.angle) / (tick - this.tick) * 1000;
+            if (speed > 0.2) {
               this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
             }
           }
