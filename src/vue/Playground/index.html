@@ -99,8 +99,8 @@
               </v-btn>
             </v-flex>
             <v-flex xs6 d-flex>
-              <v-btn block color="error" text @click="completed = false;scramble();" :height="size * 0.8">
-                <div :style="{'font-size':size/3+'px'}">重试</div>
+              <v-btn block color="error" text @click="completed = false;tap('share');tap('open');" :height="size * 0.8">
+                <div :style="{'font-size':size/3+'px'}">复盘</div>
               </v-btn>
             </v-flex>
           </v-layout>
