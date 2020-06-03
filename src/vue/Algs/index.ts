@@ -13,7 +13,6 @@ export class AlgItem {
   origin: string;
   exp: string;
   scramble: boolean;
-  tag: boolean;
 }
 
 export class AlgGroup {
@@ -29,13 +28,11 @@ export class AlgsData {
     version: string;
     position: { group: number; index: number };
     modify: string[][];
-    tag: boolean[][];
     more: AlgGroup;
   } = {
     version: "0.5",
     position: { group: 0, index: 0 },
     modify: [[], [], []],
-    tag: [[], [], []],
     more: require("./more.json"),
   };
 
@@ -56,10 +53,8 @@ export class AlgsData {
     for (let i = 0; i < this.algs.length; i++) {
       const group = this.algs[i];
       const modify = this.values.modify[i];
-      const tag = this.values.tag[i];
       for (let j = 0; j < group.items.length; j++) {
         const alg = group.items[j];
-        alg.tag = tag[j];
         const exp = modify[j];
         if (exp && exp.length > 0) {
           alg.exp = exp;
@@ -83,16 +78,6 @@ export class AlgsData {
       this.values.more.items[j].exp = exp;
     }
     alg.exp = exp;
-  }
-
-  tag(i: number, j: number): void {
-    const alg = this.algs[i].items[j];
-    alg.tag = !alg.tag;
-    if (i < 3) {
-      this.values.tag[i][j] = alg.tag;
-    } else {
-      this.values.more.items[j].tag = alg.tag;
-    }
   }
 
   add(item: AlgItem): void {
@@ -301,5 +286,5 @@ export default class Algs extends Vue {
   }
 
   addd = false;
-  addi: AlgItem = { name: "", order: 3, scramble: false, exp: "", origin: "", tag: false };
+  addi: AlgItem = { name: "", order: 3, scramble: false, exp: "", origin: "" };
 }

@@ -94,11 +94,11 @@
               <v-btn
                 block
                 depressed
-                :text="!alg.tag"
+                text
                 color="primary"
                 :style="{'font-size':size/3+'px', 'height': size * 0.5 + 'px'}"
                 style="text-transform: none; text-align: center; margin: 0%; padding: 0%;"
-                @click="data.tag(i, j);data.save();"
+                @click="select(i, j)"
               >
                 {{alg.name}}
               </v-btn>
