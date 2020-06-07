@@ -3,7 +3,6 @@ import { Component, Provide, Watch, Ref } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import Setting from "../Setting";
-import Cubelet from "../../cuber/cubelet";
 import World from "../../cuber/world";
 import pako from "pako";
 import { ThemeData, PreferanceData } from "../../data";
@@ -411,9 +410,9 @@ export default class Playground extends Vue {
 
     // 第一步 清理MES
     let origin = this.world.cube.history.exp;
-    origin = origin.replace("M", "(x' L' R)");
-    origin = origin.replace("E", "(y' D' U)");
-    origin = origin.replace("S", "(z' F' B)");
+    origin = origin.replace(/M/g, "(x' L' R)");
+    origin = origin.replace(/E/g, "(y' D' U)");
+    origin = origin.replace(/S/g, "(z' F' B)");
     let temp: TwistAction[] = new TwistNode(origin).parse();
 
     const list: TwistAction[] = [];
