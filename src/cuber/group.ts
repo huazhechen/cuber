@@ -382,6 +382,12 @@ export class GroupTable {
           to = from;
         }
       }
+      if (from > this.order) {
+        from = this.order;
+      }
+      if (to > this.order) {
+        to = this.order;
+      }
       axis = GroupTable.AXIS_MAP[list[4].toUpperCase()];
       from = axis.length == 2 ? from : this.order - from + 1;
       to = axis.length == 2 ? to : this.order - to + 1;

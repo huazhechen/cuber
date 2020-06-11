@@ -9,25 +9,50 @@ import { ThemeData, PreferanceData } from "../../data";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 
 class KeyHandle {
-  reverse = false;
-  prefix = 1;
+  width = 2;
+  display = false;
 
   public disable = false;
 
   callback: Function;
-  keymap: { [key: string]: string } = {
-    U: "U",
-    I: "R",
-    O: "B",
-    J: "F",
-    K: "D",
-    L: "L",
-    u: "u",
-    i: "r",
-    o: "b",
-    j: "f",
-    k: "d",
-    l: "l",
+  keymap: { [key: number]: string } = {
+    73: "R", //I R
+    75: "R'", //K R'
+    87: "B", //W B
+    79: "B'", //O B'
+    83: "D", //S D
+    76: "D'", //L D'
+    68: "L", //D L
+    69: "L'", //E L'
+    74: "U", //J U
+    70: "U'", //F U'
+    72: "F", //H F
+    71: "F'", //G F'
+    186: "U", //; y
+    59: "U", //; y
+    65: "U'", //A y'
+    85: "r", //U r
+    82: "l'", //R l'
+    77: "r'", //M r'
+    86: "l", //V l
+    84: "x", //T x
+    89: "x", //Y x
+    78: "x'", //N x'
+    66: "x'", //B x'
+    190: "M'", //. M'
+    88: "M'", //X M'
+    53: "M", //5 M
+    54: "M", //6 M
+    80: "z", //P z
+    81: "z'", //Q z'
+    90: "d", //Z d
+    191: "d'", /// d'
+    67: "u'", //C u'
+    188: "u", //, u
+    37: "U", //← d
+    38: "R", //↑ d'
+    39: "U'", //→ u'
+    40: "R'", //↓ u
   };
 
   constructor(callback: Function) {
@@ -39,40 +64,31 @@ class KeyHandle {
     if (this.disable) {
       return false;
     }
-    const id = event.which;
+    const id = event.keyCode | event.which;
+
+    if (id == 51 || id == 55) {
+      this.width = Math.max(2, this.width - 1);
+      this.display = true;
+    } else if (id == 52 || id == 56) {
+      this.width = this.width + 1;
+      this.display = true;
+    }
     if (id === 8) {
       this.callback("^");
       event.preventDefault();
       return false;
     }
-    if (id === 96) {
-      event.preventDefault();
-      this.reverse = !this.reverse;
-      return false;
-    }
-    let key = String.fromCharCode(event.which);
-    if ("123456789".indexOf(key) >= 0) {
-      event.preventDefault();
-      this.prefix = Number(key);
-      return false;
-    }
-    if (this.keymap[key]) {
-      key = this.keymap[key];
+    const key = this.keymap[id];
+    if (key) {
       event.preventDefault();
       let exp = "";
-      if (this.prefix == 1) {
-        key = key.toUpperCase();
+      if (this.width != 2 && ["l", "r", "f", "b", "d", "u"].indexOf(key[0]) >= 0) {
+        exp = this.width + key;
       } else {
-        exp = exp + this.prefix;
-      }
-      exp = exp + key;
-      if (this.reverse) {
-        exp = exp + "'";
+        exp = key;
       }
       this.callback(exp);
-      this.prefix = 1;
-      this.reverse = false;
-      return false;
+      this.display = false;
     }
     return false;
   };
@@ -244,14 +260,11 @@ export default class Playground extends Vue {
   }
 
   get key(): string {
-    let exp = "(_)";
-    if (this.keyboard.prefix > 1) {
-      exp = this.keyboard.prefix + exp;
+    let exp = "";
+    if (this.keyboard.display) {
+      exp = this.keyboard.width.toString();
     }
-    if (this.keyboard.reverse) {
-      exp = exp + "'";
-    }
-    return exp === "(_)" ? "" : exp;
+    return exp;
   }
 
   completed = false;

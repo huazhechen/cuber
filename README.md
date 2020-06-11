@@ -15,6 +15,30 @@
 
 # 功能介绍
 
+## 物理键盘
+
+<table class="table" id="vrckey" style="display: inline-block;">
+<tr><th colspan=10>按键表</th></tr>
+<tr>
+<td>1<br><br></td><td>2<br><br></td><td>3<br><span>&lt;</span></td><td>4<br><span>&gt;</span></td><td>5<br><span>M</span></td>
+<td>6<br><span>M</span></td><td>7<br><span>&lt;</span></td><td>8<br><span>&gt;</span></td><td>9<br><br></td><td>0<br><br></td>
+</tr><tr>
+<td>Q<br><span> z'</span></td><td>W<br><span>  B</span></td><td>E<br><span> L'</span></td><td>R<br><span>Lw'</span></td><td>T<br><span>  x</span></td> 
+<td>Y<br><span>  x</span></td><td>U<br><span> Rw</span></td><td>I<br><span>  R</span></td><td>O<br><span> B'</span></td><td>P<br><span>  z</span></td> 
+</tr><tr>
+<td>A<br><span> y'</span></td><td>S<br><span>  D</span></td><td>D<br><span>  L</span></td><td>F<br><span> U'</span></td><td>G<br><span> F'</span></td>
+<td>H<br><span>  F</span></td><td>J<br><span>  U</span></td><td>K<br><span> R'</span></td><td>L<br><span> D'</span></td><td>;<br><span>  y</span></td>
+<td></td>
+<td>↑<br><span> R</span></td>
+</tr><tr>
+<td>Z<br><span> Dw</span></td><td>X<br><span> M'</span></td><td>C<br><span>Uw'</span></td><td>V<br><span> Lw</span></td><td>B<br><span> x'</span></td>
+<td>N<br><span> x'</span></td><td>M<br><span>Rw'</span></td><td>,<br><span> Uw</span></td><td>.<br><span> M'</span></td><td>/<br><span>Dw'</span></td>
+<td>←<br><span> U</span></td>
+<td>↓<br><span> R'</span></td>
+<td>→<br><span> U'</span></td>
+</tr>
+</table>
+
 ## [虚拟魔方](https://huazhechen.gitee.io/cuber)
 
 - 触控操作
@@ -98,25 +122,6 @@
 - 主题设置
 
   ![theme](https://gitee.com/huazhechen/cuber/raw/master/screenshot/theme.gif)
-
-## 其他
-
-### 物理键盘
-
-| affix   | key | twist |
-| ------- | --- | ----- |
-|         | U/r | U     |
-|         | I/i | R     |
-|         | O/o | B     |
-|         | J/j | F     |
-|         | K/k | D     |
-|         | L/l | L     |
-| \`      | I/i | R'    |
-| \` + \` | I/i | R     |
-| 2       | I   | 2R    |
-| 2       | i   | 2r    |
-| 2 + 1   | I/i | R     |
-| 2 + \`  | I   | 2R'   |
 
 ## 技术栈
 
