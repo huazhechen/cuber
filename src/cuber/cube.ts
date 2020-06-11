@@ -1,11 +1,11 @@
 import { GroupTable } from "./group";
 import Cubelet from "./cubelet";
 import { FACE } from "./define";
-import { Group, Euler } from "three";
+import * as THREE from "three";
 import { TwistAction } from "./twister";
 import History from "./history";
 
-class Container extends Group {
+class Container extends THREE.Group {
   dirty = false;
   updateMatrixWorld(force: boolean): void {
     if (this.dirty) {
@@ -14,7 +14,7 @@ class Container extends Group {
   }
 }
 
-export default class Cube extends Group {
+export default class Cube extends THREE.Group {
   public dirty = true;
   public lock = false;
   public cubelets: Cubelet[] = [];
@@ -57,11 +57,25 @@ export default class Cube extends Group {
       if (!group) {
         throw Error();
       }
-      const color = this.cubelets[group.indices[0]].getColor(face);
-      const same = group.indices.every((idx) => {
-        return color == this.cubelets[idx].getColor(face);
-      });
-      return same;
+      let cubelet = this.cubelets[group.indices[0]];
+      const color = cubelet.getColor(face);
+      if (this.arrow) {
+        const q1: THREE.Quaternion = new THREE.Quaternion();
+        this.cubelets[group.indices[0]].getWorldQuaternion(q1);
+        const q2: THREE.Quaternion = new THREE.Quaternion();
+        const same = group.indices.every((idx) => {
+          cubelet = this.cubelets[idx];
+          cubelet.getWorldQuaternion(q2);
+          return color == cubelet.getColor(face) && q1.equals(q2);
+        });
+        return same;
+      } else {
+        const same = group.indices.every((idx) => {
+          cubelet = this.cubelets[idx];
+          return color == cubelet.getColor(face);
+        });
+        return same;
+      }
     });
     this.complete = complete;
     if (this.callback) {
@@ -73,9 +87,21 @@ export default class Cube extends Group {
     return this.initials[value].index;
   }
 
+  public _arrow = false;
+  set arrow(value: boolean) {
+    this._arrow = value;
+    for (const cubelet of this.cubelets) {
+      cubelet.arrow = value;
+    }
+  }
+
+  get arrow(): boolean {
+    return this._arrow;
+  }
+
   reset(): void {
     for (const cubelet of this.cubelets) {
-      cubelet.setRotationFromEuler(new Euler(0, 0, 0));
+      cubelet.setRotationFromEuler(new THREE.Euler(0, 0, 0));
       cubelet.index = cubelet.initial;
       cubelet.updateMatrix();
     }

@@ -190,9 +190,7 @@ export class PreferanceData {
     if (this.values.arrow != value) {
       this.values.arrow = value;
     }
-    for (const cubelet of this.world.cube.cubelets) {
-      cubelet.arrow = value;
-    }
+    this.world.cube.arrow = value;
     this.world.dirty = true;
   }
 }
