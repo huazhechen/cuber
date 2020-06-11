@@ -60,13 +60,11 @@ export default class Cube extends THREE.Group {
       let cubelet = this.cubelets[group.indices[0]];
       const color = cubelet.getColor(face);
       if (this.arrow) {
-        const q1: THREE.Quaternion = new THREE.Quaternion();
-        this.cubelets[group.indices[0]].getWorldQuaternion(q1);
-        const q2: THREE.Quaternion = new THREE.Quaternion();
+        const q1 = this.cubelets[group.indices[0]].rotation;
         const same = group.indices.every((idx) => {
           cubelet = this.cubelets[idx];
-          cubelet.getWorldQuaternion(q2);
-          return color == cubelet.getColor(face) && q1.equals(q2);
+          const q2 = cubelet.rotation;
+          return color == cubelet.getColor(face) && (q1.x - q2.x) ** 2 + (q1.y - q2.y) ** 2 + (q1.z - q2.z) ** 2 < 0.1;
         });
         return same;
       } else {
