@@ -28,11 +28,16 @@
 </tr><tr>
 <td>A<br><span> y'</span></td><td>S<br><span>  D</span></td><td>D<br><span>  L</span></td><td>F<br><span> U'</span></td><td>G<br><span> F'</span></td>
 <td>H<br><span>  F</span></td><td>J<br><span>  U</span></td><td>K<br><span> R'</span></td><td>L<br><span> D'</span></td><td>;<br><span>  y</span></td>
-<td></td>
-<td>↑<br><span> R</span></td>
 </tr><tr>
 <td>Z<br><span> Dw</span></td><td>X<br><span> M'</span></td><td>C<br><span>Uw'</span></td><td>V<br><span> Lw</span></td><td>B<br><span> x'</span></td>
 <td>N<br><span> x'</span></td><td>M<br><span>Rw'</span></td><td>,<br><span> Uw</span></td><td>.<br><span> M'</span></td><td>/<br><span>Dw'</span></td>
+</tr>
+<tr>
+<td></td>
+<td>↑<br><span> R</span></td>
+<td></td>
+</tr>
+<tr>
 <td>←<br><span> U</span></td>
 <td>↓<br><span> R'</span></td>
 <td>→<br><span> U'</span></td>
