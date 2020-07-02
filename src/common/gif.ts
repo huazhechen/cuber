@@ -235,22 +235,38 @@ export default class GIF {
     this.writeNetscapeExt();
   }
 
+  addColor(r: number, g: number, b: number): void {
+    const best = this.getColor(r, g, b);
+    if (best == 0) {
+      this.colors[this.colorn++] = r;
+      this.colors[this.colorn++] = g;
+      this.colors[this.colorn++] = b;
+      return;
+    }
+    let i = best * 3;
+    const cr = this.colors[i++];
+    const cg = this.colors[i++];
+    const cb = this.colors[i++];
+    const d = Color.RGBD([r, g, b], [cr, cg, cb]);
+    if (d > 16) {
+      this.colors[this.colorn++] = r;
+      this.colors[this.colorn++] = g;
+      this.colors[this.colorn++] = b;
+    }
+  }
+
   genColorTable(): Uint8Array {
     this.colors = new Uint8Array(3 * Math.pow(2, GIF.DEEP));
-    let i = 0;
+    this.colorn = 0;
     // TRANSPARENT
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
-    this.colors[i++] = 0x00;
+    this.colors[this.colorn++] = 0x00;
+    this.colors[this.colorn++] = 0x00;
+    this.colors[this.colorn++] = 0x00;
     // BLACK-WHITE
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0xff;
-    this.colors[i++] = 0xff;
-    for (let v = 0; v < 255; v = v + 5) {
-      this.colors[i++] = v;
-      this.colors[i++] = v;
-      this.colors[i++] = v;
+    for (let v = 0; v < 255; v = v + 8) {
+      this.addColor(v, v, v);
     }
+    this.addColor(255, 255, 255);
     // LIGHT
     for (const key in COLORS) {
       const rgb = Color.HEX2RGB(COLORS[key]);
@@ -267,9 +283,7 @@ export default class GIF {
       for (let l = start; l < end; l = l + delta) {
         const dhsv = [hsl[0], hsl[1], l];
         const drgb = Color.HSL2RGB(dhsv);
-        this.colors[i++] = drgb[0];
-        this.colors[i++] = drgb[1];
-        this.colors[i++] = drgb[2];
+        this.addColor(drgb[0], drgb[1], drgb[2]);
       }
       start = hsl[2] - gray;
       end = hsl[2];
@@ -277,9 +291,7 @@ export default class GIF {
       for (let l = start; l < end; l = l + delta) {
         const dhsv = [hsl[0], hsl[1], l];
         const drgb = Color.HSL2RGB(dhsv);
-        this.colors[i++] = drgb[0];
-        this.colors[i++] = drgb[1];
-        this.colors[i++] = drgb[2];
+        this.addColor(drgb[0], drgb[1], drgb[2]);
       }
       start = hsl[2];
       end = 95;
@@ -287,12 +299,9 @@ export default class GIF {
       for (let l = start; l < end; l = l + delta) {
         const dhsv = [hsl[0], hsl[1], l];
         const drgb = Color.HSL2RGB(dhsv);
-        this.colors[i++] = drgb[0];
-        this.colors[i++] = drgb[1];
-        this.colors[i++] = drgb[2];
+        this.addColor(drgb[0], drgb[1], drgb[2]);
       }
     }
-    this.colorn = i;
     if (this.colorn > 3 * Math.pow(2, GIF.DEEP)) {
       throw "too many this.colors: " + this.colorn / 3;
     }
