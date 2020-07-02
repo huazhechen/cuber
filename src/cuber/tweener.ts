@@ -62,11 +62,13 @@ export class Tweener {
   update(): boolean {
     if (this.tweens.length === 0) return false;
     let i = 0;
-    while (i < this.tweens.length) {
+    let len = this.tweens.length;
+    while (i < len) {
       if (this.tweens[i].update()) {
         i++;
       } else {
         this.tweens.splice(i, 1);
+        len--;
       }
     }
     return true;

@@ -5,7 +5,7 @@
         <v-flex xs2> <div :style="{'font-size':size * 0.3 + 'px'}">帧数:</div> </v-flex>
         <v-flex xs10 style="display: flex;">
           <v-btn
-            v-for="frames in [5, 10, 20, 30, 45, 60]"
+            v-for="frames in [1, 10, 20, 30, 45, 60]"
             :key="frames"
             @click="preferance.frames = frames"
             :color="preferance.frames == frames?'primary':''"
