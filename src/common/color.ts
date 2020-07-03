@@ -162,21 +162,6 @@ export default class Color {
     return [r, g, b];
   }
 
-  static HSVD(hsv1: number[], hsv2: number[]): number {
-    const r = 50;
-    const h = 90;
-    const x1 = r * hsv1[2] * hsv1[1] * Math.cos((hsv1[0] / 180) * Math.PI);
-    const y1 = r * hsv1[2] * hsv1[1] * Math.sin((hsv1[0] / 180) * Math.PI);
-    const z1 = h * (1 - hsv1[2]);
-    const x2 = r * hsv2[2] * hsv2[1] * Math.cos((hsv2[0] / 180) * Math.PI);
-    const y2 = r * hsv2[2] * hsv2[1] * Math.sin((hsv2[0] / 180) * Math.PI);
-    const z2 = h * (1 - hsv2[2]);
-    const dx = x1 - x2;
-    const dy = y1 - y2;
-    const dz = z1 - z2;
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
-  }
-
   static RGBD(rgb1: number[], rgb2: number[]): number {
     const rmean = (rgb1[0] + rgb2[0]) / 2;
     const r = rgb1[0] - rgb2[0];
