@@ -20,7 +20,7 @@ export class PreferanceData {
     arrow: false,
     cloud: false,
     wireframe: false,
-    shadow: true,
+    shadow: false,
   };
 
   constructor(world: World) {

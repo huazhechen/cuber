@@ -28,9 +28,9 @@ export default class World {
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
 
-    this.ambient = new AmbientLight(0xffffff, 0.8);
+    this.ambient = new AmbientLight(0xffffff, 1);
     this.scene.add(this.ambient);
-    this.directional = new DirectionalLight(0xffffff, 0.2);
+    this.directional = new DirectionalLight(0xffffff, 0);
     this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 3, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
     this.scene.updateMatrix();
