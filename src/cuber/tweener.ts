@@ -4,18 +4,12 @@ export class Tween {
   duration: number;
   callback: Function;
   value: number;
-  delta: number;
   constructor(begin: number, end: number, duration: number, callback: Function) {
     this.begin = begin;
     this.end = end;
     this.duration = duration;
     this.callback = callback;
     this.value = 0;
-    this.delta = 1;
-  }
-
-  speedup(): void {
-    this.delta = 4;
   }
 
   finish(): void {
@@ -23,7 +17,7 @@ export class Tween {
   }
 
   update(): boolean {
-    this.value = this.value + this.delta;
+    this.value++;
     let elapsed = this.value / this.duration;
     elapsed = elapsed > 1 ? 1 : elapsed;
     elapsed = elapsed < 0 ? 0 : elapsed;
@@ -72,12 +66,6 @@ export class Tweener {
       }
     }
     return true;
-  }
-
-  speedup(): void {
-    for (const tween of this.tweens) {
-      tween.speedup();
-    }
   }
 
   finish(): void {

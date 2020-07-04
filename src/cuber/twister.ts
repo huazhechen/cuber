@@ -265,7 +265,6 @@ export default class Twister {
       tweener.finish();
       this.update();
     }
-    tweener.speedup();
     const node = new TwistNode(exp, reverse, times);
     const list = node.parse();
     for (const element of list) {
