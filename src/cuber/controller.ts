@@ -203,7 +203,13 @@ export default class Controller {
         this.vector.crossVectors(this.holder.vector, this.holder.plane.normal);
         this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
       }
-      this.group?.hold();
+      if (this.group) {
+        let success = this.group.hold();
+        while (!success) {
+          tweener.finish();
+          success = this.group.hold();
+        }
+      }
     }
     if (this.rotating && this.group) {
       if (this.holder.index === -1) {

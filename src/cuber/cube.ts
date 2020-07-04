@@ -2,8 +2,9 @@ import { GroupTable } from "./group";
 import Cubelet from "./cubelet";
 import { FACE } from "./define";
 import * as THREE from "three";
-import { TwistAction } from "./twister";
+import { TwistAction, TwistNode } from "./twister";
 import History from "./history";
+import tweener from "./tweener";
 
 class Container extends THREE.Group {
   dirty = false;
@@ -24,6 +25,40 @@ export default class Cube extends THREE.Group {
   public callback: Function | undefined;
   public history: History;
   public container: Container;
+
+  scrambler(): string {
+    let result = "";
+    const exps = [];
+    let last = -1;
+    const actions = ["U", "D", "R", "L", "F", "B"];
+    let axis = -1;
+    for (let i = 0; i < 3 * 3 * this.order; i++) {
+      const exp = [];
+      while (axis == last) {
+        axis = Math.floor(Math.random() * 3);
+      }
+      const side = Math.floor(Math.random() * 2);
+      let action = actions[axis * 2 + side];
+      const prefix = Math.ceil(Math.random() * Math.floor(this.order / 2));
+      if (prefix === 1) {
+        action = action[0];
+      }
+      if (prefix > 2) {
+        exp.push(prefix);
+      }
+      exp.push(action);
+      const suffix = Math.random();
+      if (suffix < 0.4) {
+        exp.push("2");
+      } else if (suffix < 0.7) {
+        exp.push("'");
+      }
+      exps.push(exp.join(""));
+      last = axis;
+    }
+    result = exps.join(" ");
+    return result;
+  }
 
   constructor(order: number, callback: Function | undefined = undefined) {
     super();
@@ -129,6 +164,7 @@ export default class Cube extends THREE.Group {
   }
 
   reset(): void {
+    tweener.finish();
     for (const cubelet of this.cubelets) {
       cubelet.setRotationFromEuler(new THREE.Euler(0, 0, 0));
       cubelet.index = cubelet.initial;
@@ -174,5 +210,84 @@ export default class Cube extends THREE.Group {
     }
     this.container.dirty = true;
     this.dirty = true;
+  }
+
+  twist(exp: string, reverse = false, times = 1, fast = false): boolean {
+    const node = new TwistNode(exp, reverse, times);
+    const list = node.parse();
+    if (list.length == 1) {
+      const action = list[0];
+      if (fast) {
+        tweener.finish();
+        action.fast = true;
+      }
+      return this.execute(action);
+    }
+    tweener.finish();
+    for (const action of list) {
+      action.fast = true;
+      this.execute(action);
+    }
+    return true;
+  }
+
+  private execute(action: TwistAction): boolean {
+    if (action.group == "#") {
+      this.reset();
+      this.dirty = true;
+      this.history.clear();
+      if (this.callback) {
+        this.callback();
+      }
+      return true;
+    }
+    if (action.group == "*") {
+      this.reset();
+      this.dirty = true;
+      const exp = this.scrambler();
+      const node = new TwistNode(exp, false, 1);
+      const list = node.parse();
+      for (const action of list) {
+        action.fast = true;
+        this.execute(action);
+      }
+      this.history.clear();
+      this.history.init = exp;
+      return true;
+    }
+    let angle = -Math.PI / 2;
+    if (action.reverse) {
+      angle = -angle;
+    }
+    if (action.times) {
+      angle = angle * action.times;
+    }
+    const group = this.groups.get(action.group);
+    if (group === undefined) {
+      return true;
+    }
+    const success = group.hold();
+    if (!success) {
+      return false;
+    }
+    group.angle = 0;
+    if (action.fast) {
+      group.angle = angle;
+    }
+    group.twist(angle);
+    return true;
+  }
+
+  undo(): void {
+    if (this.history.length == 0) {
+      return;
+    }
+    const last = this.history.last;
+    const action = new TwistAction(last.group, !last.reverse, last.times);
+    let success = this.execute(action);
+    while (!success) {
+      tweener.finish();
+      success = this.execute(action);
+    }
   }
 }

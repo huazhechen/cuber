@@ -56,7 +56,7 @@ export default class Playbar extends Vue {
     this.init();
     for (let i = 0; i < value; i++) {
       const action = this.actions[i];
-      this.world.twister.twist(action.group, action.reverse, action.times, true);
+      this.world.cube.twist(action.group, action.reverse, action.times);
     }
     this.pprogress = value;
   }
@@ -85,15 +85,15 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress = 0;
     tweener.finish();
-    this.world.twister.twist("#");
+    this.world.cube.twist("#");
     const scene = this.scene.replace("^", "(" + this.action + ")'");
-    this.world.twister.twist(scene, false, 1, true);
+    this.world.cube.twist(scene, false, 1, true);
     this.world.cube.history.clear();
   }
 
   finish(): void {
     this.init();
-    this.world.twister.twist(this.action, false, 1, true);
+    this.world.cube.twist(this.action, false, 1, true);
     this.pprogress = this.actions.length;
   }
 
@@ -105,9 +105,19 @@ export default class Playbar extends Vue {
         }
         return;
       }
-      const action = this.actions[this.pprogress];
-      this.pprogress++;
-      this.world.twister.twist(action.group, action.reverse, action.times, false);
+      let success;
+      do {
+        const action = this.actions[this.pprogress];
+        success = this.world.cube.twist(action.group, action.reverse, action.times);
+        if (success) {
+          this.pprogress++;
+          if (this.pprogress == this.actions.length) {
+            break;
+          }
+        } else {
+          break;
+        }
+      } while (true);
     }
   }
 
@@ -133,7 +143,11 @@ export default class Playbar extends Vue {
     this.playing = false;
     const action = this.actions[this.pprogress];
     this.pprogress++;
-    this.world.twister.twist(action.group, action.reverse, action.times);
+    let success = this.world.cube.twist(action.group, action.reverse, action.times);
+    while (!success) {
+      tweener.finish();
+      success = this.world.cube.twist(action.group, action.reverse, action.times);
+    }
   }
 
   backward(): void {
@@ -143,7 +157,11 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress--;
     const action = this.actions[this.pprogress];
-    this.world.twister.twist(action.group, !action.reverse, action.times);
+    let success = this.world.cube.twist(action.group, !action.reverse, action.times);
+    while (!success) {
+      tweener.finish();
+      success = this.world.cube.twist(action.group, !action.reverse, action.times);
+    }
   }
 
   get chaos(): boolean {

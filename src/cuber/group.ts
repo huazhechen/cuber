@@ -119,12 +119,11 @@ export default class CubeGroup extends THREE.Group {
     return new TwistAction(group, reverse, times);
   }
 
-  hold(): void {
+  hold(): boolean {
     this.angle = 0;
-    let lock = this.cube.lock(this.lock.axis, this.lock.layers);
-    while (!lock) {
-      tweener.finish();
-      lock = this.cube.lock(this.lock.axis, this.lock.layers);
+    const success = this.cube.lock(this.lock.axis, this.lock.layers);
+    if (!success) {
+      return false;
     }
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
@@ -135,6 +134,7 @@ export default class CubeGroup extends THREE.Group {
       }
     }
     this.cube.add(this);
+    return true;
   }
 
   drop(): void {
@@ -153,11 +153,11 @@ export default class CubeGroup extends THREE.Group {
     }
     this.cube.remove(this);
     this.cube.container.dirty = true;
+    this.angle = 0;
     this.cube.unlock(this.lock.axis, this.lock.layers);
-    if (this.angle != 0 && this.cube.callback) {
+    if (this.cube.callback) {
       this.cube.callback();
     }
-    this.angle = 0;
   }
 
   twist(angle = this.angle): void {

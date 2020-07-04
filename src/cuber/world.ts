@@ -1,7 +1,6 @@
 import Cube from "./cube";
 import Cubelet from "./cubelet";
 import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
-import Twister from "./twister";
 import Controller from "./controller";
 
 export default class World {
@@ -19,7 +18,6 @@ export default class World {
   private cubes: Cube[] = [];
   public callbacks: Function[] = [];
 
-  public twister: Twister;
   public controller: Controller;
 
   constructor() {
@@ -40,7 +38,6 @@ export default class World {
     this.camera.position.y = 0;
     this.camera.position.z = 0;
 
-    this.twister = new Twister(this);
     this.controller = new Controller(this);
     this.order = 3;
   }

@@ -214,9 +214,9 @@ export default class Playground extends Vue {
     super();
     this.keyboard = new KeyHandle((exp: string) => {
       if (exp === "^") {
-        this.world.twister.undo();
+        this.world.cube.undo();
       } else {
-        this.world.twister.twist(exp);
+        this.world.cube.twist(exp);
       }
     });
   }
@@ -311,19 +311,19 @@ export default class Playground extends Vue {
     const scene = this.data.scene;
     const history = this.data.history;
     this.world.order = order;
-    this.world.twister.twist("# " + scene, false, 1, true);
+    this.world.cube.twist("# " + scene, false, 1, true);
     this.world.cube.history.clear();
     this.world.cube.history.init = scene;
-    this.world.twister.twist(history, false, 1, true);
+    this.world.cube.twist(history, false, 1, true);
     this.callback();
   }
 
   scramble(): void {
     this.data.complete = true;
     if (this.data.scrambler === "*") {
-      this.world.twister.twist("*");
+      this.world.cube.twist("*");
     } else {
-      this.world.twister.twist("# " + this.data.scrambler, false, 1, true);
+      this.world.cube.twist("# " + this.data.scrambler, false, 1, true);
       this.world.cube.history.clear();
       this.world.cube.history.init = this.data.scrambler;
     }
@@ -367,7 +367,7 @@ export default class Playground extends Vue {
         this.scrambled = true;
         break;
       case "undo":
-        this.world.twister.undo();
+        this.world.cube.undo();
         break;
       case "history":
         this.historyd = true;
