@@ -41,6 +41,11 @@ export default class Playbar extends Vue {
   }
 
   playing = false;
+  @Watch("playing")
+  onPlayingChange(): void {
+    this.world.controller.disable = this.playing;
+  }
+
   pprogress = 0;
 
   get progress(): number {

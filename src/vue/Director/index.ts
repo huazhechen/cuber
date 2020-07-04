@@ -357,11 +357,9 @@ export default class Director extends Vue {
   film(): void {
     if (this.recording) {
       this.recording = false;
-      this.world.controller.disable = false;
       this.playbar.toggle();
       return;
     }
-    this.world.controller.disable = true;
     const pixel = this.data.pixel;
     const filmt = this.data.filmt;
     const delay = this.data.delay;
@@ -485,7 +483,6 @@ export default class Director extends Vue {
   finish(): void {
     const filmt = this.data.filmt;
     this.recording = false;
-    this.world.controller.disable = false;
     let data;
     let blob;
     let url;

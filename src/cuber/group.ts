@@ -144,8 +144,8 @@ export default class CubeGroup extends THREE.Group {
     this.cube.remove(this);
     this.cube.container.dirty = true;
     this.cube.lock = false;
-    if (this.angle != 0) {
-      this.cube.update();
+    if (this.angle != 0 && this.cube.callback) {
+      this.cube.callback();
     }
     this.angle = 0;
   }

@@ -20,7 +20,6 @@ export default class Cube extends THREE.Group {
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
   public groups: GroupTable;
-  public complete = false;
   public order: number;
   public callback: Function | undefined;
   public history: History;
@@ -51,7 +50,7 @@ export default class Cube extends THREE.Group {
     this.history.record(action);
   }
 
-  update(): void {
+  get complete(): boolean {
     const complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every((face) => {
       const group = this.groups.get(FACE[face]);
       if (!group) {
@@ -75,10 +74,7 @@ export default class Cube extends THREE.Group {
         return same;
       }
     });
-    this.complete = complete;
-    if (this.callback) {
-      this.callback();
-    }
+    return complete;
   }
 
   index(value: number): number {
