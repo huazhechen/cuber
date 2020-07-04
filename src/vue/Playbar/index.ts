@@ -2,6 +2,7 @@ import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import World from "../../cuber/world";
+import tweener from "../../cuber/tweener";
 
 @Component({
   template: require("./index.html"),
@@ -83,7 +84,7 @@ export default class Playbar extends Vue {
     this.world.controller.lock = false;
     this.playing = false;
     this.pprogress = 0;
-    this.world.twister.finish();
+    tweener.finish();
     this.world.twister.twist("#");
     const scene = this.scene.replace("^", "(" + this.action + ")'");
     this.world.twister.twist(scene, false, 1, true);

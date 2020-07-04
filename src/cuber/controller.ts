@@ -169,12 +169,6 @@ export default class Controller {
       if (Math.min(this.world.width, this.world.height) / d > 128) {
         return;
       }
-      tweener.finish();
-      if (this.world.cube.lock) {
-        this.dragging = false;
-        this.rotating = false;
-        return;
-      }
       this.dragging = false;
       this.rotating = true;
       if (this.holder.index === -1) {

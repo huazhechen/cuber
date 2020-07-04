@@ -249,17 +249,6 @@ export default class Twister {
     return result;
   }
 
-  get length(): number {
-    return this.queue.length;
-  }
-
-  finish(): void {
-    for (const action of this.queue) {
-      action.fast = true;
-    }
-    tweener.finish();
-  }
-
   twist(exp: string, reverse = false, times = 1, fast = false): void {
     if (this.queue.length > 0) {
       tweener.finish();
@@ -281,9 +270,6 @@ export default class Twister {
 
   update(): void {
     if (this.queue.length === 0) {
-      return;
-    }
-    if (this.world.cube.lock) {
       return;
     }
     const twist = this.queue.shift();
@@ -317,26 +303,22 @@ export default class Twister {
     if (action.times) {
       angle = angle * action.times;
     }
-    const part = this.world.cube.groups.get(action.group);
-    if (part === undefined) {
+    const group = this.world.cube.groups.get(action.group);
+    if (group === undefined) {
       this.update();
       return;
     }
-    part.angle = 0;
-    part.hold();
+    group.angle = 0;
+    group.hold();
 
     if (action.fast) {
-      part.angle = angle;
+      group.angle = angle;
     }
-    part.twist(angle);
+    group.twist(angle);
     return;
   }
 
   undo(): void {
-    if (this.world.cube.history.length == 0) {
-      return;
-    }
-    this.finish();
     if (this.world.cube.history.length == 0) {
       return;
     }

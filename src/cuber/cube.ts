@@ -16,7 +16,7 @@ class Container extends THREE.Group {
 
 export default class Cube extends THREE.Group {
   public dirty = true;
-  public lock = false;
+  public locks: Map<string, Set<number>>;
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
   public groups: GroupTable;
@@ -40,10 +40,45 @@ export default class Cube extends THREE.Group {
         this.container.add(cubelet);
       }
     }
+    this.locks = new Map();
+    this.locks.set("x", new Set());
+    this.locks.set("y", new Set());
+    this.locks.set("z", new Set());
+    this.locks.set("a", new Set());
     this.history = new History();
     this.groups = new GroupTable(this);
     this.matrixAutoUpdate = false;
     this.updateMatrix();
+  }
+
+  lock(axis: string, layers: number[]): boolean {
+    const tmp = this.locks.get(axis);
+    if (tmp == undefined) {
+      return false;
+    }
+    // 有其他轴上锁了
+    for (const lock of this.locks.values()) {
+      if (lock != tmp && lock.size > 0) {
+        return false;
+      }
+    }
+    // 层冲突
+    for (const layer of layers) {
+      if (tmp.has(layer)) {
+        return false;
+      }
+    }
+    for (const layer of layers) {
+      tmp.add(layer);
+    }
+    return true;
+  }
+
+  unlock(axis: string, layers: number[]): void {
+    const tmp = this.locks.get(axis);
+    for (const layer of layers) {
+      tmp?.delete(layer);
+    }
   }
 
   record(action: TwistAction): void {

@@ -4,6 +4,11 @@ import Cube from "./cube";
 import * as THREE from "three";
 import tweener from "./tweener";
 
+class CubeLock {
+  axis = "";
+  layers: number[] = [];
+}
+
 export default class CubeGroup extends THREE.Group {
   public static frames = 30;
   cube: Cube;
@@ -11,6 +16,7 @@ export default class CubeGroup extends THREE.Group {
   name: string;
   indices: number[];
   axis: THREE.Vector3;
+  lock: CubeLock = new CubeLock();
 
   _angle: number;
   set angle(angle) {
@@ -115,6 +121,11 @@ export default class CubeGroup extends THREE.Group {
 
   hold(): void {
     this.angle = 0;
+    let lock = this.cube.lock(this.lock.axis, this.lock.layers);
+    while (!lock) {
+      tweener.finish();
+      lock = this.cube.lock(this.lock.axis, this.lock.layers);
+    }
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
@@ -124,7 +135,6 @@ export default class CubeGroup extends THREE.Group {
       }
     }
     this.cube.add(this);
-    this.cube.lock = true;
   }
 
   drop(): void {
@@ -143,7 +153,7 @@ export default class CubeGroup extends THREE.Group {
     }
     this.cube.remove(this);
     this.cube.container.dirty = true;
-    this.cube.lock = false;
+    this.cube.unlock(this.lock.axis, this.lock.layers);
     if (this.angle != 0 && this.cube.callback) {
       this.cube.callback();
     }
@@ -203,7 +213,12 @@ export class GroupTable {
       for (let from = 1; from <= this.order; from++) {
         for (let to = from; to <= this.order; to++) {
           const name = GroupTable.FORMAT(axis, from, to);
-          this.groups.set(name, new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]));
+          const g = new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]);
+          g.lock.axis = axis;
+          for (let l = from; l <= to; l++) {
+            g.lock.layers.push(l);
+          }
+          this.groups.set(name, g);
         }
       }
     }
@@ -286,7 +301,10 @@ export class GroupTable {
             throw Error();
           }
           const name = GroupTable.FORMAT(axis, from, to);
-          this.groups.set(name, new CubeGroup(cube, name, template.indices, GroupTable.AXIS_VECTOR[axis]));
+          const g = new CubeGroup(cube, name, template.indices, GroupTable.AXIS_VECTOR[axis]);
+          g.lock.axis = template.lock.axis;
+          g.lock.layers = template.lock.layers;
+          this.groups.set(name, g);
         }
       }
     }
@@ -296,10 +314,16 @@ export class GroupTable {
       if (!template) {
         throw Error();
       }
-      this.groups.set(axis, new CubeGroup(cube, axis, template.indices, GroupTable.AXIS_VECTOR[axis]));
+      const g = new CubeGroup(cube, axis, template.indices, GroupTable.AXIS_VECTOR[axis]);
+      g.lock.axis = template.lock.axis;
+      g.lock.layers = template.lock.layers;
+      this.groups.set(axis, g);
     }
-    this.groups.set(".", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
-    this.groups.set("~", new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]));
+    const g = new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]);
+    g.lock.axis = "a";
+    g.lock.layers.push(1);
+    this.groups.set(".", g);
+    this.groups.set("~", g);
   }
 
   private static AXIS_MAP: { [key: string]: string } = {
