@@ -248,7 +248,7 @@ export default class GIF {
     const cg = this.colors[i++];
     const cb = this.colors[i++];
     const d = Color.RGBD([r, g, b], [cr, cg, cb]);
-    if (d > 8) {
+    if (d > 3) {
       this.colors[this.colorn++] = r;
       this.colors[this.colorn++] = g;
       this.colors[this.colorn++] = b;
@@ -260,6 +260,7 @@ export default class GIF {
     this.colorn = 0;
     this.addColor(0, 0, 0);
     this.addColor(255, 255, 255);
+    const max = 3 * Math.pow(2, GIF.DEEP);
     // 原色
     for (const key in COLORS) {
       const rgb = Color.HEX2RGB(COLORS[key]);
@@ -269,32 +270,51 @@ export default class GIF {
     for (let v = 0; v < 255; v = v + 8) {
       this.addColor(v, v, v);
     }
-    // 普通灰度
+    // 饱和度
     for (const key in COLORS) {
       const rgb = Color.HEX2RGB(COLORS[key]);
-      const hsl = Color.RGB2HSL(rgb);
-      const delta = 8;
-      for (let dl = 0; ; dl++) {
-        const l = dl * delta;
-        if (l > 100) {
+      const hsv = Color.RGB2HSV(rgb);
+      let delta = 10;
+      let s = hsv[1];
+      while (this.colorn < max) {
+        s = s - delta;
+        delta = delta * 1.25;
+        if (s < 0) {
           break;
         }
-        const dhsl = [hsl[0], hsl[1], l];
-        const drgb = Color.HSL2RGB(dhsl);
+        const dhsv = [hsv[0], s, hsv[2]];
+        const drgb = Color.HSV2RGB(dhsv);
         this.addColor(drgb[0], drgb[1], drgb[2]);
       }
     }
-    // 细分灰度
+    // 亮度
     for (const key in COLORS) {
       const rgb = Color.HEX2RGB(COLORS[key]);
-      const hsl = Color.RGB2HSL(rgb);
-      for (let dl = 0; dl < 27; dl++) {
-        const l = hsl[2] - dl;
-        if (l < 0) {
+      const hsv = Color.RGB2HSV(rgb);
+      let delta = 10;
+      let v = hsv[2];
+      while (this.colorn < max) {
+        v = v - delta;
+        delta = delta * 1.25;
+        if (v < 0) {
           break;
         }
-        const dhsl = [hsl[0], hsl[1], l];
-        const drgb = Color.HSL2RGB(dhsl);
+        const dhsv = [hsv[0], hsv[1], v];
+        const drgb = Color.HSV2RGB(dhsv);
+        this.addColor(drgb[0], drgb[1], drgb[2]);
+      }
+    }
+    // 阴影
+    for (let delta = 0; this.colorn < max; delta++) {
+      for (const key in COLORS) {
+        const rgb = Color.HEX2RGB(COLORS[key]);
+        const hsv = Color.RGB2HSV(rgb);
+        const v = hsv[2] - delta;
+        if (v < 0) {
+          continue;
+        }
+        const dhsv = [hsv[0], hsv[1], v];
+        const drgb = Color.HSV2RGB(dhsv);
         this.addColor(drgb[0], drgb[1], drgb[2]);
       }
     }
@@ -313,7 +333,7 @@ export default class GIF {
       const cg = this.colors[i++];
       const cb = this.colors[i++];
       const d = Color.RGBD([r, g, b], [cr, cg, cb]);
-      if (d < 5) {
+      if (d < 2) {
         return index;
       }
       if (d < dmin) {

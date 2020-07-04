@@ -58,7 +58,7 @@ export default class Color {
     let r = 0,
       g = 0,
       b = 0;
-    const i = Math.round((h / 60) % 6);
+    const i = Math.floor((h / 60) % 6);
     const f = h / 60 - i;
     const p = v * (1 - s);
     const q = v * (1 - f * s);
@@ -103,70 +103,15 @@ export default class Color {
     return [r, g, b];
   }
 
-  static RGB2HSL(rgb: number[]): number[] {
-    const r = rgb[0] / 255,
-      g = rgb[1] / 255,
-      b = rgb[2] / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const v = max - min;
-
-    let h = 0;
-    if (v === 0) {
-      h = 0;
-    } else if (max === r) {
-      h = 60 * (((g - b) / v) % 6);
-    } else if (max === g) {
-      h = 60 * ((b - r) / v + 2);
-    } else if (max === b) {
-      h = 60 * ((r - g) / v + 4);
-    }
-
-    h = h % 360;
-    if (h < 0) {
-      h += 360;
-    }
-    let l = (max + min) / 2;
-    let s = v === 0 ? 0 : v / (1 - Math.abs(2 * l - 1));
-    h = Math.round(h);
-    s = Math.round(s * 100);
-    l = Math.round(l * 100);
-    return [h, s, l];
-  }
-
-  static HSL2RGB(hsl: number[]): number[] {
-    const h = hsl[0],
-      s = hsl[1] / 100,
-      l = hsl[2] / 100;
-    const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-    const m = l - c / 2;
-    const rgb = [];
-    if (h >= 0 && h < 60) {
-      rgb.push(c, x, 0);
-    } else if (h >= 60 && h < 120) {
-      rgb.push(x, c, 0);
-    } else if (h >= 120 && h < 180) {
-      rgb.push(0, c, x);
-    } else if (h >= 180 && h < 240) {
-      rgb.push(0, x, c);
-    } else if (h >= 240 && h < 300) {
-      rgb.push(x, 0, c);
-    } else if (h >= 300 && h < 360) {
-      rgb.push(c, 0, x);
-    }
-    let [r, g, b] = rgb;
-    r = Math.round(255 * (r + m));
-    g = Math.round(255 * (g + m));
-    b = Math.round(255 * (b + m));
-    return [r, g, b];
-  }
-
   static RGBD(rgb1: number[], rgb2: number[]): number {
     const rmean = (rgb1[0] + rgb2[0]) / 2;
     const r = rgb1[0] - rgb2[0];
     const g = rgb1[1] - rgb2[1];
     const b = rgb1[2] - rgb2[2];
     return Math.sqrt((2 + rmean / 256) * r ** 2 + 4 * g ** 2 + (2 + (255 - rmean) / 256) * b ** 2);
+  }
+
+  static PRINT(rgb: number[]): void {
+    console.log("%cRGB=" + rgb + " HSV=" + Color.RGB2HSV(rgb), "color:" + Color.RGB2HEX(rgb));
   }
 }
