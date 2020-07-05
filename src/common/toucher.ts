@@ -52,8 +52,11 @@ export default class Toucher {
     }
     this.dom.tabIndex = 1;
     this.dom.focus();
-    const touches = event.changedTouches;
+    const touches = event.touches;
     const first = touches[0];
+    if (first != event.changedTouches[0]) {
+      return false;
+    }
     const action = new TouchAction(
       event.type,
       first.clientX - this.dom.getBoundingClientRect().left,
