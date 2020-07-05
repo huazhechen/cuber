@@ -16,6 +16,9 @@ export default class History {
       const last = this.list[this.list.length - 1];
       if (last.group == action.group) {
         last.times = last.times + action.times * (last.reverse == action.reverse ? 1 : -1);
+        while (last.times < 0) {
+          last.times = last.times + 4;
+        }
         last.times = last.times % 4;
         this.exp = this.exp.substring(0, this.exp.lastIndexOf(" "));
         if (last.times == 0) {
