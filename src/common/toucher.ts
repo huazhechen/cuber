@@ -52,9 +52,9 @@ export default class Toucher {
     }
     this.dom.tabIndex = 1;
     this.dom.focus();
-    const touches = event.touches;
-    const first = touches[0];
-    if (first != event.changedTouches[0]) {
+    const first = event.changedTouches[0];
+    const one = event.touches.length == 0 || event.touches[0].identifier == first.identifier;
+    if (!one) {
       return false;
     }
     const action = new TouchAction(
