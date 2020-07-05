@@ -2,7 +2,7 @@ import Cubelet from "./cubelet";
 import { TwistAction } from "./twister";
 import Cube from "./cube";
 import * as THREE from "three";
-import tweener from "./tweener";
+import tweener, { Tween } from "./tweener";
 
 class CubeLock {
   axis = "";
@@ -17,6 +17,8 @@ export default class CubeGroup extends THREE.Group {
   indices: number[];
   axis: THREE.Vector3;
   lock: CubeLock = new CubeLock();
+  holding = false;
+  tween: Tween | undefined = undefined;
 
   _angle: number;
   set angle(angle) {
@@ -120,6 +122,14 @@ export default class CubeGroup extends THREE.Group {
   }
 
   hold(): boolean {
+    if (this.holding) {
+      if (this.tween) {
+        tweener.cancel(this.tween);
+        this.tween = undefined;
+      }
+      return true;
+    }
+    this.holding = true;
     this.angle = 0;
     const success = this.cube.lock(this.lock.axis, this.lock.layers);
     if (!success) {
@@ -155,6 +165,7 @@ export default class CubeGroup extends THREE.Group {
     this.cube.container.dirty = true;
     this.angle = 0;
     this.cube.unlock(this.lock.axis, this.lock.layers);
+    this.holding = false;
     if (this.cube.callback) {
       this.cube.callback();
     }
@@ -173,10 +184,11 @@ export default class CubeGroup extends THREE.Group {
     } else {
       const d = Math.abs(delta) / (Math.PI / 2);
       const duration = CubeGroup.frames * (2 - 2 / (d + 1));
-      tweener.tween(this.angle, angle, duration, (value: number) => {
+      this.tween = tweener.tween(this.angle, angle, duration, (value: number) => {
         this.angle = value;
         if (Math.abs(this.angle - angle) < 1e-6) {
           this.drop();
+          this.tween = undefined;
         }
       });
     }

@@ -19,6 +19,7 @@ export default class Controller {
   public dragging = false;
   public rotating = false;
   public angle = 0;
+  public contingle = 0;
   public taps: Function[];
   public ray = new THREE.Ray();
   public down = new THREE.Vector2(0, 0);
@@ -65,8 +66,9 @@ export default class Controller {
 
   update(): void {
     if (this.rotating && this.group) {
-      if (this.group.angle != this.angle) {
-        const delta = (this.angle - this.group.angle) / 2;
+      const angle = this.contingle + this.angle;
+      if (this.group.angle != angle) {
+        const delta = (angle - this.group.angle) / 2;
         this.group.angle += delta;
         this.world.dirty = true;
       }
@@ -209,6 +211,7 @@ export default class Controller {
           tweener.finish();
           success = this.group.hold();
         }
+        this.contingle = this.group.angle;
       }
     }
     if (this.rotating && this.group) {

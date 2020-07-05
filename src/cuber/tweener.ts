@@ -49,8 +49,10 @@ export class Tweener {
     this.update();
   }
 
-  tween(begin: number, end: number, duration: number, update: Function): void {
-    this.tweens.push(new Tween(begin, end, duration, update));
+  tween(begin: number, end: number, duration: number, update: Function): Tween {
+    const tween = new Tween(begin, end, duration, update);
+    this.tweens.push(tween);
+    return tween;
   }
 
   update(): boolean {
@@ -68,10 +70,29 @@ export class Tweener {
     return true;
   }
 
-  finish(): void {
-    const tweens = this.tweens.splice(0, this.tweens.length);
-    for (const tween of tweens) {
-      tween.finish();
+  finish(tween: Tween | undefined = undefined): void {
+    if (tween) {
+      for (let i = 0; i < this.tweens.length; i++) {
+        if (this.tweens[i] == tween) {
+          tween.finish();
+          this.tweens.splice(i, 1);
+          return;
+        }
+      }
+    } else {
+      const tweens = this.tweens.splice(0, this.tweens.length);
+      for (const tween of tweens) {
+        tween.finish();
+      }
+    }
+  }
+
+  cancel(tween: Tween): void {
+    for (let i = 0; i < this.tweens.length; i++) {
+      if (this.tweens[i] == tween) {
+        this.tweens.splice(i, 1);
+        return;
+      }
     }
   }
 }
