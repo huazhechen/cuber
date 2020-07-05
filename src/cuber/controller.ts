@@ -206,10 +206,10 @@ export default class Controller {
         this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
       }
       if (this.group) {
-        let success = this.group.hold();
+        let success = this.group.hold(true);
         while (!success) {
           tweener.finish();
-          success = this.group.hold();
+          success = this.group.hold(true);
         }
         this.contingle = this.group.angle;
       }
@@ -261,14 +261,18 @@ export default class Controller {
     if (this.rotating) {
       if (this.group && this.group !== null) {
         if (!this.lock) {
-          if (Math.abs(this.angle) < Math.PI / 4) {
+          let angle = this.angle;
+          if (Math.abs(angle) < Math.PI / 4) {
             const tick = new Date().getTime();
             const speed = (Math.abs(this.angle) / (tick - this.tick)) * 1000;
             if (speed > 0.2) {
-              this.angle = this.angle == 0 ? 0 : ((this.angle / Math.abs(this.angle)) * Math.PI) / 2;
+              angle = angle == 0 ? 0 : ((angle / Math.abs(angle)) * Math.PI) / 2;
+              if ((this.contingle + angle) * this.contingle < 0) {
+                angle = -this.contingle;
+              }
             }
           }
-          this.group.twist(this.angle);
+          this.group.twist(this.contingle + angle);
         } else {
           this.group.twist(0);
         }

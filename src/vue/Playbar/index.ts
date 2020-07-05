@@ -143,11 +143,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     const action = this.actions[this.pprogress];
     this.pprogress++;
-    let success = this.world.cube.twist(action.group, action.reverse, action.times);
-    while (!success) {
-      tweener.finish();
-      success = this.world.cube.twist(action.group, action.reverse, action.times);
-    }
+    this.world.cube.twist(action.group, action.reverse, action.times, false, true);
   }
 
   backward(): void {
@@ -157,11 +153,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress--;
     const action = this.actions[this.pprogress];
-    let success = this.world.cube.twist(action.group, !action.reverse, action.times);
-    while (!success) {
-      tweener.finish();
-      success = this.world.cube.twist(action.group, !action.reverse, action.times);
-    }
+    this.world.cube.twist(action.group, !action.reverse, action.times, false, true);
   }
 
   get chaos(): boolean {

@@ -212,7 +212,7 @@ export default class Cube extends THREE.Group {
     this.dirty = true;
   }
 
-  twist(exp: string, reverse = false, times = 1, fast = false): boolean {
+  twist(exp: string, reverse = false, times = 1, fast = false, force = false): boolean {
     const node = new TwistNode(exp, reverse, times);
     const list = node.parse();
     if (list.length == 1) {
@@ -221,7 +221,12 @@ export default class Cube extends THREE.Group {
         tweener.finish();
         action.fast = true;
       }
-      return this.execute(action);
+      let success = this.execute(action);
+      while (!success && force) {
+        tweener.finish();
+        success = this.execute(action);
+      }
+      return success;
     }
     tweener.finish();
     for (const action of list) {
@@ -266,7 +271,7 @@ export default class Cube extends THREE.Group {
     if (group === undefined) {
       return true;
     }
-    const success = group.hold();
+    const success = group.hold(false);
     if (!success) {
       return false;
     }
@@ -283,11 +288,6 @@ export default class Cube extends THREE.Group {
       return;
     }
     const last = this.history.last;
-    const action = new TwistAction(last.group, !last.reverse, last.times);
-    let success = this.execute(action);
-    while (!success) {
-      tweener.finish();
-      success = this.execute(action);
-    }
+    this.twist(last.exp, true, 1, false, true);
   }
 }

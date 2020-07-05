@@ -216,7 +216,7 @@ export default class Playground extends Vue {
       if (exp === "^") {
         this.world.cube.undo();
       } else {
-        this.world.cube.twist(exp);
+        this.world.cube.twist(exp, false, 1, false, true);
       }
     });
   }

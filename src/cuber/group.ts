@@ -121,20 +121,24 @@ export default class CubeGroup extends THREE.Group {
     return new TwistAction(group, reverse, times);
   }
 
-  hold(): boolean {
+  hold(cancel: boolean): boolean {
     if (this.holding) {
-      if (this.tween) {
-        tweener.cancel(this.tween);
-        this.tween = undefined;
+      if (cancel) {
+        if (this.tween) {
+          tweener.cancel(this.tween);
+          this.tween = undefined;
+        }
+        return true;
+      } else {
+        return false;
       }
-      return true;
     }
-    this.holding = true;
     this.angle = 0;
     const success = this.cube.lock(this.lock.axis, this.lock.layers);
     if (!success) {
       return false;
     }
+    this.holding = true;
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
