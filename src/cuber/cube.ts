@@ -271,11 +271,13 @@ export default class Cube extends THREE.Group {
     if (group === undefined) {
       return true;
     }
-    const success = group.hold(false);
+    if (group.holding && group.tween) {
+      angle = angle + group.tween.end;
+    }
+    const success = group.hold();
     if (!success) {
       return false;
     }
-    group.angle = 0;
     if (action.fast) {
       group.angle = angle;
     }
@@ -284,6 +286,7 @@ export default class Cube extends THREE.Group {
   }
 
   undo(): void {
+    tweener.finish();
     if (this.history.length == 0) {
       return;
     }

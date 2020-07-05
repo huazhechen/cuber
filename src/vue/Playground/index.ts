@@ -543,7 +543,7 @@ export default class Playground extends Vue {
 
     const segments = this.split(scene).reverse();
     this.data.history = "";
-    if (empty) {
+    if (empty && segments.length > 0) {
       const segment = segments.pop() as string;
       if (segment.indexOf("(") >= 0) {
         list = new TwistNode(segment, true).parse();

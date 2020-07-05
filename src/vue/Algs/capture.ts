@@ -81,7 +81,7 @@ export default class Capture {
         continue;
       }
       part.angle = 0;
-      part.hold(false);
+      part.hold();
       part.angle = angle;
       part.twist(angle);
     }

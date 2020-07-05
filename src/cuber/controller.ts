@@ -206,10 +206,10 @@ export default class Controller {
         this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
       }
       if (this.group) {
-        let success = this.group.hold(true);
+        let success = this.group.hold();
         while (!success) {
           tweener.finish();
-          success = this.group.hold(true);
+          success = this.group.hold();
         }
         this.contingle = this.group.angle;
       }

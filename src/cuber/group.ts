@@ -121,17 +121,13 @@ export default class CubeGroup extends THREE.Group {
     return new TwistAction(group, reverse, times);
   }
 
-  hold(cancel: boolean): boolean {
+  hold(): boolean {
     if (this.holding) {
-      if (cancel) {
-        if (this.tween) {
-          tweener.cancel(this.tween);
-          this.tween = undefined;
-        }
-        return true;
-      } else {
-        return false;
+      if (this.tween) {
+        tweener.cancel(this.tween);
+        this.tween = undefined;
       }
+      return true;
     }
     this.angle = 0;
     const success = this.cube.lock(this.lock.axis, this.lock.layers);
@@ -153,6 +149,11 @@ export default class CubeGroup extends THREE.Group {
 
   drop(): void {
     this.angle = Math.round(this.angle / (Math.PI / 2)) * (Math.PI / 2);
+    const reverse = this.angle > 0;
+    const times = Math.round(Math.abs(this.angle) / (Math.PI / 2));
+    if (times != 0) {
+      this.cube.record(this.action(reverse, times));
+    }
     while (true) {
       const cubelet = this.cubelets.pop();
       if (undefined === cubelet) {
@@ -177,11 +178,6 @@ export default class CubeGroup extends THREE.Group {
 
   twist(angle = this.angle): void {
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    const reverse = angle > 0;
-    const times = Math.round(Math.abs(angle) / (Math.PI / 2));
-    if (times != 0) {
-      this.cube.record(this.action(reverse, times));
-    }
     const delta = angle - this.angle;
     if (delta === 0) {
       this.drop();
