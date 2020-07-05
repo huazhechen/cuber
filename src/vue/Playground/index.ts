@@ -425,7 +425,7 @@ export default class Playground extends Vue {
     let origin = this.world.cube.history.exp;
     origin = origin.replace(/M/g, "(x' L' R)");
     origin = origin.replace(/E/g, "(y' D' U)");
-    origin = origin.replace(/S/g, "(z' F' B)");
+    origin = origin.replace(/S/g, "(z F' B)");
     let temp: TwistAction[] = new TwistNode(origin).parse();
 
     const list: TwistAction[] = [];

@@ -56,7 +56,7 @@ export default class Playbar extends Vue {
     this.init();
     for (let i = 0; i < value; i++) {
       const action = this.actions[i];
-      this.world.cube.twist(action.group, action.reverse, action.times);
+      this.world.cube.twist(action.group, action.reverse, action.times, true);
     }
     this.pprogress = value;
   }
