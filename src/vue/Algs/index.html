@@ -60,6 +60,7 @@
   <div
     v-show="listd"
     style="margin: 0; display: flex; flex-flow: column; height: 100%; user-select: none; touch-action: none;"
+    :style="{height: height + 'px'}"
   >
     <div style="margin: auto; width: 100%;">
       <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
@@ -70,7 +71,10 @@
         </v-tab>
       </v-tabs>
     </div>
-    <div style="flex: 1; overflow: auto; margin: auto;">
+    <div
+      style="flex: 1; overflow: auto; margin: auto; user-select: none;"
+      :style="{height: (height - size * 0.8) + 'px'}"
+    >
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="(group,i) in data.algs" :key="i" :value="'tab-' + i" style="height: 100%;">
           <v-layout row wrap style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%; align-items: stretch;">
