@@ -28,12 +28,10 @@ export class AlgsData {
     version: string;
     position: { group: number; index: number };
     modify: string[][];
-    more: AlgGroup;
   } = {
-    version: "0.5",
+    version: "0.6",
     position: { group: 0, index: 0 },
     modify: [[], [], []],
-    more: require("./more.json"),
   };
 
   constructor() {
@@ -63,29 +61,16 @@ export class AlgsData {
         }
       }
     }
-    this.algs.push(this.values.more);
   }
 
   modify(i: number, j: number, exp: string): void {
     const alg = this.algs[i].items[j];
-    if (i < 3) {
-      if (exp == alg.origin) {
-        this.values.modify[i][j] = "";
-      } else {
-        this.values.modify[i][j] = exp;
-      }
+    if (exp == alg.origin) {
+      this.values.modify[i][j] = "";
     } else {
-      this.values.more.items[j].exp = exp;
+      this.values.modify[i][j] = exp;
     }
     alg.exp = exp;
-  }
-
-  add(item: AlgItem): void {
-    this.values.more.items.push(item);
-  }
-
-  remove(index: number): void {
-    this.values.more.items.splice(index, 1);
   }
 
   save(): void {
@@ -94,10 +79,6 @@ export class AlgsData {
 
   get position(): { group: number; index: number } {
     return this.values.position;
-  }
-
-  get more(): AlgGroup {
-    return this.values.more;
   }
 }
 @Component({
@@ -264,27 +245,4 @@ export default class Algs extends Vue {
     this.reload();
     this.listd = false;
   }
-
-  removed = false;
-  removei = -1;
-  remove(): void {
-    if (this.removei < 0) {
-      return;
-    }
-    this.data.remove(this.removei);
-    if (this.data.position.group == this.data.algs.length - 1 && this.data.position.index == this.removei) {
-      this.data.position.group = 0;
-      this.data.position.index = 0;
-    }
-    this.data.save();
-    this.pics[this.data.algs.length - 1].splice(this.removei, 1);
-  }
-
-  add(): void {
-    this.data.add(JSON.parse(JSON.stringify(this.addi)));
-    this.data.save();
-  }
-
-  addd = false;
-  addi: AlgItem = { name: "", order: 3, scramble: false, exp: "", origin: "" };
 }
