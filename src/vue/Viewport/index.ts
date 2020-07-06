@@ -39,6 +39,9 @@ export default class Viewport extends Vue {
   }
 
   wheel(e: WheelEvent): void {
+    if (e.target != this.renderer.domElement) {
+      return;
+    }
     let scale = this.preferance.scale;
     if (e.deltaY > 0) {
       scale = scale - 10;
