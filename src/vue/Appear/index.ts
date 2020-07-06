@@ -52,7 +52,7 @@ export default class Appear extends Vue {
     this.preferance.thickness = 32;
     this.preferance.mirror = false;
     this.preferance.hollow = false;
-    this.preferance.shadow = false;
+    this.preferance.shadow = true;
     this.preferance.arrow = false;
   }
 }

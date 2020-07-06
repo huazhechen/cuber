@@ -7,6 +7,7 @@ import World from "../../cuber/world";
 import pako from "pako";
 import { ThemeData, PreferanceData } from "../../data";
 import { TwistAction, TwistNode } from "../../cuber/twister";
+import Cubelet from "../../cuber/cubelet";
 
 class KeyHandle {
   width = 2;
@@ -282,8 +283,22 @@ export default class Playground extends Vue {
     }
   }
 
+  breath(): void {
+    if (this.world.order < 10) {
+      let tick = new Date().getTime();
+      tick = (tick / 2000) * Math.PI;
+      tick = Math.sin(tick);
+      this.world.cube.position.y = tick * Cubelet.SIZE / 64;
+      this.world.cube.rotation.y = (tick / 768) * Math.PI;
+      this.world.cube.dirty = true;
+      this.world.cube.container.dirty = true;
+      this.world.cube.updateMatrix();
+    }
+  }
+
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
+    this.breath();
     this.viewport.draw();
     if (this.data.complete) {
       return;

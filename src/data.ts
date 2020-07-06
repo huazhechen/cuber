@@ -20,7 +20,7 @@ export class PreferanceData {
     arrow: false,
     cloud: false,
     wireframe: false,
-    shadow: false,
+    shadow: true,
   };
 
   constructor(world: World) {
@@ -111,7 +111,7 @@ export class PreferanceData {
       this.values.shadow = value;
     }
     if (value) {
-      this.world.ambient.intensity = 0.8;
+      this.world.ambient.intensity = 0.85;
       this.world.directional.intensity = 0.2;
     } else {
       this.world.ambient.intensity = 1;
