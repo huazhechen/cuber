@@ -76,14 +76,11 @@ export default class Capture {
       if (action.times) {
         angle = angle * action.times;
       }
-      const part = this.cube.groups.get(action.group);
-      if (part === undefined) {
+      const group = this.cube.groups.get(action.group);
+      if (group === undefined) {
         continue;
       }
-      part.angle = 0;
-      part.hold();
-      part.angle = angle;
-      part.twist(angle);
+      group.twist(angle, true);
     }
   }
 }

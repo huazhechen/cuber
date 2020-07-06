@@ -271,22 +271,10 @@ export default class Cube extends THREE.Group {
     if (group === undefined) {
       return true;
     }
-    if (group.holding && group.tween) {
-      angle = angle + group.tween.end;
-    }
-    const success = group.hold();
-    if (!success) {
-      return false;
-    }
-    if (action.fast) {
-      group.angle = angle;
-    }
-    group.twist(angle);
-    return true;
+    return group.twist(angle, action.fast);
   }
 
   undo(): void {
-    tweener.finish();
     if (this.history.length == 0) {
       return;
     }

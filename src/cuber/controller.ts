@@ -272,9 +272,9 @@ export default class Controller {
               }
             }
           }
-          this.group.twist(this.contingle + angle);
+          this.group.twist(this.contingle + angle, false);
         } else {
-          this.group.twist(0);
+          this.group.twist(0, false);
         }
       }
     }

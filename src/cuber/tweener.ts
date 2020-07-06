@@ -22,13 +22,9 @@ export class Tween {
     elapsed = elapsed > 1 ? 1 : elapsed;
     elapsed = elapsed < 0 ? 0 : elapsed;
     elapsed = elapsed - 1;
-    const value = 1 - elapsed * elapsed;
-    if (value == 1) {
-      this.callback(this.end);
-      return false;
-    }
-    this.callback(this.begin + (this.end - this.begin) * value);
-    return true;
+    elapsed = 1 - elapsed * elapsed;
+    const value = elapsed == 1 ? this.end : this.begin + (this.end - this.begin) * elapsed;
+    return this.callback(value);
   }
 }
 
@@ -61,10 +57,10 @@ export class Tweener {
     let len = this.tweens.length;
     while (i < len) {
       if (this.tweens[i].update()) {
-        i++;
-      } else {
         this.tweens.splice(i, 1);
         len--;
+      } else {
+        i++;
       }
     }
     return true;

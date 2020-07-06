@@ -17,8 +17,8 @@ export default class CubeGroup extends THREE.Group {
   indices: number[];
   axis: THREE.Vector3;
   lock: CubeLock = new CubeLock();
-  holding = false;
-  tween: Tween | undefined = undefined;
+  private holding = false;
+  private tween: Tween | undefined = undefined;
 
   _angle: number;
   set angle(angle) {
@@ -121,12 +121,28 @@ export default class CubeGroup extends THREE.Group {
     return new TwistAction(group, reverse, times);
   }
 
+  cancel(): number {
+    if (this.tween) {
+      // 记录当前动作的角度
+      let left = this.tween.end;
+      // 取消当前动作
+      tweener.cancel(this.tween);
+      this.tween = undefined;
+      // 记录取消的动作
+      left = Math.round(left / (Math.PI / 2)) * (Math.PI / 2);
+      const reverse = left > 0;
+      const times = Math.round(Math.abs(left) / (Math.PI / 2));
+      if (times != 0) {
+        this.cube.record(this.action(!reverse, times));
+      }
+      return left;
+    }
+    return 0;
+  }
+
   hold(): boolean {
     if (this.holding) {
-      if (this.tween) {
-        tweener.cancel(this.tween);
-        this.tween = undefined;
-      }
+      this.cancel();
       return true;
     }
     this.angle = 0;
@@ -148,12 +164,8 @@ export default class CubeGroup extends THREE.Group {
   }
 
   drop(): void {
-    this.angle = Math.round(this.angle / (Math.PI / 2)) * (Math.PI / 2);
-    const reverse = this.angle > 0;
-    const times = Math.round(Math.abs(this.angle) / (Math.PI / 2));
-    if (times != 0) {
-      this.cube.record(this.action(reverse, times));
-    }
+    this.holding = false;
+    this.tween = undefined;
     while (true) {
       const cubelet = this.cubelets.pop();
       if (undefined === cubelet) {
@@ -170,16 +182,32 @@ export default class CubeGroup extends THREE.Group {
     this.cube.container.dirty = true;
     this.angle = 0;
     this.cube.unlock(this.lock.axis, this.lock.layers);
-    this.holding = false;
     if (this.cube.callback) {
       this.cube.callback();
     }
   }
 
-  twist(angle = this.angle): void {
+  twist(angle: number, fast: boolean): boolean {
+    if (this.holding) {
+      // 如果当前有正在执行的动作
+      angle = angle + this.cancel();
+    } else {
+      const success = this.hold();
+      if (!success) {
+        return false;
+      }
+    }
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
+    const reverse = angle > 0;
+    const times = Math.round(Math.abs(angle) / (Math.PI / 2));
+    if (times != 0) {
+      this.cube.record(this.action(reverse, times));
+    }
+    if (fast) {
+      this.angle = angle;
+    }
     const delta = angle - this.angle;
-    if (delta === 0) {
+    if (Math.abs(this.angle - angle) < 1e-6) {
       this.drop();
     } else {
       const d = Math.abs(delta) / (Math.PI / 2);
@@ -188,10 +216,12 @@ export default class CubeGroup extends THREE.Group {
         this.angle = value;
         if (Math.abs(this.angle - angle) < 1e-6) {
           this.drop();
-          this.tween = undefined;
+          return true;
         }
+        return false;
       });
     }
+    return true;
   }
 
   rotate(cubelet: Cubelet): void {
