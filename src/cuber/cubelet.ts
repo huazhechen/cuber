@@ -427,9 +427,9 @@ export default class Cubelet extends THREE.Group {
           _mirror.rotation.y = Math.PI;
         }
 
-        _mirror.position.x = _sticker.position.x * 3;
-        _mirror.position.y = _sticker.position.y * 3;
-        _mirror.position.z = _sticker.position.z * 3;
+        _mirror.position.x = _sticker.position.x * 5;
+        _mirror.position.y = _sticker.position.y * 5;
+        _mirror.position.z = _sticker.position.z * 5;
         this.mirrors[i] = _mirror;
       }
     }
