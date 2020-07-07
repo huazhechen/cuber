@@ -134,7 +134,7 @@
       { "name": "PLL-Gc", "origin": "R2'U' (RU'RU) (R'UR2UD') (RU'R'D)" },
       { "name": "PLL-Gd", "origin": "D'(RUR'U')D (R2U'RU') (R'UR'U)R2" },
       { "name": "PLL-H", "origin": "M2U M2U2 M2U M2" },
-      { "name": "PLL-Ja", "origin": "x(R2'FRF'RU2') (r'UrU2')x'" },
+      { "name": "PLL-Ja", "origin": "(rR2'FRF'RU2') (r'UrU2'r')" },
       { "name": "PLL-Jb", "origin": "(RUR'F') (RUR'U') (R'F)(R2U'R')" },
       { "name": "PLL-Na", "origin": "(F'RUR'U'R'FR2) (FU'R'U'RUF'R')" },
       { "name": "PLL-Nb", "origin": "(R'URU') (R'F'U'F) (RUR'U') RU'fRf'" },
