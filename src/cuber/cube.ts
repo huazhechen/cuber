@@ -215,28 +215,23 @@ export default class Cube extends THREE.Group {
   twist(exp: string, reverse = false, times = 1, fast = false, force = false): boolean {
     const node = new TwistNode(exp, reverse, times);
     const list = node.parse();
-    if (list.length == 1) {
-      const action = list[0];
-      if (fast) {
-        tweener.finish();
-        action.fast = true;
-      }
-      let success = this.execute(action);
-      while (!success && force) {
-        tweener.finish();
-        success = this.execute(action);
-      }
-      return success;
+    if (list.length > 1) {
+      fast = true;
     }
-    tweener.finish();
     for (const action of list) {
-      action.fast = true;
-      this.execute(action);
+      let success = this.execute(action, fast);
+      if (!success && !fast && !force) {
+        return false;
+      }
+      while (!success) {
+        tweener.finish();
+        success = this.execute(action, fast);
+      }
     }
     return true;
   }
 
-  private execute(action: TwistAction): boolean {
+  private execute(action: TwistAction, fast: boolean): boolean {
     if (action.group == "#") {
       this.reset();
       this.dirty = true;
@@ -253,8 +248,7 @@ export default class Cube extends THREE.Group {
       const node = new TwistNode(exp, false, 1);
       const list = node.parse();
       for (const action of list) {
-        action.fast = true;
-        this.execute(action);
+        this.execute(action, true);
       }
       this.history.clear();
       this.history.init = exp;
@@ -271,7 +265,7 @@ export default class Cube extends THREE.Group {
     if (group === undefined) {
       return true;
     }
-    return group.twist(angle, action.fast);
+    return group.twist(angle, fast);
   }
 
   undo(): void {

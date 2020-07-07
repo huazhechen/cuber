@@ -2,12 +2,10 @@ export class TwistAction {
   group: string;
   reverse: boolean;
   times: number;
-  fast: boolean;
-  constructor(exp: string, reverse = false, times = 1, fast = false) {
+  constructor(exp: string, reverse = false, times = 1) {
     this.group = exp;
     this.reverse = reverse;
     this.times = times;
-    this.fast = fast;
   }
 
   get exp(): string {
