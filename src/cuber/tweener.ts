@@ -18,6 +18,7 @@ export class Tween {
 
   update(): boolean {
     this.value++;
+    // y = 1 - (1-x)^2
     let elapsed = this.value / this.duration;
     elapsed = elapsed > 1 ? 1 : elapsed;
     elapsed = elapsed < 0 ? 0 : elapsed;
