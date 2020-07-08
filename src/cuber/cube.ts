@@ -2,7 +2,7 @@ import { GroupTable } from "./group";
 import Cubelet from "./cubelet";
 import { FACE } from "./define";
 import * as THREE from "three";
-import { TwistAction, TwistNode } from "./twister";
+import Twister, { TwistAction } from "./twister";
 import History from "./history";
 import tweener from "./tweener";
 
@@ -22,48 +22,14 @@ export default class Cube extends THREE.Group {
   public initials: Cubelet[] = [];
   public groups: GroupTable;
   public order: number;
-  public callback: Function | undefined;
+  public callbacks: Function[] = [];
   public history: History;
   public container: Container;
+  public twister: Twister = new Twister(this);
 
-  scrambler(): string {
-    let result = "";
-    const exps = [];
-    let last = -1;
-    const actions = ["U", "D", "R", "L", "F", "B"];
-    let axis = -1;
-    for (let i = 0; i < 3 * 3 * this.order; i++) {
-      const exp = [];
-      while (axis == last) {
-        axis = Math.floor(Math.random() * 3);
-      }
-      const side = Math.floor(Math.random() * 2);
-      let action = actions[axis * 2 + side];
-      const prefix = Math.ceil(Math.random() * Math.floor(this.order / 2));
-      if (prefix === 1) {
-        action = action[0];
-      }
-      if (prefix > 2) {
-        exp.push(prefix);
-      }
-      exp.push(action);
-      const suffix = Math.random();
-      if (suffix < 0.4) {
-        exp.push("2");
-      } else if (suffix < 0.7) {
-        exp.push("'");
-      }
-      exps.push(exp.join(""));
-      last = axis;
-    }
-    result = exps.join(" ");
-    return result;
-  }
-
-  constructor(order: number, callback: Function | undefined = undefined) {
+  constructor(order: number) {
     super();
     this.order = order;
-    this.callback = callback;
     this.container = new Container();
     this.add(this.container);
     this.scale.set(3 / order, 3 / order, 3 / order);
@@ -84,6 +50,12 @@ export default class Cube extends THREE.Group {
     this.groups = new GroupTable(this);
     this.matrixAutoUpdate = false;
     this.updateMatrix();
+  }
+
+  callback(): void {
+    for (const callback of this.callbacks) {
+      callback();
+    }
   }
 
   lock(axis: string, layers: number[]): boolean {
@@ -210,69 +182,5 @@ export default class Cube extends THREE.Group {
     }
     this.container.dirty = true;
     this.dirty = true;
-  }
-
-  twist(exp: string, reverse = false, times = 1, fast = false, force = false): boolean {
-    const node = new TwistNode(exp, reverse, times);
-    const list = node.parse();
-    if (list.length > 1) {
-      fast = true;
-    }
-    for (const action of list) {
-      let success = this.execute(action, fast);
-      if (!success && !fast && !force) {
-        return false;
-      }
-      while (!success) {
-        tweener.finish();
-        success = this.execute(action, fast);
-      }
-    }
-    return true;
-  }
-
-  private execute(action: TwistAction, fast: boolean): boolean {
-    if (action.group == "#") {
-      this.reset();
-      this.dirty = true;
-      this.history.clear();
-      if (this.callback) {
-        this.callback();
-      }
-      return true;
-    }
-    if (action.group == "*") {
-      this.reset();
-      this.dirty = true;
-      const exp = this.scrambler();
-      const node = new TwistNode(exp, false, 1);
-      const list = node.parse();
-      for (const action of list) {
-        this.execute(action, true);
-      }
-      this.history.clear();
-      this.history.init = exp;
-      return true;
-    }
-    let angle = -Math.PI / 2;
-    if (action.reverse) {
-      angle = -angle;
-    }
-    if (action.times) {
-      angle = angle * action.times;
-    }
-    const group = this.groups.get(action.group);
-    if (group === undefined) {
-      return true;
-    }
-    return group.twist(angle, fast);
-  }
-
-  undo(): void {
-    if (this.history.length == 0) {
-      return;
-    }
-    const last = this.history.last;
-    this.twist(last.exp, true, 1, false, true);
   }
 }

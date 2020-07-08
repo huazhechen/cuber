@@ -215,9 +215,14 @@ export default class Playground extends Vue {
     super();
     this.keyboard = new KeyHandle((exp: string) => {
       if (exp === "^") {
-        this.world.cube.undo();
+        this.world.cube.twister.undo();
       } else {
-        this.world.cube.twist(exp, false, 1, false, true);
+        const node = new TwistNode(exp);
+        const list = node.parse();
+        if (list.length != 1) {
+          return;
+        }
+        this.world.cube.twister.twist(list[0], false, true);
       }
     });
   }
@@ -288,7 +293,7 @@ export default class Playground extends Vue {
       let tick = new Date().getTime();
       tick = (tick / 2000) * Math.PI;
       tick = Math.sin(tick);
-      this.world.cube.position.y = tick * Cubelet.SIZE / 64;
+      this.world.cube.position.y = (tick * Cubelet.SIZE) / 64;
       this.world.cube.rotation.y = (tick / 768) * Math.PI;
       this.world.cube.dirty = true;
       this.world.cube.container.dirty = true;
@@ -326,21 +331,21 @@ export default class Playground extends Vue {
     const scene = this.data.scene;
     const history = this.data.history;
     this.world.order = order;
-    this.world.cube.twist("# " + scene, false, 1, true);
-    this.world.cube.history.clear();
-    this.world.cube.history.init = scene;
-    this.world.cube.twist(history, false, 1, true);
+    this.world.cube.twister.setup(scene);
+    const node = new TwistNode(history);
+    const list = node.parse();
+    for (const action of list) {
+      this.world.cube.twister.twist(action, true, true);
+    }
     this.callback();
   }
 
   scramble(): void {
     this.data.complete = true;
     if (this.data.scrambler === "*") {
-      this.world.cube.twist("*");
+      this.world.cube.twister.twist(new TwistAction("*"), true, true);
     } else {
-      this.world.cube.twist("# " + this.data.scrambler, false, 1, true);
-      this.world.cube.history.clear();
-      this.world.cube.history.init = this.data.scrambler;
+      this.world.cube.twister.setup(this.data.scrambler);
     }
     this.data.complete = this.world.cube.complete;
     this.callback();
@@ -382,7 +387,7 @@ export default class Playground extends Vue {
         this.scrambled = true;
         break;
       case "undo":
-        this.world.cube.undo();
+        this.world.cube.twister.undo();
         break;
       case "history":
         this.historyd = true;

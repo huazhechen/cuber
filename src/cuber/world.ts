@@ -54,7 +54,8 @@ export default class World {
   set order(value: number) {
     this.scene.remove(this.cube);
     if (this.cubes[value] == undefined) {
-      this.cubes[value] = new Cube(value, this.callback);
+      this.cubes[value] = new Cube(value);
+      this.cubes[value].callbacks.push(this.callback);
     }
     this.cube = this.cubes[value];
     this.scene.add(this.cube);

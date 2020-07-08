@@ -56,7 +56,7 @@ export default class Playbar extends Vue {
     this.init();
     for (let i = 0; i < value; i++) {
       const action = this.actions[i];
-      this.world.cube.twist(action.group, action.reverse, action.times, true);
+      this.world.cube.twister.twist(action, true, true);
     }
     this.pprogress = value;
   }
@@ -84,16 +84,15 @@ export default class Playbar extends Vue {
     this.world.controller.lock = false;
     this.playing = false;
     this.pprogress = 0;
-    tweener.finish();
-    this.world.cube.twist("#");
     const scene = this.scene.replace("^", "(" + this.action + ")'");
-    this.world.cube.twist(scene, false, 1, true);
-    this.world.cube.history.clear();
+    this.world.cube.twister.setup(scene);
   }
 
   finish(): void {
     this.init();
-    this.world.cube.twist(this.action, false, 1, true);
+    for (const action of this.actions) {
+      this.world.cube.twister.twist(action, true, true);
+    }
     this.pprogress = this.actions.length;
   }
 
@@ -108,7 +107,7 @@ export default class Playbar extends Vue {
       let success;
       do {
         const action = this.actions[this.pprogress];
-        success = this.world.cube.twist(action.group, action.reverse, action.times);
+        success = this.world.cube.twister.twist(action, false, false);
         if (success) {
           this.pprogress++;
           if (this.pprogress == this.actions.length) {
@@ -143,7 +142,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     const action = this.actions[this.pprogress];
     this.pprogress++;
-    this.world.cube.twist(action.group, action.reverse, action.times, false, true);
+    this.world.cube.twister.twist(action, false, true);
   }
 
   backward(): void {
@@ -153,7 +152,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress--;
     const action = this.actions[this.pprogress];
-    this.world.cube.twist(action.group, !action.reverse, action.times, false, true);
+    this.world.cube.twister.twist(new TwistAction(action.group, !action.reverse, action.times), false, true);
   }
 
   get chaos(): boolean {

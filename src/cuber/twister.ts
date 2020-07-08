@@ -1,3 +1,6 @@
+import Cube from "./cube";
+import tweener from "./tweener";
+
 export class TwistAction {
   group: string;
   reverse: boolean;
@@ -196,5 +199,137 @@ export class TwistNode {
       result.push(action);
     }
     return result;
+  }
+}
+
+export default class Twister {
+  private cube: Cube;
+  private queue: TwistAction[] = [];
+  constructor(cube: Cube) {
+    this.cube = cube;
+    this.cube.callbacks.push(this.update);
+  }
+
+  scrambler(): string {
+    let result = "";
+    const exps = [];
+    let last = -1;
+    const actions = ["U", "D", "R", "L", "F", "B"];
+    let axis = -1;
+    for (let i = 0; i < 3 * 3 * this.cube.order; i++) {
+      const exp = [];
+      while (axis == last) {
+        axis = Math.floor(Math.random() * 3);
+      }
+      const side = Math.floor(Math.random() * 2);
+      let action = actions[axis * 2 + side];
+      const prefix = Math.ceil(Math.random() * Math.floor(this.cube.order / 2));
+      if (prefix === 1) {
+        action = action[0];
+      }
+      if (prefix > 2) {
+        exp.push(prefix);
+      }
+      exp.push(action);
+      const suffix = Math.random();
+      if (suffix < 0.4) {
+        exp.push("2");
+      } else if (suffix < 0.7) {
+        exp.push("'");
+      }
+      exps.push(exp.join(""));
+      last = axis;
+    }
+    result = exps.join(" ");
+    return result;
+  }
+
+  get length(): number {
+    return this.queue.length;
+  }
+
+  finish(): void {
+    while (this.queue.length > 0) {
+      tweener.finish();
+    }
+    tweener.finish();
+  }
+
+  setup(exp: string, reverse = false, times = 1): void {
+    this.finish();
+    this.cube.reset();
+    const node = new TwistNode(exp, reverse, times);
+    const list = node.parse();
+    for (const action of list) {
+      this.twist(action, true, true);
+    }
+    this.cube.dirty = true;
+    this.cube.history.clear();
+    this.cube.history.init = exp;
+    this.cube.callback();
+  }
+
+  push(exp: string, reverse = false, times = 1): void {
+    const node = new TwistNode(exp, reverse, times);
+    const list = node.parse();
+    if (list.length == 0) {
+      return;
+    }
+    for (const action of list) {
+      this.queue.push(action);
+    }
+    this.update();
+  }
+
+  update = (): void => {
+    while (true) {
+      const action = this.queue.shift();
+      if (action == undefined) {
+        return;
+      }
+      const success = this.twist(action, false, false);
+      if (!success) {
+        this.queue.unshift(action);
+        return;
+      }
+    }
+  };
+
+  twist(action: TwistAction, fast: boolean, force: boolean): boolean {
+    if (action.group == "#") {
+      this.setup("");
+      return true;
+    }
+    if (action.group == "*") {
+      const exp = this.scrambler();
+      this.setup(exp);
+      return true;
+    }
+    let angle = -Math.PI / 2;
+    if (action.reverse) {
+      angle = -angle;
+    }
+    if (action.times) {
+      angle = angle * action.times;
+    }
+    const group = this.cube.groups.get(action.group);
+    if (group === undefined) {
+      return true;
+    }
+    let success = group.twist(angle, fast);
+    while (!success && force) {
+      tweener.finish();
+      success = group.twist(angle, fast);
+    }
+    return success;
+  }
+
+  undo(): void {
+    if (this.cube.history.length == 0) {
+      return;
+    }
+    const last = this.cube.history.last;
+    const reverse = new TwistAction(last.group, !last.reverse, last.times);
+    this.twist(reverse, false, true);
   }
 }

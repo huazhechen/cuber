@@ -182,9 +182,7 @@ export default class CubeGroup extends THREE.Group {
     this.cube.container.dirty = true;
     this.angle = 0;
     this.cube.unlock(this.lock.axis, this.lock.layers);
-    if (this.cube.callback) {
-      this.cube.callback();
-    }
+    this.cube.callback();
   }
 
   twist(angle: number, fast: boolean): boolean {
