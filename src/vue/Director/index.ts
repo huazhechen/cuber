@@ -21,7 +21,7 @@ export class DirectorData {
   private values = {
     version: "0.2",
     order: 3,
-    delay: 4,
+    delay: 2,
     pixel: 512,
     filmt: "gif",
     snapt: "png",
