@@ -5,7 +5,7 @@
         <v-flex v-for="(item, index) in colors" :key="index" xs3 :style="{padding:size * 0.06 + 'px'}"
           v-show="index!=='Gray'">
           <v-btn @click="tap(index)" :color="item" block depressed :height="size"
-            :style="{'font-size':size / 3 + 'px'}">{{index}}
+            :style="{'font-size':size / 3 + 'px'}">{{index[0]}}
           </v-btn>
         </v-flex>
       </v-layout>
