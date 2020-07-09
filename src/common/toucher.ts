@@ -24,7 +24,7 @@ export default class Toucher {
   dom: HTMLElement;
   callback: Function;
   target: EventTarget | null;
-  identifier: number;
+  last: Touch | null;
 
   mouse = (event: MouseEvent): boolean => {
     if (event.type === "mousedown") {
@@ -45,21 +45,24 @@ export default class Toucher {
   };
 
   touch = (event: TouchEvent): boolean => {
+    const first = event.changedTouches[0];
     if (event.type === "touchstart") {
       this.target = event.target;
+      if (this.last) {
+        const action = new TouchAction(
+          "touchend",
+          this.last.clientX - this.dom.getBoundingClientRect().left,
+          this.last.clientY - this.dom.getBoundingClientRect().top
+        );
+        this.callback(action);
+      }
+      this.last = first;
     }
-    if (this.target !== this.dom) {
+    if (this.target !== this.dom || this.last?.identifier != first.identifier) {
       return false;
     }
     this.dom.tabIndex = 1;
     this.dom.focus();
-    const first = event.changedTouches[0];
-    if (event.touches.length == 0 || first.identifier == event.touches[0].identifier) {
-      this.identifier = event.changedTouches[0].identifier;
-    }
-    if (first.identifier != this.identifier) {
-      return false;
-    }
     const action = new TouchAction(
       event.type,
       first.clientX - this.dom.getBoundingClientRect().left,
