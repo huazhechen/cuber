@@ -2,10 +2,10 @@
   <v-card text style="margin: auto; touch-action: none; user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-layout row wrap :style="{'padding-bottom':size * 0.2 + 'px'}">
-        <v-flex v-for="(item, index) in colors" :key="index" xs6 :style="{padding:size * 0.06 + 'px'}"
+        <v-flex v-for="(item, index) in colors" :key="index" xs3 :style="{padding:size * 0.06 + 'px'}"
           v-show="index!=='Gray'">
-          <v-btn @click="tap(index)" :color="item" block depressed :height="size * 0.8"
-            :style="{'font-size':size * 0.3 + 'px'}">{{index}}
+          <v-btn @click="tap(index)" :color="item" block depressed :height="size"
+            :style="{'font-size':size / 3 + 'px'}">{{index}}
           </v-btn>
         </v-flex>
       </v-layout>

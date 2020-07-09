@@ -9,6 +9,14 @@
         <v-slider dense v-model="preferance.perspective" always-dirty thumb-label="always" max="100" min="0" label="透视">
         </v-slider>
       </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider dense v-model="preferance.angle" always-dirty thumb-label="always" max="100" min="0" label="左右">
+        </v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider dense v-model="preferance.gradient" always-dirty thumb-label="always" max="100" min="0" label="上下">
+        </v-slider>
+      </v-layout>
     </v-container>
   </v-card>
 </v-bottom-sheet>

@@ -4,7 +4,6 @@ import Order from "../Menu/Order";
 import Control from "../Menu/Control";
 import Appear from "../Menu/Appear";
 import Camera from "../Menu/Camera";
-import Pose from "../Menu/Pose";
 import Palette from "../Menu/Palette";
 import Common from "../Menu/Common";
 
@@ -30,7 +29,6 @@ export class SettingItem {
     order: Order,
     appear: Appear,
     camera: Camera,
-    pose: Pose,
     control: Control,
     palette: Palette,
     common: Common,
@@ -45,10 +43,9 @@ export default class Setting extends Vue {
     super();
     this.items["order"] = new SettingItem("阶数");
     this.items["control"] = new SettingItem("控制");
+    this.items["camera"] = new SettingItem("显示");
     this.items["appear"] = new SettingItem("外观");
     this.items["palette"] = new SettingItem("配色");
-    this.items["camera"] = new SettingItem("图像");
-    this.items["pose"] = new SettingItem("姿态");
     this.items["common"] = new SettingItem("通用");
   }
   mounted(): void {

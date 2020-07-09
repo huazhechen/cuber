@@ -7,7 +7,6 @@
   <order v-model="items['order'].value" v-on:order="$emit('order');"></order>
   <appear v-model="items['appear'].value"></appear>
   <camera v-model="items['camera'].value"></camera>
-  <pose v-model="items['pose'].value"></pose>
   <control v-model="items['control'].value"></control>
   <palette v-model="items['palette'].value"></palette>
   <common v-model="items['common'].value"></common>
@@ -20,6 +19,11 @@
               style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
               @click="tap('playground')" :style="{height: size + 'px'}">
               <v-icon :size="size * 0.8">games</v-icon>
+            </v-btn>
+            <v-btn :color="mode == 'solve'?'primary':''" depressed
+              style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
+              @click="tap('solve')" :style="{height: size + 'px'}">
+              <v-icon :size="size * 0.8">assistant</v-icon>
             </v-btn>
             <v-btn :color="mode == 'algs'?'primary':''" depressed
               style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
