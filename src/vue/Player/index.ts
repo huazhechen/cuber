@@ -6,7 +6,7 @@ import World from "../../cuber/world";
 import { FACE } from "../../cuber/define";
 import pako from "pako";
 import Setting from "../Setting";
-import { PreferanceData, ThemeData } from "../../data";
+import { PreferanceData, PaletteData } from "../../data";
 
 @Component({
   template: require("./index.html"),
@@ -23,8 +23,8 @@ export default class Algs extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("themes")
-  theme: ThemeData = new ThemeData(this.world);
+  @Provide("palette")
+  palette: PaletteData = new PaletteData(this.world);
 
   width = 0;
   height = 0;
@@ -80,7 +80,7 @@ export default class Algs extends Vue {
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.preferance.refresh();
-      this.theme.refresh();
+      this.palette.refresh();
     });
     this.loop();
   }

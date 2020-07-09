@@ -1,0 +1,27 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
+  <v-card text style="margin: auto; touch-action: none; user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap :style="{'padding-bottom':size * 0.2 + 'px'}">
+        <v-flex v-for="(item, index) in colors" :key="index" xs6 :style="{padding:size * 0.06 + 'px'}"
+          v-show="index!=='Gray'">
+          <v-btn @click="tap(index)" :color="item" block depressed :height="size * 0.8"
+            :style="{'font-size':size * 0.3 + 'px'}">{{index}}
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
+  <v-bottom-sheet v-model="colord">
+    <v-card flat style="margin: auto; touch-action: none; user-select: none;">
+      <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(size * 8, width) + 'px'}">
+        <v-layout row wrap>
+          <v-flex v-for="item in palette" :key="item" xs2 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="color(item);" :color="item" block depressed
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-bottom-sheet>
+</v-bottom-sheet>

@@ -1,18 +1,18 @@
 import Vue from "vue";
 import { Component, Prop, Inject } from "vue-property-decorator";
-import World from "../../cuber/world";
-import { COLORS } from "../../cuber/define";
-import { ThemeData } from "../../data";
+import World from "../../../cuber/world";
+import { COLORS } from "../../../cuber/define";
+import { PaletteData } from "../../../data";
 
 @Component({
   template: require("./index.html"),
 })
-export default class Theme extends Vue {
+export default class Palette extends Vue {
   @Inject("world")
   world: World;
 
-  @Inject("themes")
-  data: ThemeData;
+  @Inject("palette")
+  data: PaletteData;
 
   @Prop({ required: true })
   value: boolean;
@@ -20,6 +20,9 @@ export default class Theme extends Vue {
     return this.value;
   }
   set show(value) {
+    if (!value) {
+      this.data.save();
+    }
     this.$emit("input", value);
   }
 
@@ -53,7 +56,6 @@ export default class Theme extends Vue {
   color(color: string): void {
     this.colord = false;
     this.data.color(this.face, color);
-    this.data.save();
   }
 
   palette: string[] = [
@@ -107,9 +109,4 @@ export default class Theme extends Vue {
     "#D0D0D0",
     "#F0F0F0",
   ];
-
-  reset(): void {
-    this.data.reset();
-    this.data.save();
-  }
 }

@@ -1,0 +1,59 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
+  <v-card text style="margin: auto; touch-action: none; user-select: none;">
+    <v-card-title style="text-justify: auto;">
+      <p :style="{'font-size':size / 2 + 'px'}">魔方栈</p>
+    </v-card-title>
+    <v-card-text>
+      <p :style="{'font-size':size / 3 + 'px'}">作者: 华哲辰</p>
+      <p :style="{'font-size':size / 3 + 'px'}">邮箱: <a href="mailto:37705123@qq.com">37705123@qq.com</a></p>
+      <p :style="{'font-size':size / 3 + 'px'}">微信: huazhechen</p>
+    </v-card-text>
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}">
+        <v-flex xs6 style="display: flex;">
+          <v-btn @click="tap('help')" color="success" text style="text-transform: none; min-width: 0%; flex: 1;"
+            :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            使用帮助
+          </v-btn>
+        </v-flex>
+        <v-flex xs6 style="display: flex;">
+          <v-btn @click="tap('reset')" color="error" text style="text-transform: none; min-width: 0%; flex: 1;"
+            :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            重置数据
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      </v-layout>
+    </v-container>
+  </v-card>
+  <v-dialog v-model="resetd" :width="Math.min(size * 8, width)">
+    <v-card>
+      <v-card-title style="text-transform: none;">
+        <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+          重置数据?
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs4 d-flex>
+            <v-btn block color="error" text @click="resetd = false;reset();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">全部</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs4 d-flex>
+            <v-btn block color="info" text @click="resetd = false;clear();" :height="size">
+              <div :style="{'font-size':size/3+'px'}">配置</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs4 d-flex>
+            <v-btn block text @click="resetd = false" :height="size">
+              <div :style="{'font-size':size/3+'px'}">取消</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</v-bottom-sheet>

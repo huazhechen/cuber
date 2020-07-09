@@ -5,7 +5,7 @@ import Setting from "../Setting";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
 import Capture from "./capture";
-import { PreferanceData, ThemeData } from "../../data";
+import { PreferanceData, PaletteData } from "../../data";
 
 export class AlgItem {
   name: string;
@@ -96,8 +96,8 @@ export default class Algs extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("themes")
-  theme: ThemeData = new ThemeData(this.world);
+  @Provide("palette")
+  palette: PaletteData = new PaletteData(this.world);
 
   data: AlgsData = new AlgsData();
 
@@ -131,7 +131,7 @@ export default class Algs extends Vue {
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.preferance.refresh();
-      this.theme.refresh();
+      this.palette.refresh();
     });
     this.reload();
     this.loop();

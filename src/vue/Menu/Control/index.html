@@ -1,0 +1,28 @@
+<v-bottom-sheet v-model="show" v-resize="resize">
+  <v-card text style="margin: auto; touch-action: none; user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.frames"
+          always-dirty
+          thumb-label="always"
+          max="60"
+          min="1"
+          label="帧数"
+        ></v-slider>
+      </v-layout>
+      <v-layout row wrap justify-center align-center>
+        <v-slider
+          dense
+          v-model="preferance.sensitivity"
+          always-dirty
+          thumb-label="always"
+          max="100"
+          min="1"
+          label="灵敏"
+        ></v-slider>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

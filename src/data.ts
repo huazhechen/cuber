@@ -7,20 +7,21 @@ import Cubelet from "./cuber/cubelet";
 export class PreferanceData {
   private world: World;
   private values = {
-    version: "0.2",
+    version: "0.4",
     scale: 50,
     perspective: 50,
     angle: 60,
     gradient: 65,
     frames: 20,
-    sensitivity: 3,
-    thickness: 32,
+    sensitivity: 50,
+    thickness: true,
     mirror: false,
     hollow: false,
     arrow: false,
     cloud: false,
     wireframe: false,
     shadow: true,
+    dark: false,
   };
 
   constructor(world: World) {
@@ -137,8 +138,8 @@ export class PreferanceData {
     if (this.values.sensitivity != value) {
       this.values.sensitivity = value;
     }
-    let i = (value - 3) / 2;
-    i = 2 ** i;
+    let i = value / 100;
+    i = i ** 2;
     this.world.controller.sensitivity = i;
   }
 
@@ -168,7 +169,7 @@ export class PreferanceData {
     this.world.dirty = true;
   }
 
-  get thickness(): number {
+  get thickness(): boolean {
     return this.values.thickness;
   }
 
@@ -177,7 +178,7 @@ export class PreferanceData {
       this.values.thickness = value;
     }
     for (const cubelet of this.world.cube.cubelets) {
-      cubelet.thickness = value + 1;
+      cubelet.thickness = value;
     }
     this.world.dirty = true;
   }
@@ -193,14 +194,45 @@ export class PreferanceData {
     this.world.cube.arrow = value;
     this.world.dirty = true;
   }
+
+  get dark(): boolean {
+    return this.values.dark;
+  }
+  set dark(value) {
+    if (this.values.dark != value) {
+      this.values.dark = value;
+    }
+    vm.$vuetify.theme.dark = value;
+  }
+
+  reset(): void {
+    this.values = {
+      version: "0.4",
+      scale: 50,
+      perspective: 50,
+      angle: 60,
+      gradient: 65,
+      frames: 20,
+      sensitivity: 50,
+      thickness: true,
+      mirror: false,
+      hollow: false,
+      arrow: false,
+      cloud: false,
+      wireframe: false,
+      shadow: true,
+      dark: false,
+    };
+    this.refresh();
+    this.save();
+  }
 }
 
-export class ThemeData {
+export class PaletteData {
   private world: World;
   private default: string;
   private values = {
-    version: "0.2",
-    dark: false,
+    version: "0.3",
     colors: {},
   };
 
@@ -211,7 +243,7 @@ export class ThemeData {
   }
 
   load(): void {
-    const save = window.localStorage.getItem("theme");
+    const save = window.localStorage.getItem("palette");
     if (save) {
       const data = JSON.parse(save);
       if (data.version != this.values.version) {
@@ -223,11 +255,10 @@ export class ThemeData {
   }
 
   save(): void {
-    window.localStorage.setItem("theme", JSON.stringify(this.values));
+    window.localStorage.setItem("palette", JSON.stringify(this.values));
   }
 
   refresh(): void {
-    this.dark = this.values.dark;
     const colors = this.values.colors as { [key: string]: string };
     for (const key in colors) {
       const value = colors[key];
@@ -259,15 +290,6 @@ export class ThemeData {
     this.values.colors = JSON.parse(this.default);
     this.refresh();
     this.values.colors = {};
-  }
-
-  get dark(): boolean {
-    return this.values.dark;
-  }
-  set dark(value) {
-    if (this.values.dark != value) {
-      this.values.dark = value;
-    }
-    vm.$vuetify.theme.dark = value;
+    this.save();
   }
 }

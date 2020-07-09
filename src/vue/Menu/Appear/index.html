@@ -1,0 +1,51 @@
+<v-bottom-sheet v-model="show" overlay-opacity="0" v-resize="resize">
+  <v-card text style="margin: auto; touch-action: none; user-select: none;">
+    <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
+      <v-layout row wrap :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}">
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.dark=!preferance.dark" :color="preferance.dark?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            暗黑
+          </v-btn>
+        </v-flex>
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.shadow=!preferance.shadow" :color="preferance.shadow?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            阴影
+          </v-btn>
+        </v-flex>
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.hollow=!preferance.hollow" :color="preferance.hollow?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            透明
+          </v-btn>
+        </v-flex>
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.mirror=!preferance.mirror" :color="preferance.mirror?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            镜像
+          </v-btn>
+        </v-flex>
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.arrow=!preferance.arrow" :color="preferance.arrow?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            箭头
+          </v-btn>
+        </v-flex>
+        <v-flex xs4 style="display: flex;">
+          <v-btn @click="preferance.thickness=!preferance.thickness" :color="preferance.thickness?'primary':''"
+            depressed style="text-transform: none; min-width: 0%; flex: 1;" :height="size * 0.8"
+            :style="{'font-size':size / 3 + 'px', 'margin-left':size * 0.06 + 'px', 'margin-right':size * 0.06 + 'px', 'margin-bottom':size * 0.2 + 'px'}">
+            厚度
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      </v-layout>
+    </v-container>
+  </v-card>
+</v-bottom-sheet>

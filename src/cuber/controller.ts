@@ -52,7 +52,7 @@ export default class Controller {
   }
 
   world: World;
-  sensitivity = 1;
+  sensitivity = 0.5;
   constructor(world: World) {
     this.world = world;
     this.taps = [];
@@ -219,22 +219,21 @@ export default class Controller {
         const dx = this.move.x - this.down.x;
         const dy = this.move.y - this.down.y;
         if (this.group === this.world.cube.groups.get("y")) {
-          this.angle = (((dx / Cubelet.SIZE) * Math.PI) / 6) * this.sensitivity;
+          this.angle = (dx / Cubelet.SIZE) * Math.PI * this.sensitivity;
         } else if (this.group === this.world.cube.groups.get("x")) {
-          this.angle = (((dy / Cubelet.SIZE) * Math.PI) / 6) * this.sensitivity;
+          this.angle = (dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
         } else if (this.group === this.world.cube.groups.get("z")) {
-          this.angle = (((-dy / Cubelet.SIZE) * Math.PI) / 6) * this.sensitivity;
+          this.angle = (-dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
         }
       } else {
         const start = this.intersect(this.down, this.holder.plane);
         const end = this.intersect(this.move, this.holder.plane);
         this.vector.subVectors(end, start).multiply(this.holder.vector);
         this.angle =
-          ((((-(this.vector.x + this.vector.y + this.vector.z) *
+          ((-(this.vector.x + this.vector.y + this.vector.z) *
             (this.group.axis.x + this.group.axis.y + this.group.axis.z)) /
             Cubelet.SIZE) *
-            Math.PI) /
-            6) *
+          Math.PI *
           this.sensitivity;
       }
     }

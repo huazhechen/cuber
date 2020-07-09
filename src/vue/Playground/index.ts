@@ -5,7 +5,7 @@ import Viewport from "../Viewport";
 import Setting from "../Setting";
 import World from "../../cuber/world";
 import pako from "pako";
-import { ThemeData, PreferanceData } from "../../data";
+import { PaletteData, PreferanceData } from "../../data";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Cubelet from "../../cuber/cubelet";
 
@@ -198,8 +198,8 @@ export default class Playground extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("themes")
-  theme: ThemeData = new ThemeData(this.world);
+  @Provide("palette")
+  palette: PaletteData = new PaletteData(this.world);
 
   data: PlaygroundData = new PlaygroundData();
 
@@ -239,7 +239,7 @@ export default class Playground extends Vue {
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.preferance.refresh();
-      this.theme.refresh();
+      this.palette.refresh();
     });
     this.world.callbacks.push(() => {
       this.callback();

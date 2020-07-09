@@ -15,7 +15,7 @@ import Setting from "../Setting";
 import World from "../../cuber/world";
 import pako from "pako";
 import ClipboardJS from "clipboard";
-import { PreferanceData, ThemeData } from "../../data";
+import { PreferanceData, PaletteData } from "../../data";
 
 export class DirectorData {
   private values = {
@@ -107,8 +107,8 @@ export default class Director extends Vue {
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
 
-  @Provide("themes")
-  theme: ThemeData = new ThemeData(this.world);
+  @Provide("palette")
+  palette: PaletteData = new PaletteData(this.world);
 
   data: DirectorData = new DirectorData();
 
@@ -168,7 +168,7 @@ export default class Director extends Vue {
     this.$nextTick(this.resize);
     this.$nextTick(() => {
       this.preferance.refresh();
-      this.theme.refresh();
+      this.palette.refresh();
     });
     this.loop();
   }
