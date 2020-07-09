@@ -12,16 +12,10 @@ export class TwistAction {
   }
 
   get exp(): string {
-    let times = this.times;
-    let reverse = this.reverse;
-    if (times === 3) {
-      times = 1;
-      reverse = !reverse;
+    if (this.times == 0) {
+      return "";
     }
-    if (times === 2) {
-      reverse = false;
-    }
-    return times == 0 ? "" : this.group + (reverse ? "'" : "") + (times == 1 ? "" : String(times));
+    return this.group + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
   }
 }
 
