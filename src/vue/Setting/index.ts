@@ -43,7 +43,7 @@ export default class Setting extends Vue {
     super();
     this.items["order"] = new SettingItem("阶数");
     this.items["control"] = new SettingItem("控制");
-    this.items["appear"] = new SettingItem("外观");
+    this.items["appear"] = new SettingItem("显示");
     this.items["camera"] = new SettingItem("镜头");
     this.items["palette"] = new SettingItem("配色");
     this.items["about"] = new SettingItem("关于");
