@@ -6,7 +6,7 @@ import { PreferanceData, PaletteData } from "../../../data";
 @Component({
   template: require("./index.html"),
 })
-export default class Common extends Vue {
+export default class About extends Vue {
   @Inject("world")
   world: World;
 

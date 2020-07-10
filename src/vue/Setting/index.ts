@@ -5,7 +5,7 @@ import Control from "../Menu/Control";
 import Appear from "../Menu/Appear";
 import Camera from "../Menu/Camera";
 import Palette from "../Menu/Palette";
-import Common from "../Menu/Common";
+import About from "../Menu/About";
 
 export class SettingItem {
   label: string;
@@ -31,7 +31,7 @@ export class SettingItem {
     camera: Camera,
     control: Control,
     palette: Palette,
-    common: Common,
+    about: About,
   },
 })
 export default class Setting extends Vue {
@@ -43,10 +43,10 @@ export default class Setting extends Vue {
     super();
     this.items["order"] = new SettingItem("阶数");
     this.items["control"] = new SettingItem("控制");
-    this.items["camera"] = new SettingItem("显示");
     this.items["appear"] = new SettingItem("外观");
+    this.items["camera"] = new SettingItem("镜头");
     this.items["palette"] = new SettingItem("配色");
-    this.items["common"] = new SettingItem("通用");
+    this.items["about"] = new SettingItem("关于");
   }
   mounted(): void {
     this.resize();

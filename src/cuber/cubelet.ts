@@ -323,7 +323,7 @@ export default class Cubelet extends THREE.Group {
   initial: number;
   stickers: THREE.Mesh[];
   set thickness(value: boolean) {
-    const scale = value ? 30 : 1;
+    const scale = value ? Cubelet.SIZE / 2 : 1;
     for (const sticker of this.stickers) {
       if (sticker) {
         sticker.scale.z = scale;
