@@ -188,6 +188,9 @@ export default class CubeGroup extends THREE.Group {
   twist(angle: number, fast: boolean): boolean {
     if (this.holding) {
       // 如果当前有正在执行的动作
+      if (this.name == ".") {
+        return false;
+      }
       angle = angle + this.cancel();
     } else {
       const success = this.hold();
@@ -359,7 +362,7 @@ export class GroupTable {
       g.lock.layers = template.lock.layers;
       this.groups.set(axis, g);
     }
-    const g = new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR["a"]);
+    const g = new CubeGroup(cube, ".", [], GroupTable.AXIS_VECTOR["a"]);
     g.lock.axis = "a";
     g.lock.layers.push(1);
     this.groups.set(".", g);
