@@ -10,7 +10,7 @@ export enum FACE {
 export const COLORS: { [key: string]: string } = {
   R: "#B71C1C",
   L: "#FF6D00",
-  U: "#FAFAFA",
+  U: "#F0F0F0",
   D: "#FFD600",
   F: "#00A020",
   B: "#0D47A1",

@@ -68,7 +68,7 @@ export default class Palette extends Vue {
     "#0D47A1",
     "#00A020",
     "#FFD600",
-    "#FAFAFA",
+    "#F0F0F0",
     // NORMAL
     "#FF0000",
     "#FFA100",
