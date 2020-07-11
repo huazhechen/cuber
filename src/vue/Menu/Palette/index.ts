@@ -56,7 +56,10 @@ export default class Palette extends Vue {
   color(color: string): void {
     this.colord = false;
     this.data.color(this.face, color);
+    this.data.save();
   }
+
+  colorv = "#FF0000";
 
   palette: string[] = [
     // DEFAULT
@@ -66,26 +69,12 @@ export default class Palette extends Vue {
     "#00A020",
     "#FFD600",
     "#FAFAFA",
-    // DARK
-    "#A81010",
-    "#E85B00",
-    "#1A237E",
-    "#004D40",
-    "#E8C000",
-    "#D0D0D0",
     // NORMAL
     "#FF0000",
     "#FFA100",
     "#0000FF",
     "#00FF00",
     "#FFFF00",
-    "#A0A0A0",
-    // LIGHT
-    "#FF6060",
-    "#FFCC80",
-    "#18FFFF",
-    "#B2FF59",
-    "#FFFF8D",
     "#808080",
     // MACAROON
     "#F8BBD0",
@@ -96,9 +85,9 @@ export default class Palette extends Vue {
     "#505050",
     // OTHER
     "#FF4081",
-    "#A83DD9",
-    "#FF99FF",
+    "#C800FF",
     "#607D8B",
+    "#00FFDE",
     "#885500",
     "#202020",
   ];
