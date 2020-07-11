@@ -65,7 +65,7 @@ export default class Palette extends Vue {
     "#0D47A1",
     "#00A020",
     "#FFD600",
-    "#F8F8F8",
+    "#FAFAFA",
     // DARK
     "#A81010",
     "#E85B00",
@@ -95,11 +95,20 @@ export default class Palette extends Vue {
     "#FFF59D",
     "#505050",
     // OTHER
+    "#FF4081",
     "#A83DD9",
     "#FF99FF",
     "#607D8B",
     "#885500",
-    "#EEE8AA",
     "#202020",
   ];
+
+  match(color: string): string {
+    for (const key in COLORS) {
+      if (color == COLORS[key]) {
+        return key[0];
+      }
+    }
+    return "";
+  }
 }
