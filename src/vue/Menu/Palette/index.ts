@@ -59,54 +59,47 @@ export default class Palette extends Vue {
   }
 
   palette: string[] = [
-    // YELLOW
-    "#FFD600",
-    "#FFFF00",
-    "#FFFF8D",
-    "#FEFE00",
-    "#FDD835",
-    "#FFC107",
-    // ORANGE
-    "#FF6D00",
-    "#FFA100",
-    "#FB8C00",
-    "#F57C00",
-    "#EF6C00",
-    "#E65100",
-    // RED
+    // DEFAULT
     "#B71C1C",
-    "#FF0000",
-    "#EE0000",
-    "#DD0000",
-    "#CC0000",
-    "#BF360C",
-    // BLUE
+    "#FF6D00",
     "#0D47A1",
-    "#0000FF",
-    "#88DDFF",
-    "#03A9F4",
-    "#1976D2",
-    "#1A237E",
-    // GREEN
     "#00A020",
+    "#FFD600",
+    "#F8F8F8",
+    // DARK
+    "#A81010",
+    "#E85B00",
+    "#1A237E",
+    "#004D40",
+    "#E8C000",
+    "#D0D0D0",
+    // NORMAL
+    "#FF0000",
+    "#FFA100",
+    "#0000FF",
     "#00FF00",
-    "#76FF03",
-    "#00D800",
-    "#00A000",
-    "#006600",
-    // P
-    "#FF4081",
-    "#EEE8AA",
-    "#FF99FF",
+    "#FFFF00",
+    "#A0A0A0",
+    // LIGHT
+    "#FF6060",
+    "#FFCC80",
+    "#18FFFF",
+    "#B2FF59",
+    "#FFFF8D",
+    "#808080",
+    // MACAROON
+    "#F8BBD0",
+    "#FFAB91",
+    "#B2EBF2",
+    "#B9F6CA",
+    "#FFF59D",
+    "#505050",
+    // OTHER
     "#A83DD9",
+    "#FF99FF",
     "#607D8B",
     "#885500",
-    // WB
+    "#EEE8AA",
     "#202020",
-    "#505050",
-    "#808080",
-    "#A0A0A0",
-    "#D0D0D0",
-    "#F0F0F0",
   ];
 }
