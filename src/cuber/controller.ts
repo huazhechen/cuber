@@ -20,6 +20,7 @@ export default class Controller {
   public dragging = false;
   public rotating = false;
   public angle = 0;
+  public contingle = 0;
   public taps: Function[];
   public ray = new THREE.Ray();
   public down = new THREE.Vector2(0, 0);
@@ -67,7 +68,7 @@ export default class Controller {
 
   update(): void {
     if (this.rotating) {
-      const angle = this.angle;
+      const angle = this.contingle + this.angle;
       if (this.group) {
         if (this.group.angle != angle) {
           const delta = (angle - this.group.angle) / 2;
@@ -190,12 +191,13 @@ export default class Controller {
         }
         this.group = null;
         for (const group of this.world.cube.table.groups[this.axis]) {
-          let success = group.hold();
+          let success = group.drag();
           while (!success) {
             tweener.finish();
-            success = group.hold();
+            success = group.drag();
           }
         }
+        this.contingle = 0;
       } else {
         const start = this.intersect(this.down, this.holder.plane);
         const end = this.intersect(this.move, this.holder.plane);
@@ -215,11 +217,12 @@ export default class Controller {
           this.rotating = false;
           return;
         }
-        let success = this.group.hold();
+        let success = this.group.drag();
         while (!success) {
           tweener.finish();
-          success = this.group.hold();
+          success = this.group.drag();
         }
+        this.contingle = this.group.angle;
         this.vector.crossVectors(this.holder.vector, this.holder.plane.normal);
         this.holder.vector.multiplyScalar(this.vector.x + this.vector.y + this.vector.z);
       }
@@ -271,11 +274,12 @@ export default class Controller {
       if (!this.lock) {
         if (Math.abs(angle) < Math.PI / 4) {
           const tick = new Date().getTime();
-          const speed = (Math.abs(this.angle) / (tick - this.tick)) * 1000;
+          const speed = (Math.abs(angle) / (tick - this.tick)) * 1000;
           if (speed > 0.2) {
             angle = angle == 0 ? 0 : ((angle / Math.abs(angle)) * Math.PI) / 2;
           }
         }
+        angle = angle + this.contingle;
       } else {
         angle = 0;
       }

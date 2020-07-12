@@ -89,17 +89,23 @@ export default class CubeGroup extends THREE.Group {
     return 0;
   }
 
-  hold(): boolean {
-    if (this.holding) {
-      this.angle = 0;
-      this.cancel();
-      return true;
+  finish(): number {
+    if (this.tween) {
+      // 记录剩余的角度
+      const angle = this.tween.end - this.angle;
+      // 完成动作
+      tweener.finish(this.tween);
+      this.tween = undefined;
+      return angle;
     }
+    return 0;
+  }
+
+  private hold(): boolean {
     const success = this.cube.lock(this.axis, this.layer);
     if (!success) {
       return false;
     }
-    this.angle = 0;
     this.holding = true;
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
@@ -111,6 +117,13 @@ export default class CubeGroup extends THREE.Group {
     }
     this.cube.add(this);
     return true;
+  }
+
+  drag(): boolean {
+    if (this.holding) {
+      this.angle = -this.finish();
+    }
+    return this.hold();
   }
 
   drop(): void {
@@ -147,6 +160,7 @@ export default class CubeGroup extends THREE.Group {
       if (!success) {
         return false;
       }
+      this.angle = 0;
     }
 
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
