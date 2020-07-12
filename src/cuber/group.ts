@@ -369,6 +369,9 @@ export class GroupTable {
         from = this.order - from + 1;
         to = this.order - to + 1;
       }
+      if (from > to) {
+        [from, to] = [to, from];
+      }
       for (let layer = from - 1; layer < to; layer++) {
         group = this.groups[sign][layer];
         result.push(new RotateAction(group, twist));
