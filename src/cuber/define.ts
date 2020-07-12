@@ -16,5 +16,5 @@ export const COLORS: { [key: string]: string } = {
   B: "#0D47A1",
   Core: "#202020",
   Gray: "#808080",
-  High: "#FF4081",
+  High: "#FF0080",
 };
