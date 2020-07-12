@@ -26,7 +26,7 @@ export default class Controller {
   public matrix = new THREE.Matrix4();
   public holder = new Holder();
   public vector = new THREE.Vector3();
-  public group: CubeGroup;
+  public group: CubeGroup | null;
   public axis: string;
   public planes = [
     new THREE.Plane(new THREE.Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
@@ -106,7 +106,6 @@ export default class Controller {
             layer = Math.floor(index / (order * order));
             break;
         }
-        layer = layer + 1;
         return this.world.cube.table.groups[axis][layer];
       }
     }
@@ -188,6 +187,7 @@ export default class Controller {
             this.axis = "z";
           }
         }
+        this.group = null;
         for (const group of this.world.cube.table.groups[this.axis]) {
           let success = group.hold();
           while (!success) {
@@ -209,12 +209,11 @@ export default class Controller {
         this.vector.set(x, y, z);
         this.holder.vector.copy(this.vector.multiply(this.vector).normalize());
 
-        const group = this.match();
-        if (!group) {
+        this.group = this.match();
+        if (!this.group) {
           this.rotating = false;
           return;
         }
-        this.group = group;
         let success = this.group.hold();
         while (!success) {
           tweener.finish();
@@ -225,17 +224,7 @@ export default class Controller {
       }
     }
     if (this.rotating) {
-      if (this.holder.index === -1) {
-        const dx = this.move.x - this.down.x;
-        const dy = this.move.y - this.down.y;
-        if (this.axis == "y") {
-          this.angle = (dx / Cubelet.SIZE) * Math.PI * this.sensitivity;
-        } else if (this.axis == "x") {
-          this.angle = (dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
-        } else if (this.axis == "z") {
-          this.angle = (-dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
-        }
-      } else {
+      if (this.group) {
         const start = this.intersect(this.down, this.holder.plane);
         const end = this.intersect(this.move, this.holder.plane);
         this.vector.subVectors(end, start).multiply(this.holder.vector);
@@ -244,6 +233,16 @@ export default class Controller {
           ((-(this.vector.x + this.vector.y + this.vector.z) * (vector.x + vector.y + vector.z)) / Cubelet.SIZE) *
           Math.PI *
           this.sensitivity;
+      } else {
+        const dx = this.move.x - this.down.x;
+        const dy = this.move.y - this.down.y;
+        if (this.axis == "y") {
+          this.angle = (-dx / Cubelet.SIZE) * Math.PI * this.sensitivity;
+        } else if (this.axis == "x") {
+          this.angle = (-dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
+        } else if (this.axis == "z") {
+          this.angle = (dy / Cubelet.SIZE) * Math.PI * this.sensitivity;
+        }
       }
     }
   }
@@ -267,22 +266,28 @@ export default class Controller {
       }
     }
     if (this.rotating) {
-      if (this.group && this.group !== null) {
-        if (!this.lock) {
-          let angle = this.angle;
-          if (Math.abs(angle) < Math.PI / 4) {
-            const tick = new Date().getTime();
-            const speed = (Math.abs(this.angle) / (tick - this.tick)) * 1000;
-            if (speed > 0.2) {
-              angle = angle == 0 ? 0 : ((angle / Math.abs(angle)) * Math.PI) / 2;
-            }
+      let angle = this.angle;
+      if (!this.lock) {
+        if (Math.abs(angle) < Math.PI / 4) {
+          const tick = new Date().getTime();
+          const speed = (Math.abs(this.angle) / (tick - this.tick)) * 1000;
+          if (speed > 0.2) {
+            angle = angle == 0 ? 0 : ((angle / Math.abs(angle)) * Math.PI) / 2;
           }
-          this.group.twist(angle, false);
-        } else {
-          this.group.twist(0, false);
+        }
+      } else {
+        angle = 0;
+      }
+      if (this.group) {
+        this.group.twist(angle, false);
+      } else {
+        const groups = this.world.cube.table.groups[this.axis];
+        for (const group of groups) {
+          group.twist(angle, false);
         }
       }
     }
+    this.group = null;
     this.holder.index = -1;
     this.dragging = false;
     this.rotating = false;

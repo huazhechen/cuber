@@ -8,9 +8,9 @@ export default class CubeGroup extends THREE.Group {
   public static frames = 30;
   public static readonly AXIS_VECTOR: { [key: string]: THREE.Vector3 } = {
     a: new THREE.Vector3(1, 1, 1),
-    x: new THREE.Vector3(1, 0, 0),
-    y: new THREE.Vector3(0, 1, 0),
-    z: new THREE.Vector3(0, 0, 1),
+    x: new THREE.Vector3(-1, 0, 0),
+    y: new THREE.Vector3(0, -1, 0),
+    z: new THREE.Vector3(0, 0, -1),
   };
 
   cube: Cube;
@@ -264,7 +264,7 @@ export class GroupTable {
     // 根据魔方阶数生成所有group
     for (const axis of ["x", "y", "z"]) {
       const list: CubeGroup[] = [];
-      for (let layer = 1; layer <= this.order; layer++) {
+      for (let layer = 0; layer < this.order; layer++) {
         const g = new CubeGroup(cube, axis, layer);
         list[layer] = g;
       }
@@ -281,17 +281,17 @@ export class GroupTable {
       let group: CubeGroup;
 
       axis = "x";
-      layer = (index % this.order) + 1;
+      layer = index % this.order;
       group = this.groups[axis][layer];
       group.indices.push(cubelet.index);
 
       axis = "y";
-      layer = Math.floor((index % (this.order * this.order)) / this.order) + 1;
+      layer = Math.floor((index % (this.order * this.order)) / this.order);
       group = this.groups[axis][layer];
       group.indices.push(cubelet.index);
 
       axis = "z";
-      layer = Math.floor(index / (this.order * this.order)) + 1;
+      layer = Math.floor(index / (this.order * this.order));
       group = this.groups[axis][layer];
       group.indices.push(cubelet.index);
     }
@@ -310,11 +310,11 @@ export class GroupTable {
   };
 
   face(face: string): CubeGroup {
-    let layer = 1;
+    let layer = 0;
     let sign = GroupTable.AXIS_MAP[face];
     if (sign.length == 2) {
       sign = sign[1];
-      layer = this.order;
+      layer = this.order - 1;
     }
     return this.groups[sign][layer];
   }
@@ -336,7 +336,7 @@ export class GroupTable {
         case "x":
         case "y":
         case "z":
-          for (let layer = 1; layer <= this.order; layer++) {
+          for (let layer = 0; layer < this.order; layer++) {
             group = this.groups[sign][layer];
             result.push(new RotateAction(group, twist));
           }
@@ -347,12 +347,13 @@ export class GroupTable {
         case "L":
         case "D":
         case "B":
-          layer = 1;
+          layer = 0;
           sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
           if (sign.length == 2) {
             twist = -twist;
             sign = sign[1];
-            layer = this.order;
+          } else {
+            layer = this.order - 1;
           }
           group = this.groups[sign][layer];
           result.push(new RotateAction(group, twist));
@@ -363,12 +364,13 @@ export class GroupTable {
         case "l":
         case "d":
         case "b":
-          layer = 1;
+          layer = 0;
           sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
           if (sign.length == 2) {
             twist = -twist;
             sign = sign[1];
-            layer = this.order - 1;
+          } else {
+            layer = this.order - 2;
           }
           group = this.groups[sign][layer];
           result.push(new RotateAction(group, twist));
@@ -378,7 +380,7 @@ export class GroupTable {
         case "E":
         case "M":
         case "S":
-          layer = Math.floor((this.order + 1) / 2);
+          layer = Math.floor((this.order - 1) / 2);
           sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
           if (sign.length == 2) {
             twist = -twist;
@@ -399,7 +401,7 @@ export class GroupTable {
             twist = -twist;
             sign = sign[1];
           }
-          for (let layer = 2; layer < this.order; layer++) {
+          for (let layer = 1; layer < this.order - 1; layer++) {
             group = this.groups[sign][layer];
             result.push(new RotateAction(group, twist));
           }
@@ -433,7 +435,7 @@ export class GroupTable {
         from = this.order - from + 1;
         to = this.order - to + 1;
       }
-      for (let layer = from; layer <= to; layer++) {
+      for (let layer = from - 1; layer < to; layer++) {
         group = this.groups[sign][layer];
         result.push(new RotateAction(group, twist));
       }
