@@ -5,6 +5,7 @@ import { TouchAction } from "../common/toucher";
 import * as THREE from "three";
 import World from "./world";
 import tweener from "./tweener";
+import { TwistAction } from "./twister";
 
 export class Holder {
   public vector: THREE.Vector3;
@@ -280,10 +281,22 @@ export default class Controller {
       }
       if (this.group) {
         this.group.twist(angle, false);
+        if (angle != 0) {
+          let times = Math.round(angle / (Math.PI / 2));
+          const reverse = times < 0;
+          times = Math.abs(times);
+          this.world.cube.record(new TwistAction(this.group.name, reverse, times));
+        }
       } else {
         const groups = this.world.cube.table.groups[this.axis];
         for (const group of groups) {
           group.twist(angle, false);
+        }
+        if (angle != 0) {
+          let times = Math.round(angle / (Math.PI / 2));
+          const reverse = times < 0;
+          times = Math.abs(times);
+          this.world.cube.record(new TwistAction(this.axis, reverse, times));
         }
       }
     }

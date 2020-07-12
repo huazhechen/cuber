@@ -33,15 +33,6 @@ export default class CubeGroup extends THREE.Group {
     return this._angle;
   }
 
-  static MES_TABLE: { [key: string]: string } = {
-    R: "M'",
-    U: "E'",
-    F: "S",
-    L: "M",
-    D: "E",
-    B: "S'",
-  };
-
   constructor(cube: Cube, axis: string, layer: number) {
     super();
     this.cube = cube;
@@ -52,6 +43,36 @@ export default class CubeGroup extends THREE.Group {
     this.updateMatrix();
     this.axis = axis;
     this.layer = layer;
+
+    const half = (this.cube.order - 1) / 2;
+    const table: { [key: string]: string }[] = [
+      {
+        x: "R",
+        y: "U",
+        z: "F",
+      },
+      {
+        x: "L'",
+        y: "D'",
+        z: "B'",
+      },
+      {
+        x: "M'",
+        y: "E'",
+        z: "S",
+      },
+    ];
+    let type = 0;
+    if (this.layer === half) {
+      layer = 0;
+      type = 2;
+    } else if (this.layer < half) {
+      type = 1;
+    } else {
+      layer = this.cube.order - layer - 1;
+    }
+    const name = table[type][this.axis];
+    this.name = (layer === 0 ? "" : String(layer + 1)) + name;
   }
 
   cancel(): number {

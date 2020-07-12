@@ -6,6 +6,19 @@ export class TwistAction {
   reverse: boolean;
   times: number;
   constructor(sign: string, reverse = false, times = 1) {
+    // 不用解析场景
+    if (sign.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
+      if (/[XYZ]/.test(sign)) {
+        sign = sign.toLowerCase();
+      }
+    } else {
+      const values = sign.match(/([0123456789-]*[\*\#~.xyzbsfdeulmr][w]*)('?)(\d*)('?)/i);
+      if (values) {
+        sign = values[1];
+        reverse = reverse !== ((values[2] + values[4]).length == 1);
+        times = times * (values[3].length == 0 ? 1 : parseInt(values[3]));
+      }
+    }
     this.sign = sign;
     this.reverse = reverse;
     this.times = times;
