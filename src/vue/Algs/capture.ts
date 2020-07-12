@@ -67,8 +67,8 @@ export default class Capture {
   }
 
   twist(exp: string): void {
-    const list = new TwistNode(exp).parse();
-    for (const action of list) {
+    const actions = new TwistNode(exp).parse();
+    for (const action of actions) {
       let angle = -Math.PI / 2;
       if (action.reverse) {
         angle = -angle;
@@ -76,11 +76,10 @@ export default class Capture {
       if (action.times) {
         angle = angle * action.times;
       }
-      const group = this.cube.groups.get(action.group);
-      if (group === undefined) {
-        continue;
+      const list = this.cube.table.convert(action);
+      for (const rotate of list) {
+        rotate.group.twist((Math.PI / 2) * rotate.twist, true);
       }
-      group.twist(angle, true);
     }
   }
 }

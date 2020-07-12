@@ -16,6 +16,7 @@ import World from "../../cuber/world";
 import pako from "pako";
 import ClipboardJS from "clipboard";
 import { PreferanceData, PaletteData } from "../../data";
+import { TwistAction } from "../../cuber/twister";
 
 export class DirectorData {
   private values = {
@@ -334,10 +335,7 @@ export default class Director extends Vue {
     const strip: { [face: string]: number[] | undefined } = {};
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       const key = FACE[face];
-      const group = this.world.cube.groups.get(key);
-      if (!group) {
-        throw Error();
-      }
+      const group = this.world.cube.table.face(key);
       strip[key] = group.indices;
       let arr = this.stickers[FACE[face]];
       if (arr == undefined) {

@@ -2,20 +2,20 @@ import Cube from "./cube";
 import tweener from "./tweener";
 
 export class TwistAction {
-  group: string;
+  sign: string;
   reverse: boolean;
   times: number;
-  constructor(exp: string, reverse = false, times = 1) {
-    this.group = exp;
+  constructor(sign: string, reverse = false, times = 1) {
+    this.sign = sign;
     this.reverse = reverse;
     this.times = times;
   }
 
-  get exp(): string {
+  get value(): string {
     if (this.times == 0) {
       return "";
     }
-    return this.group + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
+    return this.sign + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
   }
 }
 
@@ -121,8 +121,8 @@ export class TwistNode {
     exp = exp.replace(/[‘＇’]/g, "'");
     // 不用解析场景
     if (exp.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
-      if (/[XYZ]/.test(this.twist.group)) {
-        this.twist.group = this.twist.group.toLowerCase();
+      if (/[XYZ]/.test(this.twist.sign)) {
+        this.twist.sign = this.twist.sign.toLowerCase();
       }
       return;
     }
@@ -188,8 +188,8 @@ export class TwistNode {
           }
         }
       }
-    } else if (this.twist.group != "" && !this.twist.group.startsWith("//")) {
-      const action = new TwistAction(this.twist.group, reverse, this.twist.times);
+    } else if (this.twist.sign != "" && !this.twist.sign.startsWith("//")) {
+      const action = new TwistAction(this.twist.sign, reverse, this.twist.times);
       result.push(action);
     }
     return result;
@@ -290,30 +290,23 @@ export default class Twister {
   };
 
   twist(action: TwistAction, fast: boolean, force: boolean): boolean {
-    if (action.group == "#") {
+    if (action.sign == "#") {
       this.setup("");
       return true;
     }
-    if (action.group == "*") {
+    if (action.sign == "*") {
       const exp = this.scrambler();
       this.setup(exp);
       return true;
     }
-    let angle = -Math.PI / 2;
-    if (action.reverse) {
-      angle = -angle;
-    }
-    if (action.times) {
-      angle = angle * action.times;
-    }
-    const group = this.cube.groups.get(action.group);
-    if (group === undefined) {
-      return true;
-    }
-    let success = group.twist(angle, fast);
-    while (!success && force) {
-      tweener.finish();
-      success = group.twist(angle, fast);
+    const list = this.cube.table.convert(action);
+    let success = false;
+    for (const rotate of list) {
+      success = rotate.group.twist((Math.PI / 2) * rotate.twist, fast);
+      while (!success && force) {
+        tweener.finish();
+        success = rotate.group.twist((Math.PI / 2) * rotate.twist, fast);
+      }
     }
     return success;
   }
@@ -323,7 +316,7 @@ export default class Twister {
       return;
     }
     const last = this.cube.history.last;
-    const reverse = new TwistAction(last.group, !last.reverse, last.times);
+    const reverse = new TwistAction(last.sign, !last.reverse, last.times);
     this.twist(reverse, false, true);
   }
 }

@@ -20,7 +20,7 @@ export default class Cube extends THREE.Group {
   public locks: Map<string, Set<number>>;
   public cubelets: Cubelet[] = [];
   public initials: Cubelet[] = [];
-  public groups: GroupTable;
+  public table: GroupTable;
   public order: number;
   public callbacks: Function[] = [];
   public history: History;
@@ -47,7 +47,7 @@ export default class Cube extends THREE.Group {
     this.locks.set("z", new Set());
     this.locks.set("a", new Set());
     this.history = new History();
-    this.groups = new GroupTable(this);
+    this.table = new GroupTable(this);
     this.matrixAutoUpdate = false;
     this.updateMatrix();
   }
@@ -58,7 +58,7 @@ export default class Cube extends THREE.Group {
     }
   }
 
-  lock(axis: string, layers: number[]): boolean {
+  lock(axis: string, layer: number): boolean {
     const tmp = this.locks.get(axis);
     if (tmp == undefined) {
       return false;
@@ -69,23 +69,13 @@ export default class Cube extends THREE.Group {
         return false;
       }
     }
-    // 层冲突
-    for (const layer of layers) {
-      if (tmp.has(layer)) {
-        return false;
-      }
-    }
-    for (const layer of layers) {
-      tmp.add(layer);
-    }
+    tmp.add(layer);
     return true;
   }
 
-  unlock(axis: string, layers: number[]): void {
+  unlock(axis: string, layer: number): void {
     const tmp = this.locks.get(axis);
-    for (const layer of layers) {
-      tmp?.delete(layer);
-    }
+    tmp?.delete(layer);
   }
 
   record(action: TwistAction): void {
@@ -94,7 +84,7 @@ export default class Cube extends THREE.Group {
 
   get complete(): boolean {
     const complete = [FACE.U, FACE.D, FACE.L, FACE.R, FACE.F, FACE.B].every((face) => {
-      const group = this.groups.get(FACE[face]);
+      const group = this.table.face(FACE[face]);
       if (!group) {
         throw Error();
       }
@@ -161,7 +151,7 @@ export default class Cube extends THREE.Group {
   strip(strip: { [face: string]: number[] | undefined }): void {
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       const key = FACE[face];
-      const group = this.groups.get(key);
+      const group = this.table.face(key);
       if (!group) {
         throw Error();
       }

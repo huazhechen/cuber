@@ -4,43 +4,47 @@ import Cube from "./cube";
 import * as THREE from "three";
 import tweener, { Tween } from "./tweener";
 
-class CubeLock {
-  axis = "";
-  layers: number[] = [];
-}
-
 export default class CubeGroup extends THREE.Group {
   public static frames = 30;
+  public static readonly AXIS_VECTOR: { [key: string]: THREE.Vector3 } = {
+    a: new THREE.Vector3(1, 1, 1),
+    x: new THREE.Vector3(1, 0, 0),
+    y: new THREE.Vector3(0, 1, 0),
+    z: new THREE.Vector3(0, 0, 1),
+  };
+
   cube: Cube;
   cubelets: Cubelet[];
-  name: string;
   indices: number[];
-  axis: THREE.Vector3;
-  lock: CubeLock = new CubeLock();
+  axis: string;
+  layer: number;
   private holding = false;
   private tween: Tween | undefined = undefined;
 
+  contangle: number;
   _angle: number;
   set angle(angle) {
-    this.setRotationFromAxisAngle(this.axis, angle);
     this._angle = angle;
+    this.setRotationFromAxisAngle(CubeGroup.AXIS_VECTOR[this.axis], this.contangle + this._angle);
     this.updateMatrix();
     this.cube.dirty = true;
   }
+
   get angle(): number {
     return this._angle;
   }
 
-  constructor(cube: Cube, name: string, indices: number[], axis: THREE.Vector3) {
+  constructor(cube: Cube, axis: string, layer: number) {
     super();
     this.cube = cube;
     this._angle = 0;
+    this.contangle = 0;
     this.cubelets = [];
-    this.name = name;
-    this.indices = indices;
-    this.axis = axis;
+    this.indices = [];
     this.matrixAutoUpdate = false;
     this.updateMatrix();
+    this.axis = axis;
+    this.layer = layer;
   }
 
   static AXIS_TABLE: { [key: string]: string } = {
@@ -142,14 +146,17 @@ export default class CubeGroup extends THREE.Group {
 
   hold(): boolean {
     if (this.holding) {
+      this.contangle = this.angle;
+      this.angle = 0;
       this.cancel();
       return true;
     }
-    this.angle = 0;
-    const success = this.cube.lock(this.lock.axis, this.lock.layers);
+    const success = this.cube.lock(this.axis, this.layer);
     if (!success) {
       return false;
     }
+    this.contangle = 0;
+    this.angle = 0;
     this.holding = true;
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
@@ -180,8 +187,9 @@ export default class CubeGroup extends THREE.Group {
     }
     this.cube.remove(this);
     this.cube.container.dirty = true;
+    this.contangle = 0;
     this.angle = 0;
-    this.cube.unlock(this.lock.axis, this.lock.layers);
+    this.cube.unlock(this.axis, this.layer);
     this.cube.callback();
   }
 
@@ -198,6 +206,11 @@ export default class CubeGroup extends THREE.Group {
         return false;
       }
     }
+    // 将剩余角度合计
+    angle = this.contangle + angle;
+    this.angle = this.angle + this.contangle;
+    this.contangle = 0;
+
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
     const reverse = angle > 0;
     const times = Math.round(Math.abs(angle) / (Math.PI / 2));
@@ -226,48 +239,36 @@ export default class CubeGroup extends THREE.Group {
   }
 
   rotate(cubelet: Cubelet): void {
-    cubelet.rotateOnWorldAxis(this.axis, this.angle);
-    cubelet.vector = cubelet.vector.applyAxisAngle(this.axis, this.angle);
+    cubelet.rotateOnWorldAxis(CubeGroup.AXIS_VECTOR[this.axis], this.angle);
+    cubelet.vector = cubelet.vector.applyAxisAngle(CubeGroup.AXIS_VECTOR[this.axis], this.angle);
     cubelet.updateMatrix();
+  }
+}
+
+export class RotateAction {
+  group: CubeGroup;
+  twist: number;
+  constructor(group: CubeGroup, twist: number) {
+    this.group = group;
+    this.twist = twist;
   }
 }
 
 export class GroupTable {
   private order: number;
-  private groups: Map<string, CubeGroup> = new Map();
+  groups: { [key: string]: CubeGroup[] };
 
-  public static FORMAT(axis: string, from: number, to: number): string {
-    return axis + ":" + from + ":" + to;
-  }
-
-  public static readonly AXIS_VECTOR: { [key: string]: THREE.Vector3 } = {
-    a: new THREE.Vector3(1, 1, 1),
-    x: new THREE.Vector3(1, 0, 0),
-    y: new THREE.Vector3(0, 1, 0),
-    z: new THREE.Vector3(0, 0, 1),
-    "-x": new THREE.Vector3(-1, 0, 0),
-    "-y": new THREE.Vector3(0, -1, 0),
-    "-z": new THREE.Vector3(0, 0, -1),
-  };
   constructor(cube: Cube) {
     this.order = cube.order;
-    // 根据魔方阶数生成所有正向group
+    this.groups = {};
+    // 根据魔方阶数生成所有group
     for (const axis of ["x", "y", "z"]) {
-      for (let from = 1; from <= this.order; from++) {
-        for (let to = from; to <= this.order; to++) {
-          const name = GroupTable.FORMAT(axis, from, to);
-          const g = new CubeGroup(cube, name, [], GroupTable.AXIS_VECTOR[axis]);
-          g.lock.axis = axis;
-          for (let l = from; l <= to; l++) {
-            g.lock.layers.push(l);
-          }
-          this.groups.set(name, g);
-        }
+      const list: CubeGroup[] = [];
+      for (let layer = 1; layer <= this.order; layer++) {
+        const g = new CubeGroup(cube, axis, layer);
+        list[layer] = g;
       }
-    }
-    // 块类型group
-    for (const type of ["center", "edge", "corner"]) {
-      this.groups.set(type, new CubeGroup(cube, type, [], GroupTable.AXIS_VECTOR["a"]));
+      this.groups[axis] = list;
     }
     // 将每个块索引放入x y z的每层中
     for (const cubelet of cube.initials) {
@@ -275,98 +276,25 @@ export class GroupTable {
         continue;
       }
       const index = cubelet.initial;
-      let axis;
-      let layer;
-      let group;
-      let faces = 0;
+      let axis: string;
+      let layer: number;
+      let group: CubeGroup;
 
       axis = "x";
       layer = (index % this.order) + 1;
-      if (layer == 1 || layer == this.order) {
-        faces++;
-      }
-      group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
-      if (!group) {
-        throw Error();
-      }
+      group = this.groups[axis][layer];
       group.indices.push(cubelet.index);
 
       axis = "y";
       layer = Math.floor((index % (this.order * this.order)) / this.order) + 1;
-      if (layer == 1 || layer == this.order) {
-        faces++;
-      }
-      group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
-      if (!group) {
-        throw Error();
-      }
-      group.indices.push(cubelet.index);
-      axis = "z";
-      layer = Math.floor(index / (this.order * this.order)) + 1;
-      if (layer == 1 || layer == this.order) {
-        faces++;
-      }
-      group = this.groups.get(GroupTable.FORMAT(axis, layer, layer));
-      if (!group) {
-        throw Error();
-      }
+      group = this.groups[axis][layer];
       group.indices.push(cubelet.index);
 
-      group = this.groups.get(["", "center", "edge", "corner"][faces]);
-      if (group) {
-        group.indices.push(cubelet.index);
-      }
+      axis = "z";
+      layer = Math.floor(index / (this.order * this.order)) + 1;
+      group = this.groups[axis][layer];
+      group.indices.push(cubelet.index);
     }
-    // x y z的多层
-    for (const axis of ["x", "y", "z"]) {
-      for (let from = 1; from <= this.order; from++) {
-        for (let to = from + 1; to <= this.order; to++) {
-          const dst = this.groups.get(GroupTable.FORMAT(axis, from, to));
-          if (!dst) {
-            throw Error();
-          }
-          for (let i = from; i <= to; i++) {
-            const src = this.groups.get(GroupTable.FORMAT(axis, i, i));
-            if (!src) {
-              throw Error();
-            }
-            dst.indices.push(...src.indices);
-          }
-        }
-      }
-    }
-    // 通过正向group拷贝反向group
-    for (const axis of ["-x", "-y", "-z"]) {
-      for (let from = 1; from <= this.order; from++) {
-        for (let to = from; to <= this.order; to++) {
-          const template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), from, to));
-          if (!template) {
-            throw Error();
-          }
-          const name = GroupTable.FORMAT(axis, from, to);
-          const g = new CubeGroup(cube, name, template.indices, GroupTable.AXIS_VECTOR[axis]);
-          g.lock.axis = template.lock.axis;
-          g.lock.layers = template.lock.layers;
-          this.groups.set(name, g);
-        }
-      }
-    }
-    // 特殊处理整体旋转
-    for (const axis of ["x", "y", "z"]) {
-      const template = this.groups.get(GroupTable.FORMAT(axis.replace("-", ""), 1, this.order));
-      if (!template) {
-        throw Error();
-      }
-      const g = new CubeGroup(cube, axis, template.indices, GroupTable.AXIS_VECTOR[axis]);
-      g.lock.axis = template.lock.axis;
-      g.lock.layers = template.lock.layers;
-      this.groups.set(axis, g);
-    }
-    const g = new CubeGroup(cube, ".", [], GroupTable.AXIS_VECTOR["a"]);
-    g.lock.axis = "a";
-    g.lock.layers.push(1);
-    this.groups.set(".", g);
-    this.groups.set("~", g);
   }
 
   private static AXIS_MAP: { [key: string]: string } = {
@@ -381,67 +309,109 @@ export class GroupTable {
     S: "z",
   };
 
-  get(name: string): CubeGroup | undefined {
-    let axis = "";
-    let from = 0;
-    let to = 0;
-    if (this.groups.get(name)) {
-      return this.groups.get(name);
+  face(face: string): CubeGroup {
+    let layer = 1;
+    let sign = GroupTable.AXIS_MAP[face];
+    if (sign.length == 2) {
+      sign = sign[1];
+      layer = this.order;
     }
-    if (name.match(/.[Ww]/)) {
-      name = name.toLowerCase().replace("w", "");
+    return this.groups[sign][layer];
+  }
+
+  convert(action: TwistAction): RotateAction[] {
+    const result: RotateAction[] = [];
+    let sign = action.sign;
+    if (sign.match(/.[Ww]/)) {
+      sign = sign.toLowerCase().replace("w", "");
     }
-    if (/[XYZ]/.test(name)) {
-      name = name.toLowerCase();
+    if (/[XYZ]/.test(sign)) {
+      sign = sign.toLowerCase();
     }
-    if (name.length === 1) {
-      switch (name) {
+    let group: CubeGroup;
+    let twist: number = action.times * (action.reverse ? -1 : 1);
+    let layer: number;
+    if (sign.length === 1) {
+      switch (sign) {
         case "x":
         case "y":
         case "z":
-          return this.groups.get(name);
+          for (let layer = 1; layer <= this.order; layer++) {
+            group = this.groups[sign][layer];
+            result.push(new RotateAction(group, twist));
+          }
+          return result;
         case "R":
-        case "L":
         case "U":
-        case "D":
         case "F":
+        case "L":
+        case "D":
         case "B":
-          axis = GroupTable.AXIS_MAP[name];
-          from = axis.length == 2 ? 1 : this.order;
-          to = from;
-          break;
+          layer = 1;
+          sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
+          if (sign.length == 2) {
+            twist = -twist;
+            sign = sign[1];
+            layer = this.order;
+          }
+          group = this.groups[sign][layer];
+          result.push(new RotateAction(group, twist));
+          return result;
         case "r":
-        case "l":
         case "u":
-        case "d":
         case "f":
+        case "l":
+        case "d":
         case "b":
-          axis = GroupTable.AXIS_MAP[name.toUpperCase()];
-          from = axis.length == 2 ? 1 : this.order;
-          to = axis.length == 2 ? 2 : this.order - 1;
-          break;
+          layer = 1;
+          sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
+          if (sign.length == 2) {
+            twist = -twist;
+            sign = sign[1];
+            layer = this.order - 1;
+          }
+          group = this.groups[sign][layer];
+          result.push(new RotateAction(group, twist));
+          group = this.groups[sign][layer + 1];
+          result.push(new RotateAction(group, twist));
+          return result;
         case "E":
         case "M":
         case "S":
-          axis = GroupTable.AXIS_MAP[name];
-          from = Math.floor((this.order + 1) / 2);
-          to = Math.ceil((this.order + 1) / 2);
-          break;
+          layer = Math.floor((this.order + 1) / 2);
+          sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
+          if (sign.length == 2) {
+            twist = -twist;
+            sign = sign[1];
+          }
+          group = this.groups[sign][layer];
+          result.push(new RotateAction(group, twist));
+          if (this.order % 2 == 0) {
+            group = this.groups[sign][layer + 1];
+            result.push(new RotateAction(group, twist));
+          }
+          return result;
         case "e":
         case "m":
         case "s":
-          axis = GroupTable.AXIS_MAP[name.toUpperCase()];
-          from = 2;
-          to = this.order - 1;
-          break;
+          sign = GroupTable.AXIS_MAP[sign.toUpperCase()];
+          if (sign.length == 2) {
+            twist = -twist;
+            sign = sign[1];
+          }
+          for (let layer = 2; layer < this.order; layer++) {
+            group = this.groups[sign][layer];
+            result.push(new RotateAction(group, twist));
+          }
+          return result;
       }
     } else {
-      const list = name.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
+      const list = sign.match(/([0123456789]*)(-?)([0123456789]*)([lrudfb])/i);
       if (list == null) {
-        return undefined;
+        return result;
       }
-      from = Number(list[1]);
-      to = Number(list[3]);
+      let from = Number(list[1]);
+      let to = Number(list[3]);
       if (to === NaN || to === 0) {
         if (/[lrudfb]/.test(list[4])) {
           to = 1;
@@ -455,13 +425,19 @@ export class GroupTable {
       if (to > this.order) {
         to = this.order;
       }
-      axis = GroupTable.AXIS_MAP[list[4].toUpperCase()];
-      from = axis.length == 2 ? from : this.order - from + 1;
-      to = axis.length == 2 ? to : this.order - to + 1;
+      sign = GroupTable.AXIS_MAP[list[4].toUpperCase()];
+      if (sign.length == 2) {
+        twist = -twist;
+        sign = sign[1];
+      } else {
+        from = this.order - from + 1;
+        to = this.order - to + 1;
+      }
+      for (let layer = from; layer <= to; layer++) {
+        group = this.groups[sign][layer];
+        result.push(new RotateAction(group, twist));
+      }
     }
-    if (from > to) {
-      [from, to] = [to, from];
-    }
-    return this.groups.get(GroupTable.FORMAT(axis, from, to));
+    return result;
   }
 }

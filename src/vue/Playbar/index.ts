@@ -152,7 +152,7 @@ export default class Playbar extends Vue {
     this.playing = false;
     this.pprogress--;
     const action = this.actions[this.pprogress];
-    this.world.cube.twister.twist(new TwistAction(action.group, !action.reverse, action.times), false, true);
+    this.world.cube.twister.twist(new TwistAction(action.sign, !action.reverse, action.times), false, true);
   }
 
   get chaos(): boolean {

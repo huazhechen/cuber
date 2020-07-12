@@ -451,8 +451,8 @@ export default class Playground extends Vue {
     const list: TwistAction[] = [];
     // 第二步 清理xyz
     for (const item of temp) {
-      if (item.group == "x" || item.group == "y" || item.group == "z") {
-        const map = tm[item.group];
+      if (item.sign == "x" || item.sign == "y" || item.sign == "z") {
+        const map = tm[item.sign];
         let times = item.times;
         if (item.reverse) {
           times = 4 - times;
@@ -466,8 +466,8 @@ export default class Playground extends Vue {
         }
         continue;
       }
-      const index = om.indexOf(item.group);
-      item.group = o[index];
+      const index = om.indexOf(item.sign);
+      item.sign = o[index];
       list.push(item);
     }
     // 第三步 清理R L R'
@@ -477,11 +477,11 @@ export default class Playground extends Vue {
       let last: TwistAction | null = null;
       for (let i = 0; i < list.length; i++) {
         const prev = list[list.length - 1 - i];
-        if (prev.group == item.group) {
+        if (prev.sign == item.sign) {
           last = prev;
           break;
         }
-        if (am[prev.group] != am[item.group]) {
+        if (am[prev.sign] != am[item.sign]) {
           break;
         }
       }
@@ -498,7 +498,7 @@ export default class Playground extends Vue {
     // 第四步 生成string
     let string = "";
     for (const item of list) {
-      string = string + " " + item.exp;
+      string = string + " " + item.value;
     }
     this.data.history = string.substring(1);
     this.data.save();
@@ -555,7 +555,7 @@ export default class Playground extends Vue {
     if (!empty) {
       string = string + "(";
       for (const item of list) {
-        string = string + item.exp + " ";
+        string = string + item.value + " ";
       }
       string = string.substr(0, string.length - 1);
       string = string + ") ";
@@ -568,7 +568,7 @@ export default class Playground extends Vue {
       if (segment.indexOf("(") >= 0) {
         list = new TwistNode(segment, true).parse();
         for (const item of list) {
-          this.data.history = this.data.history + item.exp + " ";
+          this.data.history = this.data.history + item.value + " ";
         }
       } else {
         segments.push(segment);
@@ -583,7 +583,7 @@ export default class Playground extends Vue {
         string = string + "(";
       }
       for (const item of list) {
-        string = string + item.exp + " ";
+        string = string + item.value + " ";
       }
       if (segment.indexOf("(") >= 0) {
         string = string.substr(0, string.length - 1);
