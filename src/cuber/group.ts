@@ -21,11 +21,10 @@ export default class CubeGroup extends THREE.Group {
   private holding = false;
   private tween: Tween | undefined = undefined;
 
-  contangle: number;
   _angle: number;
   set angle(angle) {
     this._angle = angle;
-    this.setRotationFromAxisAngle(CubeGroup.AXIS_VECTOR[this.axis], this.contangle + this._angle);
+    this.setRotationFromAxisAngle(CubeGroup.AXIS_VECTOR[this.axis], this._angle);
     this.updateMatrix();
     this.cube.dirty = true;
   }
@@ -33,28 +32,6 @@ export default class CubeGroup extends THREE.Group {
   get angle(): number {
     return this._angle;
   }
-
-  constructor(cube: Cube, axis: string, layer: number) {
-    super();
-    this.cube = cube;
-    this._angle = 0;
-    this.contangle = 0;
-    this.cubelets = [];
-    this.indices = [];
-    this.matrixAutoUpdate = false;
-    this.updateMatrix();
-    this.axis = axis;
-    this.layer = layer;
-  }
-
-  static AXIS_TABLE: { [key: string]: string } = {
-    x: "R",
-    y: "U",
-    z: "F",
-    "-x": "L",
-    "-y": "D",
-    "-z": "B",
-  };
 
   static MES_TABLE: { [key: string]: string } = {
     R: "M'",
@@ -65,88 +42,34 @@ export default class CubeGroup extends THREE.Group {
     B: "S'",
   };
 
-  action(reverse: boolean, times: number): TwistAction {
-    let group = this.name;
-    const values = this.name.match(/(^-?[xyz]):(\d*):(\d*$)/i);
-    if (values?.length == 4) {
-      let axis = values[1];
-      let from = Number(values[2]);
-      let to = Number(values[3]);
-      const half = (this.cube.order + 1) / 2;
-
-      // 找到哪个离得远
-      if (Math.abs(from - half) < Math.abs(to - half)) {
-        [from, to] = [to, from];
-      }
-      if (axis.length == 1 && from < half) {
-        axis = "-" + axis;
-        reverse = !reverse;
-      } else if (axis.length == 2 && from > half) {
-        axis = axis[1];
-        reverse = !reverse;
-      }
-      if (axis.length == 1) {
-        from = this.cube.order - from + 1;
-        to = this.cube.order - to + 1;
-      }
-      group = CubeGroup.AXIS_TABLE[axis];
-      if (from == to) {
-        if (from === half) {
-          group = CubeGroup.MES_TABLE[group].toUpperCase();
-          if (group.length == 2) {
-            group = group[0];
-            reverse = !reverse;
-          }
-        } else {
-          group = (from === 1 ? "" : String(from)) + group;
-        }
-      } else {
-        if (from === 1 && to === this.cube.order) {
-          // xyz
-          group = axis;
-          if (group.length == 2) {
-            group = group[1];
-            reverse = !reverse;
-          }
-        } else if (from === 2 && to === this.cube.order - 1) {
-          // mes
-          group = CubeGroup.MES_TABLE[group].toLowerCase();
-          if (group.length == 2) {
-            group = group[0];
-            reverse = !reverse;
-          }
-        } else if (from === 1) {
-          group = (to > 2 ? String(to) : "") + group + "w";
-        } else {
-          group = String(from) + "-" + String(to) + group + "w";
-        }
-      }
-    }
-    return new TwistAction(group, reverse, times);
+  constructor(cube: Cube, axis: string, layer: number) {
+    super();
+    this.cube = cube;
+    this._angle = 0;
+    this.cubelets = [];
+    this.indices = [];
+    this.matrixAutoUpdate = false;
+    this.updateMatrix();
+    this.axis = axis;
+    this.layer = layer;
   }
 
   cancel(): number {
     if (this.tween) {
       // 记录当前动作的角度
-      let left = this.tween.end;
+      let angle = this.tween.end;
       // 取消当前动作
       tweener.cancel(this.tween);
       this.tween = undefined;
       // 记录取消的动作
-      left = Math.round(left / (Math.PI / 2)) * (Math.PI / 2);
-      const reverse = left > 0;
-      const times = Math.round(Math.abs(left) / (Math.PI / 2));
-      if (times != 0) {
-        this.cube.record(this.action(!reverse, times));
-      }
-      return left;
+      angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
+      return angle;
     }
     return 0;
   }
 
   hold(): boolean {
     if (this.holding) {
-      this.contangle = this.angle;
       this.angle = 0;
       this.cancel();
       return true;
@@ -155,7 +78,6 @@ export default class CubeGroup extends THREE.Group {
     if (!success) {
       return false;
     }
-    this.contangle = 0;
     this.angle = 0;
     this.holding = true;
     for (const i of this.indices) {
@@ -187,7 +109,6 @@ export default class CubeGroup extends THREE.Group {
     }
     this.cube.remove(this);
     this.cube.container.dirty = true;
-    this.contangle = 0;
     this.angle = 0;
     this.cube.unlock(this.axis, this.layer);
     this.cube.callback();
@@ -206,17 +127,8 @@ export default class CubeGroup extends THREE.Group {
         return false;
       }
     }
-    // 将剩余角度合计
-    angle = this.contangle + angle;
-    this.angle = this.angle + this.contangle;
-    this.contangle = 0;
 
     angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
-    const reverse = angle > 0;
-    const times = Math.round(Math.abs(angle) / (Math.PI / 2));
-    if (times != 0) {
-      this.cube.record(this.action(reverse, times));
-    }
     if (fast) {
       this.angle = angle;
     }
@@ -314,6 +226,7 @@ export class GroupTable {
     let sign = GroupTable.AXIS_MAP[face];
     if (sign.length == 2) {
       sign = sign[1];
+    } else {
       layer = this.order - 1;
     }
     return this.groups[sign][layer];

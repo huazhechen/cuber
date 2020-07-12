@@ -308,6 +308,9 @@ export default class Twister {
         success = rotate.group.twist((Math.PI / 2) * rotate.twist, fast);
       }
     }
+    if (success) {
+      this.cube.record(action);
+    }
     return success;
   }
 

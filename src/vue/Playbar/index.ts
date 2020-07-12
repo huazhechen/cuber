@@ -116,7 +116,7 @@ export default class Playbar extends Vue {
         } else {
           break;
         }
-      } while (true);
+      } while (this.pprogress < this.actions.length);
     }
   }
 
