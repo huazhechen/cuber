@@ -76,19 +76,12 @@ export default class Palette extends Vue {
     "#00FF00",
     "#FFFF00",
     "#808080",
-    // MACAROON
-    "#F8BBD0",
-    "#FFAB91",
-    "#B2EBF2",
-    "#B9F6CA",
-    "#FFF59D",
-    "#505050",
     // OTHER
-    "#FF4081",
-    "#C800FF",
+    "#FF0080",
+    "#FF00FF",
     "#607D8B",
-    "#00FFDE",
-    "#885500",
+    "#00FFFF",
+    "#795548",
     "#202020",
   ];
 

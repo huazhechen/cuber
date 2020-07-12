@@ -26,7 +26,9 @@
 .v-card__text {
   padding-bottom: 0 !important;
 }
-
+.v-color-picker {
+  max-width: 100% !important;
+}
 div::-webkit-scrollbar {
   width: 0;
 }
