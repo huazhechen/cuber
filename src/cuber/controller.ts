@@ -67,8 +67,8 @@ export default class Controller {
   }
 
   update(): void {
+    const angle = this.contingle + this.angle;
     if (this.rotating) {
-      const angle = this.contingle + this.angle;
       if (this.group) {
         if (this.group.angle != angle) {
           const delta = (angle - this.group.angle) / 2;
@@ -190,14 +190,23 @@ export default class Controller {
           }
         }
         this.group = null;
+        const contingle: Set<number> = new Set();
         for (const group of this.world.cube.table.groups[this.axis]) {
           let success = group.drag();
           while (!success) {
             tweener.finish();
             success = group.drag();
           }
+          contingle.add(group.angle);
         }
-        this.contingle = 0;
+        if (contingle.size == 1) {
+          for (const value of contingle.values()) {
+            this.contingle = value;
+            break;
+          }
+        } else {
+          this.contingle = 0;
+        }
       } else {
         const start = this.intersect(this.down, this.holder.plane);
         const end = this.intersect(this.move, this.holder.plane);

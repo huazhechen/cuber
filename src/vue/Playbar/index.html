@@ -11,7 +11,7 @@
       v-model="progress"
       :max="actions.length"
     >
-      <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].exp}}</template>
+      <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
     </v-slider>
   </v-flex>
   <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
