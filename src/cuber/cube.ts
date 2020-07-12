@@ -53,6 +53,12 @@ export default class Cube extends THREE.Group {
   }
 
   callback(): void {
+    // 有锁不回调
+    for (const lock of this.locks.values()) {
+      if (lock.size > 0) {
+        return;
+      }
+    }
     for (const callback of this.callbacks) {
       callback();
     }
