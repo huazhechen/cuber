@@ -120,7 +120,7 @@ export default class CubeGroup extends THREE.Group {
   }
 
   drag(): boolean {
-    if (this.holding) {
+    while (this.holding) {
       this.angle = -this.finish();
     }
     return this.hold();

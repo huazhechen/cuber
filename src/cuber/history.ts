@@ -5,7 +5,8 @@ export default class History {
   init = "";
   exp = "";
 
-  record(action: TwistAction): void {
+  record(raw: TwistAction): void {
+    const action = new TwistAction(raw.sign, raw.reverse, raw.times);
     if (this.list.length == 0) {
       action.times = action.times % 4;
       if (action.times != 0) {
