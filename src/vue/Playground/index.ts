@@ -436,15 +436,24 @@ export default class Playground extends Vue {
     };
     const o = om.slice();
 
-    // 第一步 清理MES
+    // 清理ufrbld
     let origin = this.world.cube.history.exp;
+    origin = origin.replace(/u/g, "(UE')");
+    origin = origin.replace(/f/g, "(FS)");
+    origin = origin.replace(/r/g, "(RM')");
+    origin = origin.replace(/b/g, "(BS')");
+    origin = origin.replace(/l/g, "(LM)");
+    origin = origin.replace(/d/g, "(DE)");
+
+    // 清理MES
     origin = origin.replace(/M/g, "(x' L' R)");
     origin = origin.replace(/E/g, "(y' D' U)");
     origin = origin.replace(/S/g, "(z F' B)");
+
     let temp: TwistAction[] = new TwistNode(origin).parse();
 
     const list: TwistAction[] = [];
-    // 第二步 清理xyz
+    // 清理xyz
     for (const item of temp) {
       if (item.sign == "x" || item.sign == "y" || item.sign == "z") {
         const map = tm[item.sign];
@@ -465,7 +474,7 @@ export default class Playground extends Vue {
       item.sign = o[index];
       list.push(item);
     }
-    // 第三步 清理R L R'
+    // 清理R L R'
     temp = list.slice();
     list.length = 0;
     for (const item of temp) {

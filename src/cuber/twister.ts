@@ -126,17 +126,15 @@ export class TwistNode {
 
   constructor(exp: string, reverse = false, times = 1) {
     this.children = [];
-    this.twist = new TwistAction(exp, reverse, times);
-    if (exp.length == 0) {
-      return;
-    }
     // '符号处理
     exp = exp.replace(/[‘＇’]/g, "'");
     // 不用解析场景
     if (exp.match(/^[0123456789-]*[\*~.#xyzbsfdeulmr][w]*$/gi)) {
-      if (/[XYZ]/.test(this.twist.sign)) {
-        this.twist.sign = this.twist.sign.toLowerCase();
-      }
+      this.twist = new TwistAction(exp, reverse, times);
+      return;
+    }
+    this.twist = new TwistAction("", reverse, times);
+    if (exp.length == 0) {
       return;
     }
     const list = TwistNode.SPLIT_SEGMENT(exp);
