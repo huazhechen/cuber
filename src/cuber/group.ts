@@ -150,10 +150,6 @@ export default class CubeGroup extends THREE.Group {
 
   twist(angle: number, fast: boolean): boolean {
     if (this.holding) {
-      // 如果当前有正在执行的动作
-      if (this.name == ".") {
-        return false;
-      }
       angle = angle + this.cancel();
     } else {
       const success = this.hold();

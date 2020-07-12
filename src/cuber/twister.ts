@@ -1,5 +1,6 @@
 import Cube from "./cube";
 import tweener from "./tweener";
+import CubeGroup from "./group";
 
 export class TwistAction {
   sign: string;
@@ -301,6 +302,7 @@ export default class Twister {
   };
 
   twist(action: TwistAction, fast: boolean, force: boolean): boolean {
+    let success = false;
     if (action.sign == "#") {
       this.setup("");
       return true;
@@ -310,8 +312,37 @@ export default class Twister {
       this.setup(exp);
       return true;
     }
+    if (action.sign == ".") {
+      if (fast || force) {
+        return true;
+      }
+      success = this.cube.lock("a", 1);
+      if (success) {
+        tweener.tween(0, 1, CubeGroup.frames * action.times, (value: number) => {
+          if (value == 1) {
+            this.cube.unlock("a", 1);
+            this.cube.callback();
+            return true;
+          }
+          return false;
+        });
+      }
+      return success;
+    }
+    if (action.sign == "~") {
+      if (fast || force) {
+        return true;
+      }
+      success = this.cube.lock("a", 1);
+      if (success) {
+        this.cube.unlock("a", 1);
+      }
+      return success;
+    }
     const list = this.cube.table.convert(action);
-    let success = false;
+    if (list.length == 0) {
+      return true;
+    }
     for (const rotate of list) {
       success = rotate.group.twist((Math.PI / 2) * rotate.twist, fast);
       while (!success && force) {

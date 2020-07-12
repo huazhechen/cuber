@@ -59,6 +59,9 @@ export default class Cube extends THREE.Group {
   }
 
   lock(axis: string, layer: number): boolean {
+    if (this.locks.get("a")?.has(1)) {
+      return false;
+    }
     const tmp = this.locks.get(axis);
     if (tmp == undefined) {
       return false;
