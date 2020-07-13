@@ -12,9 +12,6 @@ import Cubelet from "../../cuber/cubelet";
 class KeyHandle {
   width = 2;
   display = false;
-
-  public disable = false;
-
   callback: Function;
   keymap: { [key: number]: string } = {
     73: "R", //I R
@@ -62,9 +59,6 @@ class KeyHandle {
   }
 
   keydown = (event: KeyboardEvent): boolean => {
-    if (this.disable) {
-      return false;
-    }
     const id = event.keyCode | event.which;
 
     if (id == 51 || id == 55) {
@@ -76,12 +70,10 @@ class KeyHandle {
     }
     if (id === 8) {
       this.callback("^");
-      event.preventDefault();
       return false;
     }
     const key = this.keymap[id];
     if (key) {
-      event.preventDefault();
       let exp = "";
       if (this.width != 2 && ["l", "r", "f", "b", "d", "u"].indexOf(key[0]) >= 0) {
         exp = this.width + key;
@@ -367,13 +359,6 @@ export default class Playground extends Vue {
   }
 
   scrambled = false;
-  @Watch("scrambled")
-  onscrambledChange(): void {
-    this.keyboard.disable = this.scrambled;
-    if (this.scrambled === false) {
-      this.data.save();
-    }
-  }
 
   historyd = false;
   tap(key: string): void {
