@@ -44,6 +44,7 @@ export default class Util {
   }
 
   private static SSE(order: number, a: string, x: string, b: string, y: string): string {
+    console.log("create: ", { a, x, b, y });
     const width = Number(x);
     if (Number(y) == 1) {
       y = "";
@@ -84,7 +85,7 @@ export default class Util {
         } as { [key: string]: string })[b];
         return "(" + mes.toLowerCase() + ")" + y;
       case "V":
-        return "(" + "2-" + String(2 + width - 1) + b + ")" + y;
+        return "(" + "2-" + String(2 + width - 1) + b + "w" + ")" + y;
       case "C":
         const xyz = ({
           R: "x",
@@ -122,6 +123,7 @@ export default class Util {
     exp = exp + " ";
     for (let i = 0; i < exp.length; i++) {
       const c = exp[i];
+      console.log(c + " at " + state);
       switch (state) {
         case "init":
           if (/[SNTWVCM]/.test(c)) {
@@ -186,6 +188,7 @@ export default class Util {
           result = result + c;
       }
     }
+    console.log(result);
     return result;
   }
 }
