@@ -143,7 +143,7 @@ export default class Controller {
         let x = point.x / Cubelet.SIZE / 3;
         let y = point.y / Cubelet.SIZE / 3;
         let z = point.z / Cubelet.SIZE / 3;
-        if (Math.abs(x) <= 0.5 && Math.abs(y) <= 0.5 && Math.abs(z) <= 0.5) {
+        if (Math.abs(x) <= 0.5001 && Math.abs(y) <= 0.5001 && Math.abs(z) <= 0.5001) {
           const d =
             Math.pow(point.x - this.ray.origin.x, 2) +
             Math.pow(point.y - this.ray.origin.y, 2) +
@@ -151,9 +151,9 @@ export default class Controller {
           if (distance == 0 || d < distance) {
             this.holder.plane = plane;
             const order = this.world.cube.order;
-            x = Math.min(order - 1, Math.floor((x + 0.5) * order));
-            y = Math.min(order - 1, Math.floor((y + 0.5) * order));
-            z = Math.min(order - 1, Math.floor((z + 0.5) * order));
+            x = Math.max(0, Math.min(order - 1, Math.floor((x + 0.5) * order)));
+            y = Math.max(0, Math.min(order - 1, Math.floor((y + 0.5) * order)));
+            z = Math.max(0, Math.min(order - 1, Math.floor((z + 0.5) * order)));
             this.holder.index = z * order * order + y * order + x;
             distance = d;
           }
@@ -183,13 +183,11 @@ export default class Controller {
           const lf = new THREE.Vector3(-(Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
           lf.applyMatrix4(this.world.scene.matrix).project(this.world.camera);
           const lx = Math.round(lf.x * half + half);
-          const dl = Math.abs(lx - half);
 
           const rf = new THREE.Vector3((Cubelet.SIZE * 3) / 2, 0, (Cubelet.SIZE * 3) / 2);
           rf.applyMatrix4(this.world.scene.matrix).project(this.world.camera);
           const rx = Math.round(rf.x * half + half);
-          const dr = Math.abs(rx - half);
-          if (dl < dr) {
+          if (lf.z < rf.z) {
             if (this.down.x < lx) {
               this.axis = "z'";
             } else {
