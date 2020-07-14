@@ -1,6 +1,6 @@
 import { FACE } from "./define";
 import Cubelet from "./cubelet";
-import CubeGroup, { GroupTable } from "./group";
+import CubeGroup from "./group";
 import { TouchAction } from "../common/toucher";
 import * as THREE from "three";
 import World from "./world";
