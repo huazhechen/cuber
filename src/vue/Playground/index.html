@@ -21,9 +21,6 @@
           <v-btn @click="tap('history')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">assignment</v-icon>
           </v-btn>
-          <v-btn @click="tap('orientation')" v-show="orientation" :style="style" text :ripple="false">
-            <v-icon :size="size * 0.8">explore</v-icon>
-          </v-btn>
           <v-btn @click="tap('undo')" :style="style" text :ripple="false" :disabled="world.cube.history.length == 0">
             <v-icon :size="size * 0.8">backspace</v-icon>
           </v-btn>

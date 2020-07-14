@@ -97,7 +97,6 @@ export class PlaygroundData {
     start: 0,
     now: 0,
     complete: false,
-    orientation: true,
   };
 
   constructor() {
@@ -175,13 +174,6 @@ export class PlaygroundData {
   set complete(value: boolean) {
     this.values.complete = value;
   }
-
-  get orientation(): boolean {
-    return this.values.orientation;
-  }
-  set orientation(value: boolean) {
-    this.values.orientation = value;
-  }
 }
 
 @Component({
@@ -203,8 +195,6 @@ export default class Playground extends Vue {
 
   data: PlaygroundData = new PlaygroundData();
 
-  orientation = false;
-
   width = 0;
   height = 0;
   size = 0;
@@ -222,7 +212,6 @@ export default class Playground extends Vue {
         this.world.cube.twister.twist(new TwistAction(exp), false, true);
       }
     });
-    window.addEventListener("deviceorientation", this.rotate);
   }
 
   resize(): void {
@@ -286,24 +275,7 @@ export default class Playground extends Vue {
     }
   }
 
-  rotate(event: DeviceOrientationEvent): void {
-    if (event.beta && event.gamma) {
-      this.orientation = true;
-      if (!this.data.orientation) {
-        return;
-      }
-      this.world.cube.rotation.x = (event.beta / 180) * Math.PI - Math.PI / 2;
-      this.world.cube.rotation.y = (event.gamma / 180) * Math.PI;
-      this.world.cube.dirty = true;
-      this.world.cube.container.dirty = true;
-      this.world.cube.updateMatrix();
-    }
-  }
-
   breath(): void {
-    if (this.data.orientation && this.orientation) {
-      return;
-    }
     if (this.world.order < 10) {
       let tick = new Date().getTime();
       tick = (tick / 2000) * Math.PI;
@@ -399,10 +371,6 @@ export default class Playground extends Vue {
         break;
       case "history":
         this.historyd = true;
-        break;
-      case "orientation":
-        this.data.orientation = !this.data.orientation;
-        this.data.save();
         break;
       case "share":
         this.share();
