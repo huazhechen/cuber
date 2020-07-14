@@ -16,7 +16,6 @@ import World from "../../cuber/world";
 import pako from "pako";
 import ClipboardJS from "clipboard";
 import { PreferanceData, PaletteData } from "../../data";
-import { TwistAction } from "../../cuber/twister";
 
 export class DirectorData {
   private values = {

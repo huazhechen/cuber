@@ -42,4 +42,150 @@ export default class Util {
     }
     return (crc ^ -1) >>> 0;
   }
+
+  private static SSE(order: number, a: string, x: string, b: string, y: string): string {
+    const width = Number(x);
+    if (Number(y) == 1) {
+      y = "";
+    }
+    switch (a) {
+      case "S":
+        const opposite = ({
+          R: "L'",
+          L: "R'",
+          F: "B'",
+          B: "F'",
+          U: "D'",
+          D: "U'",
+        } as { [key: string]: string })[b];
+        if (width == 1) {
+          return "(" + b + " " + opposite + ")" + y;
+        } else if (width == 2) {
+          return "(" + b + "w" + " " + opposite + "w" + ")" + y;
+        } else {
+          return "(" + x + b + "w" + " " + x + opposite + "w" + ")" + y;
+        }
+      case "N":
+        return "(" + x + b + ")" + y;
+      case "T":
+        if (width == 2) {
+          return "(" + b + "w" + ")" + y;
+        } else {
+          return "(" + x + b + "w" + ")" + y;
+        }
+      case "W":
+        const mes = ({
+          R: "M'",
+          L: "M",
+          F: "S",
+          B: "S'",
+          U: "E'",
+          D: "E",
+        } as { [key: string]: string })[b];
+        return "(" + mes.toLowerCase() + ")" + y;
+      case "V":
+        return "(" + "2-" + String(2 + width - 1) + b + ")" + y;
+      case "C":
+        const xyz = ({
+          R: "x",
+          L: "x'",
+          F: "z",
+          B: "z'",
+          U: "y",
+          D: "y'",
+        } as { [key: string]: string })[b];
+        return "(" + xyz.toLowerCase() + ")" + y;
+      case "M":
+        const from = Math.floor((order - width) / 2) + 1;
+        const to = from + width - 1;
+        return "(" + String(from) + "-" + String(to) + b + "w" + ")" + y;
+    }
+    return "";
+  }
+
+  static SSE2SIGN(order: number, exp: string): string {
+    let result = "";
+    let state = "init";
+    let sntwvcm = "";
+    let width = "";
+    let rufbld = "";
+    let times = "";
+    const dw: { [key: string]: number } = {
+      S: 1,
+      N: 2,
+      T: 2,
+      W: 0,
+      V: 2,
+      C: 0,
+      M: 1,
+    };
+    exp = exp + " ";
+    for (let i = 0; i < exp.length; i++) {
+      const c = exp[i];
+      switch (state) {
+        case "init":
+          if (/[SNTWVCM]/.test(c)) {
+            state = "SNTWVCM";
+            sntwvcm = c;
+          } else {
+            result = result + c;
+            sntwvcm = "";
+            width = "";
+            rufbld = "";
+            times = "";
+          }
+          break;
+        case "SNTWVCM":
+          if (/[0123456789]/.test(c)) {
+            state = "WIDTH";
+            width = width + c;
+          } else {
+            state = "WIDTH";
+            width = String(dw[sntwvcm]);
+            i--;
+          }
+          break;
+        case "WIDTH":
+          if (/[0123456789]/.test(c)) {
+            width = width + c;
+          } else if (/[RUFBLD]/.test(c)) {
+            state = "RUFBLD";
+            rufbld = c;
+          } else {
+            state = "init";
+            sntwvcm = "";
+            width = "";
+            rufbld = "";
+            times = "";
+          }
+          break;
+        case "RUFBLD":
+          if (/[0123456789]/.test(c)) {
+            state = "TIMES";
+            times = times + c;
+          } else {
+            state = "TIMES";
+            times = "1";
+            i--;
+          }
+          break;
+        case "TIMES":
+          if (/[0123456789]/.test(c)) {
+            times = times + c;
+          } else {
+            result = result + Util.SSE(order, sntwvcm, width, rufbld, times);
+            state = "init";
+            sntwvcm = "";
+            width = "";
+            rufbld = "";
+            times = "";
+            i--;
+          }
+          break;
+        default:
+          result = result + c;
+      }
+    }
+    return result;
+  }
 }
