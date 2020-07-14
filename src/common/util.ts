@@ -44,7 +44,6 @@ export default class Util {
   }
 
   private static SSE(order: number, a: string, x: string, b: string, y: string): string {
-    console.log("create: ", { a, x, b, y });
     const width = Number(x);
     if (Number(y) == 1) {
       y = "";
@@ -62,17 +61,17 @@ export default class Util {
         if (width == 1) {
           return "(" + b + " " + opposite + ")" + y;
         } else if (width == 2) {
-          return "(" + b + "w" + " " + opposite + "w" + ")" + y;
+          return "(" + b.toLowerCase() + " " + opposite.toLowerCase() + ")" + y;
         } else {
-          return "(" + x + b + "w" + " " + x + opposite + "w" + ")" + y;
+          return "(" + x + b.toLowerCase() + " " + x + opposite.toLowerCase() + ")" + y;
         }
       case "N":
         return "(" + x + b + ")" + y;
       case "T":
         if (width == 2) {
-          return "(" + b + "w" + ")" + y;
+          return "(" + b.toLowerCase() + ")" + y;
         } else {
-          return "(" + x + b + "w" + ")" + y;
+          return "(" + x + b.toLowerCase() + ")" + y;
         }
       case "W":
         const mes = ({
@@ -85,7 +84,7 @@ export default class Util {
         } as { [key: string]: string })[b];
         return "(" + mes.toLowerCase() + ")" + y;
       case "V":
-        return "(" + "2-" + String(2 + width - 1) + b + "w" + ")" + y;
+        return "(" + "2-" + String(2 + width - 1) + b.toLowerCase() + ")" + y;
       case "C":
         const xyz = ({
           R: "x",
@@ -99,7 +98,7 @@ export default class Util {
       case "M":
         const from = Math.floor((order - width) / 2) + 1;
         const to = from + width - 1;
-        return "(" + String(from) + "-" + String(to) + b + "w" + ")" + y;
+        return "(" + String(from) + "-" + String(to) + b.toLowerCase() + ")" + y;
     }
     return "";
   }
@@ -123,7 +122,6 @@ export default class Util {
     exp = exp + " ";
     for (let i = 0; i < exp.length; i++) {
       const c = exp[i];
-      console.log(c + " at " + state);
       switch (state) {
         case "init":
           if (/[SNTWVCM]/.test(c)) {
@@ -188,7 +186,6 @@ export default class Util {
           result = result + c;
       }
     }
-    console.log(result);
     return result;
   }
 }
