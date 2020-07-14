@@ -6,12 +6,13 @@ import Cubelet from "./cuber/cubelet";
 
 export class PreferanceData {
   private world: World;
-  private values = {
+
+  static DEFAULT = {
     version: "0.4",
     scale: 50,
     perspective: 50,
-    angle: 60,
-    gradient: 65,
+    angle: 30,
+    gradient: 33,
     frames: 20,
     sensitivity: 50,
     thickness: true,
@@ -23,6 +24,8 @@ export class PreferanceData {
     shadow: true,
     dark: false,
   };
+
+  private values = JSON.parse(JSON.stringify(PreferanceData.DEFAULT));
 
   constructor(world: World) {
     this.world = world;
@@ -87,7 +90,7 @@ export class PreferanceData {
     if (this.values.angle != value) {
       this.values.angle = value;
     }
-    this.world.scene.rotation.y = ((value / 100 - 1) * Math.PI) / 2;
+    this.world.scene.rotation.y = ((value / 50 - 1) * Math.PI) / 2;
     this.world.scene.updateMatrix();
     this.world.dirty = true;
   }
@@ -99,7 +102,7 @@ export class PreferanceData {
     if (this.values.gradient != value) {
       this.values.gradient = value;
     }
-    this.world.scene.rotation.x = ((1 - value / 100) * Math.PI) / 2;
+    this.world.scene.rotation.x = ((1 - value / 50) * Math.PI) / 2;
     this.world.scene.updateMatrix();
     this.world.dirty = true;
   }
@@ -206,23 +209,7 @@ export class PreferanceData {
   }
 
   reset(): void {
-    this.values = {
-      version: "0.4",
-      scale: 50,
-      perspective: 50,
-      angle: 60,
-      gradient: 65,
-      frames: 20,
-      sensitivity: 50,
-      thickness: true,
-      mirror: false,
-      hollow: false,
-      arrow: false,
-      cloud: false,
-      wireframe: false,
-      shadow: true,
-      dark: false,
-    };
+    this.values = JSON.parse(JSON.stringify(PreferanceData.DEFAULT));
     this.refresh();
     this.save();
   }

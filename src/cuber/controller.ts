@@ -34,6 +34,8 @@ export default class Controller {
     new THREE.Plane(new THREE.Vector3(1, 0, 0), (-Cubelet.SIZE * 3) / 2),
     new THREE.Plane(new THREE.Vector3(0, 1, 0), (-Cubelet.SIZE * 3) / 2),
     new THREE.Plane(new THREE.Vector3(0, 0, 1), (-Cubelet.SIZE * 3) / 2),
+    new THREE.Plane(new THREE.Vector3(-1, 0, 0), (-Cubelet.SIZE * 3) / 2),
+    new THREE.Plane(new THREE.Vector3(0, -1, 0), (-Cubelet.SIZE * 3) / 2),
   ];
   public _lock = false;
   get lock(): boolean {
@@ -149,16 +151,14 @@ export default class Controller {
           if (distance == 0 || d < distance) {
             this.holder.plane = plane;
             const order = this.world.cube.order;
-            x = Math.ceil((x + 0.5) * order) - 1;
-            y = Math.ceil((y + 0.5) * order) - 1;
-            z = Math.ceil((z + 0.5) * order) - 1;
+            x = Math.min(order - 1, Math.floor((x + 0.5) * order));
+            y = Math.min(order - 1, Math.floor((y + 0.5) * order));
+            z = Math.min(order - 1, Math.floor((z + 0.5) * order));
             this.holder.index = z * order * order + y * order + x;
             distance = d;
-            return;
           }
         }
       }
-      return;
     }, this);
   }
 
