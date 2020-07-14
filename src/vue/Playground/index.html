@@ -2,38 +2,17 @@
   <div v-resize="resize" style="user-select: none; touch-action: none;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
-    <v-btn
-      fixed
-      left
-      top
-      text
-      color="primary"
-      style="user-select: none; margin: 0%; padding: 0%;"
-      :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}"
-      :ripple="false"
-    >
+    <v-btn fixed left top text color="primary" style="user-select: none; margin: 0%; padding: 0%;"
+      :style="{height:size+'px', 'margin-left': width / 2 - Math.min(size*4, width/2 - size/4) + 'px'}" :ripple="false">
       <div :style="{'font-size':(size * 0.5)+'px'}">{{score}}</div>
     </v-btn>
-    <v-btn
-      fixed
-      block
-      bottom
-      text
-      disabled
-      style="user-select: none; margin: 0%; padding: 0%;"
-      :style="{height:size+'px', 'margin-bottom': size * 1.5 + 'px'}"
-      :ripple="false"
-      v-show="key.length > 0"
-    >
+    <v-btn fixed block bottom text disabled style="user-select: none; margin: 0%; padding: 0%;"
+      :style="{height:size+'px', 'margin-bottom': size * 1.5 + 'px'}" :ripple="false" v-show="key.length > 0">
       <div :style="{'font-size':(size * 0.5)+'px'}">{{key}}</div>
     </v-btn>
-    <v-container
-      fluid
-      grid-list-md
-      text-xs-center
+    <v-container fluid grid-list-md text-xs-center
       :style="{width:Math.min(size * 8, width) + 'px', height:size * 1.5 + 'px'}"
-      style="padding: 0%; touch-action: none;"
-    >
+      style="padding: 0%; touch-action: none;">
       <v-layout row wrap>
         <v-flex xs12 style="display: flex;" :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px'}">
           <v-btn @click="tap('scramble')" :style="style" text :ripple="false">
@@ -41,6 +20,9 @@
           </v-btn>
           <v-btn @click="tap('history')" :style="style" text :ripple="false">
             <v-icon :size="size * 0.8">assignment</v-icon>
+          </v-btn>
+          <v-btn @click="tap('orientation')" v-show="orientation" :style="style" text :ripple="false">
+            <v-icon :size="size * 0.8">explore</v-icon>
           </v-btn>
           <v-btn @click="tap('undo')" :style="style" text :ripple="false" :disabled="world.cube.history.length == 0">
             <v-icon :size="size * 0.8">backspace</v-icon>
@@ -56,16 +38,8 @@
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none; padding-bottom: 0%;">
-          <v-textarea
-            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            auto-grow
-            rows="1"
-            solo
-            flat
-            outlined
-            hide-details
-            v-model="data.scrambler"
-          >
+          <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" auto-grow rows="1" solo flat
+            outlined hide-details v-model="data.scrambler">
           </v-textarea>
         </v-card-text>
         <v-card-actions>
@@ -115,17 +89,8 @@
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none; padding-bottom: 0%;">
-          <v-textarea
-            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="4"
-            no-resize
-            solo
-            flat
-            outlined
-            hide-details
-            readonly
-            v-model="data.scene"
-          >
+          <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" rows="4" no-resize solo flat
+            outlined hide-details readonly v-model="data.scene">
           </v-textarea>
         </v-card-text>
         <v-card-title style="text-transform: none;">
@@ -142,17 +107,8 @@
               <div :style="{'font-size':size/3+'px'}">NISS</div>
             </v-btn>
           </v-flex>
-          <v-textarea
-            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="6"
-            no-resize
-            solo
-            flat
-            outlined
-            hide-details
-            readonly
-            v-model="data.history"
-          >
+          <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" rows="6" no-resize solo flat
+            outlined hide-details readonly v-model="data.history">
           </v-textarea>
         </v-card-text>
         <v-card-actions>
@@ -179,15 +135,8 @@
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs12 d-flex>
-              <v-textarea
-                id="link"
-                :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-                solo
-                flat
-                outlined
-                hide-details
-                v-model="link"
-              >
+              <v-textarea id="link" :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" solo flat
+                outlined hide-details v-model="link">
               </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>

@@ -8,7 +8,7 @@ export class PreferanceData {
   private world: World;
 
   static DEFAULT = {
-    version: "0.4",
+    version: "0.5",
     scale: 50,
     perspective: 50,
     angle: 30,
