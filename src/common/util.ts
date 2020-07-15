@@ -43,12 +43,9 @@ export default class Util {
     return (crc ^ -1) >>> 0;
   }
 
-  private static SSE(order: number, a: string, x: string, b: string, y: string): string {
-    const width = Number(x);
-    if (Number(y) == 1) {
-      y = "";
-    }
-    switch (a) {
+  private static SSE(order: number, key: string, width: string, axis: string): string {
+    const w = Number(width);
+    switch (key) {
       case "S":
         const opposite = ({
           R: "L'",
@@ -57,34 +54,34 @@ export default class Util {
           B: "F'",
           U: "D'",
           D: "U'",
-        } as { [key: string]: string })[b];
-        if (width == 1) {
-          return "(" + b + " " + opposite + ")" + y;
-        } else if (width == 2) {
-          return "(" + b.toLowerCase() + " " + opposite.toLowerCase() + ")" + y;
+        } as { [key: string]: string })[axis];
+        if (w == 1) {
+          return "(" + axis + " " + opposite + ")";
+        } else if (w == 2) {
+          return "(" + axis.toLowerCase() + " " + opposite.toLowerCase() + ")";
         } else {
-          return "(" + x + b.toLowerCase() + " " + x + opposite.toLowerCase() + ")" + y;
+          return "(" + width + axis.toLowerCase() + " " + width + opposite.toLowerCase() + ")";
         }
       case "N":
-        return "(" + x + b + ")" + y;
+        return "(" + width + axis + ")";
       case "T":
-        if (width == 2) {
-          return "(" + b.toLowerCase() + ")" + y;
+        if (w == 2) {
+          return "(" + axis.toLowerCase() + ")";
         } else {
-          return "(" + x + b.toLowerCase() + ")" + y;
+          return "(" + width + axis.toLowerCase() + ")";
         }
       case "W":
         const mes = ({
-          R: "M'",
-          L: "M",
-          F: "S",
-          B: "S'",
-          U: "E'",
-          D: "E",
-        } as { [key: string]: string })[b];
-        return "(" + mes.toLowerCase() + ")" + y;
+          R: "m'",
+          L: "m",
+          F: "s",
+          B: "s'",
+          U: "e'",
+          D: "e",
+        } as { [key: string]: string })[axis];
+        return "(" + mes + ")";
       case "V":
-        return "(" + "2-" + String(2 + width - 1) + b.toLowerCase() + ")" + y;
+        return "(" + "2-" + String(2 + w - 1) + axis.toLowerCase() + ")";
       case "C":
         const xyz = ({
           R: "x",
@@ -93,23 +90,24 @@ export default class Util {
           B: "z'",
           U: "y",
           D: "y'",
-        } as { [key: string]: string })[b];
-        return "(" + xyz.toLowerCase() + ")" + y;
+        } as { [key: string]: string })[axis];
+        return "(" + xyz.toLowerCase() + ")";
       case "M":
-        const from = Math.floor((order - width) / 2) + 1;
-        const to = from + width - 1;
-        return "(" + String(from) + "-" + String(to) + b.toLowerCase() + ")" + y;
+        const from = Math.floor((order - w) / 2) + 1;
+        const to = from + w - 1;
+        if (from == to) {
+          return "(" + String(from) + axis + ")";
+        }
+        return "(" + String(from) + "-" + String(to) + axis.toLowerCase() + ")";
     }
     return "";
   }
 
   static SSE2SIGN(order: number, exp: string): string {
     let result = "";
-    let state = "init";
-    let sntwvcm = "";
+    let state = "INIT";
+    let key = "";
     let width = "";
-    let rufbld = "";
-    let times = "";
     const dw: { [key: string]: number } = {
       S: 1,
       N: 2,
@@ -123,16 +121,12 @@ export default class Util {
     for (let i = 0; i < exp.length; i++) {
       const c = exp[i];
       switch (state) {
-        case "init":
+        case "INIT":
           if (/[SNTWVCM]/.test(c)) {
             state = "SNTWVCM";
-            sntwvcm = c;
+            key = c;
           } else {
             result = result + c;
-            sntwvcm = "";
-            width = "";
-            rufbld = "";
-            times = "";
           }
           break;
         case "SNTWVCM":
@@ -141,46 +135,19 @@ export default class Util {
             width = width + c;
           } else {
             state = "WIDTH";
-            width = String(dw[sntwvcm]);
+            width = String(dw[key]);
             i--;
           }
           break;
         case "WIDTH":
-          if (/[0123456789]/.test(c)) {
-            width = width + c;
-          } else if (/[RUFBLD]/.test(c)) {
-            state = "RUFBLD";
-            rufbld = c;
+          if (/[RUFBLD]/.test(c)) {
+            result = result + Util.SSE(order, key, width, c);
           } else {
-            state = "init";
-            sntwvcm = "";
-            width = "";
-            rufbld = "";
-            times = "";
-          }
-          break;
-        case "RUFBLD":
-          if (/[0123456789]/.test(c)) {
-            state = "TIMES";
-            times = times + c;
-          } else {
-            state = "TIMES";
-            times = "1";
             i--;
           }
-          break;
-        case "TIMES":
-          if (/[0123456789]/.test(c)) {
-            times = times + c;
-          } else {
-            result = result + Util.SSE(order, sntwvcm, width, rufbld, times);
-            state = "init";
-            sntwvcm = "";
-            width = "";
-            rufbld = "";
-            times = "";
-            i--;
-          }
+          state = "INIT";
+          key = "";
+          width = "";
           break;
         default:
           result = result + c;
