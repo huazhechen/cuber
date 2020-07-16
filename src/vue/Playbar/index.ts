@@ -100,21 +100,19 @@ export default class Playbar extends Vue {
   callback(): void {
     if (this.playing) {
       if (this.pprogress == this.actions.length) {
-        if (this.playing) {
-          this.playing = false;
-        }
+        this.playing = false;
         return;
       }
       let success;
       do {
-        const action = this.actions[this.pprogress];
+        const action = this.actions[this.pprogress++];
         success = this.world.cube.twister.twist(action, false, false);
         if (success) {
-          this.pprogress++;
           if (this.pprogress == this.actions.length) {
             break;
           }
         } else {
+          this.pprogress--;
           break;
         }
       } while (this.pprogress < this.actions.length);

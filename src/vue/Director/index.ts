@@ -505,7 +505,6 @@ export default class Director extends Vue {
     let data;
     let blob;
     let url;
-    this.playbar.init();
     if (filmt == "gif") {
       this.gif.finish();
       data = this.gif.out.getData();
