@@ -16,6 +16,7 @@ import World from "../../cuber/world";
 import pako from "pako";
 import ClipboardJS from "clipboard";
 import { PreferanceData, PaletteData } from "../../data";
+import { TwistNode } from "../../cuber/twister";
 
 export class DirectorData {
   private values = {
@@ -252,6 +253,22 @@ export default class Director extends Vue {
         window.open(this.link);
         this.shared = false;
         break;
+      case "clear":
+        this.action = "";
+        break;
+      case "expand":
+        let exp = this.action;
+        if (exp.startsWith("SSE:")) {
+          exp = exp.replace("SSE:", "");
+          exp = Util.SSE2SIGN(this.world.order, exp);
+        }
+        const actions = new TwistNode(exp).parse();
+        exp = "";
+        for (const action of actions) {
+          exp = exp + action.value + " ";
+        }
+        this.action = exp;
+        break;
       default:
         break;
     }
@@ -290,7 +307,12 @@ export default class Director extends Vue {
   action = "";
   @Watch("action")
   onActionChange(): void {
-    this.playbar.action = this.action;
+    let action = this.action;
+    if (action.startsWith("SSE:")) {
+      action = action.replace("SSE:", "");
+      action = Util.SSE2SIGN(this.world.order, action);
+    }
+    this.playbar.action = action;
     this.data.dramas[this.world.order].action = this.action;
     this.data.save();
   }

@@ -132,7 +132,7 @@
       { "name": "PLL-Ga", "origin": "R2U (R'UR'U') (RU'R2U'D) (R'URD')" },
       { "name": "PLL-Gb", "origin": "(R'd'F)(R2u) (R'URU'Ru'R'2)y'" },
       { "name": "PLL-Gc", "origin": "R2'U' (RU'RU) (R'UR2UD') (RU'R'D)" },
-      { "name": "PLL-Gd", "origin": "D'(RUR'U')D (R2U'RU') (R'UR'U)R2" },
+      { "name": "PLL-Gd", "origin": "(RUR'U'D) (R2U'RU') (R'UR'U)R2D'" },
       { "name": "PLL-H", "origin": "M2U M2U2 M2U M2" },
       { "name": "PLL-Ja", "origin": "(rR2'FRF'RU2') (r'UrU2'r')" },
       { "name": "PLL-Jb", "origin": "(RUR'F') (RUR'U') (R'F)(R2U'R')" },

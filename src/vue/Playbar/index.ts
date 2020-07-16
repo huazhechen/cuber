@@ -77,12 +77,7 @@ export default class Playbar extends Vue {
   actions: TwistAction[] = [];
   @Watch("action")
   onActionChange(): void {
-    let action = this.action;
-    if (action.startsWith("SSE:")) {
-      action = action.replace("SSE:", "");
-      action = Util.SSE2SIGN(this.world.order, action);
-    }
-    this.actions = new TwistNode(action).parse();
+    this.actions = new TwistNode(this.action).parse();
     this.init();
   }
 
@@ -90,12 +85,7 @@ export default class Playbar extends Vue {
     this.world.controller.lock = false;
     this.playing = false;
     this.pprogress = 0;
-    let action = this.action;
-    if (action.startsWith("SSE:")) {
-      action = action.replace("SSE:", "");
-      action = Util.SSE2SIGN(this.world.order, action);
-    }
-    const scene = this.scene.replace("^", "(" + action + ")'");
+    const scene = this.scene.replace("^", "(" + this.action + ")'");
     this.world.cube.twister.setup(scene);
   }
 

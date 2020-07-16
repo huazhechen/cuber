@@ -2,20 +2,12 @@
   <div v-resize="resize" style="user-select: none; touch-action: none;">
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
-    <v-container
-      v-show="!colord"
-      fluid
-      grid-list-md
-      text-xs-center
+    <v-container v-show="!colord" fluid grid-list-md text-xs-center
       :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px'}"
-      style="padding: 0%; touch-action: none;"
-    >
+      style="padding: 0%; touch-action: none;">
       <v-layout row wrap>
-        <v-flex
-          xs12
-          style="display: flex;"
-          :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}"
-        >
+        <v-flex xs12 style="display: flex;"
+          :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px','padding-bottom': size / 8 + 'px'}">
           <v-btn @click="tap('color')" :style="style" text :ripple="false" :disabled="recording">
             <v-icon :size="size * 0.8">colorize</v-icon>
           </v-btn>
@@ -33,35 +25,15 @@
           </v-btn>
         </v-flex>
         <v-flex xs12>
-          <v-text-field
-            style="text-transform: none;"
-            :height="size * 0.8"
+          <v-text-field style="text-transform: none;" :height="size * 0.8"
             :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
-            dense
-            hide-details
-            outlined
-            single-line
-            :disabled="recording"
-            v-model="action"
-          >
-            <v-btn
-              tabindex="-1"
-              slot="label"
-              text
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-            >
+            dense hide-details outlined single-line :disabled="recording" v-model="action">
+            <v-btn tabindex="-1" slot="label" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}">
               <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
             </v-btn>
-            <v-btn
-              tabindex="-1"
-              slot="append"
-              text
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}"
-              @click="scriptd=true"
-              :disabled="recording"
-            >
+            <v-btn tabindex="-1" slot="append" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}" @click="scriptd=true" :disabled="recording">
               <v-icon :size="size * 0.4">edit</v-icon>
             </v-btn>
           </v-text-field>
@@ -77,16 +49,9 @@
               <div :style="{'font-size':size * 0.3+'px'}">像素:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
-              <v-btn
-                v-for="i in [128, 256, 512, 1024, 2048]"
-                :key="i"
-                @click="data.pixel=i;data.save();"
-                :color="data.pixel == i?'primary':''"
-                depressed
-                style="text-transform: none; min-width: 0%; flex: 1;"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px'}"
-              >
+              <v-btn v-for="i in [128, 256, 512, 1024, 2048]" :key="i" @click="data.pixel=i;data.save();"
+                :color="data.pixel == i?'primary':''" depressed style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8" :style="{'font-size':size * 0.3+'px'}">
                 <div>{{i}}</div>
               </v-btn>
             </v-flex>
@@ -96,16 +61,9 @@
               <div :style="{'font-size':size * 0.3+'px'}">截图:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
-              <v-btn
-                v-for="i in ['png', 'svg']"
-                :key="i"
-                @click="data.snapt=i;data.save();"
-                :color="data.snapt == i?'primary':''"
-                depressed
-                style="text-transform: none; min-width: 0%; flex: 1;"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px'}"
-              >
+              <v-btn v-for="i in ['png', 'svg']" :key="i" @click="data.snapt=i;data.save();"
+                :color="data.snapt == i?'primary':''" depressed style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8" :style="{'font-size':size * 0.3+'px'}">
                 <div>{{i.toUpperCase()}}</div>
               </v-btn>
             </v-flex>
@@ -115,41 +73,22 @@
               <div :style="{'font-size':size * 0.3+'px'}">录制:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
-              <v-btn
-                v-for="i in ['gif', 'apng', 'pngs']"
-                :key="i"
-                @click="data.filmt=i;data.save();"
-                :color="data.filmt == i?'primary':''"
-                depressed
-                style="text-transform: none; min-width: 0%; flex: 1;"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px'}"
-              >
+              <v-btn v-for="i in ['gif', 'apng', 'pngs']" :key="i" @click="data.filmt=i;data.save();"
+                :color="data.filmt == i?'primary':''" depressed style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8" :style="{'font-size':size * 0.3+'px'}">
                 <div>{{i.toUpperCase()}}</div>
               </v-btn>
             </v-flex>
           </v-layout>
-          <v-layout
-            row
-            wrap
-            justify-center
-            align-center
-            :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}"
-          >
+          <v-layout row wrap justify-center align-center
+            :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}">
             <v-flex xs2>
               <div :style="{'font-size':size * 0.3+'px'}">间隔:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
-              <v-btn
-                v-for="i in [2, 3, 4, 5, 6, 10]"
-                :key="i"
-                @click="data.delay=i;data.save();"
-                :color="data.delay == i?'primary':''"
-                depressed
-                style="text-transform: none; min-width: 0%; flex: 1;"
-                :height="size * 0.8"
-                :style="{'font-size':size * 0.3+'px'}"
-              >
+              <v-btn v-for="i in [2, 3, 4, 5, 6, 10]" :key="i" @click="data.delay=i;data.save();"
+                :color="data.delay == i?'primary':''" depressed style="text-transform: none; min-width: 0%; flex: 1;"
+                :height="size * 0.8" :style="{'font-size':size * 0.3+'px'}">
                 <div>{{i}}</div>
               </v-btn>
             </v-flex>
@@ -159,35 +98,18 @@
     </v-bottom-sheet>
     <v-bottom-sheet v-model="colord" hide-overlay persistent no-click-animation :retain-focus="false">
       <v-card flat style="margin: auto; touch-action: none; user-select: none;">
-        <v-container
-          fluid
-          grid-list-md
-          text-xs-center
-          :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}"
-        >
+        <v-container fluid grid-list-md text-xs-center
+          :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}">
           <v-layout row wrap>
             <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="color = item;"
-                :color="colors[item]"
-                block
-                depressed
-                :ripple="false"
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-              >
+              <v-btn @click="color = item;" :color="colors[item]" block depressed :ripple="false"
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
                 <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
               </v-btn>
             </v-flex>
             <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="color = 'Core';"
-                block
-                depressed
-                :ripple="false"
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-              >
+              <v-btn @click="color = 'Core';" block depressed :ripple="false"
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
                 <v-icon :size="size * 0.8" v-show="color=='Core'">crop_din</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='Core'">
                   底色
@@ -195,14 +117,8 @@
               </v-btn>
             </v-flex>
             <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="color = 'remove';"
-                block
-                depressed
-                :ripple="false"
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-              >
+              <v-btn @click="color = 'remove';" block depressed :ripple="false"
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
                 <v-icon :size="size * 0.8" v-show="color=='remove'">block</v-icon>
                 <div :style="{'font-size':size * 0.4+'px'}" v-show="color!='remove'">
                   移除
@@ -210,30 +126,16 @@
               </v-btn>
             </v-flex>
             <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="reset"
-                block
-                depressed
-                :ripple="false"
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-                color="success"
-              >
+              <v-btn @click="reset" block depressed :ripple="false"
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="success">
                 <div :style="{'font-size':size * 0.4+'px'}">
                   重置
                 </div>
               </v-btn>
             </v-flex>
             <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
-              <v-btn
-                @click="clear"
-                block
-                depressed
-                :ripple="false"
-                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;"
-                :height="size"
-                color="error"
-              >
+              <v-btn @click="clear" block depressed :ripple="false"
+                style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="error">
                 <div :style="{'font-size':size * 0.4+'px'}">
                   清空
                 </div>
@@ -251,16 +153,8 @@
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none; padding-bottom: 0%;">
-          <v-textarea
-            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="2"
-            no-resize
-            solo
-            flat
-            outlined
-            hide-details
-            v-model="scene"
-          >
+          <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" rows="2" no-resize solo flat
+            outlined hide-details v-model="scene">
           </v-textarea>
         </v-card-text>
         <v-card-title style="text-transform: none;">
@@ -269,16 +163,16 @@
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none;">
-          <v-textarea
-            :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-            rows="6"
-            no-resize
-            solo
-            flat
-            outlined
-            hide-details
-            v-model="action"
-          >
+          <v-flex xs12 style="display: flex;">
+            <v-btn depressed @click="tap('expand')" :height="size * 0.8" color="success" style="flex: 1;">
+              <div :style="{'font-size':size/3+'px'}">展开</div>
+            </v-btn>
+            <v-btn depressed @click="tap('clear')" :height="size * 0.8" color="error" style="flex: 1;">
+              <div :style="{'font-size':size/3+'px'}">清空</div>
+            </v-btn>
+          </v-flex>
+          <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" rows="6" no-resize solo flat
+            outlined hide-details v-model="action">
           </v-textarea>
         </v-card-text>
         <v-card-actions>
@@ -302,15 +196,8 @@
         <v-card-actions>
           <v-layout row wrap style="margin: 0%;">
             <v-flex xs12 d-flex>
-              <v-textarea
-                id="link"
-                :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}"
-                solo
-                flat
-                outlined
-                hide-details
-                v-model="link"
-              >
+              <v-textarea id="link" :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" solo flat
+                outlined hide-details v-model="link">
               </v-textarea>
             </v-flex>
             <v-flex xs6 d-flex>
