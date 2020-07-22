@@ -228,12 +228,9 @@ export default class Twister {
         axis = Math.floor(Math.random() * 3);
       }
       const side = Math.floor(Math.random() * 2);
-      let action = actions[axis * 2 + side];
+      const action = actions[axis * 2 + side];
       const prefix = Math.ceil(Math.random() * Math.floor(this.cube.order / 2));
-      if (prefix === 1) {
-        action = action[0];
-      }
-      if (prefix > 2) {
+      if (prefix !== 1) {
         exp.push(prefix);
       }
       exp.push(action);
