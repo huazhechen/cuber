@@ -126,7 +126,7 @@ export default class CoordCube {
       }
       for (let j = 0; j < 16; j++) {
         CubieCube.CornConjugate(CoordCube.CubieC, CubieCube.SymMultInv[0][j], CoordCube.CubieD);
-        CoordCube.CCombPConj[i][j] = CoordCube.CubieD.CComb + 70 * (i / 70);
+        CoordCube.CCombPConj[i][j] = CoordCube.CubieD.CComb + 70 * ~~(i / 70);
       }
     }
   }
@@ -322,5 +322,51 @@ export default class CoordCube {
       CubieCube.SymStatePerm,
       0x7d824
     );
+  }
+
+  setWithPrun(cc: CubieCube, depth: number): boolean {
+    this.twist = cc.TwistSym;
+    this.flip = cc.FlipSym;
+    this.tsym = this.twist & 7;
+    this.twist = this.twist >> 3;
+    this.prun = 0;
+    this.fsym = this.flip & 7;
+    this.flip = this.flip >> 3;
+    this.slice = cc.UDSlice;
+    this.prun = Math.max(
+      this.prun,
+      Math.max(
+        CoordCube.GetPruning(
+          CoordCube.UDSliceTwistPrun,
+          this.twist * CoordCube.N_SLICE + CoordCube.UDSliceConj[this.slice][this.tsym]
+        ),
+        CoordCube.GetPruning(
+          CoordCube.UDSliceFlipPrun,
+          this.flip * CoordCube.N_SLICE + CoordCube.UDSliceConj[this.slice][this.fsym]
+        )
+      )
+    );
+    return this.prun <= depth;
+  }
+
+  doMovePrun(cc: CoordCube, m: number): number {
+    this.slice = CoordCube.UDSliceMove[cc.slice][m];
+    this.flip = CoordCube.FlipMove[cc.flip][CubieCube.Sym8Move[(m << 3) | cc.fsym]];
+    this.fsym = (this.flip & 7) ^ cc.fsym;
+    this.flip >>= 3;
+    this.twist = CoordCube.TwistMove[cc.twist][CubieCube.Sym8Move[(m << 3) | cc.tsym]];
+    this.tsym = (this.twist & 7) ^ cc.tsym;
+    this.twist >>= 3;
+    this.prun = Math.max(
+      CoordCube.GetPruning(
+        CoordCube.UDSliceTwistPrun,
+        this.twist * CoordCube.N_SLICE + CoordCube.UDSliceConj[this.slice][this.tsym]
+      ),
+      CoordCube.GetPruning(
+        CoordCube.UDSliceFlipPrun,
+        this.flip * CoordCube.N_SLICE + CoordCube.UDSliceConj[this.slice][this.fsym]
+      )
+    );
+    return this.prun;
   }
 }

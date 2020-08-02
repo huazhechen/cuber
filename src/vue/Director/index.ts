@@ -328,7 +328,7 @@ export default class Director extends Vue {
     }
     const cubelet: Cubelet = this.world.cube.cubelets[index];
     index = cubelet.initial;
-    face = cubelet.getColor(face);
+    face = cubelet.getFace(face);
     let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
       arr = {};

@@ -274,7 +274,7 @@ export default class Cubelet extends THREE.Group {
     }
   }
 
-  getColor(face: FACE): number {
+  getFace(face: FACE): number {
     const position = new THREE.Vector3(0, 0, 0);
     switch (face) {
       case FACE.L:
@@ -318,6 +318,28 @@ export default class Cubelet extends THREE.Group {
       color = FACE.F;
     }
     return color;
+  }
+
+  getColor(face: FACE): string {
+    const sticker = this.stickers[this.getFace(face)];
+    if (!sticker || !sticker.visible) {
+      return "?";
+    }
+    switch (sticker.material) {
+      case Cubelet.LAMBERS.L:
+        return "L";
+      case Cubelet.LAMBERS.R:
+        return "R";
+      case Cubelet.LAMBERS.F:
+        return "F";
+      case Cubelet.LAMBERS.B:
+        return "B";
+      case Cubelet.LAMBERS.U:
+        return "U";
+      case Cubelet.LAMBERS.D:
+        return "D";
+    }
+    return "?";
   }
 
   initial: number;

@@ -168,9 +168,16 @@ export default class Helper extends Vue {
   color = "R";
   stickers: { [face: string]: { [index: number]: string } | undefined };
   stick(index: number, face: number): void {
+    if (index < 0) {
+      const state = this.world.cube.serialize();
+      const solution = this.searcher.solve(state);
+      console.log(state);
+      console.log(solution);
+      return;
+    }
     const cubelet: Cubelet = this.world.cube.cubelets[index];
     index = cubelet.initial;
-    face = cubelet.getColor(face);
+    face = cubelet.getFace(face);
     let arr = this.stickers[FACE[face]];
     if (arr == undefined) {
       arr = {};

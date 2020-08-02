@@ -108,6 +108,27 @@ export default class Util {
     [Util.B4, Util.R6],
   ];
 
+  static MOVE2STR = [
+    "U ",
+    "U2",
+    "U'",
+    "R ",
+    "R2",
+    "R'",
+    "F ",
+    "F2",
+    "F'",
+    "D ",
+    "D2",
+    "D'",
+    "L ",
+    "L2",
+    "L'",
+    "B ",
+    "B2",
+    "B'",
+  ];
+
   static UD2STD = [
     Util.Ux1,
     Util.Ux2,
@@ -177,13 +198,13 @@ export default class Util {
     let p = 0;
     for (let i = n - 2; i >= 0; i--) {
       p ^= idx % (n - i);
-      idx /= n - i;
+      idx = ~~(idx / (n - i));
     }
     return p & 1;
   }
 
   static SetVal(src: number, dst: number, edge: boolean): number {
-    return edge ? (dst << 1) | (src & 1) : dst | (src & ~7);
+    return edge ? (dst << 1) | (src & 1) : dst | (src & 0xf8);
   }
 
   static GetVal(src: number, edge: boolean): number {

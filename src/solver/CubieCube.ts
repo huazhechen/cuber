@@ -156,7 +156,7 @@ export default class CubieCube {
     const isEdge = coord != 1;
 
     for (let i = 0; i < N_RAW; i++) {
-      if (Raw2Sym[i] != 0) {
+      if (Raw2Sym[i] != undefined) {
         continue;
       }
       switch (coord) {
@@ -473,9 +473,75 @@ export default class CubieCube {
     if (sum % 3 != 0) {
       return -5; // twisted corner
     }
-    if ((Util.GetNParity(Util.GetNPerm(this.ea, 12, true), 12) ^ Util.GetNParity(this.CPerm, 8)) != 0) {
+    if ((Util.GetNParity(Util.GetNPermFull(this.ea, 12, true), 12) ^ Util.GetNParity(this.CPerm, 8)) != 0) {
       return -6; // parity error
     }
     return 0; // cube ok
+  }
+
+  serialize(): string {
+    const ts = "URFDLB";
+    const f = [];
+    for (let i = 0; i < 54; i++) {
+      f[i] = ts[~~(i / 9)];
+    }
+    for (let c = 0; c < 8; c++) {
+      const j = this.ca[c] & 0x7; // cornercubie with index j is at
+      const ori = this.ca[c] >> 3; // Orientation of this cubie
+      for (let n = 0; n < 3; n++) f[Util.CornerFacelet[c][(n + ori) % 3]] = ts[~~(Util.CornerFacelet[j][n] / 9)];
+    }
+    for (let e = 0; e < 12; e++) {
+      const j = this.ea[e] >> 1; // edgecubie with index j is at edgeposition
+      const ori = this.ea[e] & 1; // Orientation of this cubie
+      for (let n = 0; n < 2; n++) f[Util.EdgeFacelet[e][(n + ori) % 2]] = ts[~~(Util.EdgeFacelet[j][n] / 9)];
+    }
+    return f.join("");
+  }
+
+  deserialize(facelet: string): boolean {
+    let count = 0;
+    const f = [];
+    const centers = facelet[4] + facelet[13] + facelet[22] + facelet[31] + facelet[40] + facelet[49];
+    for (let i = 0; i < 54; ++i) {
+      f[i] = centers.indexOf(facelet[i]);
+      if (f[i] == -1) {
+        return false;
+      }
+      count += 1 << (f[i] << 2);
+    }
+    if (count != 0x999999) {
+      return false;
+    }
+    let col1, col2, i, j, ori;
+    for (i = 0; i < 8; ++i) {
+      for (ori = 0; ori < 3; ++ori) if (f[Util.CornerFacelet[i][ori]] == 0 || f[Util.CornerFacelet[i][ori]] == 3) break;
+      col1 = f[Util.CornerFacelet[i][(ori + 1) % 3]];
+      col2 = f[Util.CornerFacelet[i][(ori + 2) % 3]];
+      for (j = 0; j < 8; ++j) {
+        if (col1 == ~~(Util.CornerFacelet[j][1] / 9) && col2 == ~~(Util.CornerFacelet[j][2] / 9)) {
+          this.ca[i] = j | (ori % 3 << 3);
+          break;
+        }
+      }
+    }
+    for (i = 0; i < 12; ++i) {
+      for (j = 0; j < 12; ++j) {
+        if (
+          f[Util.EdgeFacelet[i][0]] == ~~(Util.EdgeFacelet[j][0] / 9) &&
+          f[Util.EdgeFacelet[i][1]] == ~~(Util.EdgeFacelet[j][1] / 9)
+        ) {
+          this.ea[i] = j << 1;
+          break;
+        }
+        if (
+          f[Util.EdgeFacelet[i][0]] == ~~(Util.EdgeFacelet[j][1] / 9) &&
+          f[Util.EdgeFacelet[i][1]] == ~~(Util.EdgeFacelet[j][0] / 9)
+        ) {
+          this.ea[i] = (j << 1) | 1;
+          break;
+        }
+      }
+    }
+    return true;
   }
 }
