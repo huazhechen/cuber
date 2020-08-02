@@ -1,0 +1,35 @@
+<v-app>
+  <div v-resize="resize" style="user-select: none; touch-action: none;">
+    <setting ref="setting"> </setting>
+    <viewport ref="viewport"></viewport>
+    <v-card flat style="margin: auto; touch-action: none; user-select: none;">
+      <v-container fluid grid-list-md text-xs-center
+        :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}">
+        <v-layout row wrap>
+          <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="color = item;" :color="colors[item]" block depressed :ripple="false"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
+              <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="reset" block depressed :ripple="false"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="success">
+              <div :style="{'font-size':size * 0.4+'px'}">
+                重置
+              </div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="clear" block depressed :ripple="false"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="error">
+              <div :style="{'font-size':size * 0.4+'px'}">
+                清空
+              </div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </div>
+</v-app>
