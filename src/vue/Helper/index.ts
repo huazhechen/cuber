@@ -120,6 +120,22 @@ export default class Helper extends Vue {
     this.reload();
   }
 
+  reset(): void {
+    this.stickers = {};
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      const key = FACE[face];
+      const group = this.world.cube.table.face(key);
+      const list = [];
+      for (const indice of group.indices) {
+        list[indice] = key;
+      }
+      this.stickers[FACE[face]] = list;
+    }
+    this.data.stickers = this.stickers;
+    this.data.save();
+    this.reload();
+  }
+
   reload(): void {
     this.world.order = 3;
     if (!this.data.stickers) {
@@ -145,6 +161,7 @@ export default class Helper extends Vue {
         this.world.cube.stick(index, face, value);
       }
     }
+    this.state = this.world.cube.serialize();
   }
 
   loop(): void {
@@ -166,6 +183,18 @@ export default class Helper extends Vue {
 
   color = "R";
   stickers: { [face: string]: { [index: number]: string } | undefined } = {};
+  state = "";
+  get faces(): { [face: string]: number } {
+    const ret: { [face: string]: number } = {};
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      const key = FACE[face];
+      ret[key] = 0;
+    }
+    for (const c of this.state) {
+      ret[c]++;
+    }
+    return ret;
+  }
 
   stick(index: number, face: number): void {
     if (index < 0) {
@@ -183,6 +212,7 @@ export default class Helper extends Vue {
     this.world.cube.stick(index, face, this.color);
     this.data.stickers = this.stickers;
     this.data.save();
+    this.state = this.world.cube.serialize();
   }
 
   solutiond = false;
@@ -190,7 +220,9 @@ export default class Helper extends Vue {
   solve(): void {
     const state = this.world.cube.serialize();
     this.solution = this.searcher.solve(state);
-    this.solutiond = true;
+    if (this.solution.length != 0) {
+      this.solutiond = true;
+    }
     return;
   }
 
@@ -198,7 +230,7 @@ export default class Helper extends Vue {
     const data: { [key: string]: {} } = {};
     const order = this.world.order;
     data["order"] = order;
-    const drama = { scene: "", action: this.solution, stickers: this.stickers };
+    const drama = { scene: this.world.cube.history.exp, action: this.solution, stickers: this.stickers };
     data["drama"] = drama;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });
