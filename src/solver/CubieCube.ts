@@ -448,7 +448,7 @@ export default class CubieCube {
     Util.SetComb(this.ca, idx, 0, false);
   }
 
-  verify(): number {
+  verify(): string {
     let sum = 0;
     let mask = 0;
     for (let e = 0; e < 12; e++) {
@@ -456,10 +456,10 @@ export default class CubieCube {
       sum ^= this.ea[e] & 1;
     }
     if (mask != 0xfff) {
-      return -2; // missing edges
+      return "missing edges";
     }
     if (sum != 0) {
-      return -3;
+      return "fliped edges";
     }
     mask = 0;
     sum = 0;
@@ -468,15 +468,15 @@ export default class CubieCube {
       sum += this.ca[c] >> 3;
     }
     if (mask != 0xff) {
-      return -4; // missing corners
+      return "missing corners";
     }
     if (sum % 3 != 0) {
-      return -5; // twisted corner
+      return "twisted corner";
     }
     if ((Util.GetNParity(Util.GetNPermFull(this.ea, 12, true), 12) ^ Util.GetNParity(this.CPerm, 8)) != 0) {
-      return -6; // parity error
+      return "parity error";
     }
-    return 0; // cube ok
+    return "";
   }
 
   serialize(): string {

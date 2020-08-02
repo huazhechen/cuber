@@ -6,23 +6,23 @@
       <v-container fluid grid-list-md text-xs-center
         :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}">
         <v-layout row wrap>
-          <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
+          <v-flex v-for="item in colort" :key="item" xs4 :style="{padding:size * 0.06 + 'px'}">
             <v-btn @click="color = item;" :color="colors[item]" block depressed :ripple="false"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
-            <v-btn @click="reset" block depressed :ripple="false"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="success">
+          <v-flex xs6 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="solve" block depressed :ripple="false"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <div :style="{'font-size':size * 0.4+'px'}">
-                重置
+                求解
               </div>
             </v-btn>
           </v-flex>
-          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+          <v-flex xs6 :style="{padding:size * 0.06 + 'px'}">
             <v-btn @click="clear" block depressed :ripple="false"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size" color="error">
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <div :style="{'font-size':size * 0.4+'px'}">
                 清空
               </div>
@@ -32,4 +32,33 @@
       </v-container>
     </v-card>
   </div>
+  <v-dialog v-model="solutiond" :width="Math.min(size * 8, width)" eager>
+    <v-card>
+      <v-card-title style="text-transform: none;">
+        <div :style="{'font-size':size * 0.4+'px','padding-top':size/8+'px'}">
+          解法:
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-layout row wrap style="margin: 0%;">
+          <v-flex xs12 d-flex>
+            <v-textarea id="copy" :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" solo flat
+              outlined hide-details v-model="solution">
+            </v-textarea>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block text @click="play" :height="size * 0.8" :disabled="solution.startsWith('error')">
+              <div :style="{'font-size':size/3+'px'}">播放</div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs6 d-flex>
+            <v-btn block text @click="solutiond = false;" :height="size * 0.8" data-clipboard-target="#copy" ref="copy"
+              :disabled="solution.startsWith('error')">
+              <div :style="{'font-size':size/3+'px'}">复制</div>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </v-app>

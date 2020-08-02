@@ -8,6 +8,8 @@ import Setting from "../Setting";
 import World from "../../cuber/world";
 import { PreferanceData, PaletteData } from "../../data";
 import Solver from "../../solver/Solver";
+import ClipboardJS from "clipboard";
+import pako from "pako";
 
 export class HelperData {
   private values = {
@@ -75,6 +77,9 @@ export default class Helper extends Vue {
   @Ref("setting")
   setting: Setting;
 
+  @Ref("copy")
+  copy: Vue;
+
   colort: string[];
   colors: { [key: string]: string };
 
@@ -92,6 +97,8 @@ export default class Helper extends Vue {
   }
 
   mounted(): void {
+    new ClipboardJS(this.copy.$el);
+
     this.setting.items["order"].disable = true;
     this.stickers = {};
     this.reload();
@@ -107,9 +114,27 @@ export default class Helper extends Vue {
     this.loop();
   }
 
+  clear(): void {
+    this.stickers = {};
+    this.data.stickers = this.stickers;
+    this.data.save();
+    this.reload();
+  }
+
   reload(): void {
     this.world.order = 3;
-    this.world.cube.strip({});
+    if (!this.data.stickers) {
+      this.data.stickers = {};
+    }
+    this.stickers = this.data.stickers;
+
+    const strip: { [face: string]: number[] | undefined } = {};
+    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+      const key = FACE[face];
+      const group = this.world.cube.table.face(key);
+      strip[key] = group.indices;
+    }
+    this.world.cube.strip(strip);
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       const list = this.stickers[FACE[face]];
       if (!list) {
@@ -140,39 +165,10 @@ export default class Helper extends Vue {
     };
   }
 
-  reset(): void {
-    this.stickers = {};
-    this.world.cube.strip({});
-  }
-
-  clear(): void {
-    const strip: { [face: string]: number[] | undefined } = {};
-    for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-      const key = FACE[face];
-      const group = this.world.cube.table.face(key);
-      strip[key] = group.indices;
-      let arr = this.stickers[FACE[face]];
-      if (arr == undefined) {
-        arr = {};
-        this.stickers[FACE[face]] = arr;
-      }
-      for (const index of group.indices) {
-        arr[index] = "remove";
-      }
-    }
-    this.world.cube.strip(strip);
-    this.data.stickers = this.stickers;
-    this.data.save();
-  }
-
   color = "R";
   stickers: { [face: string]: { [index: number]: string } | undefined };
   stick(index: number, face: number): void {
     if (index < 0) {
-      const state = this.world.cube.serialize();
-      const solution = this.searcher.solve(state);
-      console.log(state);
-      console.log(solution);
       return;
     }
     const cubelet: Cubelet = this.world.cube.cubelets[index];
@@ -190,5 +186,30 @@ export default class Helper extends Vue {
       arr[index] = this.color;
       this.world.cube.stick(index, face, this.color);
     }
+    this.data.stickers = this.stickers;
+    this.data.save();
+  }
+
+  solutiond = false;
+  solution = "";
+  solve(): void {
+    const state = this.world.cube.serialize();
+    this.solution = this.searcher.solve(state);
+    this.solutiond = true;
+    return;
+  }
+
+  play(): void {
+    const data: { [key: string]: {} } = {};
+    const order = this.world.order;
+    data["order"] = order;
+    const drama = { scene: "^", action: this.solution, stickers: this.stickers };
+    data["drama"] = drama;
+    let string = JSON.stringify(data);
+    string = pako.deflate(string, { to: "string" });
+    string = window.btoa(string);
+    const search = "mode=player&data=" + string;
+    const link = window.location.origin + window.location.pathname + "?" + search;
+    window.open(link);
   }
 }

@@ -73,11 +73,11 @@ export default class Solver {
   solve(facelets: string): string {
     const valid = this.cc.deserialize(facelets);
     if (!valid) {
-      return "error";
+      return "error: invalid cube";
     }
     const verify = this.cc.verify();
-    if (verify != 0) {
-      return "invalid:" + verify;
+    if (verify.length > 0) {
+      return "error: " + verify;
     }
     this.sol = 22;
     this.probe = 0;
