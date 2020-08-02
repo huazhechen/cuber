@@ -16,7 +16,8 @@ import { PreferanceData, PaletteData } from "../../data";
     setting: Setting,
   },
 })
-export default class Algs extends Vue {
+
+export default class Player extends Vue {
   @Provide("world")
   world: World = new World();
 

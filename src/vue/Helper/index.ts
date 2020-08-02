@@ -100,7 +100,6 @@ export default class Helper extends Vue {
     new ClipboardJS(this.copy.$el);
 
     this.setting.items["order"].disable = true;
-    this.stickers = {};
     this.reload();
     this.world.controller.taps.push((index: number, face: number) => {
       this.stick(index, face);
@@ -166,7 +165,8 @@ export default class Helper extends Vue {
   }
 
   color = "R";
-  stickers: { [face: string]: { [index: number]: string } | undefined };
+  stickers: { [face: string]: { [index: number]: string } | undefined } = {};
+
   stick(index: number, face: number): void {
     if (index < 0) {
       return;
@@ -179,13 +179,8 @@ export default class Helper extends Vue {
       arr = {};
       this.stickers[FACE[face]] = arr;
     }
-    if (this.color == FACE[face]) {
-      delete arr[index];
-      this.world.cube.stick(index, face, "");
-    } else {
-      arr[index] = this.color;
-      this.world.cube.stick(index, face, this.color);
-    }
+    arr[index] = this.color;
+    this.world.cube.stick(index, face, this.color);
     this.data.stickers = this.stickers;
     this.data.save();
   }
@@ -203,7 +198,7 @@ export default class Helper extends Vue {
     const data: { [key: string]: {} } = {};
     const order = this.world.order;
     data["order"] = order;
-    const drama = { scene: "^", action: this.solution, stickers: this.stickers };
+    const drama = { scene: "", action: this.solution, stickers: this.stickers };
     data["drama"] = drama;
     let string = JSON.stringify(data);
     string = pako.deflate(string, { to: "string" });

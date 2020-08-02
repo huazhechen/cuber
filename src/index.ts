@@ -5,7 +5,6 @@ import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import Playground from "./vue/Playground";
 import Director from "./vue/Director";
-import Algs from "./vue/Algs";
 import Player from "./vue/Player";
 import Helper from "./vue/Helper";
 import { VueConstructor } from "vue/types/umd";
@@ -38,9 +37,6 @@ let app: VueConstructor;
 switch (mode) {
   case "director":
     app = Director;
-    break;
-  case "algs":
-    app = Algs;
     break;
   case "player":
     app = Player;
