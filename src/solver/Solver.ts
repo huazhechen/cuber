@@ -142,7 +142,6 @@ export default class Solver {
   depth1 = 0;
 
   phase1PreMoves(maxl: number, lm: number, cc: CubieCube): number {
-    console.log("phase1PreMoves");
     this.preMoveLen = this.maxPreMoves - maxl;
     if (
       this.isRec ? this.depth1 == this.length1 - this.preMoveLen : this.preMoveLen == 0 || ((0x36fb7 >> lm) & 1) == 0
@@ -190,7 +189,6 @@ export default class Solver {
   }
 
   phase1(node: CoordCube, maxl: number, lm: number): number {
-    console.log("phase1");
     if (node.prun == 0 && maxl < 5) {
       if (this.allowShorter || maxl == 0) {
         this.depth1 -= maxl;
@@ -233,7 +231,6 @@ export default class Solver {
   }
 
   initPhase2Pre(): number {
-    console.log("initPhase2Pre");
     this.isRec = false;
     if (this.probe >= (this.moveSol == null ? this.probeMax : this.probeMin)) {
       return 0;
@@ -262,7 +259,6 @@ export default class Solver {
   }
 
   initPhase2(phase2Cubie: CubieCube): number {
-    console.log("initPhase2");
     let p2corn = phase2Cubie.CPermSym;
     const p2csym = p2corn & 0xf;
     p2corn >>= 4;
@@ -315,7 +311,6 @@ export default class Solver {
   }
 
   appendSolMove(move: number): void {
-    console.log("appendSolMove");
     if (!this.moveSol) {
       return;
     }
@@ -361,7 +356,6 @@ export default class Solver {
     depth: number,
     lm: number
   ): number {
-    console.log("phase2");
     if (edge == 0 && corn == 0 && mid == 0) {
       return maxl;
     }

@@ -384,7 +384,7 @@ export default class CubieCube {
   set Twist(idx) {
     let twst = 15;
     let val = 0;
-    for (let i = 6; i >= 0; i--, idx /= 3) {
+    for (let i = 6; i >= 0; i--, idx = ~~(idx / 3)) {
       twst -= val = idx % 3;
       this.ca[i] = (this.ca[i] & 0x7) | (val << 3);
     }
