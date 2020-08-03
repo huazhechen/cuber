@@ -3,33 +3,31 @@ import CoordCube from "./CoordCube";
 import Util from "./Util";
 
 export default class Solver {
-  static MAX_PRE_MOVES = 20;
-  static TRY_INVERSE = true;
-  static TRY_THREE_AXES = true;
-  static MIN_P1LENGTH_PRE = 7;
-  static MAX_DEPTH2 = 13;
+  private static MAX_PRE_MOVES = 20;
+  private static TRY_INVERSE = true;
+  private static TRY_THREE_AXES = true;
+  private static MIN_P1LENGTH_PRE = 7;
+  private static MAX_DEPTH2 = 13;
 
-  valid1: number;
-  cc: CubieCube;
-  move: number[];
-  moveSol: number[] | null;
-
-  nodeUD: CoordCube[];
-  urfCubieCube: CubieCube[];
-  urfCoordCube: CoordCube[];
-  phase1Cubie: CubieCube[];
-  preMoveCubes: CubieCube[];
-
-  allowShorter: boolean;
-  preMoves: number[];
-  preMoveLen: number;
-  maxPreMoves: number;
-  isRec = false;
-  sol: number;
-  probe: number;
-  probeMin: number;
-  probeMax: number;
-  verbose: number;
+  private valid1: number;
+  private cc: CubieCube;
+  private move: number[];
+  private moveSol: number[] | null;
+  private nodeUD: CoordCube[];
+  private urfCubieCube: CubieCube[];
+  private urfCoordCube: CoordCube[];
+  private phase1Cubie: CubieCube[];
+  private preMoveCubes: CubieCube[];
+  private allowShorter: boolean;
+  private preMoves: number[];
+  private preMoveLen: number;
+  private maxPreMoves: number;
+  private isRec = false;
+  private sol: number;
+  private probe: number;
+  private probeMin: number;
+  private probeMax: number;
+  private verbose: number;
 
   constructor() {
     CubieCube.Init();
@@ -91,8 +89,8 @@ export default class Solver {
     return solution;
   }
 
-  conjMask: number;
-  initSearch(): void {
+  private conjMask: number;
+  private initSearch(): void {
     this.conjMask = (Solver.TRY_INVERSE ? 0 : 0x38) | (Solver.TRY_THREE_AXES ? 0 : 0x36);
     this.maxPreMoves = this.conjMask > 7 ? 0 : Solver.MAX_PRE_MOVES;
 
@@ -106,9 +104,9 @@ export default class Solver {
     }
   }
 
-  length1 = 0;
-  urfIdx = 0;
-  search(): string {
+  private length1 = 0;
+  private urfIdx = 0;
+  private search(): string {
     for (this.length1 = this.isRec ? this.length1 : 0; this.length1 < this.sol; this.length1++) {
       for (this.urfIdx = this.isRec ? this.urfIdx : 0; this.urfIdx < 6; this.urfIdx++) {
         if ((this.conjMask & (1 << this.urfIdx)) != 0) {
@@ -122,7 +120,7 @@ export default class Solver {
     return this.moveSol == null ? "Error 7" : this.getSolution();
   }
 
-  getSolution(): string {
+  private getSolution(): string {
     let ret = "";
     if (!this.moveSol) {
       return ret;
@@ -139,9 +137,9 @@ export default class Solver {
     }
     return ret;
   }
-  depth1 = 0;
+  private depth1 = 0;
 
-  phase1PreMoves(maxl: number, lm: number, cc: CubieCube): number {
+  private phase1PreMoves(maxl: number, lm: number, cc: CubieCube): number {
     this.preMoveLen = this.maxPreMoves - maxl;
     if (
       this.isRec ? this.depth1 == this.length1 - this.preMoveLen : this.preMoveLen == 0 || ((0x36fb7 >> lm) & 1) == 0
@@ -188,7 +186,7 @@ export default class Solver {
     return 1;
   }
 
-  phase1(node: CoordCube, maxl: number, lm: number): number {
+  private phase1(node: CoordCube, maxl: number, lm: number): number {
     if (node.prun == 0 && maxl < 5) {
       if (this.allowShorter || maxl == 0) {
         this.depth1 -= maxl;
@@ -230,7 +228,7 @@ export default class Solver {
     return 1;
   }
 
-  initPhase2Pre(): number {
+  private initPhase2Pre(): number {
     this.isRec = false;
     if (this.probe >= (this.moveSol == null ? this.probeMax : this.probeMin)) {
       return 0;
@@ -258,7 +256,7 @@ export default class Solver {
     return ret;
   }
 
-  initPhase2(phase2Cubie: CubieCube): number {
+  private initPhase2(phase2Cubie: CubieCube): number {
     let p2corn = phase2Cubie.CPermSym;
     const p2csym = p2corn & 0xf;
     p2corn >>= 4;
@@ -310,7 +308,7 @@ export default class Solver {
     }
   }
 
-  appendSolMove(move: number): void {
+  private appendSolMove(move: number): void {
     if (!this.moveSol) {
       return;
     }
@@ -346,7 +344,7 @@ export default class Solver {
     this.moveSol.push(move);
   }
 
-  phase2(
+  private phase2(
     edge: number,
     esym: number,
     corn: number,
