@@ -86,7 +86,7 @@ export default class Helper extends Vue {
   constructor() {
     super();
     this.colors = COLORS;
-    this.colort = ["R", "L", "F", "B", "U", "D"];
+    this.colort = ["R", "F", "D", "L", "B", "U"];
   }
 
   resize(): void {
