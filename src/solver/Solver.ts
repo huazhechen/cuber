@@ -89,6 +89,17 @@ export default class Solver {
     return solution;
   }
 
+  next(): string {
+    this.probe = 0;
+    this.probeMax = 1e9;
+    this.probeMin = 0;
+    this.verbose = 0;
+    this.moveSol = null;
+    this.isRec = true;
+    const solution = this.search();
+    return solution;
+  }
+
   private conjMask: number;
   private initSearch(): void {
     this.conjMask = (Solver.TRY_INVERSE ? 0 : 0x38) | (Solver.TRY_THREE_AXES ? 0 : 0x36);
@@ -113,11 +124,11 @@ export default class Solver {
           continue;
         }
         if (this.phase1PreMoves(this.maxPreMoves, -30, this.urfCubieCube[this.urfIdx]) == 0) {
-          return this.moveSol == null ? "Error 8" : this.getSolution();
+          return this.moveSol == null ? "error: no solution for prob" : this.getSolution();
         }
       }
     }
-    return this.moveSol == null ? "Error 7" : this.getSolution();
+    return this.moveSol == null ? "error: no solution for depth" : this.getSolution();
   }
 
   private getSolution(): string {
