@@ -10,11 +10,13 @@ import { PreferanceData, PaletteData } from "../../data";
 import Solver from "../../solver/Solver";
 import ClipboardJS from "clipboard";
 import pako from "pako";
+import { TwistNode } from "../../cuber/twister";
 
 export class HelperData {
   private values = {
-    version: "0.1",
+    version: "0.2",
     stickers: {},
+    history: "",
   };
 
   constructor() {
@@ -43,6 +45,14 @@ export class HelperData {
 
   set stickers(value) {
     this.values.stickers = value;
+  }
+
+  get history(): string {
+    return this.values.history;
+  }
+
+  set history(value) {
+    this.values.history = value;
   }
 }
 
@@ -98,6 +108,9 @@ export default class Helper extends Vue {
 
   mounted(): void {
     new ClipboardJS(this.copy.$el);
+    this.world.callbacks.push(() => {
+      this.callback();
+    });
 
     this.setting.items["order"].disable = true;
     this.reload();
@@ -111,6 +124,11 @@ export default class Helper extends Vue {
       this.palette.refresh();
     });
     this.loop();
+  }
+
+  callback(): void {
+    this.data.history = this.world.cube.history.exp;
+    this.data.save();
   }
 
   clear(): void {
@@ -140,6 +158,12 @@ export default class Helper extends Vue {
   reload(): void {
     this.world.order = 3;
     this.stickers = this.data.stickers;
+    const node = new TwistNode(this.data.history);
+    const list = node.parse();
+    for (const action of list) {
+      this.world.cube.twister.twist(action, true, true);
+    }
+    this.callback();
 
     const strip: { [face: string]: number[] | undefined } = {};
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
