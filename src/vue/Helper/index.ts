@@ -22,7 +22,7 @@ export class HelperData {
   }
 
   load(): void {
-    const save = window.localStorage.getItem("solver");
+    const save = window.localStorage.getItem("helper");
     if (save) {
       const data = JSON.parse(save);
       if (data.version != this.values.version) {
@@ -34,7 +34,7 @@ export class HelperData {
   }
 
   save(): void {
-    window.localStorage.setItem("solver", JSON.stringify(this.values));
+    window.localStorage.setItem("helper", JSON.stringify(this.values));
   }
 
   get stickers(): { [face: string]: { [index: number]: string } | undefined } {
@@ -65,7 +65,7 @@ export default class Helper extends Vue {
 
   data: HelperData = new HelperData();
 
-  searcher: Solver = new Solver();
+  solver: Solver = new Solver();
 
   width = 0;
   height = 0;
@@ -121,6 +121,7 @@ export default class Helper extends Vue {
   }
 
   reset(): void {
+    this.world.cube.reset();
     this.stickers = {};
     for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
       const key = FACE[face];
@@ -138,9 +139,6 @@ export default class Helper extends Vue {
 
   reload(): void {
     this.world.order = 3;
-    if (!this.data.stickers) {
-      this.data.stickers = {};
-    }
     this.stickers = this.data.stickers;
 
     const strip: { [face: string]: number[] | undefined } = {};
@@ -167,7 +165,7 @@ export default class Helper extends Vue {
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
     this.viewport.draw();
-    this.searcher.init();
+    this.solver.init();
   }
 
   get style(): {} {
@@ -219,10 +217,11 @@ export default class Helper extends Vue {
   solution = "";
   solve(): void {
     const state = this.world.cube.serialize();
-    this.solution = this.searcher.solve(state);
-    if (this.solution.length != 0) {
-      this.solutiond = true;
+    this.solution = this.solver.solve(state);
+    if (this.solution.length == 0) {
+      this.solution = "error: solved";
     }
+    this.solutiond = true;
     return;
   }
 

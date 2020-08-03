@@ -6,34 +6,34 @@
       <v-container fluid grid-list-md text-xs-center
         :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}">
         <v-layout row wrap>
-          <v-flex v-for="item in colort" :key="item" xs4 :style="{padding:size * 0.06 + 'px'}">
+          <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
             <v-btn @click="color = item;" :color="colors[item]" block depressed :ripple="false"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <span v-show="color!=item" :style="{'font-size':size * 0.5 + 'px'}">{{faces[item]}}</span>
               <v-icon :size="size * 0.8" v-show="color==item">colorize</v-icon>
             </v-btn>
           </v-flex>
-          <v-flex xs4 :style="{padding:size * 0.06 + 'px'}">
-            <v-btn @click="solve" block text :ripple="false" color="success"
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
-              <div :style="{'font-size':size * 0.4+'px'}">
-                求解
-              </div>
-            </v-btn>
-          </v-flex>
-          <v-flex xs4 :style="{padding:size * 0.06 + 'px'}">
-            <v-btn @click="reset" block text :ripple="false" color="primary"
+          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="reset" block depressed :ripple="false" color="success"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <div :style="{'font-size':size * 0.4+'px'}">
                 重置
               </div>
             </v-btn>
           </v-flex>
-          <v-flex xs4 :style="{padding:size * 0.06 + 'px'}">
-            <v-btn @click="clear" block text :ripple="false" color="error"
+          <v-flex xs3 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="clear" block depressed :ripple="false" color="error"
               style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
               <div :style="{'font-size':size * 0.4+'px'}">
                 清空
+              </div>
+            </v-btn>
+          </v-flex>
+          <v-flex xs12 :style="{padding:size * 0.06 + 'px'}">
+            <v-btn @click="solve" block text :ripple="false" color="success"
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">
+              <div :style="{'font-size':size * 0.4+'px'}">
+                求解
               </div>
             </v-btn>
           </v-flex>
