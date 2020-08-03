@@ -361,7 +361,7 @@ export default class Twister {
       return;
     }
     const last = this.cube.history.last;
-    const reverse = new TwistAction(last.sign, !last.reverse, last.times);
+    const reverse = new TwistAction(last.sign, !last.reverse, 1);
     this.twist(reverse, false, true);
   }
 }
