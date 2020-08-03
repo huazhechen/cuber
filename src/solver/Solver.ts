@@ -22,7 +22,6 @@ export default class Solver {
   private preMoves: number[];
   private preMoveLen: number;
   private maxPreMoves: number;
-  private isRec = false;
   private sol: number;
 
   constructor() {
@@ -46,7 +45,6 @@ export default class Solver {
     this.preMoveLen = 0;
     this.maxPreMoves = 0;
 
-    this.isRec = false;
     for (let i = 0; i < 21; i++) {
       this.nodeUD[i] = new CoordCube();
       this.phase1Cubie[i] = new CubieCube();
@@ -75,7 +73,6 @@ export default class Solver {
     }
     this.sol = 22;
     this.moveSol = null;
-    this.isRec = false;
     this.initSearch();
     const solution = this.search();
     return solution;
@@ -99,8 +96,8 @@ export default class Solver {
   private length1 = 0;
   private urfIdx = 0;
   private search(): string {
-    for (this.length1 = this.isRec ? this.length1 : 0; this.length1 < this.sol; this.length1++) {
-      for (this.urfIdx = this.isRec ? this.urfIdx : 0; this.urfIdx < 6; this.urfIdx++) {
+    for (this.length1 = 0; this.length1 < this.sol; this.length1++) {
+      for (this.urfIdx = 0; this.urfIdx < 6; this.urfIdx++) {
         if ((this.conjMask & (1 << this.urfIdx)) != 0) {
           continue;
         }
@@ -133,9 +130,7 @@ export default class Solver {
 
   private phase1PreMoves(maxl: number, lm: number, cc: CubieCube): number {
     this.preMoveLen = this.maxPreMoves - maxl;
-    if (
-      this.isRec ? this.depth1 == this.length1 - this.preMoveLen : this.preMoveLen == 0 || ((0x36fb7 >> lm) & 1) == 0
-    ) {
+    if (this.preMoveLen == 0 || ((0x36fb7 >> lm) & 1) == 0) {
       this.depth1 = this.length1 - this.preMoveLen;
       this.phase1Cubie[0].copy(cc) /* = cc*/;
       this.allowShorter = this.depth1 == Solver.MIN_P1LENGTH_PRE && this.preMoveLen != 0;
@@ -164,7 +159,7 @@ export default class Solver {
         m += 2;
         continue;
       }
-      if ((this.isRec && m != this.preMoves[this.maxPreMoves - maxl]) || (skipMoves & (1 << m)) != 0) {
+      if ((skipMoves & (1 << m)) != 0) {
         continue;
       }
       CubieCube.CornMult(CubieCube.MoveCube[m], cc, this.preMoveCubes[maxl]);
@@ -195,11 +190,6 @@ export default class Solver {
       }
       for (let power = 0; power < 3; power++) {
         const m = axis + power;
-
-        if (this.isRec && m != this.move[this.depth1 - maxl]) {
-          continue;
-        }
-
         const prun = this.nodeUD[maxl].doMovePrun(node, m);
         if (prun > maxl) {
           break;
@@ -221,8 +211,6 @@ export default class Solver {
   }
 
   private initPhase2Pre(): number {
-    this.isRec = false;
-
     for (let i = this.valid1; i < this.depth1; i++) {
       CubieCube.CornMult(this.phase1Cubie[i], CubieCube.MoveCube[this.move[i]], this.phase1Cubie[i + 1]);
       CubieCube.EdgeMult(this.phase1Cubie[i], CubieCube.MoveCube[this.move[i]], this.phase1Cubie[i + 1]);
