@@ -24,10 +24,6 @@ export default class Solver {
   private maxPreMoves: number;
   private isRec = false;
   private sol: number;
-  private probe: number;
-  private probeMin: number;
-  private probeMax: number;
-  private verbose: number;
 
   constructor() {
     CubieCube.Init();
@@ -78,24 +74,9 @@ export default class Solver {
       return "error: " + verify;
     }
     this.sol = 22;
-    this.probe = 0;
-    this.probeMax = 1e9;
-    this.probeMin = 0;
-    this.verbose = 0;
     this.moveSol = null;
     this.isRec = false;
     this.initSearch();
-    const solution = this.search();
-    return solution;
-  }
-
-  next(): string {
-    this.probe = 0;
-    this.probeMax = 1e9;
-    this.probeMin = 0;
-    this.verbose = 0;
-    this.moveSol = null;
-    this.isRec = true;
     const solution = this.search();
     return solution;
   }
@@ -241,10 +222,6 @@ export default class Solver {
 
   private initPhase2Pre(): number {
     this.isRec = false;
-    if (this.probe >= (this.moveSol == null ? this.probeMax : this.probeMin)) {
-      return 0;
-    }
-    ++this.probe;
 
     for (let i = this.valid1; i < this.depth1; i++) {
       CubieCube.CornMult(this.phase1Cubie[i], CubieCube.MoveCube[this.move[i]], this.phase1Cubie[i + 1]);
@@ -313,7 +290,7 @@ export default class Solver {
       this.sol = this.moveSol.length;
     }
     if (depth2 != maxDep2 - 1) {
-      return this.probe >= this.probeMin ? 0 : 1;
+      return 0;
     } else {
       return 1;
     }
