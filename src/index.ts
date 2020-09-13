@@ -7,6 +7,7 @@ import Playground from "./vue/Playground";
 import Director from "./vue/Director";
 import Player from "./vue/Player";
 import Helper from "./vue/Helper";
+import Algs from "./vue/Algs";
 import { VueConstructor } from "vue/types/umd";
 
 /* eslint-disable */
@@ -37,6 +38,9 @@ let app: VueConstructor;
 switch (mode) {
   case "director":
     app = Director;
+    break;
+  case "algs":
+    app = Algs;
     break;
   case "player":
     app = Player;

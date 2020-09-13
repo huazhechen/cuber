@@ -25,6 +25,11 @@
               @click="tap('helper')" :style="{height: size + 'px'}">
               <v-icon :size="size * 0.8">assistant</v-icon>
             </v-btn>
+            <v-btn :color="mode == 'algs'?'primary':''" depressed
+              style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
+              @click="tap('algs')" :style="{height: size + 'px'}">
+              <v-icon :size="size * 0.8">school</v-icon>
+            </v-btn>
             <v-btn :color="mode == 'director'?'primary':''" depressed
               style="text-transform: none; min-width: 0%; min-height: 0%; margin: 0%; padding: 0%; flex: 1;"
               @click="tap('director')" :style="{height: size + 'px'}">
