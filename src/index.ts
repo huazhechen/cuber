@@ -48,6 +48,11 @@ switch (mode) {
   case "helper":
     app = Helper;
     break;
+  case "reset":
+    window.localStorage.clear();
+    const link = window.location.origin + window.location.pathname;
+    window.location.replace(link);
+    break;
   default:
     app = Playground;
     break;
