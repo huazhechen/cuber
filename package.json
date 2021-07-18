@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "watch": "webpack --watch",
+    "watch": "webpack --watch --mode=production",
     "build": "webpack --color --mode=production"
   },
   "dependencies": {},
@@ -24,7 +24,6 @@
     "file-loader": "*",
     "html-webpack-plugin": "*",
     "material-design-icons": "*",
-    "pako": "*",
     "sass": "*",
     "sass-loader": "*",
     "style-loader": "*",

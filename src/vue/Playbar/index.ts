@@ -2,8 +2,6 @@ import Vue from "vue";
 import { Component, Prop, Watch, Inject } from "vue-property-decorator";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import World from "../../cuber/world";
-import tweener from "../../cuber/tweener";
-import Util from "../../common/util";
 
 @Component({
   template: require("./index.html"),

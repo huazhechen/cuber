@@ -1,16 +1,8 @@
 <v-layout row wrap>
-  <v-flex
-    xs12
-    :style="{'padding-left': size / 2 + 'px','padding-right': size / 2 + 'px','padding-top': size * 0.2 + 'px'}"
-  >
-    <v-slider
-      style="margin: 0%;padding: 0%;"
-      hide-details
-      :thumb-label="progress!=0?'always':false"
-      ticks="always"
-      v-model="progress"
-      :max="actions.length"
-    >
+  <v-flex xs12
+    :style="{'padding-left': size / 2 + 'px','padding-right': size / 2 + 'px','padding-top': size * 0.2 + 'px','font-size':(size * 0.3)+'px','min-height':size+'px'}">
+    <v-slider style="margin: 0%;padding: 0%;" hide-details :thumb-label="progress!=0?'always':false" ticks="always"
+      v-model="progress" :max="actions.length" :thumb-size="size * 0.6">
       <template v-slot:thumb-label>{{progress==0?'#':actions[progress - 1].value}}</template>
     </v-slider>
   </v-flex>

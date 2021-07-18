@@ -4,7 +4,6 @@ import { Component, Provide, Ref } from "vue-property-decorator";
 import Viewport from "../Viewport";
 import Setting from "../Setting";
 import World from "../../cuber/world";
-import pako from "pako";
 import { PaletteData, PreferanceData } from "../../data";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Cubelet from "../../cuber/cubelet";
@@ -393,7 +392,6 @@ export default class Playground extends Vue {
     const drama = { scene: this.data.scene, action: this.data.history };
     data["drama"] = drama;
     let string = JSON.stringify(data);
-    string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     const search = "mode=player&data=" + string;
     this.link = window.location.origin + window.location.pathname + "?" + search;

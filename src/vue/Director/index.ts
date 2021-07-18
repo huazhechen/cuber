@@ -13,7 +13,6 @@ import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
 import Setting from "../Setting";
 import World from "../../cuber/world";
-import pako from "pako";
 import ClipboardJS from "clipboard";
 import { PreferanceData, PaletteData } from "../../data";
 import { TwistNode } from "../../cuber/twister";
@@ -151,7 +150,7 @@ export default class Director extends Vue {
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 3.6 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 4.6);
     this.playbar?.resize(this.size);
   }
 
@@ -282,7 +281,6 @@ export default class Director extends Vue {
     data["order"] = order;
     data["drama"] = this.data.dramas[order];
     let string = JSON.stringify(data);
-    string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     const search = "mode=player&data=" + string;
     this.link = window.location.origin + window.location.pathname + "?" + search;

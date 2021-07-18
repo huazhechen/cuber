@@ -4,7 +4,6 @@ import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
 import { FACE } from "../../cuber/define";
-import pako from "pako";
 import Setting from "../Setting";
 import { PreferanceData, PaletteData } from "../../data";
 
@@ -16,7 +15,6 @@ import { PreferanceData, PaletteData } from "../../data";
     setting: Setting,
   },
 })
-
 export default class Player extends Vue {
   @Provide("world")
   world: World = new World();
@@ -53,30 +51,33 @@ export default class Player extends Vue {
     const list = search.match(/(\?|\&)data=([^&]*)(&|$)/);
     let string = list ? list[2] : "";
     string = window.atob(string);
-    string = pako.inflate(string, { to: "string" });
-    const data = JSON.parse(string);
-    if (data.order) {
-      this.world.order = data.order;
-    }
-    if (data.drama) {
-      this.scene = data.drama.scene;
-      this.playbar.scene = this.scene;
-      this.action = data.drama.action;
-      this.playbar.action = this.action;
-      const stickers = data.drama.stickers;
-      if (stickers) {
-        for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
-          const list = stickers[FACE[face]];
-          if (!list) {
-            continue;
-          }
-          for (const sticker in list) {
-            const index = Number(sticker);
-            const value = list[index];
-            this.world.cube.stick(index, face, value);
+    try {
+      const data = JSON.parse(string);
+      if (data.order) {
+        this.world.order = data.order;
+      }
+      if (data.drama) {
+        this.scene = data.drama.scene;
+        this.playbar.scene = this.scene;
+        this.action = data.drama.action;
+        this.playbar.action = this.action;
+        const stickers = data.drama.stickers;
+        if (stickers) {
+          for (const face of [FACE.L, FACE.R, FACE.D, FACE.U, FACE.B, FACE.F]) {
+            const list = stickers[FACE[face]];
+            if (!list) {
+              continue;
+            }
+            for (const sticker in list) {
+              const index = Number(sticker);
+              const value = list[index];
+              this.world.cube.stick(index, face, value);
+            }
           }
         }
       }
+    } catch (e) {
+      console.log(e);
     }
     this.$nextTick(this.resize);
     this.$nextTick(() => {
@@ -95,7 +96,7 @@ export default class Player extends Vue {
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 1.6 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 2.6);
     this.playbar?.resize(this.size);
   }
 

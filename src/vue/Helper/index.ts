@@ -9,7 +9,6 @@ import World from "../../cuber/world";
 import { PreferanceData, PaletteData } from "../../data";
 import Solver from "../../solver/Solver";
 import ClipboardJS from "clipboard";
-import pako from "pako";
 import { TwistNode } from "../../cuber/twister";
 
 export class HelperData {
@@ -103,7 +102,7 @@ export default class Helper extends Vue {
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 3.6 - 32);
+    this.viewport?.resize(this.width, this.height - this.size * 4.6);
   }
 
   mounted(): void {
@@ -256,7 +255,6 @@ export default class Helper extends Vue {
     const drama = { scene: this.world.cube.history.exp, action: this.solution, stickers: this.stickers };
     data["drama"] = drama;
     let string = JSON.stringify(data);
-    string = pako.deflate(string, { to: "string" });
     string = window.btoa(string);
     const search = "mode=player&data=" + string;
     const link = window.location.origin + window.location.pathname + "?" + search;

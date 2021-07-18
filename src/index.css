@@ -8,13 +8,23 @@
 }
 .v-input input {
   max-height: 512px;
+  font-size: inherit;
 }
 .v-input__append-inner {
   margin-top: 0% !important;
 }
-.v-input .v-label {
+.v-input {
   height: 100%;
   line-height: 100%;
+  font-size: inherit;
+}
+.v-label {
+  height: 100%;
+  line-height: 100%;
+  font-size: inherit;
+}
+.v-slider__thumb-label {
+  font-size: inherit;
 }
 .v-text-field--outlined.v-input--dense .v-label {
   top: 0px !important;

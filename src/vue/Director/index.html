@@ -3,7 +3,7 @@
     <setting v-on:order="order"></setting>
     <viewport ref="viewport"></viewport>
     <v-container v-show="!colord" fluid grid-list-md text-xs-center
-      :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px'}"
+      :style="{width:Math.min(size * 8, width) + 'px', height:size * 4.6 + 'px'}"
       style="padding: 0%; touch-action: none;">
       <v-layout row wrap>
         <v-flex xs12 style="display: flex;"
@@ -99,7 +99,7 @@
     <v-bottom-sheet v-model="colord" hide-overlay persistent no-click-animation :retain-focus="false">
       <v-card flat style="margin: auto; touch-action: none; user-select: none;">
         <v-container fluid grid-list-md text-xs-center
-          :style="{width:Math.min(size * 8, width) + 'px', height:size * 3.6 + 32 + 'px', 'padding-top': size * 0.3 + 'px'}">
+          :style="{width:Math.min(size * 8, width) + 'px', height:size * 4.6 + 'px', 'padding-top': size * 0.3 + 'px'}">
           <v-layout row wrap>
             <v-flex v-for="item in colort" :key="item" xs3 :style="{padding:size * 0.06 + 'px'}">
               <v-btn @click="color = item;" :color="colors[item]" block depressed :ripple="false"

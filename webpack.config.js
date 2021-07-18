@@ -76,7 +76,6 @@ module.exports = () => ({
       favicon: "./resource/icon.png",
       filename: "index.html",
       template: "./resource/index.html",
-      title: "魔方栈",
     }),
     new CleanWebpackPlugin(),
   ],
