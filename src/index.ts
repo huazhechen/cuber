@@ -20,10 +20,6 @@ var _hmt: any = _hmt || [];
 })();
 /* eslint-disable */
 
-if (navigator.serviceWorker != null) {
-  navigator.serviceWorker.register("./service-worker.js");
-}
-
 Vue.use(Vuetify);
 const opts = {};
 const vuetify = new Vuetify(opts);

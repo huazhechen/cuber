@@ -1,52 +1,52 @@
 import { FACE, COLORS } from "./define";
 import * as THREE from "three";
 
-class Frame extends THREE.Geometry {
+class Frame extends THREE.BufferGeometry {
   private static readonly _INDICES = [
-    [0, 2, 1],
-    [0, 3, 2],
-    [4, 6, 5],
-    [4, 7, 6],
-    [8, 10, 9],
-    [8, 11, 10],
-    [12, 14, 13],
-    [12, 15, 14],
-    [16, 18, 17],
-    [16, 19, 18],
-    [20, 22, 21],
-    [20, 23, 22],
-    [1, 6, 7],
-    [0, 1, 7],
-    [3, 0, 10],
-    [11, 3, 10],
-    [17, 2, 3],
-    [16, 17, 3],
-    [23, 20, 1],
-    [2, 23, 1],
-    [5, 12, 13],
-    [4, 5, 13],
-    [9, 13, 14],
-    [8, 9, 14],
-    [22, 15, 12],
-    [21, 22, 12],
-    [19, 14, 15],
-    [18, 19, 15],
-    [7, 4, 9],
-    [10, 7, 9],
-    [11, 8, 19],
-    [16, 11, 19],
-    [23, 17, 18],
-    [22, 23, 18],
-    [20, 21, 5],
-    [6, 20, 5],
-    [20, 6, 1],
-    [10, 0, 7],
-    [21, 12, 5],
-    [13, 9, 4],
-    [23, 2, 17],
-    [11, 16, 3],
-    [22, 18, 15],
-    [8, 14, 19],
+    0, 2, 1,
+    0, 3, 2,
+    4, 6, 5,
+    4, 7, 6,
+    8, 10, 9,
+    8, 11, 10,
+    12, 14, 13,
+    12, 15, 14,
+    16, 18, 17,
+    16, 19, 18,
+    20, 22, 21,
+    20, 23, 22,
+    1, 6, 7,
+    0, 1, 7,
+    3, 0, 10,
+    11, 3, 10,
+    17, 2, 3,
+    16, 17, 3,
+    23, 20, 1,
+    2, 23, 1,
+    5, 12, 13,
+    4, 5, 13,
+    9, 13, 14,
+    8, 9, 14,
+    22, 15, 12,
+    21, 22, 12,
+    19, 14, 15,
+    18, 19, 15,
+    7, 4, 9,
+    10, 7, 9,
+    11, 8, 19,
+    16, 11, 19,
+    23, 17, 18,
+    22, 23, 18,
+    20, 21, 5,
+    6, 20, 5,
+    20, 6, 1,
+    10, 0, 7,
+    21, 12, 5,
+    13, 9, 4,
+    23, 2, 17,
+    11, 16, 3,
+    22, 18, 15,
+    8, 14, 19,
   ];
 
   constructor(size: number, border: number) {
@@ -54,48 +54,33 @@ class Frame extends THREE.Geometry {
     const _O = size / 2;
     const _I = _O - border;
     const _verts = [
-      //0: F Face
-      [-_I, +_I, +_O],
-      [+_I, +_I, +_O],
-      [+_I, -_I, +_O],
-      [-_I, -_I, +_O],
-      //4: U Face
-      [-_I, +_O, -_I],
-      [+_I, +_O, -_I],
-      [+_I, +_O, +_I],
-      [-_I, +_O, +_I],
-      //8: L Face
-      [-_O, -_I, -_I],
-      [-_O, +_I, -_I],
-      [-_O, +_I, +_I],
-      [-_O, -_I, +_I],
-      //12: B Face
-      [+_I, +_I, -_O],
-      [-_I, +_I, -_O],
-      [-_I, -_I, -_O],
-      [+_I, -_I, -_O],
-      //16: D Face
-      [-_I, -_O, +_I],
-      [+_I, -_O, +_I],
-      [+_I, -_O, -_I],
-      [-_I, -_O, -_I],
-      //20: R Face
-      [+_O, +_I, +_I],
-      [+_O, +_I, -_I],
-      [+_O, -_I, -_I],
-      [+_O, -_I, +_I],
+      -_I, +_I, +_O, // 0: F Face
+      +_I, +_I, +_O,
+      +_I, -_I, +_O,
+      -_I, -_I, +_O,
+      -_I, +_O, -_I, // 4: U Face
+      +_I, +_O, -_I,
+      +_I, +_O, +_I,
+      -_I, +_O, +_I,
+      -_O, -_I, -_I, //8: L Face
+      -_O, +_I, -_I,
+      -_O, +_I, +_I,
+      -_O, -_I, +_I,
+      +_I, +_I, -_O, //12: B Face
+      -_I, +_I, -_O,
+      -_I, -_I, -_O,
+      +_I, -_I, -_O,
+      -_I, -_O, +_I, //16: D Face
+      +_I, -_O, +_I,
+      +_I, -_O, -_I,
+      -_I, -_O, -_I,
+      +_O, +_I, +_I, //20: R Face
+      +_O, +_I, -_I,
+      +_O, -_I, -_I,
+      +_O, -_I, +_I,
     ];
-
-    for (let i = 0; i < _verts.length; i++) {
-      const _vert = _verts[i];
-      this.vertices.push(new THREE.Vector3(_vert[0], _vert[1], _vert[2]));
-    }
-    for (let i = 0; i < Frame._INDICES.length; i++) {
-      const _indice = Frame._INDICES[i];
-      const _face = new THREE.Face3(_indice[0], _indice[1], _indice[2]);
-      this.faces.push(_face);
-    }
-    this.computeFaceNormals();
+    this.setAttribute("position", new THREE.Float32BufferAttribute(_verts, 3));
+    this.setIndex(Frame._INDICES);
   }
 }
 
@@ -299,7 +284,7 @@ export default class Cubelet extends THREE.Group {
         break;
     }
     this._quaternion.copy(this.quaternion);
-    position.applyQuaternion(this._quaternion.inverse());
+    position.applyQuaternion(this._quaternion.invert());
     const x = Math.round(position.x);
     const y = Math.round(position.y);
     const z = Math.round(position.z);

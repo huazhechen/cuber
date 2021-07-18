@@ -121,7 +121,9 @@ export default class Controller {
     const y = -(point.y / this.world.height) * 2 + 1;
     this.ray.origin.setFromMatrixPosition(this.world.camera.matrixWorld);
     this.ray.direction.set(x, y, 0.5).unproject(this.world.camera).sub(this.ray.origin).normalize();
-    this.ray.applyMatrix4(this.matrix.identity().getInverse(this.world.scene.matrix));
+    this.matrix.copy(this.world.scene.matrix);
+    this.matrix.invert();
+    this.ray.applyMatrix4(this.matrix);
     const result = new THREE.Vector3(Infinity, Infinity, Infinity);
     this.ray.intersectPlane(plane, result);
     return result;

@@ -1,52 +1,19 @@
 <v-bottom-sheet v-model="show" v-resize="resize">
   <v-card text style="margin: auto; touch-action: none; user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
-      <v-layout
-        row
-        wrap
-        justify-center
-        align-center
-        :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.2 + 'px'}"
-      >
+      <v-layout row wrap justify-center align-center
+        :style="{'padding-top':size * 0.2 + 'px', 'padding-bottom':size * 0.3 + 'px'}">
         <v-flex xs12 style="display: flex;">
-          <v-btn
-            v-for="i in [1,2,3,4,5,6]"
-            :key="i"
-            @click="order(i)"
-            :color="world.order == i?'primary':''"
-            depressed
-            style="text-transform: none; min-width: 0%; flex: 1;"
-            :height="size"
-            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}"
-          >
+          <v-btn v-for="i in [1,2,3,4,5,6]" :key="i" @click="order(i)" :color="world.order == i?'primary':''" depressed
+            style="text-transform: none; min-width: 0%; flex: 1;" :height="size"
+            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}">
             <div>{{i}}</div>
           </v-btn>
         </v-flex>
         <v-flex xs12 style="display: flex;">
-          <v-btn
-            v-for="i in [7,8,9,10,11,12]"
-            :key="i"
-            @click="order(i)"
-            :color="world.order == i?'primary':''"
-            depressed
-            style="text-transform: none; min-width: 0%; flex: 1;"
-            :height="size"
-            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}"
-          >
-            <div>{{i}}</div>
-          </v-btn>
-        </v-flex>
-        <v-flex xs12 style="display: flex;">
-          <v-btn
-            v-for="i in [13,14,15,16,17,18]"
-            :key="i"
-            @click="order(i)"
-            :color="world.order == i?'primary':''"
-            depressed
-            style="text-transform: none; min-width: 0%; flex: 1;"
-            :height="size"
-            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}"
-          >
+          <v-btn v-for="i in [7,8,9,10,11,12]" :key="i" @click="order(i)" :color="world.order == i?'primary':''"
+            depressed style="text-transform: none; min-width: 0%; flex: 1;" :height="size"
+            :style="{'font-size':size * 0.5 + 'px', margin:size/20 + 'px'}">
             <div>{{i}}</div>
           </v-btn>
         </v-flex>

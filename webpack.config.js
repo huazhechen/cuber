@@ -1,13 +1,13 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const WorkboxPlugin = require("workbox-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const htmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = () => ({
   entry: {
     index: "./src/index.ts",
   },
+  devtool: "inline-source-map",
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "./",
@@ -50,7 +50,7 @@ module.exports = () => ({
       },
       {
         test: /.(png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
-        loader: "url-loader",
+        type: "asset/inline",
       },
     ],
   },
@@ -63,44 +63,21 @@ module.exports = () => ({
   performance: {
     hints: false,
   },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
+  },
   plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: "template.html",
+    new htmlWebpackPlugin({
+      favicon: "./resource/icon.png",
       filename: "index.html",
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        minifyCSS: true,
-      },
+      template: "./resource/index.html",
+      title: "魔方栈",
     }),
-    new WorkboxPlugin.GenerateSW({
-      // https://developers.google.cn/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW?hl=zh_cn#GenerateSW
-      clientsClaim: true,
-      skipWaiting: true,
-      cleanupOutdatedCaches: true,
-      directoryIndex: "./index.html",
-      exclude: [/./],
-      runtimeCaching: [
-        {
-          urlPattern: /cuber/,
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "data",
-            matchOptions: {
-              ignoreSearch: true,
-            },
-          },
-        },
-      ],
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: __dirname + "/resource/",
-        to: __dirname + "/dist/",
-        ignore: ["*.html"],
-      },
-    ]),
+    new CleanWebpackPlugin(),
   ],
-  devtool: "",
 });

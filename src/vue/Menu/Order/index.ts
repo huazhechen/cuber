@@ -18,7 +18,7 @@ export default class Order extends Vue {
   get show(): boolean {
     return this.value;
   }
-  set show(value) {
+  set show(value: boolean) {
     this.$emit("input", value);
   }
 
