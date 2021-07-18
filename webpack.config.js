@@ -1,5 +1,5 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -7,7 +7,7 @@ module.exports = () => ({
   entry: {
     index: "./src/index.ts",
   },
-  devtool: "inline-source-map",
+  devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "./",
@@ -45,6 +45,10 @@ module.exports = () => ({
         loader: "ts-loader",
       },
       {
+        test: /\.(html|svg)?$/,
+        loader: "text-loader",
+      },
+      {
         test: /.(png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
         type: "asset/inline",
       },
@@ -63,7 +67,13 @@ module.exports = () => ({
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
         extractComments: false,
+        parallel: true,
       }),
     ],
   },
@@ -73,6 +83,6 @@ module.exports = () => ({
       filename: "index.html",
       template: "./resource/index.html",
     }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin("./dist/"),
   ],
 });
