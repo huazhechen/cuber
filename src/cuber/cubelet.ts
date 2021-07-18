@@ -81,6 +81,7 @@ class Frame extends THREE.BufferGeometry {
     ];
     this.setAttribute("position", new THREE.Float32BufferAttribute(_verts, 3));
     this.setIndex(Frame._INDICES);
+    this.computeVertexNormals();
   }
 }
 
