@@ -52,7 +52,7 @@ export class DirectorData {
     return this.values.order;
   }
 
-  set order(value) {
+  set order(value: number) {
     this.values.order = value;
   }
 
@@ -60,7 +60,7 @@ export class DirectorData {
     return this.values.delay;
   }
 
-  set delay(value) {
+  set delay(value: number) {
     this.values.delay = value;
   }
 
@@ -68,7 +68,7 @@ export class DirectorData {
     return this.values.pixel;
   }
 
-  set pixel(value) {
+  set pixel(value: number) {
     this.values.pixel = value;
   }
 
@@ -76,7 +76,7 @@ export class DirectorData {
     return this.values.filmt;
   }
 
-  set filmt(value) {
+  set filmt(value: string) {
     this.values.filmt = value;
   }
 
@@ -84,11 +84,15 @@ export class DirectorData {
     return this.values.snapt;
   }
 
-  set snapt(value) {
+  set snapt(value: string) {
     this.values.snapt = value;
   }
 
-  get dramas(): { scene: string; action: string; stickers: {} }[] {
+  get dramas(): {
+    scene: string;
+    action: string;
+    stickers: { [face: string]: { [index: number]: string } | undefined };
+  }[] {
     return this.values.dramas;
   }
 }
@@ -213,7 +217,7 @@ export default class Director extends Vue {
     }
   }
 
-  get style(): {} {
+  get style(): unknown {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -276,7 +280,7 @@ export default class Director extends Vue {
   shared = false;
   link = "";
   share(): void {
-    const data: { [key: string]: {} } = {};
+    const data: { [key: string]: unknown } = {};
     const order = this.world.order;
     data["order"] = order;
     data["drama"] = this.data.dramas[order];

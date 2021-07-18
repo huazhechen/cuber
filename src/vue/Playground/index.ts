@@ -11,7 +11,7 @@ import Cubelet from "../../cuber/cubelet";
 class KeyHandle {
   width = 2;
   display = false;
-  callback: Function;
+  callback: (key: string) => void;
   keymap: { [key: number]: string } = {
     73: "R", //I R
     75: "R'", //K R'
@@ -52,7 +52,7 @@ class KeyHandle {
     40: "R'", //↓ R'
   };
 
-  constructor(callback: Function) {
+  constructor(callback: (key: string) => void) {
     this.callback = callback;
     document.addEventListener("keydown", this.keydown, false);
   }
@@ -346,7 +346,7 @@ export default class Playground extends Vue {
     this.scramble();
   }
 
-  get style(): {} {
+  get style(): unknown {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -386,7 +386,7 @@ export default class Playground extends Vue {
   shared = false;
   link = "";
   share(): void {
-    const data: { [key: string]: {} } = {};
+    const data: { [key: string]: unknown } = {};
     const order = this.world.order;
     data["order"] = order;
     const drama = { scene: this.data.scene, action: this.data.history };

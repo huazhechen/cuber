@@ -191,7 +191,7 @@ export default class Helper extends Vue {
     this.solver.init();
   }
 
-  get style(): {} {
+  get style(): unknown {
     return {
       width: this.size + "px",
       height: this.size + "px",
@@ -249,7 +249,7 @@ export default class Helper extends Vue {
   }
 
   play(): void {
-    const data: { [key: string]: {} } = {};
+    const data: { [key: string]: unknown } = {};
     const order = this.world.order;
     data["order"] = order;
     const drama = { scene: this.world.cube.history.exp, action: this.solution, stickers: this.stickers };
