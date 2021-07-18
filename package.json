@@ -38,7 +38,7 @@
     "vue-property-decorator": "*",
     "vue-style-loader": "*",
     "vue-template-compiler": "*",
-    "vuetify": "*",
+    "vuetify": "2.4.5",
     "webpack": "*",
     "webpack-cli": "*",
     "webpack-dev-server": "*"
