@@ -45,10 +45,6 @@ module.exports = () => ({
         loader: "ts-loader",
       },
       {
-        test: /\.(html|svg)?$/,
-        loader: "text-loader",
-      },
-      {
         test: /.(png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
         type: "asset/inline",
       },
