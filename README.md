@@ -135,7 +135,3 @@
 - threejs
 - vue
 - vuetify
-
-## 赞赏
-
-  <img width="320px" src="https://gitee.com/huazhechen/cuber/raw/master/screenshot/appreciation.jpg"  alt="赞赏" />
