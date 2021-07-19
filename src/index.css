@@ -26,6 +26,15 @@
 .v-slider__thumb-label {
   font-size: inherit;
 }
+.v-slider__track-background {
+  transition: none !important;
+}
+.v-slider__track-fill {
+  transition: none !important;
+}
+.v-slider__thumb-container {
+  transition: none !important;
+}
 .v-text-field--outlined.v-input--dense .v-label {
   top: 0px !important;
 }
