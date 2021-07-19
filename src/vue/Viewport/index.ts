@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { Component, Inject, Ref } from "vue-property-decorator";
-import { WebGLRenderer } from "three";
+import * as THREE from "three";
 import { COLORS } from "../../cuber/define";
 import Toucher from "../../common/toucher";
 import World from "../../cuber/world";
@@ -20,12 +20,12 @@ export default class Viewport extends Vue {
   @Ref("canvas")
   canvas: HTMLElement;
 
-  renderer: WebGLRenderer;
+  renderer: THREE.WebGLRenderer;
   constructor() {
     super();
     const canvas = document.createElement("canvas");
     canvas.style.outline = "none";
-    this.renderer = new WebGLRenderer({
+    this.renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
       alpha: true,

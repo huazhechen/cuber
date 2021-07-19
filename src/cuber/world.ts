@@ -1,19 +1,19 @@
 import Cube from "./cube";
 import Cubelet from "./cubelet";
-import { Scene, PerspectiveCamera, AmbientLight, DirectionalLight } from "three";
+import * as THREE from "three";
 import Controller from "./controller";
 
 export default class World {
   public width = 1;
   public height = 1;
 
-  public scene: Scene;
-  public camera: PerspectiveCamera;
+  public scene: THREE.Scene;
+  public camera: THREE.PerspectiveCamera;
 
   public cube: Cube;
 
-  public ambient: AmbientLight;
-  public directional: DirectionalLight;
+  public ambient: THREE.AmbientLight;
+  public directional: THREE.DirectionalLight;
 
   private cubes: Cube[] = [];
   public callbacks: (()=>void)[] = [];
@@ -21,19 +21,19 @@ export default class World {
   public controller: Controller;
 
   constructor() {
-    this.scene = new Scene();
+    this.scene = new THREE.Scene();
     this.scene.matrixAutoUpdate = false;
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
 
-    this.ambient = new AmbientLight(0xffffff, 1);
+    this.ambient = new THREE.AmbientLight(0xffffff, 1);
     this.scene.add(this.ambient);
-    this.directional = new DirectionalLight(0xffffff, 0);
+    this.directional = new THREE.DirectionalLight(0xffffff, 0);
     this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 3, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
     this.scene.updateMatrix();
 
-    this.camera = new PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
+    this.camera = new THREE.PerspectiveCamera(50, 1, 1, Cubelet.SIZE * 32);
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 0;

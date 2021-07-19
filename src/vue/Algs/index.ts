@@ -185,7 +185,7 @@ export default class Algs extends Vue {
     return result;
   }
 
-  get style(): {} {
+  get style(): unknown {
     return {
       width: this.size + "px",
       height: this.size + "px",

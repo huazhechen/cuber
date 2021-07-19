@@ -10,7 +10,7 @@ export class TouchAction {
 }
 
 export default class Toucher {
-  init(dom: HTMLElement, callback: Function): void {
+  init(dom: HTMLElement, callback: (action: TouchAction) => void): void {
     this.dom = dom;
     this.callback = callback;
     document.addEventListener("touchstart", this.touch);
@@ -22,7 +22,7 @@ export default class Toucher {
     document.addEventListener("mouseup", this.mouse);
   }
   dom: HTMLElement;
-  callback: Function;
+  callback: (action: TouchAction) => void;
   target: EventTarget | null;
   last: Touch | null;
 

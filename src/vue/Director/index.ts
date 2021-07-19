@@ -3,8 +3,7 @@ import { Component, Watch, Provide, Ref } from "vue-property-decorator";
 
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
-import { WebGLRenderer, Vector3 } from "three";
-import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer";
+import * as THREE from "three";
 import GIF from "../../common/gif";
 import { APNG } from "../../common/apng";
 import ZIP from "../../common/zip";
@@ -24,7 +23,6 @@ export class DirectorData {
     delay: 2,
     pixel: 512,
     filmt: "gif",
-    snapt: "png",
     dramas: [],
   };
 
@@ -80,14 +78,6 @@ export class DirectorData {
     this.values.filmt = value;
   }
 
-  get snapt(): string {
-    return this.values.snapt;
-  }
-
-  set snapt(value: string) {
-    this.values.snapt = value;
-  }
-
   get dramas(): {
     scene: string;
     action: string;
@@ -129,8 +119,7 @@ export default class Director extends Vue {
   @Ref("copy")
   copy: Vue;
 
-  filmer: WebGLRenderer;
-  svger: SVGRenderer;
+  filmer: THREE.WebGLRenderer;
   gif: GIF;
   apng: APNG;
   zip: ZIP;
@@ -139,10 +128,9 @@ export default class Director extends Vue {
 
   constructor() {
     super();
-    this.filmer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.filmer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(0xffffff, 0);
-    this.svger = new SVGRenderer();
     this.gif = new GIF();
     this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
@@ -239,12 +227,7 @@ export default class Director extends Vue {
         this.outputd = true;
         break;
       case "snap":
-        const snapt = this.data.snapt;
-        if (snapt == "png") {
-          this.png();
-        } else if (snapt == "svg") {
-          this.svg();
-        }
+        this.snap();
         break;
       case "film":
         this.film();
@@ -403,7 +386,7 @@ export default class Director extends Vue {
     this.recording = true;
   }
 
-  png(): void {
+  snap(): void {
     const pixel = this.data.pixel;
     const width = this.world.width;
     const height = this.world.height;
@@ -429,44 +412,6 @@ export default class Director extends Vue {
     const blob = new Blob([data], { type: type });
     const url = URL.createObjectURL(blob);
     Util.DOWNLOAD("cuber", "png", url);
-  }
-
-  svg(): void {
-    const position: Vector3 = new Vector3();
-    let distance;
-    for (const cubelet of this.world.cube.cubelets) {
-      if (cubelet === undefined || cubelet.frame === undefined) {
-        continue;
-      }
-      distance = cubelet.frame.getWorldPosition(position).distanceTo(this.world.camera.position);
-      cubelet.frame.renderOrder = 1 / distance;
-      for (const sticker of cubelet.stickers) {
-        if (sticker === undefined) {
-          continue;
-        }
-        distance = sticker.getWorldPosition(position).distanceTo(this.world.camera.position);
-        sticker.renderOrder = 1 / distance;
-      }
-      for (const mirror of cubelet.mirrors) {
-        if (mirror === undefined) {
-          continue;
-        }
-        distance = mirror.getWorldPosition(position).distanceTo(this.world.camera.position);
-        mirror.renderOrder = 1 / distance;
-      }
-    }
-    this.world.camera.aspect = 1;
-    this.world.camera.updateProjectionMatrix();
-    const pixel = this.data.pixel;
-    this.svger.setSize(pixel, pixel);
-    this.svger.clear();
-    this.svger.overdraw = 0;
-    this.svger.render(this.world.scene, this.world.camera);
-    this.world.resize();
-    const serializer = new XMLSerializer();
-    const content = serializer.serializeToString(this.svger.domElement);
-    const url = "data:image/svg+xml;base64," + btoa(content);
-    Util.DOWNLOAD("cuber", "svg", url);
   }
 
   record(): void {
