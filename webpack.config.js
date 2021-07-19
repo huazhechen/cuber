@@ -10,7 +10,6 @@ module.exports = (env, argv) => ({
   devtool: argv.mode === "production" ? false : "eval-cheap-module-source-map",
   output: {
     path: path.resolve(__dirname, "./dist"),
-    publicPath: "/",
     filename: "[name].[chunkhash].js",
     globalObject: "this",
   },
