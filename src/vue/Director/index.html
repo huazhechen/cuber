@@ -61,7 +61,7 @@
               <div :style="{'font-size':size * 0.3+'px'}">录制:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
-              <v-btn v-for="i in ['gif', 'apng', 'pngs']" :key="i" @click="data.filmt=i;data.save();"
+              <v-btn v-for="i in ['gif', 'pngs']" :key="i" @click="data.filmt=i;data.save();"
                 :color="data.filmt == i?'primary':''" depressed style="text-transform: none; min-width: 0%; flex: 1;"
                 :height="size * 0.8" :style="{'font-size':size * 0.3+'px'}">
                 <div>{{i.toUpperCase()}}</div>

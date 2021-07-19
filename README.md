@@ -58,10 +58,6 @@
 
   ![history](https://gitee.com/huazhechen/cuber/raw/master/screenshot/history.gif)
 
-- NISS
-
-  ![niss](https://gitee.com/huazhechen/cuber/raw/master/screenshot/niss.gif)
-
 - 自定义打乱
 
   ![scramble](https://gitee.com/huazhechen/cuber/raw/master/screenshot/scramble.gif)

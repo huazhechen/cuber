@@ -5,7 +5,6 @@ import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import * as THREE from "three";
 import GIF from "../../common/gif";
-import { APNG } from "../../common/apng";
 import ZIP from "../../common/zip";
 import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
@@ -121,7 +120,6 @@ export default class Director extends Vue {
 
   filmer: THREE.WebGLRenderer;
   gif: GIF;
-  apng: APNG;
   zip: ZIP;
   colort: string[];
   colors: { [key: string]: string };
@@ -132,7 +130,6 @@ export default class Director extends Vue {
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(0xffffff, 0);
     this.gif = new GIF();
-    this.apng = new APNG(this.filmer.domElement);
     this.zip = new ZIP();
     this.colors = COLORS;
     this.colort = ["R", "L", "F", "B", "U", "D", "High", "Gray"];
@@ -372,10 +369,6 @@ export default class Director extends Vue {
       this.pixels = new Uint8Array(pixel * pixel * 4);
       this.gif.start(pixel, pixel, delay);
       this.filmer.setClearColor(0xffffff, 1);
-    } else if (filmt == "apng") {
-      this.apng.delayNum = delay;
-      this.apng.start();
-      this.filmer.setClearColor(0xffffff, 0);
     } else if (filmt == "pngs") {
       this.zip.init();
       this.filmer.setClearColor(0xffffff, 0);
@@ -428,8 +421,6 @@ export default class Director extends Vue {
       const content = this.filmer.getContext();
       content.readPixels(0, 0, pixel, pixel, content.RGBA, content.UNSIGNED_BYTE, this.pixels);
       this.gif.add(this.pixels);
-    } else if (filmt == "apng") {
-      this.apng.addFrame();
     } else if (filmt == "pngs") {
       const content = this.filmer.domElement.toDataURL("image/png");
       const parts = content.split(";base64,");
@@ -458,11 +449,6 @@ export default class Director extends Vue {
       blob = new Blob([data], { type: "image/gif" });
       url = URL.createObjectURL(blob);
       Util.DOWNLOAD("cuber", "gif", url);
-    } else if (filmt == "apng") {
-      data = this.apng.finish();
-      blob = new Blob([data], { type: "image/png" });
-      url = URL.createObjectURL(blob);
-      Util.DOWNLOAD("cuber", "png", url);
     } else if (filmt == "pngs") {
       this.zip.finish();
       data = this.zip.out.getData();

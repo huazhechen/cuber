@@ -96,14 +96,6 @@
           </div>
         </v-card-title>
         <v-card-text style="text-transform: none;">
-          <v-flex xs12 style="display: flex;" v-show="world.order==3">
-            <v-btn depressed @click="adjust();" :height="size * 0.8" color="success" style="flex: 1;">
-              <div :style="{'font-size':size/3+'px'}">整理</div>
-            </v-btn>
-            <v-btn depressed @click="niss();" :height="size * 0.8" color="error" style="flex: 1;">
-              <div :style="{'font-size':size/3+'px'}">NISS</div>
-            </v-btn>
-          </v-flex>
           <v-textarea :style="{'font-size':size / 3 + 'px', 'line-height':size / 2 + 'px'}" rows="6" no-resize solo flat
             outlined hide-details readonly v-model="data.history">
           </v-textarea>
