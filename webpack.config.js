@@ -67,6 +67,8 @@ module.exports = (env, argv) => ({
       filename: "index.html",
       template: "./resource/index.html",
     }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      dry: argv.mode !== "production",
+    }),
   ],
 });
