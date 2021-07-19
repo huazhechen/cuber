@@ -129,7 +129,7 @@ export default class Director extends Vue {
     this.filmer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(0xffffff, 0);
-    this.gif = new GIF();
+    this.gif = new GIF(COLORS);
     this.zip = new ZIP();
     this.colors = COLORS;
     this.colort = ["R", "L", "F", "B", "U", "D", "High", "Gray"];

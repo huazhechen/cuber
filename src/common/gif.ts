@@ -1,5 +1,4 @@
 import Color from "./color";
-import { COLORS } from "../cuber/define";
 import ByteArray from "./bytes";
 
 export class LZW {
@@ -10,23 +9,8 @@ export class LZW {
   static BITS = 12;
   static HSIZE = 5003;
   static MASKS = [
-    0x0000,
-    0x0001,
-    0x0003,
-    0x0007,
-    0x000f,
-    0x001f,
-    0x003f,
-    0x007f,
-    0x00ff,
-    0x01ff,
-    0x03ff,
-    0x07ff,
-    0x0fff,
-    0x1fff,
-    0x3fff,
-    0x7fff,
-    0xffff,
+    0x0000, 0x0001, 0x0003, 0x0007, 0x000f, 0x001f, 0x003f, 0x007f, 0x00ff, 0x01ff, 0x03ff, 0x07ff, 0x0fff, 0x1fff,
+    0x3fff, 0x7fff, 0xffff,
   ];
 
   accum = new Uint8Array(256);
@@ -210,10 +194,12 @@ export default class GIF {
   private hash: { rgb: number[]; index: number }[] = new Array(Math.pow(2, GIF.HASH_SIZE));
   private colorn = 0;
   private colors: Uint8Array;
+  private preset: { [key: string]: string };
 
-  constructor() {
+  constructor(preset: { [key: string]: string }) {
     this.dispose = 0;
     this.frames = 0;
+    this.preset = preset;
   }
 
   frames: number;
@@ -262,8 +248,8 @@ export default class GIF {
     this.addColor(255, 255, 255);
     const max = 3 * Math.pow(2, GIF.DEEP);
     // 原色
-    for (const key in COLORS) {
-      const rgb = Color.HEX2RGB(COLORS[key]);
+    for (const key in this.preset) {
+      const rgb = Color.HEX2RGB(this.preset[key]);
       this.addColor(rgb[0], rgb[1], rgb[2]);
     }
     // 黑白
@@ -271,8 +257,8 @@ export default class GIF {
       this.addColor(v, v, v);
     }
     // 饱和度
-    for (const key in COLORS) {
-      const rgb = Color.HEX2RGB(COLORS[key]);
+    for (const key in this.preset) {
+      const rgb = Color.HEX2RGB(this.preset[key]);
       const hsv = Color.RGB2HSV(rgb);
       let delta = 10;
       let s = hsv[1];
@@ -288,8 +274,8 @@ export default class GIF {
       }
     }
     // 亮度
-    for (const key in COLORS) {
-      const rgb = Color.HEX2RGB(COLORS[key]);
+    for (const key in this.preset) {
+      const rgb = Color.HEX2RGB(this.preset[key]);
       const hsv = Color.RGB2HSV(rgb);
       let delta = 10;
       let v = hsv[2];
@@ -306,8 +292,8 @@ export default class GIF {
     }
     // 阴影
     for (let delta = 0; this.colorn < max; delta++) {
-      for (const key in COLORS) {
-        const rgb = Color.HEX2RGB(COLORS[key]);
+      for (const key in this.preset) {
+        const rgb = Color.HEX2RGB(this.preset[key]);
         const hsv = Color.RGB2HSV(rgb);
         const v = hsv[2] - delta;
         if (v < 0) {
@@ -429,8 +415,8 @@ export default class GIF {
     // packed fields
     this.out.writeByte(
       0 | // 1:3 reserved
-      disp | // 4:6 disposal
-      0 | // 7 user input - 0 = none
+        disp | // 4:6 disposal
+        0 | // 7 user input - 0 = none
         transp // 8 transparency flag
     );
 
@@ -456,8 +442,8 @@ export default class GIF {
     // packed fields
     this.out.writeByte(
       0x80 | // 1 : global color table flag = 1 (gct used)
-      ((GIF.DEEP - 1) << 4) | // 2-4 : color resolution = 7
-      0x00 | // 5 : gct sort flag = 0
+        ((GIF.DEEP - 1) << 4) | // 2-4 : color resolution = 7
+        0x00 | // 5 : gct sort flag = 0
         (GIF.DEEP - 1) // 6-8 : gct size
     );
 
