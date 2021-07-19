@@ -16,7 +16,7 @@ export default class World {
   public directional: DirectionalLight;
 
   private cubes: Cube[] = [];
-  public callbacks: Function[] = [];
+  public callbacks: (()=>void)[] = [];
 
   public controller: Controller;
 

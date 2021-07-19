@@ -1,41 +1,21 @@
 const path = require("path");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const htmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = () => ({
+module.exports = (env, argv) => ({
   entry: {
     index: "./src/index.ts",
   },
-  devtool: "source-map",
+  devtool: argv.mode === "production" ? false : "eval-cheap-module-source-map",
   output: {
     path: path.resolve(__dirname, "./dist"),
-    publicPath: "./",
+    publicPath: "/",
     filename: "[name].[chunkhash].js",
     globalObject: "this",
   },
   module: {
     rules: [
-      {
-        test: /\.s(c|a)ss$/,
-        use: [
-          "vue-style-loader",
-          "css-loader",
-          {
-            loader: "sass-loader",
-            options: {
-              implementation: require("sass"),
-              fiber: require("fibers"),
-            },
-            options: {
-              implementation: require("sass"),
-              sassOptions: {
-                fiber: require("fibers"),
-              },
-            },
-          },
-        ],
-      },
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
@@ -64,7 +44,7 @@ module.exports = () => ({
     hints: false,
   },
   optimization: {
-    minimize: true,
+    minimize: argv.mode === "production",
     minimizer: [
       new TerserPlugin({
         terserOptions: {
@@ -76,13 +56,17 @@ module.exports = () => ({
         parallel: true,
       }),
     ],
+    splitChunks: {
+      chunks: "initial",
+      name: "vendor",
+    },
   },
   plugins: [
-    new htmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       favicon: "./resource/icon.png",
       filename: "index.html",
       template: "./resource/index.html",
     }),
-    new CleanWebpackPlugin("./dist/"),
+    new CleanWebpackPlugin(),
   ],
 });

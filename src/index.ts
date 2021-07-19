@@ -1,6 +1,6 @@
 import Vue, { VNode } from "vue";
 import Vuetify from "vuetify";
-import "vuetify/dist/vuetify.css";
+import "vuetify/dist/vuetify.min.css";
 import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import Playground from "./vue/Playground";

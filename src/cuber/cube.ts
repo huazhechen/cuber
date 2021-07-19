@@ -22,7 +22,7 @@ export default class Cube extends THREE.Group {
   public initials: Cubelet[] = [];
   public table: GroupTable;
   public order: number;
-  public callbacks: Function[] = [];
+  public callbacks: (()=>void)[] = [];
   public history: History;
   public container: Container;
   public twister: Twister = new Twister(this);
