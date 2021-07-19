@@ -1,11 +1,21 @@
 import { FACE } from "./define";
 import Cubelet from "./cubelet";
 import CubeGroup from "./group";
-import { TouchAction } from "../common/toucher";
 import * as THREE from "three";
 import World from "./world";
 import tweener from "./tweener";
 import { TwistAction } from "./twister";
+
+export class TouchAction {
+  type: string;
+  x: number;
+  y: number;
+  constructor(type: string, x: number, y: number) {
+    this.type = type;
+    this.x = x;
+    this.y = y;
+  }
+}
 
 export class Holder {
   public vector: THREE.Vector3;
@@ -21,7 +31,7 @@ export default class Controller {
   public rotating = false;
   public angle = 0;
   public contingle = 0;
-  public taps: Function[];
+  public taps: ((index: number, face: FACE) => void)[];
   public ray = new THREE.Ray();
   public down = new THREE.Vector2(0, 0);
   public move = new THREE.Vector2(0, 0);
@@ -41,7 +51,7 @@ export default class Controller {
   get lock(): boolean {
     return this._lock;
   }
-  set lock(value) {
+  set lock(value: boolean) {
     this.handleUp();
     this._lock = value;
   }
@@ -50,7 +60,7 @@ export default class Controller {
   get disable(): boolean {
     return this._disable;
   }
-  set disable(value) {
+  set disable(value: boolean) {
     this.handleUp();
     this._disable = value;
   }
@@ -298,8 +308,10 @@ export default class Controller {
           face = FACE.F;
           break;
       }
-      for (const tap of this.taps) {
-        tap(this.holder.index, face);
+      if (face) {
+        for (const tap of this.taps) {
+          tap(this.holder.index, face);
+        }
       }
     }
     if (this.rotating) {

@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Ref } from "vue-property-decorator";
 import * as THREE from "three";
 import { COLORS } from "../../cuber/define";
-import Toucher from "../../common/toucher";
+import Toucher from "./toucher";
 import World from "../../cuber/world";
 import { PreferanceData } from "../../data";
 

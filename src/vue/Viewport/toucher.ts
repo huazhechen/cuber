@@ -1,13 +1,4 @@
-export class TouchAction {
-  type: string;
-  x: number;
-  y: number;
-  constructor(type: string, x: number, y: number) {
-    this.type = type;
-    this.x = x;
-    this.y = y;
-  }
-}
+import { TouchAction } from "../../cuber/controller";
 
 export default class Toucher {
   init(dom: HTMLElement, callback: (action: TouchAction) => void): void {

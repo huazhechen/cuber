@@ -42,7 +42,7 @@ export class HelperData {
     return this.values.stickers;
   }
 
-  set stickers(value) {
+  set stickers(value: { [face: string]: { [index: number]: string } | undefined }) {
     this.values.stickers = value;
   }
 
@@ -50,7 +50,7 @@ export class HelperData {
     return this.values.history;
   }
 
-  set history(value) {
+  set history(value: string) {
     this.values.history = value;
   }
 }
