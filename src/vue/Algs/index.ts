@@ -174,7 +174,7 @@ export default class Algs extends Vue {
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.size = Math.ceil(Math.min(this.width / 6, this.height / 12));
-    this.viewport?.resize(this.width, this.height - this.size * 3.6);
+    this.viewport?.resize(this.width, this.height - this.size * 3.5);
     this.playbar?.resize(this.size);
   }
 
