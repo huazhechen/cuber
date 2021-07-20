@@ -13,14 +13,14 @@
 .v-input__append-inner {
   margin-top: 0% !important;
 }
-.v-input {
+.v-input .v-label {
   height: 100%;
   line-height: 100%;
+}
+.v-input {
   font-size: inherit;
 }
 .v-label {
-  height: 100%;
-  line-height: 100%;
   font-size: inherit;
 }
 .v-slider__thumb-label {
@@ -44,6 +44,10 @@
 }
 .v-card__text {
   padding-bottom: 0 !important;
+  line-height: inherit;
+}
+.v-card__title {
+  line-height: inherit;
 }
 .v-color-picker {
   max-width: 100% !important;

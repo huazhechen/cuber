@@ -5,7 +5,7 @@
         <v-flex v-for="(item, index) in colors" :key="index" xs3 :style="{padding:size * 0.06 + 'px'}"
           v-show="index!=='Gray'">
           <v-btn @click="tap(index)" :color="item" block depressed :height="size"
-            :style="{'font-size':size / 3 + 'px'}">{{index[0]}}
+            :style="{'font-size':size * 0.4 + 'px'}">{{index[0]}}
           </v-btn>
         </v-flex>
       </v-layout>
@@ -17,7 +17,8 @@
         <v-layout row wrap>
           <v-flex v-for="item in palette" :key="item" xs2 :style="{padding:size * 0.06 + 'px'}">
             <v-btn @click="color(item);" :color="item" block depressed
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">{{match(item)}}
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size"
+              :style="{'font-size':size * 0.4 + 'px'}">{{match(item)}}
             </v-btn>
           </v-flex>
           <v-flex xs10>
@@ -25,7 +26,8 @@
           </v-flex>
           <v-flex xs2 :style="{padding:size * 0.06 + 'px'}">
             <v-btn @click="color(colorv);" :color="colorv" block depressed
-              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size">{{match(colorv)}}
+              style="min-width: 0%; min-height: 0%; margin: 0%; padding: 0%;" :height="size"
+              :style="{'font-size':size * 0.4 + 'px'}">{{match(colorv)}}
             </v-btn>
           </v-flex>
         </v-layout>

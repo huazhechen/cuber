@@ -44,7 +44,6 @@ export default class World {
 
   set dirty(value: boolean) {
     this.cube.dirty = value;
-    this.cube.container.dirty = value;
   }
 
   get dirty(): boolean {

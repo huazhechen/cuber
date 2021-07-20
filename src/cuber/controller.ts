@@ -31,7 +31,7 @@ export default class Controller {
   public rotating = false;
   public angle = 0;
   public contingle = 0;
-  public taps: ((index: number, face: FACE) => void)[];
+  public taps: ((index: number, face: FACE | null) => void)[];
   public ray = new THREE.Ray();
   public down = new THREE.Vector2(0, 0);
   public move = new THREE.Vector2(0, 0);
@@ -308,10 +308,8 @@ export default class Controller {
           face = FACE.F;
           break;
       }
-      if (face) {
-        for (const tap of this.taps) {
-          tap(this.holder.index, face);
-        }
+      for (const tap of this.taps) {
+        tap(this.holder.index, face);
       }
     }
     if (this.rotating) {

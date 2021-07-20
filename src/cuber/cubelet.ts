@@ -203,7 +203,7 @@ export default class Cubelet extends THREE.Group {
 
   _vector: THREE.Vector3;
 
-  set vector(vector) {
+  set vector(vector: THREE.Vector3) {
     const half = (this.order - 1) / 2;
     let x = Math.round(vector.x * 2) / 2;
     let y = Math.round(vector.y * 2) / 2;
@@ -223,7 +223,7 @@ export default class Cubelet extends THREE.Group {
 
   _index: number;
 
-  set index(index) {
+  set index(index: number) {
     const half = (this.order - 1) / 2;
     const _x = (index % this.order) - half;
     const _y = Math.floor((index % (this.order * this.order)) / this.order) - half;

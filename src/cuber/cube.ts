@@ -6,15 +6,6 @@ import Twister, { TwistAction } from "./twister";
 import History from "./history";
 import tweener from "./tweener";
 
-class Container extends THREE.Group {
-  dirty = false;
-  updateMatrixWorld(force: boolean): void {
-    if (this.dirty) {
-      super.updateMatrixWorld(force);
-    }
-  }
-}
-
 export default class Cube extends THREE.Group {
   public dirty = true;
   public locks: Map<string, Set<number>>;
@@ -24,21 +15,18 @@ export default class Cube extends THREE.Group {
   public order: number;
   public callbacks: (()=>void)[] = [];
   public history: History;
-  public container: Container;
   public twister: Twister = new Twister(this);
 
   constructor(order: number) {
     super();
     this.order = order;
-    this.container = new Container();
-    this.add(this.container);
     this.scale.set(3 / order, 3 / order, 3 / order);
     for (let i = 0; i < order * order * order; i++) {
       const cubelet = new Cubelet(order, i);
       this.cubelets.push(cubelet);
       this.initials.push(cubelet);
       if (cubelet.exist) {
-        this.container.add(cubelet);
+        this.add(cubelet);
       }
     }
     this.locks = new Map();
@@ -144,7 +132,6 @@ export default class Cube extends THREE.Group {
     this.cubelets.sort((left, right) => {
       return left.index - right.index;
     });
-    this.container.dirty = true;
   }
 
   stick(index: number, face: number, value: string): void {
@@ -153,7 +140,6 @@ export default class Cube extends THREE.Group {
       throw Error("invalid cubelet index: " + index);
     }
     cubelet.stick(face, value);
-    this.container.dirty = true;
     this.dirty = true;
   }
 
@@ -179,7 +165,6 @@ export default class Cube extends THREE.Group {
         cubelet.stick(face, "remove");
       }
     }
-    this.container.dirty = true;
     this.dirty = true;
   }
 

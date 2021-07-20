@@ -58,7 +58,7 @@
           </v-layout>
           <v-layout row wrap justify-center align-center :style="{'padding-top':size * 0.2 + 'px'}">
             <v-flex xs2>
-              <div :style="{'font-size':size * 0.3+'px'}">录制:</div>
+              <div :style="{'font-size':size * 0.3+'px'}">格式:</div>
             </v-flex>
             <v-flex xs10 style="display: flex;">
               <v-btn v-for="i in ['gif', 'pngs']" :key="i" @click="data.filmt=i;data.save();"

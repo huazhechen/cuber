@@ -110,7 +110,7 @@ export default class CubeGroup extends THREE.Group {
     for (const i of this.indices) {
       const cubelet = this.cube.cubelets[i];
       this.cubelets.push(cubelet);
-      this.cube.container.remove(cubelet);
+      this.cube.remove(cubelet);
       if (cubelet.exist) {
         this.add(cubelet);
       }
@@ -137,12 +137,12 @@ export default class CubeGroup extends THREE.Group {
       this.rotate(cubelet);
       this.remove(cubelet);
       if (cubelet.exist) {
-        this.cube.container.add(cubelet);
+        this.cube.add(cubelet);
       }
       this.cube.cubelets[cubelet.index] = cubelet;
     }
     this.cube.remove(this);
-    this.cube.container.dirty = true;
+    this.cube.dirty = true;
     this.angle = 0;
     this.cube.unlock(this.axis, this.layer);
     this.cube.callback();
