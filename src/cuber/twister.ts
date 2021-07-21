@@ -23,7 +23,7 @@ export class TwistAction {
     if (this.times == 0) {
       return "";
     }
-    return this.sign + (this.reverse ? "'" : "") + (this.times == 1 ? "" : String(this.times));
+    return this.sign + (this.times == 1 ? "" : String(this.times)) + (this.reverse ? "'" : "");
   }
 }
 
