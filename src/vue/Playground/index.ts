@@ -7,6 +7,7 @@ import World from "../../cuber/world";
 import { PaletteData, PreferanceData } from "../../data";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import Cubelet from "../../cuber/cubelet";
+import Rubic from "./rubic";
 
 class KeyHandle {
   width = 2;
@@ -208,11 +209,7 @@ export default class Playground extends Vue {
       if (exp === "^") {
         this.world.cube.twister.undo();
       } else {
-        const node = new TwistNode(exp);
-        const action = node.parse()[0];
-        if (action) {
-          this.world.cube.twister.twist(action, false, true);
-        }
+        this.world.cube.twister.twist(new TwistAction(exp), false, true);
       }
     });
   }
@@ -402,191 +399,23 @@ export default class Playground extends Vue {
   }
 
   adjust(): void {
-    // 高阶暂未实现
     if (this.world.order > 3) {
       return;
     }
-    const om = ["U", "F", "R", "B", "L", "D"];
-    const tm = {
-      x: [1, 5, 2, 0, 4, 3],
-      y: [0, 2, 3, 4, 1, 5],
-      z: [4, 1, 0, 3, 5, 2],
-    };
-    const am: { [key: string]: string } = {
-      R: "x",
-      L: "x",
-      U: "y",
-      D: "y",
-      F: "z",
-      B: "z",
-    };
-    const o = om.slice();
-
-    // 清理ufrbld
-    let origin = this.world.cube.history.exp;
-    origin = origin.replace(/u/g, "(UE')");
-    origin = origin.replace(/f/g, "(FS)");
-    origin = origin.replace(/r/g, "(RM')");
-    origin = origin.replace(/b/g, "(BS')");
-    origin = origin.replace(/l/g, "(LM)");
-    origin = origin.replace(/d/g, "(DE)");
-
-    // 清理MES
-    origin = origin.replace(/M/g, "(x' L' R)");
-    origin = origin.replace(/E/g, "(y' D' U)");
-    origin = origin.replace(/S/g, "(z F' B)");
-
-    let temp: TwistAction[] = new TwistNode(origin).parse();
-
-    const list: TwistAction[] = [];
-    // 清理xyz
-    for (const item of temp) {
-      if (item.sign == "x" || item.sign == "y" || item.sign == "z") {
-        const map = tm[item.sign];
-        let times = item.times;
-        if (item.reverse) {
-          times = 4 - times;
-        }
-        for (let i = 0; i < times; i++) {
-          const last = o.slice();
-          o.length = 0;
-          for (const j of map) {
-            o.push(last[j]);
-          }
-        }
-        continue;
-      }
-      const index = om.indexOf(item.sign);
-      item.sign = o[index];
-      list.push(item);
-    }
-    // 清理R L R'
-    temp = list.slice();
-    list.length = 0;
-    for (const item of temp) {
-      let last: TwistAction | null = null;
-      for (let i = 0; i < list.length; i++) {
-        const prev = list[list.length - 1 - i];
-        if (prev.sign == item.sign) {
-          last = prev;
-          break;
-        }
-        if (am[prev.sign] != am[item.sign]) {
-          break;
-        }
-      }
-      if (last) {
-        last.times = last.times + item.times * (last.reverse == item.reverse ? 1 : -1);
-        last.times = last.times % 4;
-        if (last.times == 0) {
-          list.splice(list.indexOf(last), 1);
-        }
-      } else {
-        list.push(item);
-      }
-    }
-    // 第四步 生成string
-    let string = "";
-    for (const item of list) {
-      string = string + " " + item.value;
-    }
-    this.data.history = string.substring(1);
+    this.data.history = Rubic.adjust(this.data.history);
     this.data.save();
     this.load();
-  }
-
-  split(exp: string): string[] {
-    const list = [];
-    let buffer = "";
-    let stack = 0;
-    for (let i = 0; i < exp.length; i++) {
-      const c = exp.charAt(i);
-      if (c === " " && buffer.length == 0) {
-        continue;
-      }
-      //  如果有括号 记录stack
-      if (c === "(") {
-        if (stack == 0 && buffer.length > 0) {
-          list.push(buffer);
-          buffer = "";
-          i--;
-        } else {
-          buffer = buffer.concat(c);
-          stack++;
-        }
-        continue;
-      }
-      if (c === ")") {
-        buffer = buffer.concat(c);
-        stack--;
-        if (stack == 0) {
-          list.push(buffer);
-          buffer = "";
-        }
-        continue;
-      }
-      buffer = buffer.concat(c);
-    }
-    if (buffer.length > 0) {
-      list.push(buffer);
-    }
-    return list;
   }
 
   niss(): void {
-    this.adjust();
-    const scene = this.data.scene;
-    const history = this.data.history;
-    let string = "";
-    let list: TwistAction[];
-
-    list = new TwistNode(history, true).parse();
-    const empty = list.length == 0;
-    if (!empty) {
-      string = string + "(";
-      for (const item of list) {
-        string = string + item.value + " ";
-      }
-      string = string.substr(0, string.length - 1);
-      string = string + ") ";
+    if (this.world.order > 3) {
+      return;
     }
-
-    const segments = this.split(scene).reverse();
-    this.data.history = "";
-    if (empty && segments.length > 0) {
-      const segment = segments.pop() as string;
-      if (segment.indexOf("(") >= 0) {
-        list = new TwistNode(segment, true).parse();
-        for (const item of list) {
-          this.data.history = this.data.history + item.value + " ";
-        }
-      } else {
-        segments.push(segment);
-      }
-    }
-    for (const segment of segments) {
-      list = new TwistNode(segment, true).parse();
-      if (list.length == 0) {
-        continue;
-      }
-      if (segment.indexOf("(") >= 0) {
-        string = string + "(";
-      }
-      for (const item of list) {
-        string = string + item.value + " ";
-      }
-      if (segment.indexOf("(") >= 0) {
-        string = string.substr(0, string.length - 1);
-        string = string + ") ";
-      }
-    }
-
-    if (!scene.includes("// niss")) {
-      string = string + "// niss";
-    }
-
-    this.data.scene = string;
+    const result = Rubic.niss(this.data.scene, this.data.history);
+    this.data.scene = result.scene;
+    this.data.history = result.history;
     this.data.save();
     this.load();
+    this.adjust();
   }
 }

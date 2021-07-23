@@ -6,15 +6,21 @@ export class TwistAction {
   sign: string;
   reverse: boolean;
   times: number;
-  constructor(sign: string, reverse = false, times = 1) {
-    if (/[XYZ]/.test(sign)) {
-      sign = sign.toLowerCase();
+  constructor(exp: string, reverse = false, times = 1) {
+    const values = exp.match(/([\*\#~;.#xyz]|[0123456789-]*[bsfdeulmr][w]*)('?)(\d*)('?)/i);
+    if (values) {
+      exp = values[1];
+      reverse = reverse !== ((values[2] + values[4]).length == 1);
+      times = times * (values[3].length == 0 ? 1 : parseInt(values[3]));
     }
-    if (/[Ww]/.test(sign)) {
-      sign = sign.toUpperCase();
-      sign = sign.replace("W", "w");
+    if (/[XYZ]/.test(exp)) {
+      exp = exp.toLowerCase();
     }
-    this.sign = sign;
+    if (/[Ww]/.test(exp)) {
+      exp = exp.toUpperCase();
+      exp = exp.replace("W", "w");
+    }
+    this.sign = exp;
     this.reverse = reverse;
     this.times = times;
   }
