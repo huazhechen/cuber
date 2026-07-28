@@ -33,8 +33,9 @@ export default class Viewport extends Vue {
       antialias: true,
       alpha: true,
     }));
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.autoClear = false;
-    this.renderer.setClearColor(COLORS.WHITE, 0);
+    this.renderer.setClearColor(COLORS.White, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.toucher = markRaw(new Toucher());
   }

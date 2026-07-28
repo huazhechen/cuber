@@ -262,7 +262,14 @@ export default class Playground extends Vue {
   }
 
   completed = false;
+  historyLength = 0;
+
+  syncHistoryState(): void {
+    this.historyLength = this.world.cube.history.length;
+  }
+
   callback(): void {
+    this.syncHistoryState();
     this.data.scene = this.world.cube.history.init;
     this.data.history = this.world.cube.history.exp.substring(1);
     if (this.data.complete) {
@@ -292,6 +299,7 @@ export default class Playground extends Vue {
     requestAnimationFrame(this.loop.bind(this));
     this.breath();
     this.viewport?.draw();
+    this.syncHistoryState();
     if (this.data.complete) {
       return;
     }

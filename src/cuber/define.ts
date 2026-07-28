@@ -17,4 +17,5 @@ export const COLORS: { [key: string]: string } = {
   Core: "#202020",
   Gray: "#808080",
   High: "#FF0080",
+  White: "#FFFFFF",
 };

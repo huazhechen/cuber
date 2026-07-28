@@ -6,9 +6,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "dev": "vite --host 0.0.0.0",
     "watch": "vite --host 0.0.0.0",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "npm run build && vite preview"
   },
   "dependencies": {},
   "devDependencies": {

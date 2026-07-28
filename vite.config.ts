@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
+  base: "./",
   plugins: [vue()],
   resolve: {
     alias: {
@@ -16,7 +17,12 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+    emptyOutDir: true,
     assetsInlineLimit: 100000000,
     chunkSizeWarningLimit: 1500,
+  },
+  preview: {
+    host: "0.0.0.0",
+    port: 4173,
   },
 });

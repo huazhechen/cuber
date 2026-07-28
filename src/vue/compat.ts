@@ -89,6 +89,8 @@ export const VBtnCompat = defineComponent({
     left: Boolean,
     right: Boolean,
     large: Boolean,
+    block: Boolean,
+    rounded: Boolean,
   },
   setup(props, { attrs, slots }) {
     return () => {
@@ -107,11 +109,14 @@ export const VBtnCompat = defineComponent({
         VBtn as never,
         {
           ...attrs,
+          class: ["cuber-btn", attrs.class],
           icon: props.fab || (attrs.icon as boolean | undefined),
+          block: props.block || (attrs.block as boolean | undefined),
           size: props.large ? "large" : attrs.size,
+          rounded: props.rounded || (attrs.rounded as boolean | undefined),
           variant: props.text ? "text" : props.depressed ? "flat" : attrs.variant,
           elevation: props.depressed ? 0 : attrs.elevation,
-          style: [position, attrs.style as unknown],
+          style: [props.block ? { width: "100%" } : undefined, position, attrs.style as unknown],
         },
         slots,
       );

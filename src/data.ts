@@ -115,10 +115,10 @@ export class PreferanceData {
       this.values.shadow = value;
     }
     if (value) {
-      this.world.ambient.intensity = 0.85;
-      this.world.directional.intensity = 0.2;
+      this.world.ambient.intensity = 1.15;
+      this.world.directional.intensity = 0.35;
     } else {
-      this.world.ambient.intensity = 1;
+      this.world.ambient.intensity = 1.2;
       this.world.directional.intensity = 0;
     }
     this.world.dirty = true;
@@ -252,6 +252,7 @@ export class PaletteData {
       if (value) {
         COLORS[key] = value;
         Cubelet.LAMBERS[key].color.set(value);
+        Cubelet.LAMBERS[key].emissive.set(value);
         Cubelet.BASICS[key].color.set(value);
         if (key == "Core") {
           Cubelet.CORE.color.set(value);
@@ -266,6 +267,7 @@ export class PaletteData {
     colors[key] = value;
     COLORS[key] = value;
     Cubelet.LAMBERS[key].color.set(value);
+    Cubelet.LAMBERS[key].emissive.set(value);
     Cubelet.BASICS[key].color.set(value);
     if (key == "Core") {
       Cubelet.CORE.color.set(value);

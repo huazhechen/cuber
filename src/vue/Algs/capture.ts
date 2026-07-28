@@ -13,6 +13,7 @@ export default class Capture {
 
   constructor() {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(256, 256, true);
@@ -29,9 +30,9 @@ export default class Capture {
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambient = new THREE.AmbientLight(0xffffff, 1.15);
     this.scene.add(ambient);
-    const directional = new THREE.DirectionalLight(0xffffff, 0.2);
+    const directional = new THREE.DirectionalLight(0xffffff, 0.35);
     directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(directional);
   }

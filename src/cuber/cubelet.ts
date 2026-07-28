@@ -174,7 +174,7 @@ export default class Cubelet extends THREE.Group {
     const result: { [key: string]: THREE.MeshLambertMaterial } = {};
     for (const key in COLORS) {
       const color = COLORS[key];
-      result[key] = new THREE.MeshLambertMaterial({ color: color });
+      result[key] = new THREE.MeshLambertMaterial({ color: color, emissive: color, emissiveIntensity: 0.16 });
     }
     return result;
   })();
