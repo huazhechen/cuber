@@ -10,6 +10,7 @@ import ZIP from "../../common/zip";
 import { COLORS, FACE } from "../../cuber/define";
 import Cubelet from "../../cuber/cubelet";
 import Util from "../../common/util";
+import { configureRenderer } from "../../cuber/three-compat";
 import Setting from "../Setting";
 import World from "../../cuber/world";
 import ClipboardJS from "clipboard";
@@ -127,7 +128,9 @@ export default class Director extends Vue {
 
   constructor() {
     super();
-    this.filmer = markRaw(new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true }));
+    this.filmer = markRaw(
+      configureRenderer(new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true }))
+    );
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(0xffffff, 0);
     this.gif = markRaw(new GIF(COLORS));

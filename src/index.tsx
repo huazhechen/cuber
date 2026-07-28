@@ -48,6 +48,7 @@ import { TwistAction, TwistNode } from "./cuber/twister";
 import Toucher from "./vue/Viewport/toucher";
 import Rubic from "./vue/Playground/rubic";
 import Solver from "./solver/Solver";
+import { configureRenderer } from "./cuber/three-compat";
 import Util from "./common/util";
 import GIF from "./common/gif";
 import ZIP from "./common/zip";
@@ -130,8 +131,7 @@ const Viewport = forwardRef<ViewportHandle, { ctx: AppContext }>(({ ctx }, ref) 
   const renderer = useMemo(() => {
     const canvas = document.createElement("canvas");
     canvas.style.outline = "none";
-    const instance = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    instance.outputColorSpace = THREE.SRGBColorSpace;
+    const instance = configureRenderer(new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }));
     instance.autoClear = false;
     instance.setClearColor(COLORS.White, 0);
     instance.setPixelRatio(window.devicePixelRatio);
@@ -242,8 +242,9 @@ function SettingsPanel({
   const [, force] = useState(0);
   const [open, setOpen] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [scrubbingCamera, setScrubbingCamera] = useState(false);
-  const [tab, setTab] = useState<"order" | "camera" | "control" | "appear" | "palette" | "about">("order");
+  const [tab, setTab] = useState<"order" | "camera" | "control" | "appear" | "palette">("order");
   const update = () => {
     ctx.preferance.save();
     force((i) => i + 1);
@@ -307,18 +308,24 @@ function SettingsPanel({
                 ["control", "控制", <SlidersHorizontal key="s" />],
                 ["appear", "显示", <Sparkles key="a" />],
                 ["palette", "配色", <Palette key="p" />],
-                ["about", "帮助", <HelpCircle key="h" />],
+                ["help", "帮助", <HelpCircle key="h" />],
               ].map(([key, label, icon]) => (
-                <button key={key as string} className={tab === key ? "selected" : ""} onClick={() => setTab(key as typeof tab)}>
+                <button
+                  key={key as string}
+                  className={tab === key ? "selected" : ""}
+                  onClick={() => {
+                    if (key === "help") {
+                      setHelpOpen(true);
+                    } else {
+                      setTab(key as typeof tab);
+                    }
+                  }}
+                >
                   {icon}
                   <span>{label}</span>
                 </button>
               ))}
             </div>
-            <button className="settings-reset danger" title="重置" onClick={() => setResetOpen(true)}>
-              <Trash2 />
-              <span>重置</span>
-            </button>
           </div>
         </div>
         <div className="settings-content">
@@ -346,6 +353,7 @@ function SettingsPanel({
               <Range label="透视" value={ctx.preferance.perspective} onScrubStart={() => setScrubbingCamera(true)} onScrubEnd={() => setScrubbingCamera(false)} onChange={(v) => setPref("perspective", v)} />
               <Range label="水平角" value={ctx.preferance.angle} onScrubStart={() => setScrubbingCamera(true)} onScrubEnd={() => setScrubbingCamera(false)} onChange={(v) => setPref("angle", v)} />
               <Range label="俯仰角" value={ctx.preferance.gradient} onScrubStart={() => setScrubbingCamera(true)} onScrubEnd={() => setScrubbingCamera(false)} onChange={(v) => setPref("gradient", v)} />
+              <Range label="自发光" value={ctx.preferance.stickerEmission} onScrubStart={() => setScrubbingCamera(true)} onScrubEnd={() => setScrubbingCamera(false)} onChange={(v) => setPref("stickerEmission", v)} />
             </div>
           )}
           {tab === "control" && (
@@ -377,15 +385,25 @@ function SettingsPanel({
           {tab === "palette" && (
             <div className="palette-grid">
               {["R", "L", "U", "D", "F", "B", "Core", "High", "Gray"].map((key) => (
-                <label key={key}>
-                  <span>{key}</span>
+                <label key={key} className="palette-card">
                   <input type="color" value={COLORS[key]} onChange={(e) => setColor(key, e.target.value)} />
+                  <span>{key}</span>
                 </label>
               ))}
-              <button onClick={() => ctx.palette.reset()}>恢复默认</button>
+              <button className="palette-card palette-reset" onClick={() => ctx.palette.reset()}>恢复默认</button>
             </div>
           )}
-          {tab === "about" && <HelpContent compact />}
+        </div>
+      </Modal>
+      <Modal title="Cuber 使用帮助" open={helpOpen} onClose={() => setHelpOpen(false)} className="help-modal">
+        <div className="help-modal-body">
+          <HelpContent compact />
+          <div className="danger-zone">
+            <button className="settings-reset danger" onClick={() => setResetOpen(true)}>
+              <Trash2 />
+              <span>重置数据</span>
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal title="重置数据" open={resetOpen} onClose={() => setResetOpen(false)}>
@@ -690,7 +708,7 @@ function SceneShell({
   const viewport = useRef<ViewportHandle>(null);
   const { width, height } = useWindowSize();
   useEffect(() => {
-    viewport.current?.resize(width, Math.max(1, height));
+    viewport.current?.resize(width, Math.max(1, height - viewportHeight));
   }, [height, viewportHeight, width]);
   useAnimation(() => viewport.current?.draw());
   useEffect(() => {
@@ -792,7 +810,7 @@ function Playground() {
     <SceneShell
       ctx={ctx}
       mode="playground"
-      viewportHeight={116}
+      viewportHeight={100}
       onOrder={() => {
         data.order = ctx.world.order;
         data.save();
@@ -886,7 +904,7 @@ function Helper() {
   };
   const counts = [...state].reduce<Record<string, number>>((acc, item) => ({ ...acc, [item]: (acc[item] || 0) + 1 }), {});
   return (
-    <SceneShell ctx={ctx} mode="helper" viewportHeight={260} lockOrder>
+    <SceneShell ctx={ctx} mode="helper" viewportHeight={204} lockOrder>
       <div className="bottom-panel tall">
         <div className="color-grid">
           {["R", "F", "D", "L", "B", "U"].map((item) => (
@@ -936,7 +954,7 @@ function Player() {
     }
   }, [ctx.world]);
   return (
-    <SceneShell ctx={ctx} mode="player" viewportHeight={180} lockOrder>
+    <SceneShell ctx={ctx} mode="player" viewportHeight={100} lockOrder>
       <div className="score-pill clickable" onClick={() => setOpen(true)}><Code2 />脚本</div>
       <div className="bottom-panel"><Playbar ctx={ctx} scene={scene} action={action} /></div>
       <Modal title="播放脚本" open={open} onClose={() => setOpen(false)}>
@@ -962,7 +980,7 @@ function Algs() {
     setAction(current.exp || current.origin);
   }, [ctx.world, current, data, group]);
   return (
-    <SceneShell ctx={ctx} mode="algs" viewportHeight={240} lockOrder>
+    <SceneShell ctx={ctx} mode="algs" viewportHeight={158} lockOrder>
       <button className="score-pill clickable" onClick={() => setList(true)}><BookOpen />{current.name}</button>
       <div className="bottom-panel medium">
         <div className="script-row">
@@ -971,7 +989,7 @@ function Algs() {
         </div>
         <Playbar ctx={ctx} scene={`x2${current.scramble ? "" : "^"}`} action={action} />
       </div>
-      <Modal title="公式库" open={list} onClose={() => setList(false)}>
+      <Modal title="公式库" open={list} onClose={() => setList(false)} className="alg-modal">
         <div className="alg-layout">
           <div className="settings-tabs compact">
             {data.map((item, i) => <button key={item.name} className={group === i ? "selected" : ""} onClick={() => setGroup(i)}>{item.name}</button>)}
@@ -997,11 +1015,16 @@ function Director() {
   const [action, setAction] = useState("RUR'U'~");
   const [script, setScript] = useState(false);
   const [output, setOutput] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareLink, setShareLink] = useState("");
   const [recording, setRecording] = useState(false);
   const [pixel, setPixel] = useState(512);
   const [filmt, setFilmt] = useState<"gif" | "pngs">("gif");
   const [delay, setDelay] = useState(2);
-  const filmer = useMemo(() => new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true }), []);
+  const filmer = useMemo(
+    () => configureRenderer(new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true })),
+    []
+  );
   const gif = useMemo(() => new GIF(COLORS), []);
   const zip = useMemo(() => new ZIP(), []);
   const pixels = useRef<Uint8Array>(new Uint8Array(0));
@@ -1075,14 +1098,21 @@ function Director() {
     playbar.current?.toggle();
     setRecording(true);
   };
+  const share = () => {
+    const data = btoa(JSON.stringify({ order: ctx.world.order, drama: { scene, action } }));
+    const url = `${location.origin}${location.pathname}?mode=player&data=${data}`;
+    setShareLink(url);
+    setShareOpen(true);
+    navigator.clipboard?.writeText(url).catch(() => undefined);
+  };
   return (
-    <SceneShell ctx={ctx} mode="director" viewportHeight={280}>
+    <SceneShell ctx={ctx} mode="director" viewportHeight={204}>
       <div className="bottom-panel tall">
         <div className="toolbar primary-toolbar">
           <IconButton title="输出设置" disabled={recording} onClick={() => setOutput(true)}><Settings /></IconButton>
           <IconButton title="截图" disabled={recording} onClick={snap}><Camera /></IconButton>
           <IconButton title={recording ? "停止录制" : "导出动画"} onClick={film}>{recording ? <Pause /> : <Clapperboard />}</IconButton>
-          <IconButton title="分享" disabled={recording} onClick={() => navigator.clipboard?.writeText(`${location.origin}${location.pathname}?mode=player&data=${btoa(JSON.stringify({ order: ctx.world.order, drama: { scene, action } }))}`)}><Share2 /></IconButton>
+          <IconButton title="分享" disabled={recording} onClick={share}><Share2 /></IconButton>
           <IconButton title="脚本" disabled={recording} onClick={() => setScript(true)}><Clipboard /></IconButton>
         </div>
         <div className="script-row"><input value={action} onChange={(e) => setAction(e.target.value)} /><IconButton title="展开" onClick={() => setAction(new TwistNode(action.startsWith("SSE:") ? Util.SSE2SIGN(ctx.world.order, action.replace("SSE:", "")) : action).parse().map((item) => item.value).join(" "))}><FastForward /></IconButton></div>
@@ -1091,6 +1121,13 @@ function Director() {
       <Modal title="脚本编辑" open={script} onClose={() => setScript(false)}>
         <label>场景<textarea value={scene} onChange={(e) => setScene(e.target.value)} /></label>
         <label>动作<textarea value={action} onChange={(e) => setAction(e.target.value)} /></label>
+      </Modal>
+      <Modal title="分享链接" open={shareOpen} onClose={() => setShareOpen(false)}>
+        <textarea readOnly value={shareLink} />
+        <div className="modal-actions">
+          <button onClick={() => navigator.clipboard?.writeText(shareLink)}>复制</button>
+          <button onClick={() => window.open(shareLink)}>打开</button>
+        </div>
       </Modal>
       <Modal title="输出设置" open={output} onClose={() => setOutput(false)}>
         <div className="option-group">

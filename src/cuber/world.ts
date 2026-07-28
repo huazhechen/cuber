@@ -4,6 +4,10 @@ import * as THREE from "three";
 import Controller from "./controller";
 
 export default class World {
+  public static readonly SHADOW_AMBIENT_INTENSITY = 0.9;
+  public static readonly SHADOW_DIRECTIONAL_INTENSITY = 0.25;
+  public static readonly FLAT_AMBIENT_INTENSITY = 1.0;
+
   public width = 1;
   public height = 1;
 
@@ -26,9 +30,9 @@ export default class World {
     this.scene.rotation.x = Math.PI / 6;
     this.scene.rotation.y = -Math.PI / 4 + Math.PI / 16;
 
-    this.ambient = new THREE.AmbientLight(0xffffff, 1.15);
+    this.ambient = new THREE.AmbientLight(0xffffff, World.SHADOW_AMBIENT_INTENSITY);
     this.scene.add(this.ambient);
-    this.directional = new THREE.DirectionalLight(0xffffff, 0.35);
+    this.directional = new THREE.DirectionalLight(0xffffff, World.SHADOW_DIRECTIONAL_INTENSITY);
     this.directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 3, Cubelet.SIZE * 2);
     this.scene.add(this.directional);
     this.scene.updateMatrix();

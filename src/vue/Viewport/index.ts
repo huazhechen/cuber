@@ -6,6 +6,7 @@ import { COLORS } from "../../cuber/define";
 import Toucher from "./toucher";
 import World from "../../cuber/world";
 import { PreferanceData } from "../../data";
+import { configureRenderer } from "../../cuber/three-compat";
 
 @Component({
   template,
@@ -28,12 +29,11 @@ export default class Viewport extends Vue {
     super();
     const canvas = document.createElement("canvas");
     canvas.style.outline = "none";
-    this.renderer = markRaw(new THREE.WebGLRenderer({
+    this.renderer = markRaw(configureRenderer(new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
       alpha: true,
-    }));
-    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    })));
     this.renderer.autoClear = false;
     this.renderer.setClearColor(COLORS.White, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);

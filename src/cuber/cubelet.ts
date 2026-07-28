@@ -1,6 +1,8 @@
 import { FACE, COLORS } from "./define";
 import * as THREE from "three";
 
+const DEFAULT_STICKER_EMISSION = 0.5;
+
 class Frame extends THREE.BufferGeometry {
   private static readonly _INDICES = [
     0, 2, 1,
@@ -174,10 +176,30 @@ export default class Cubelet extends THREE.Group {
     const result: { [key: string]: THREE.MeshLambertMaterial } = {};
     for (const key in COLORS) {
       const color = COLORS[key];
-      result[key] = new THREE.MeshLambertMaterial({ color: color, emissive: color, emissiveIntensity: 0.16 });
+      result[key] = new THREE.MeshLambertMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: DEFAULT_STICKER_EMISSION,
+        toneMapped: false,
+      });
     }
     return result;
   })();
+
+  public static setStickerEmission(value: number): void {
+    for (const key in Cubelet.LAMBERS) {
+      Cubelet.LAMBERS[key].emissiveIntensity = value;
+    }
+  }
+
+  public static setStickerColor(key: string, value: string): void {
+    const material = Cubelet.LAMBERS[key];
+    if (material == undefined) {
+      return;
+    }
+    material.color.set(value);
+    material.emissive.set(value);
+  }
 
   public static CORE = new THREE.MeshPhongMaterial({
     color: COLORS.Core,

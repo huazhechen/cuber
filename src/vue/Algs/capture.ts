@@ -2,6 +2,8 @@ import Cube from "../../cuber/cube";
 import Cubelet from "../../cuber/cubelet";
 import * as THREE from "three";
 import { TwistNode } from "../../cuber/twister";
+import { configureRenderer } from "../../cuber/three-compat";
+import World from "../../cuber/world";
 
 export default class Capture {
   public canvas: HTMLCanvasElement;
@@ -12,8 +14,9 @@ export default class Capture {
   private cube: Cube;
 
   constructor() {
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer = configureRenderer(
+      new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true })
+    );
     this.renderer.setClearColor(0, 0);
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(256, 256, true);
@@ -30,9 +33,9 @@ export default class Capture {
     this.camera.lookAt(this.scene.position);
     this.camera.updateProjectionMatrix();
 
-    const ambient = new THREE.AmbientLight(0xffffff, 1.15);
+    const ambient = new THREE.AmbientLight(0xffffff, World.SHADOW_AMBIENT_INTENSITY);
     this.scene.add(ambient);
-    const directional = new THREE.DirectionalLight(0xffffff, 0.35);
+    const directional = new THREE.DirectionalLight(0xffffff, World.SHADOW_DIRECTIONAL_INTENSITY);
     directional.position.set(Cubelet.SIZE, Cubelet.SIZE * 4, Cubelet.SIZE * 2);
     this.scene.add(directional);
   }

@@ -12,6 +12,7 @@ export class PreferanceData {
     perspective: 50,
     angle: 30,
     gradient: 33,
+    stickerEmission: 50,
     frames: 20,
     sensitivity: 50,
     thickness: true,
@@ -41,7 +42,9 @@ export class PreferanceData {
       }
       const values = this.values as { [key: string]: string | number | boolean };
       for (const key in values) {
-        values[key] = data[key];
+        if (data[key] !== undefined) {
+          values[key] = data[key];
+        }
       }
     }
   }
@@ -106,6 +109,17 @@ export class PreferanceData {
     this.world.dirty = true;
   }
 
+  get stickerEmission(): number {
+    return this.values.stickerEmission;
+  }
+  set stickerEmission(value) {
+    if (this.values.stickerEmission != value) {
+      this.values.stickerEmission = value;
+    }
+    Cubelet.setStickerEmission(value / 100);
+    this.world.dirty = true;
+  }
+
   get shadow(): boolean {
     return this.values.shadow;
   }
@@ -114,10 +128,10 @@ export class PreferanceData {
       this.values.shadow = value;
     }
     if (value) {
-      this.world.ambient.intensity = 1.15;
-      this.world.directional.intensity = 0.35;
+      this.world.ambient.intensity = World.SHADOW_AMBIENT_INTENSITY;
+      this.world.directional.intensity = World.SHADOW_DIRECTIONAL_INTENSITY;
     } else {
-      this.world.ambient.intensity = 1.2;
+      this.world.ambient.intensity = World.FLAT_AMBIENT_INTENSITY;
       this.world.directional.intensity = 0;
     }
     this.world.dirty = true;
@@ -250,8 +264,7 @@ export class PaletteData {
       const value = colors[key];
       if (value) {
         COLORS[key] = value;
-        Cubelet.LAMBERS[key].color.set(value);
-        Cubelet.LAMBERS[key].emissive.set(value);
+        Cubelet.setStickerColor(key, value);
         Cubelet.BASICS[key].color.set(value);
         if (key == "Core") {
           Cubelet.CORE.color.set(value);
@@ -265,8 +278,7 @@ export class PaletteData {
     const colors = this.values.colors as { [key: string]: string };
     colors[key] = value;
     COLORS[key] = value;
-    Cubelet.LAMBERS[key].color.set(value);
-    Cubelet.LAMBERS[key].emissive.set(value);
+    Cubelet.setStickerColor(key, value);
     Cubelet.BASICS[key].color.set(value);
     if (key == "Core") {
       Cubelet.CORE.color.set(value);
