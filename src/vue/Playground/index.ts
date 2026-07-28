@@ -48,10 +48,10 @@ class KeyHandle {
     191: "d'", /// d'
     67: "u'", //C u'
     188: "u", //, u
-    37: "U", //鈫?U
-    38: "R", //鈫?R
-    39: "U'", //鈫?U'
-    40: "R'", //鈫?R'
+    37: "U", // ← U
+    38: "R", // ↑ R
+    39: "U'", // → U'
+    40: "R'", // ↓ R'
   };
 
   constructor(callback: (key: string) => void) {
@@ -309,7 +309,7 @@ export default class Playground extends Vue {
   }
 
   load(): void {
-    // 鏈垵濮嬪寲
+    // 未初始化
     if (this.data.scene === "*") {
       this.scramble();
       return;

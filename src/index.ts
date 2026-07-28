@@ -8,7 +8,7 @@ import Director from "./vue/Director";
 import Player from "./vue/Player";
 import Helper from "./vue/Helper";
 import Algs from "./vue/Algs";
-import { VFlexCompat, VLayoutCompat } from "./vue/compat";
+import { VBtnCompat, VFlexCompat, VLayoutCompat } from "./vue/compat";
 import { vuetify } from "./vue/vuetify";
 
 /* eslint-disable */
@@ -53,6 +53,7 @@ const vm = createApp({
 });
 
 vm.use(vuetify);
+vm.component("v-btn", VBtnCompat);
 vm.component("v-layout", VLayoutCompat);
 vm.component("v-flex", VFlexCompat);
 vm.directive("resize", {

@@ -1,4 +1,5 @@
 import { defineComponent, h } from "vue";
+import { VBtn } from "vuetify/components";
 
 function gridWidth(props: Record<string, boolean>): string | undefined {
   for (let i = 1; i <= 12; i++) {
@@ -70,6 +71,49 @@ export const VFlexCompat = defineComponent({
           ],
         },
         slots.default?.(),
+      );
+    };
+  },
+});
+
+export const VBtnCompat = defineComponent({
+  name: "VBtn",
+  inheritAttrs: false,
+  props: {
+    text: Boolean,
+    depressed: Boolean,
+    fab: Boolean,
+    fixed: Boolean,
+    top: Boolean,
+    bottom: Boolean,
+    left: Boolean,
+    right: Boolean,
+    large: Boolean,
+  },
+  setup(props, { attrs, slots }) {
+    return () => {
+      const position = props.fixed
+        ? {
+            position: "fixed",
+            top: props.top ? "0px" : undefined,
+            bottom: props.bottom ? "0px" : undefined,
+            left: props.left ? "0px" : undefined,
+            right: props.right ? "0px" : undefined,
+            zIndex: 1006,
+          }
+        : undefined;
+
+      return h(
+        VBtn as never,
+        {
+          ...attrs,
+          icon: props.fab || (attrs.icon as boolean | undefined),
+          size: props.large ? "large" : attrs.size,
+          variant: props.text ? "text" : props.depressed ? "flat" : attrs.variant,
+          elevation: props.depressed ? 0 : attrs.elevation,
+          style: [position, attrs.style as unknown],
+        },
+        slots,
       );
     };
   },

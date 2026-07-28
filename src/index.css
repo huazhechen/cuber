@@ -1,7 +1,40 @@
+html,
+body,
+#app,
+.v-application,
+.v-application__wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+}
+.v-btn {
+  min-width: 0;
+  min-height: 0;
+  letter-spacing: 0;
+}
+.v-btn__content {
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  line-height: inherit;
+}
+.v-container[text-xs-center],
+.v-container.grid-list-md[text-xs-center],
+.container.grid-list-md.text-xs-center {
+  text-align: center;
+}
+.v-container[grid-list-md] .layout:not(:only-child),
+.v-container.grid-list-md .layout:not(:only-child),
 .container.grid-list-md .layout:not(:only-child) {
   margin: 0%;
   padding: 0%;
 }
+.v-container[grid-list-md] .layout .flex,
+.v-container.grid-list-md .layout .flex,
 .container.grid-list-md .layout .flex {
   margin: 0%;
   padding: 0%;

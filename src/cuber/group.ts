@@ -199,7 +199,7 @@ export class GroupTable {
   constructor(cube: Cube) {
     this.order = cube.order;
     this.groups = {};
-    // 鏍规嵁榄旀柟闃舵暟鐢熸垚鎵€鏈塯roup
+    // 根据魔方阶数生成所有group
     for (const axis of ["x", "y", "z"]) {
       const list: CubeGroup[] = [];
       for (let layer = 0; layer < this.order; layer++) {
@@ -208,7 +208,7 @@ export class GroupTable {
       }
       this.groups[axis] = list;
     }
-    // 灏嗘瘡涓潡绱㈠紩鏀惧叆x y z鐨勬瘡灞備腑
+    // 将每个块索引放入x y z的每层中
     for (const cubelet of cube.initials) {
       if (!cubelet.exist) {
         continue;
