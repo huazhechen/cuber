@@ -1,4 +1,4 @@
-<v-bottom-sheet v-model="show" v-resize="resize">
+<v-bottom-sheet v-model="show">
   <v-card text style="margin: auto; touch-action: none; user-select: none;">
     <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(width, height * 0.6) + 'px'}">
       <v-card-title style="text-justify: auto;">
@@ -24,7 +24,6 @@
             重置数据
           </v-btn>
         </v-flex>
-      </v-layout>
       </v-layout>
     </v-container>
   </v-card>

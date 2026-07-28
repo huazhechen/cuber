@@ -33,24 +33,26 @@
             single-line
             v-model="action"
           >
-            <v-btn
-              slot="label"
-              text
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-            >
-              <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
-            </v-btn>
-            <v-btn
-              slot="append"
-              text
-              v-show="origin&&origin.length>0&&action!=origin"
-              style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
-              @click="action=origin"
-            >
-              <v-icon :size="size * 0.4">settings_backup_restore</v-icon>
-            </v-btn>
+            <template #label>
+              <v-btn
+                text
+                style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+                :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+              >
+                <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
+              </v-btn>
+            </template>
+            <template #append-inner>
+              <v-btn
+                text
+                v-show="origin&&origin.length>0&&action!=origin"
+                style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+                :style="{width:size * 0.4+'px',height:size * 0.8+'px'}"
+                @click="action=origin"
+              >
+                <v-icon :size="size * 0.4">settings_backup_restore</v-icon>
+              </v-btn>
+            </template>
           </v-text-field>
         </v-flex>
       </v-layout>
@@ -64,7 +66,7 @@
   >
     <div style="margin: auto; width: 100%;">
       <v-tabs v-model="tab" grow color="cyan" :height="size * 0.8">
-        <v-tab v-for="(group,i) in data.algs" :key="i" :href="`#tab-${i}`">
+        <v-tab v-for="(group,i) in data.algs" :key="i" :value="`tab-${i}`">
           <p :style="{'font-size':size * 0.3+'px'}" style="text-align: center; margin: 0%; padding: 0%;">
             {{ group.name}}
           </p>
@@ -75,8 +77,8 @@
       style="flex: 1; overflow: auto; margin: auto; user-select: none;"
       :style="{height: (height - size * 0.8) + 'px'}"
     >
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="(group,i) in data.algs" :key="i" :value="'tab-' + i" style="height: 100%;">
+      <div>
+        <div v-for="(group,i) in data.algs" :key="i" v-show="tab === 'tab-' + i" style="height: 100%;">
           <v-layout row wrap style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%; align-items: stretch;">
             <v-card
               outlined
@@ -140,8 +142,8 @@
               </v-btn>
             </v-card>
           </v-layout>
-        </v-tab-item>
-      </v-tabs-items>
+        </div>
+      </div>
     </div>
   </div>
 </v-app>

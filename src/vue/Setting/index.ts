@@ -1,5 +1,5 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Vue } from "vue-facing-decorator";
+import template from "./index.html?raw";
 import Order from "../Menu/Order";
 import Control from "../Menu/Control";
 import Appear from "../Menu/Appear";
@@ -24,7 +24,7 @@ export class SettingItem {
 }
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     order: Order,
     appear: Appear,
@@ -41,12 +41,12 @@ export default class Setting extends Vue {
 
   constructor() {
     super();
-    this.items["order"] = new SettingItem("阶数");
-    this.items["control"] = new SettingItem("控制");
-    this.items["appear"] = new SettingItem("显示");
-    this.items["camera"] = new SettingItem("镜头");
-    this.items["palette"] = new SettingItem("配色");
-    this.items["about"] = new SettingItem("关于");
+    this.items["order"] = new SettingItem("闃舵暟");
+    this.items["control"] = new SettingItem("鎺у埗");
+    this.items["appear"] = new SettingItem("鏄剧ず");
+    this.items["camera"] = new SettingItem("闀滃ご");
+    this.items["palette"] = new SettingItem("閰嶈壊");
+    this.items["about"] = new SettingItem("鍏充簬");
   }
   mounted(): void {
     this.resize();

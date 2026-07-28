@@ -1,14 +1,14 @@
-import Vue from "vue";
-import { Component, Prop, Watch, Inject } from "vue-property-decorator";
+import { Component, Prop, Watch, Inject, Vue } from "vue-facing-decorator";
+import template from "./index.html?raw";
 import { TwistAction, TwistNode } from "../../cuber/twister";
 import World from "../../cuber/world";
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {},
 })
 export default class Playbar extends Vue {
-  @Inject("world")
+  @Inject({ from: "world" })
   world: World;
 
   @Prop({ required: false, default: false })

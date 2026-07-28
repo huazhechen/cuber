@@ -1,5 +1,6 @@
-import Vue from "vue";
-import { Component, Provide, Ref } from "vue-property-decorator";
+import { Component, Provide, Ref, Vue } from "vue-facing-decorator";
+import { markRaw } from "vue";
+import template from "./index.html?raw";
 
 import Viewport from "../Viewport";
 import { COLORS, FACE } from "../../cuber/define";
@@ -56,7 +57,7 @@ export class HelperData {
 }
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     viewport: Viewport,
     setting: Setting,
@@ -64,7 +65,7 @@ export class HelperData {
 })
 export default class Helper extends Vue {
   @Provide("world")
-  world: World = new World();
+  world: World = markRaw(new World());
 
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
@@ -87,7 +88,7 @@ export default class Helper extends Vue {
   setting: Setting;
 
   @Ref("copy")
-  copy: Vue;
+  copy: any;
 
   colort: string[];
   colors: { [key: string]: string };
@@ -113,8 +114,10 @@ export default class Helper extends Vue {
 
     this.setting.items["order"].disable = true;
     this.reload();
-    this.world.controller.taps.push((index: number, face: number) => {
-      this.stick(index, face);
+    this.world.controller.taps.push((index, face) => {
+      if (face != null) {
+        this.stick(index, face);
+      }
     });
 
     this.$nextTick(this.resize);
@@ -187,7 +190,7 @@ export default class Helper extends Vue {
 
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
-    this.viewport.draw();
+    this.viewport?.draw();
     this.solver.init();
   }
 

@@ -77,12 +77,9 @@ export default class CubeGroup extends THREE.Group {
 
   cancel(): number {
     if (this.tween) {
-      // 记录当前动作的角度
       let angle = this.tween.end;
-      // 取消当前动作
       tweener.cancel(this.tween);
       this.tween = undefined;
-      // 记录取消的动作
       angle = Math.round(angle / (Math.PI / 2)) * (Math.PI / 2);
       return angle;
     }
@@ -91,9 +88,7 @@ export default class CubeGroup extends THREE.Group {
 
   finish(): number {
     if (this.tween) {
-      // 记录剩余的角度
       const angle = this.tween.end - this.angle;
-      // 完成动作
       tweener.finish(this.tween);
       this.tween = undefined;
       return angle;
@@ -204,7 +199,7 @@ export class GroupTable {
   constructor(cube: Cube) {
     this.order = cube.order;
     this.groups = {};
-    // 根据魔方阶数生成所有group
+    // 鏍规嵁榄旀柟闃舵暟鐢熸垚鎵€鏈塯roup
     for (const axis of ["x", "y", "z"]) {
       const list: CubeGroup[] = [];
       for (let layer = 0; layer < this.order; layer++) {
@@ -213,7 +208,7 @@ export class GroupTable {
       }
       this.groups[axis] = list;
     }
-    // 将每个块索引放入x y z的每层中
+    // 灏嗘瘡涓潡绱㈠紩鏀惧叆x y z鐨勬瘡灞備腑
     for (const cubelet of cube.initials) {
       if (!cubelet.exist) {
         continue;
@@ -358,7 +353,7 @@ export class GroupTable {
       }
       let from = Number(list[1]);
       let to = Number(list[3]);
-      if (to === NaN || to === 0) {
+      if (Number.isNaN(to) || to === 0) {
         if (/[lrudfb]/.test(list[4])) {
           to = 1;
         } else {

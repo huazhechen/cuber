@@ -1,5 +1,6 @@
-import Vue from "vue";
-import { Component, Provide, Ref } from "vue-property-decorator";
+import { Component, Provide, Ref, Vue } from "vue-facing-decorator";
+import { markRaw } from "vue";
+import template from "./index.html?raw";
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
@@ -8,7 +9,7 @@ import Setting from "../Setting";
 import { PreferanceData, PaletteData } from "../../data";
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     viewport: Viewport,
     playbar: Playbar,
@@ -17,7 +18,7 @@ import { PreferanceData, PaletteData } from "../../data";
 })
 export default class Player extends Vue {
   @Provide("world")
-  world: World = new World();
+  world: World = markRaw(new World());
 
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);

@@ -1,11 +1,13 @@
-import Vue from "vue";
-import { Component, Watch, Provide, Ref } from "vue-property-decorator";
+import { Component, Watch, Provide, Ref, Vue } from "vue-facing-decorator";
+import { markRaw } from "vue";
+import template from "./index.html?raw";
 import Viewport from "../Viewport";
 import Setting from "../Setting";
 import Playbar from "../Playbar";
 import World from "../../cuber/world";
 import Capture from "./capture";
 import { PreferanceData, PaletteData } from "../../data";
+import algs from "./algs.json";
 
 export class AlgItem {
   name: string;
@@ -23,7 +25,7 @@ export class AlgGroup {
 }
 
 export class AlgsData {
-  algs: AlgGroup[] = require("./algs.json");
+  algs: AlgGroup[] = algs as unknown as AlgGroup[];
   private values: {
     version: string;
     position: { group: number; index: number };
@@ -82,7 +84,7 @@ export class AlgsData {
   }
 }
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     viewport: Viewport,
     setting: Setting,
@@ -91,7 +93,7 @@ export class AlgsData {
 })
 export default class Algs extends Vue {
   @Provide("world")
-  world: World = new World();
+  world: World = markRaw(new World());
 
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
@@ -101,7 +103,7 @@ export default class Algs extends Vue {
 
   data: AlgsData = new AlgsData();
 
-  capture: Capture = new Capture();
+  capture: Capture = markRaw(new Capture());
 
   width = 320;
   height = 640;
@@ -154,7 +156,7 @@ export default class Algs extends Vue {
 
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
-    if (this.viewport.draw()) {
+    if (this.viewport?.draw()) {
       return;
     }
     for (let i = 0; i < 2; i++) {

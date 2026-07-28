@@ -4,12 +4,12 @@
     @click="menu=!menu">
     <v-icon :size="size * 0.6">menu</v-icon>
   </v-btn>
-  <order v-model="items['order'].value" v-on:order="$emit('order');"></order>
-  <appear v-model="items['appear'].value"></appear>
-  <camera v-model="items['camera'].value"></camera>
-  <control v-model="items['control'].value"></control>
-  <palette v-model="items['palette'].value"></palette>
-  <about v-model="items['about'].value"></about>
+  <order :value="items['order'].value" @input="items['order'].value = $event" v-on:order="$emit('order');"></order>
+  <appear :value="items['appear'].value" @input="items['appear'].value = $event"></appear>
+  <camera :value="items['camera'].value" @input="items['camera'].value = $event"></camera>
+  <control :value="items['control'].value" @input="items['control'].value = $event"></control>
+  <palette :value="items['palette'].value" @input="items['palette'].value = $event"></palette>
+  <about :value="items['about'].value" @input="items['about'].value = $event"></about>
   <v-bottom-sheet v-model="menu">
     <v-card text style="margin: auto;">
       <v-container fluid grid-list-md text-xs-center :style="{width:Math.min(size * 8, width) + 'px'}">

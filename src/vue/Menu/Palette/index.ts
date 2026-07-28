@@ -1,17 +1,17 @@
-import Vue from "vue";
-import { Component, Prop, Inject } from "vue-property-decorator";
+import { Component, Prop, Inject, Vue } from "vue-facing-decorator";
+import template from "./index.html?raw";
 import World from "../../../cuber/world";
 import { COLORS } from "../../../cuber/define";
 import { PaletteData } from "../../../data";
 
 @Component({
-  template: require("./index.html"),
+  template,
 })
 export default class Palette extends Vue {
-  @Inject("world")
+  @Inject({ from: "world" })
   world: World;
 
-  @Inject("palette")
+  @Inject({ from: "palette" })
   data: PaletteData;
 
   @Prop({ required: true })
@@ -38,6 +38,7 @@ export default class Palette extends Vue {
 
   mounted(): void {
     this.resize();
+    window.addEventListener("resize", () => this.resize());
   }
 
   resize(): void {

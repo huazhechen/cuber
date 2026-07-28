@@ -1,5 +1,6 @@
-import Vue from "vue";
-import { Component, Watch, Provide, Ref } from "vue-property-decorator";
+import { Component, Watch, Provide, Ref, Vue } from "vue-facing-decorator";
+import { markRaw } from "vue";
+import template from "./index.html?raw";
 
 import Viewport from "../Viewport";
 import Playbar from "../Playbar";
@@ -86,7 +87,7 @@ export class DirectorData {
   }
 }
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     viewport: Viewport,
     setting: Setting,
@@ -95,7 +96,7 @@ export class DirectorData {
 })
 export default class Director extends Vue {
   @Provide("world")
-  world: World = new World();
+  world: World = markRaw(new World());
 
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
@@ -116,7 +117,7 @@ export default class Director extends Vue {
   playbar: Playbar;
 
   @Ref("copy")
-  copy: Vue;
+  copy: any;
 
   filmer: THREE.WebGLRenderer;
   gif: GIF;
@@ -126,11 +127,11 @@ export default class Director extends Vue {
 
   constructor() {
     super();
-    this.filmer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    this.filmer = markRaw(new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true }));
     this.filmer.setPixelRatio(1);
     this.filmer.setClearColor(0xffffff, 0);
-    this.gif = new GIF(COLORS);
-    this.zip = new ZIP();
+    this.gif = markRaw(new GIF(COLORS));
+    this.zip = markRaw(new ZIP());
     this.colors = COLORS;
     this.colort = ["R", "L", "F", "B", "U", "D", "High", "Gray"];
   }
@@ -147,8 +148,10 @@ export default class Director extends Vue {
     new ClipboardJS(this.copy.$el);
 
     this.reload();
-    this.world.controller.taps.push((index: number, face: number) => {
-      this.stick(index, face);
+    this.world.controller.taps.push((index, face) => {
+      if (face != null) {
+        this.stick(index, face);
+      }
     });
 
     this.world.callbacks.push(() => {
@@ -196,7 +199,7 @@ export default class Director extends Vue {
 
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
-    this.viewport.draw();
+    this.viewport?.draw();
     if (this.recording) {
       this.record();
     }

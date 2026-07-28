@@ -1,5 +1,6 @@
-import Vue from "vue";
-import { Component, Provide, Ref } from "vue-property-decorator";
+import { Component, Provide, Ref, Vue } from "vue-facing-decorator";
+import { markRaw } from "vue";
+import template from "./index.html?raw";
 
 import Viewport from "../Viewport";
 import Setting from "../Setting";
@@ -47,10 +48,10 @@ class KeyHandle {
     191: "d'", /// d'
     67: "u'", //C u'
     188: "u", //, u
-    37: "U", //← U
-    38: "R", //↑ R
-    39: "U'", //→ U'
-    40: "R'", //↓ R'
+    37: "U", //鈫?U
+    38: "R", //鈫?R
+    39: "U'", //鈫?U'
+    40: "R'", //鈫?R'
   };
 
   constructor(callback: (key: string) => void) {
@@ -177,7 +178,7 @@ export class PlaygroundData {
 }
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {
     viewport: Viewport,
     setting: Setting,
@@ -185,7 +186,7 @@ export class PlaygroundData {
 })
 export default class Playground extends Vue {
   @Provide("world")
-  world: World = new World();
+  world: World = markRaw(new World());
 
   @Provide("preferance")
   preferance: PreferanceData = new PreferanceData(this.world);
@@ -290,7 +291,7 @@ export default class Playground extends Vue {
   loop(): void {
     requestAnimationFrame(this.loop.bind(this));
     this.breath();
-    this.viewport.draw();
+    this.viewport?.draw();
     if (this.data.complete) {
       return;
     }
@@ -308,7 +309,7 @@ export default class Playground extends Vue {
   }
 
   load(): void {
-    // 未初始化
+    // 鏈垵濮嬪寲
     if (this.data.scene === "*") {
       this.scramble();
       return;

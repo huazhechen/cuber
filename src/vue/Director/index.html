@@ -28,14 +28,18 @@
           <v-text-field style="text-transform: none;" :height="size * 0.8"
             :style="{'padding-left': size / 4 + 'px','padding-right': size / 4 + 'px', 'margin-top':size/8 + 'px', 'font-size':size*0.4+'px'}"
             dense hide-details outlined single-line :disabled="recording" v-model="action">
-            <v-btn tabindex="-1" slot="label" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4+'px',height:size * 0.8+'px'}">
-              <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
-            </v-btn>
-            <v-btn tabindex="-1" slot="append" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
-              :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}" @click="scriptd=true" :disabled="recording">
-              <v-icon :size="size * 0.4">edit</v-icon>
-            </v-btn>
+            <template #label>
+              <v-btn tabindex="-1" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+                :style="{width:size * 0.4+'px',height:size * 0.8+'px'}">
+                <v-icon :size="size * 0.4" style="vertical-align: middle;">theaters</v-icon>
+              </v-btn>
+            </template>
+            <template #append-inner>
+              <v-btn tabindex="-1" text style="margin: 0%; padding: 0%; min-width: 0%; min-height: 0%;"
+                :style="{width:size * 0.4 + 'px',height:size * 0.8+'px'}" @click="scriptd=true" :disabled="recording">
+                <v-icon :size="size * 0.4">edit</v-icon>
+              </v-btn>
+            </template>
           </v-text-field>
         </v-flex>
       </v-layout>

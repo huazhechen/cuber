@@ -1,6 +1,6 @@
-import Vue, { VNode } from "vue";
-import Vuetify from "vuetify";
-import "vuetify/dist/vuetify.min.css";
+import { createApp, h, type Component as VueComponent } from "vue";
+import { toNative } from "vue-facing-decorator";
+import "vuetify/styles";
 import "material-design-icons/iconfont/material-icons.css";
 import "./index.css";
 import Playground from "./vue/Playground";
@@ -8,7 +8,8 @@ import Director from "./vue/Director";
 import Player from "./vue/Player";
 import Helper from "./vue/Helper";
 import Algs from "./vue/Algs";
-import { VueConstructor } from "vue/types/umd";
+import { VFlexCompat, VLayoutCompat } from "./vue/compat";
+import { vuetify } from "./vue/vuetify";
 
 /* eslint-disable */
 var _hmt: any = _hmt || [];
@@ -20,17 +21,11 @@ var _hmt: any = _hmt || [];
 })();
 /* eslint-disable */
 
-Vue.use(Vuetify);
-const opts = {};
-const vuetify = new Vuetify(opts);
-Vue.prototype.vuetify = vuetify;
-
 const search = location.search || "";
 const list = search.match(/(\?|\&)mode=([^&]*)(&|$)/);
 const mode = list ? list[2] : "playground";
-Vue.prototype.mode = mode;
 
-let app: VueConstructor;
+let app: VueComponent;
 switch (mode) {
   case "director":
     app = Director;
@@ -53,9 +48,32 @@ switch (mode) {
     app = Playground;
     break;
 }
-const vm = new Vue({
-  vuetify,
-  el: "#app",
-  render: (h): VNode => h(app),
+const vm = createApp({
+  render: () => h(toNative(app as never)),
 });
+
+vm.use(vuetify);
+vm.component("v-layout", VLayoutCompat);
+vm.component("v-flex", VFlexCompat);
+vm.directive("resize", {
+  mounted(el, binding) {
+    const callback = binding.value;
+    if (typeof callback !== "function") {
+      return;
+    }
+    const handler = () => callback();
+    window.addEventListener("resize", handler);
+    (el as HTMLElement & { __resizeHandler?: () => void }).__resizeHandler = handler;
+  },
+  unmounted(el) {
+    const handler = (el as HTMLElement & { __resizeHandler?: () => void }).__resizeHandler;
+    if (handler) {
+      window.removeEventListener("resize", handler);
+    }
+  },
+});
+vm.config.globalProperties.mode = mode;
+vm.config.globalProperties.vuetify = vuetify;
+vm.mount("#app");
+
 export default vm;

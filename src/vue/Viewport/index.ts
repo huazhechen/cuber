@@ -1,5 +1,6 @@
-import Vue from "vue";
-import { Component, Inject, Ref } from "vue-property-decorator";
+import { Component, Inject, Ref, Vue } from "vue-facing-decorator";
+import template from "./index.html?raw";
+import { markRaw } from "vue";
 import * as THREE from "three";
 import { COLORS } from "../../cuber/define";
 import Toucher from "./toucher";
@@ -7,35 +8,35 @@ import World from "../../cuber/world";
 import { PreferanceData } from "../../data";
 
 @Component({
-  template: require("./index.html"),
+  template,
   components: {},
 })
 export default class Viewport extends Vue {
-  @Inject("world")
+  @Inject({ from: "world" })
   world: World;
 
-  @Inject("preferance")
+  @Inject({ from: "preferance" })
   preferance: PreferanceData;
 
   @Ref("canvas")
   canvas: HTMLElement;
 
   renderer: THREE.WebGLRenderer;
+  toucher: Toucher;
+
   constructor() {
     super();
     const canvas = document.createElement("canvas");
     canvas.style.outline = "none";
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = markRaw(new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
       alpha: true,
-    });
+    }));
     this.renderer.autoClear = false;
     this.renderer.setClearColor(COLORS.WHITE, 0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    const toucher = new Toucher();
-    toucher.init(canvas, this.world.controller.touch);
-    document.addEventListener("wheel", this.wheel, false);
+    this.toucher = markRaw(new Toucher());
   }
 
   wheel(e: WheelEvent): void {
@@ -63,6 +64,8 @@ export default class Viewport extends Vue {
   }
 
   mounted(): void {
+    this.toucher.init(this.renderer.domElement, this.world.controller.touch);
+    document.addEventListener("wheel", this.wheel, false);
     this.canvas.appendChild(this.renderer.domElement);
   }
 

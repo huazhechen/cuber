@@ -1,16 +1,16 @@
-import Vue from "vue";
-import { Component, Prop, Inject } from "vue-property-decorator";
+import { Component, Prop, Inject, Vue } from "vue-facing-decorator";
+import template from "./index.html?raw";
 import World from "../../../cuber/world";
 import { PreferanceData } from "../../../data";
 
 @Component({
-  template: require("./index.html"),
+  template,
 })
 export default class Camera extends Vue {
-  @Inject("world")
+  @Inject({ from: "world" })
   world: World;
 
-  @Inject("preferance")
+  @Inject({ from: "preferance" })
   preferance: PreferanceData;
 
   @Prop({ required: true })
@@ -36,6 +36,7 @@ export default class Camera extends Vue {
 
   mounted(): void {
     this.resize();
+    window.addEventListener("resize", () => this.resize());
   }
 
   resize(): void {
