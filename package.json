@@ -25,6 +25,7 @@
     "vite": "^8.1.5",
     "vue": "3.5.40",
     "vue-facing-decorator": "4.0.1",
+    "wrangler": "^4.114.0",
     "vue-tsc": "^3.1.4",
     "vuetify": "3.13.0"
   },
