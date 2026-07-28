@@ -1,6 +1,6 @@
 {
   "name": "cuber",
-  "description": "Rubik's Cube toolbox using Javascript for 100% client side single page application using Vue and Vuetify.",
+  "description": "Rubik's Cube toolbox using TypeScript, React, Vite and Three.js.",
   "version": "1.0.0",
   "author": "huazhechen",
   "license": "MIT",
@@ -8,26 +8,27 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "watch": "vite --host 0.0.0.0",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "npm run build && vite preview"
   },
-  "dependencies": {},
+  "dependencies": {
+    "clipboard": "2.0.11",
+    "lucide-react": "1.27.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.185.1"
+  },
   "devDependencies": {
-    "@types/three": "^0.180.0",
-    "@typescript-eslint/eslint-plugin": "^8.65.0",
-    "@typescript-eslint/parser": "^8.65.0",
-    "@vitejs/plugin-vue": "^6.0.8",
-    "clipboard": "^2.0.11",
-    "eslint": "^9.38.0",
-    "material-design-icons": "3.0.1",
-    "three": "^0.180.0",
-    "typescript": "6.0.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.185.0",
+    "@typescript-eslint/eslint-plugin": "8.65.0",
+    "@typescript-eslint/parser": "8.65.0",
+    "@vitejs/plugin-react": "6.0.4",
+    "eslint": "10.8.0",
+    "typescript": "7.0.2",
     "vite": "^8.1.5",
-    "vue": "3.5.40",
-    "vue-facing-decorator": "4.0.1",
-    "wrangler": "^4.114.0",
-    "vue-tsc": "^3.1.4",
-    "vuetify": "3.13.0"
+    "wrangler": "4.114.0"
   },
   "prettier": {
     "printWidth": 120

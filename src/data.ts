@@ -1,6 +1,5 @@
 import World from "./cuber/world";
 import CubeGroup from "./cuber/group";
-import { vuetify } from "./vue/vuetify";
 import { COLORS } from "./cuber/define";
 import Cubelet from "./cuber/cubelet";
 
@@ -205,7 +204,7 @@ export class PreferanceData {
     if (this.values.dark != value) {
       this.values.dark = value;
     }
-    vuetify.theme.change(value ? "dark" : "light");
+    document.documentElement.dataset.theme = value ? "dark" : "light";
   }
 
   reset(): void {
