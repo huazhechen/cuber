@@ -299,21 +299,23 @@ function SettingsPanel({
               </button>
             ))}
           </nav>
-          <div className="settings-tabs">
-            {[
-              ["order", "阶数", <Settings key="o" />],
-              ["camera", "镜头", <Camera key="c" />],
-              ["control", "控制", <SlidersHorizontal key="s" />],
-              ["appear", "显示", <Sparkles key="a" />],
-              ["palette", "配色", <Palette key="p" />],
-              ["about", "帮助", <HelpCircle key="h" />],
-            ].map(([key, label, icon]) => (
-              <button key={key as string} className={tab === key ? "selected" : ""} onClick={() => setTab(key as typeof tab)}>
-                {icon}
-                <span>{label}</span>
-              </button>
-            ))}
-            <button className="danger" onClick={() => setResetOpen(true)}>
+          <div className="settings-tabs-row">
+            <div className="settings-tabs">
+              {[
+                ["order", "阶数", <Settings key="o" />],
+                ["camera", "镜头", <Camera key="c" />],
+                ["control", "控制", <SlidersHorizontal key="s" />],
+                ["appear", "显示", <Sparkles key="a" />],
+                ["palette", "配色", <Palette key="p" />],
+                ["about", "帮助", <HelpCircle key="h" />],
+              ].map(([key, label, icon]) => (
+                <button key={key as string} className={tab === key ? "selected" : ""} onClick={() => setTab(key as typeof tab)}>
+                  {icon}
+                  <span>{label}</span>
+                </button>
+              ))}
+            </div>
+            <button className="settings-reset danger" title="重置" onClick={() => setResetOpen(true)}>
               <Trash2 />
               <span>重置</span>
             </button>
@@ -1114,23 +1116,62 @@ function HelpContent({ compact = false }: { compact?: boolean }) {
     ["Q=z'", "W=B", "E=L'", "R=Lw'", "T=x", "Y=x", "U=Rw", "I=R", "O=B'", "P=z"],
     ["A=y'", "S=D", "D=L", "F=U'", "G=F'", "H=F", "J=U", "K=R'", "L=D'", ";=y"],
     ["Z=Dw", "X=M'", "C=Uw'", "V=Lw", "B=x'", "N=x'", "M=Rw'", ",=Uw", ".=M'", "/=Dw'"],
-    ["↑=R", "↓=R'", "←=U", "→=U'"],
+    ["←=U", "↑=R", "→=U'", "↓=R'"],
+  ];
+  const quickStarts = [
+    ["练习复原", "进入练习，点重新打乱；拖动贴纸转层，拖空白区域转视角；完成后可看历史或分享复盘。"],
+    ["录入求解", "进入求解，先选颜色，再点魔方贴纸填色；颜色数量正确后点求解，可复制公式或直接播放。"],
+    ["学习公式", "进入公式，选择 F2L / OLL / PLL 条目；用播放器逐步观察，必要时直接编辑公式文本。"],
+    ["制作动画", "进入动画，编辑脚本，播放预览；需要素材时可截图、导出 GIF 或 PNG 序列。"],
+  ];
+  const modes = [
+    ["练习", "自由操作魔方", "适合计时、打乱、复原、撤销、查看历史和分享复盘。"],
+    ["求解", "三阶颜色录入", "适合把真实魔方状态录入到页面中，生成复原公式并播放检查。"],
+    ["公式", "内置公式库", "适合按分类学习 F2L、OLL、PLL，逐步观察公式如何移动块。"],
+    ["动画", "脚本与导出", "适合制作演示、教程素材、GIF 动画、透明 PNG 序列和分享播放链接。"],
+    ["播放", "只读复盘", "由分享链接或求解结果打开，专注播放场景和动作，不改动原始脚本。"],
   ];
   return (
     <section className={compact ? "help compact-help" : "help-page"}>
       <h1>Cuber 使用帮助</h1>
-      <p>Cuber 是一个完全在浏览器中运行的魔方工具箱，包含虚拟魔方、求解辅助、公式练习、动画制作、复盘播放和个性化配置。</p>
+      <p className="help-lead">
+        Cuber 是一个在浏览器中运行的魔方工具箱。它既可以当作自由练习的虚拟魔方，也能用于三阶求解、公式学习、动画制作、复盘播放和外观配置。
+      </p>
 
-      <h2>虚拟魔方</h2>
+      <h2>快速开始</h2>
+      <div className="help-grid">
+        {quickStarts.map(([title, text]) => (
+          <article key={title} className="help-card">
+            <strong>{title}</strong>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+
+      <h2>模式怎么选</h2>
+      <div className="help-mode-list">
+        {modes.map(([name, title, text]) => (
+          <article key={name} className="help-mode-item">
+            <b>{name}</b>
+            <div>
+              <strong>{title}</strong>
+              <p>{text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <h2>基础操作</h2>
       <ul>
         <li>在魔方贴纸上拖动可以转动对应层，在空白区域拖动可以旋转整体视角。</li>
-        <li>练习模式底部工具栏支持打乱、撤销、查看历史、复盘分享和重置当前魔方。</li>
+        <li>滚轮可以缩放视图；控制台的“镜头”页可以精确调整缩放、透视、水平角和俯仰角。</li>
+        <li>练习模式底部工具栏包含重新打乱、历史、撤销和分享。历史会保存初始场景和你的后续转动。</li>
         <li>历史记录会保存当前初始状态和后续转动，复盘会打开独立播放模式，便于逐步查看还原过程。</li>
-        <li>自定义打乱支持输入普通魔方公式，也可以用 `*` 生成随机打乱。</li>
+        <li>重新打乱框中输入 <code>*</code> 会生成随机打乱；也可以输入指定公式作为打乱状态。</li>
       </ul>
 
-      <h2>物理键盘</h2>
-      <p>键盘按键会映射为常用层转动，适合快速练习和公式输入。</p>
+      <h2>键盘操作</h2>
+      <p>物理键盘会映射为常用转动，适合快速练习和公式输入。页面左上角会显示正在输入的数字前缀。</p>
       <div className="key-table">
         {keyRows.map((row, rowIndex) => (
           <div key={rowIndex} className="key-row">
@@ -1149,50 +1190,52 @@ function HelpContent({ compact = false }: { compact?: boolean }) {
 
       <h2>求解模式</h2>
       <ul>
-        <li>按面点选贴纸颜色，录入三阶魔方状态后可以生成复原公式。</li>
-        <li>生成结果可以直接打开播放模式，按步骤查看每一步如何作用到魔方上。</li>
-        <li>如果状态无效，求解框会返回错误提示，需要检查中心块、棱块和角块颜色是否录入正确。</li>
+        <li>先在底部选择颜色，再点击魔方上的贴纸录入颜色。三阶魔方每种颜色应各出现 9 次。</li>
+        <li>“重置”会恢复一个标准已还原状态；“清空”会移除所有贴纸颜色，适合重新录入。</li>
+        <li>求解结果可以复制，也可以直接打开播放模式逐步检查。若返回错误，优先检查中心、棱块和角块颜色是否录入正确。</li>
       </ul>
 
-      <h2>公式模式</h2>
+      <h2>公式与播放</h2>
       <ul>
-        <li>内置 F2L、OLL、PLL 公式列表，可以按分类浏览并切换具体条目。</li>
-        <li>播放器支持回到开始、上一步、播放/暂停、下一步和跳到结尾。</li>
-        <li>公式文本可编辑，修改后会立即重新解析并更新播放步骤。</li>
+        <li>公式模式内置 F2L、OLL、PLL。点击左上角公式名称可打开列表并切换条目。</li>
+        <li>播放条支持回到开始、上一步、播放/暂停、下一步、跳到结尾；进度滑块可以直接拖到任意步骤。</li>
+        <li>公式输入框可以临时编辑。恢复按钮会把当前条目还原为内置公式。</li>
+        <li>播放模式通常由分享链接、求解结果或动画分享打开，适合只读复盘和逐步讲解。</li>
       </ul>
 
-      <h2>动画模式</h2>
+      <h2>动画制作</h2>
       <ul>
-        <li>场景用于布置初始魔方状态，动作脚本用于定义后续播放内容。</li>
-        <li>脚本里 `^` 表示把动作的逆操作嵌入场景，常用于先摆好动画起始状态。</li>
-        <li>支持截图、分享播放链接、展开公式、导出 GIF，以及导出 PNG 序列压缩包。</li>
-        <li>输出设置可以选择画布像素、导出格式和 GIF 帧延迟。</li>
+        <li>“脚本”里有两个字段：场景用于布置初始状态，动作定义后续播放内容。</li>
+        <li>“展开”会把组合公式解析成逐步动作，便于检查和导出。</li>
+        <li>“截图”导出当前画面；“导出动画”可生成 GIF 或 PNG 序列；“分享”会复制可播放链接。</li>
+        <li>输出设置可调整画布像素、导出格式和 GIF 帧延迟。PNG 序列适合继续放进剪辑或设计软件处理。</li>
       </ul>
 
       <h2>脚本语法</h2>
       <ul>
-        <li>基础转动支持 `R U F D L B`、整体转动 `x y z`、宽层转动 `Rw Uw`，以及数字前缀层号。</li>
-        <li>后缀 `'` 表示逆时针，数字表示重复次数，例如 `R'`、`U2`、`Rw2`。</li>
-        <li>括号可组合公式并重复，例如 `(R U R' U')2`。</li>
-        <li>方括号支持交换子和共轭写法，例如 `[A,B]`、`[A:B]`。</li>
-        <li>`~` 表示停顿，`;` 表示快速分隔，`#` 表示复位，`*` 表示随机打乱。</li>
-        <li>用 `//` 可添加行注释，注释内容不会被解析为动作。</li>
+        <li>基础转动：<code>R U F D L B</code>；整体转动：<code>x y z</code>；宽层转动：<code>Rw Uw</code>。</li>
+        <li>后缀 <code>'</code> 表示逆时针，数字表示重复次数，例如 <code>R'</code>、<code>U2</code>、<code>Rw2</code>。</li>
+        <li>括号可以组合并重复，例如 <code>(R U R' U')2</code>。</li>
+        <li>方括号支持交换子和共轭写法，例如 <code>[A,B]</code>、<code>[A:B]</code>。</li>
+        <li><code>^</code> 会把前面的逆操作写入场景，常用于把动画起始状态先摆好；<code>~</code> 表示停顿，<code>;</code> 表示快速分隔，<code>#</code> 表示复位，<code>*</code> 表示随机打乱。</li>
+        <li><code>SSE:</code> 前缀可输入 SSE 表达式，动画模式会在播放和展开时转换为标准动作。</li>
+        <li><code>//</code> 可以添加行注释，注释内容不会被解析成动作。</li>
       </ul>
 
-      <h2>配置选项</h2>
+      <h2>控制台设置</h2>
       <ul>
-        <li>阶数：可切换 2 到 10 阶魔方；部分模式会锁定阶数以保证算法有效。</li>
-        <li>镜头：调整缩放、透视、水平角和俯仰角，修改时可以直接观察魔方效果。</li>
-        <li>控制：调整动画帧数和触控灵敏度。</li>
-        <li>显示：切换厚贴纸、镜面、空心、箭头、光影和深色界面。</li>
-        <li>配色：分别设置六个面以及核心、高亮、灰色等辅助颜色，也可以恢复默认配色。</li>
+        <li>第一排是模式切换，决定当前工作流；第二排是当前应用的设置页签。</li>
+        <li>阶数支持 2 到 10 阶。求解和部分公式场景会锁定阶数，以保证算法和贴纸状态有效。</li>
+        <li>镜头页调整缩放、透视和视角；控制页调整动画帧数和触控灵敏度。</li>
+        <li>显示页切换厚贴纸、镜面、空心、箭头、光影和深色界面；配色页可修改六面颜色及辅助颜色。</li>
+        <li>右侧重置按钮会打开重置确认。可以只重置配置，也可以清空本地数据并刷新页面。</li>
       </ul>
 
       <h2>数据与分享</h2>
       <ul>
-        <li>练习数据和偏好设置保存在浏览器本地存储中。</li>
-        <li>分享链接会把阶数、场景、动作和贴纸状态编码到 URL 中，接收者打开后可直接复盘。</li>
-        <li>控制台底部的帮助页包含本说明；顶部模式切换只保留实际工作模式。</li>
+        <li>练习数据、偏好设置和配色保存在浏览器本地存储中，不需要账号。</li>
+        <li>分享链接会把阶数、场景、动作和必要贴纸状态编码到 URL 中。接收者打开后可直接复盘。</li>
+        <li>如果页面表现异常，可以先尝试控制台重置配置；需要彻底恢复时再选择清空全部本地数据。</li>
       </ul>
     </section>
   );
