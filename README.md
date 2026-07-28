@@ -1,8 +1,8 @@
-# [魔方栈](https://huazhechen.gitee.io/cuber)
+# [魔方栈](https://cuber.cheesefans.com)
 
 - 优美而强大的网页魔方
 
-- 地址: <https://huazhechen.gitee.io/cuber>
+- 地址: <https://cuber.cheesefans.com>
 
   <img width="120px" src="https://gitee.com/huazhechen/cuber/raw/master/resource/icon.png"  alt="icon"/>
 
