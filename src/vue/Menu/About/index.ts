@@ -60,6 +60,7 @@ export default class About extends Vue {
     switch (key) {
       case "help":
         window.open("https://gitee.com/huazhechen/cuber/blob/master/README.md");
+        this.show = false;
         break;
       case "reset":
         this.resetd = true;
@@ -67,6 +68,5 @@ export default class About extends Vue {
       default:
         break;
     }
-    this.show = false;
   }
 }
