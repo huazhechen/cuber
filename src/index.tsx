@@ -846,7 +846,7 @@ function Playground() {
       </Modal>
       <Modal title="复原成功" open={done} onClose={() => setDone(false)}>
         <p>本次还原已经完成，可以查看历史或打开复盘播放。</p>
-        <div className="modal-actions"><button onClick={() => setDone(false)}>知道了</button><button onClick={share}>复盘</button></div>
+        <div className="modal-actions"><button onClick={() => setDone(false)}>知道了</button><button onClick={() => { setDone(false); share(); }}>复盘</button></div>
       </Modal>
     </SceneShell>
   );
