@@ -1,6 +1,7 @@
 :root {
   color-scheme: light;
-  --bg: #d5dbe5;
+  --bg: #858d98;
+  --bg-top: #9ca3ad;
   --surface: rgba(255, 255, 255, 0.9);
   --surface-strong: #ffffff;
   --text: #18202f;
@@ -22,6 +23,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #12151b;
+  --bg-top: #252b35;
   --surface: rgba(28, 32, 41, 0.9);
   --surface-strong: #202530;
   --text: #eef2f8;
@@ -52,10 +54,7 @@ body,
 body {
   margin: 0;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 20% 18%, rgba(24, 163, 93, 0.14), transparent 28%),
-    radial-gradient(circle at 86% 20%, rgba(255, 216, 77, 0.18), transparent 24%),
-    linear-gradient(180deg, #e1e6ee, var(--bg));
+  background: linear-gradient(180deg, var(--bg-top), var(--bg));
   color: var(--text);
 }
 
@@ -282,7 +281,7 @@ button:disabled {
 
 .settings-modal {
   width: min(760px, calc(100vw - 32px));
-  height: min(620px, calc(100vh - 20px));
+  max-height: min(620px, calc(100dvh - 30px), calc(100vh - 30px));
   overflow: hidden;
   display: flex;
   flex-direction: column;

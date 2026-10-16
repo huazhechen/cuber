@@ -214,7 +214,14 @@ function Modal({
 }) {
   if (!open) return null;
   return (
-    <div className={`modal-backdrop ${backdropClassName}`} role="dialog" aria-modal="true">
+    <div
+      className={`modal-backdrop ${backdropClassName}`}
+      role="dialog"
+      aria-modal="true"
+      onPointerDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div className={`modal ${className}`}>
         <header>
           <strong>{title}</strong>
